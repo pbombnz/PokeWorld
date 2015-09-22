@@ -12,4 +12,8 @@ public class Board {
 		this.height = height;
 		this.squares = new BoardSquare[height][width];
 	}
+
+	public BoardSquare[][] getSquares() {
+		return squares;
+	}
 }
