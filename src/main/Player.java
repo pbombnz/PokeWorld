@@ -1,5 +1,7 @@
 package main;
 
+import java.util.List;
+
 public class Player {
 	public static int HEALTH = 100;
 	
@@ -8,4 +10,9 @@ public class Player {
 	
 	private int totalHealth;
 	private int healthLeft;
+	
+	private List<Item> inventory;
+	
+	//private int attack;
+	Location location;
 }
