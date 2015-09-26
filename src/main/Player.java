@@ -1,5 +1,7 @@
 package main;
 
+import gameObjects.Item;
+
 import java.util.List;
 
 public class Player {
