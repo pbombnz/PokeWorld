@@ -1,6 +1,6 @@
-# SWEN222-GroupAssignment
+# SWEN222 Group Assignment
 
-## Repsonsibilites
+## Team Memebers and Repsonsibilites
 * Prashant - Networking
 * Alex - Graphical User Interface
 * Donald - Game Logic and Objects
