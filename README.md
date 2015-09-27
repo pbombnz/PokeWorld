@@ -1,2 +1,3 @@
 # SWEN222-GroupAssignment
-Testing readme
+
+## Repsonsibilites
