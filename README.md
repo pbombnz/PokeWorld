@@ -5,7 +5,10 @@
 * Alex - Graphical User Interface
 * Donald - Game Logic and Objects
 * Sushant - Game Logic and Objects
-* Priyanka - Game Saving and Loading (via JSON)
+* Priyanka - Game Saving and Loading (via JSON) / Game Sprite Making
+
+## Unknown Repsonsiblities
+* ? - Documentation
 
 ## Git Rules
 1. When you open eclipse, make sure the first thing you do before coding is 'pull' so you are synced.
