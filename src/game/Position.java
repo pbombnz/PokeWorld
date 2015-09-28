@@ -1,16 +1,15 @@
-package gui;
-
-import game.Position;
-
+package game;
 /**
  *@author Wang Zhen
  *
- *this class is for storing position
+ *storing x,y of square 
+ *(x is row number and y is colunm number in my position system)
  */
-public class UIPosition {
+public class Position {
 	public int x ;
 	public int y ;
-	public UIPosition(int x, int y) {
+	public Position(int x, int y) {
+		super();
 		this.x = x;
 		this.y = y;
 	}

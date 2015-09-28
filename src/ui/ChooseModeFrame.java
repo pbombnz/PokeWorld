@@ -1,4 +1,5 @@
-package gui;
+package ui;
+
 
 import game.Main;
 
@@ -21,13 +22,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import ui.GameFrame.ImagePanel;
 
 /**
  *@author Wang Zhen
  */
-public class ChooseNumFrame extends JFrame {
-	public ChooseNumFrame() {
+public class ChooseModeFrame extends JFrame {
+	public ChooseModeFrame() {
 		this.setLocation(300, 150);
 		this.setSize(650, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -50,12 +50,11 @@ public class ChooseNumFrame extends JFrame {
 //		panel.add(textJLabel);
 		// Function buttons will display the amount of players needed
 		JButton function1JButton = new JButton();
-		function1JButton.setText("START");
-		function1JButton.setBounds(250, 300, 100, 50);
+		function1JButton.setText("Singer Player");
+		function1JButton.setBounds(250, 300, 200, 50);
 		panel.add(function1JButton);
 		function1JButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				Game.playerNumberLimited = 3;
 				Game.mainStep2();
 			}
 		});

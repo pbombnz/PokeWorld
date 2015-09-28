@@ -1,6 +1,5 @@
-package gui;
+package ui;
 
-import game.Main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -31,7 +30,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import ui.ChooseNumFrame.ImagePanel;
+import player.Location;
+import player.MasterYi;
+import ui.ChooseModeFrame.ImagePanel;
 
 /**
  *@author Wang Zhen
@@ -43,8 +44,8 @@ public class ChooseCharaFrame extends JFrame {
 	JTextField name;
 
 	public ChooseCharaFrame() {
-		this.setLocation(200, 0);
-		this.setSize(1000, 700);
+		this.setLocation(300, 150);
+		this.setSize(650, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel panel = new ImagePanel();
@@ -119,37 +120,36 @@ public class ChooseCharaFrame extends JFrame {
 //		// user doesn't need to hit enter for results.
 
 		JButton warrior = new JButton();
-		Icon icon=new ImageIcon("src.jpg");
+		Icon icon=new ImageIcon("src/warrior.png");
 	    warrior.setIcon(icon);
-		warrior.setBounds(550, 500, 200, 25);
+		warrior.setBounds(50, 200, 150, 150);
 		panel.add(warrior);
-		JButton function1JButton = new JButton();
-		function1JButton.setText("START");
-		function1JButton.setBounds(250, 300, 100, 50);
-		panel.add(function1JButton);
-		function1JButton.addActionListener(new ActionListener() {
+		warrior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				Game.playerNumberLimited = 3;
+				Game.player = new MasterYi(new Location(0, 0));
+				Game.characterChoosed = true;
+				Game.mainStep3();
+			}
+		});
+		
+		JButton wizJButton = new JButton();
+		Icon icon2=new ImageIcon("");
+		wizJButton.setIcon(icon2);
+		wizJButton.setBounds(200, 200, 150, 150);
+		panel.add(wizJButton);
+		wizJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
 				Game.mainStep2();
 			}
 		});
-		JButton function1JButton = new JButton();
-		function1JButton.setText("START");
-		function1JButton.setBounds(250, 300, 100, 50);
-		panel.add(function1JButton);
-		function1JButton.addActionListener(new ActionListener() {
+		
+		JButton halfdJButton = new JButton();
+		Icon icon3=new ImageIcon("");
+		halfdJButton.setIcon(icon3);
+		halfdJButton.setBounds(350, 200, 150, 150);
+		panel.add(halfdJButton);
+		halfdJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				Game.playerNumberLimited = 3;
-				Game.mainStep2();
-			}
-		});
-		JButton function1JButton = new JButton();
-		function1JButton.setText("START");
-		function1JButton.setBounds(250, 300, 100, 50);
-		panel.add(function1JButton);
-		function1JButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				Game.playerNumberLimited = 3;
 				Game.mainStep2();
 			}
 		});
