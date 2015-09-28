@@ -1,23 +1,44 @@
 package gameObjects;
 
+import java.awt.image.BufferedImage;
+
 public class BadPotion implements Item{
 
+	private final int hurt;
+	private BufferedImage picture;
+	
+	public BadPotion(int hurt){
+		this.hurt = hurt;
+//		try{
+//			picture = ImageIO.read(null);
+//		} catch (IOException e){
+//			e.printStackTrace();
+//		}
+	}
+	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Good Potion";
 	}
 
 	@Override
 	public String description() {
-		// TODO Auto-generated method stub
-		return null;
+		return "This potion smells funny";
 	}
 
 	@Override
 	public String imagePath() {
-		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public int getHurt(){
+		return hurt;
+	}
+	
+	public boolean isUsable(){
+		return true;
+	}
+	
+	
 
 }

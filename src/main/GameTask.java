@@ -61,7 +61,7 @@ public class GameTask {
 		return newDir;
 	}
 	}
-	
+
 	public int moveUp(int playerID){
 		return move(playerID, Direction.UP);
 	}
@@ -74,7 +74,7 @@ public class GameTask {
 	public int moveRight(int playerID){
 		return move(playerID, Direction.RIGHT);
 	}
-	
+
 
 	private int move(int playerID, Direction direction) {
 		// TODO Auto-generated method stub
@@ -82,4 +82,5 @@ public class GameTask {
 	}
 
 }
+
 

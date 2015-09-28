@@ -1,23 +1,46 @@
 package gameObjects;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 public class GoodPotion implements Item{
 
+	private final int heal;
+	private BufferedImage picture;
+	
+	public GoodPotion(int heal){
+		this.heal = heal;
+//		try{
+//			picture = ImageIO.read(null);
+//		} catch (IOException e){
+//			e.printStackTrace();
+//		}
+	}
+	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Good Potion";
 	}
 
 	@Override
 	public String description() {
-		// TODO Auto-generated method stub
-		return null;
+		return "This potion smells good";
 	}
 
 	@Override
 	public String imagePath() {
-		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public int getHeal(){
+		return heal;
+	}
+	
+	public boolean isUsable(){
+		return true;
+	}
+	
+	
 
 }
