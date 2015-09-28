@@ -23,7 +23,7 @@ public class GiantSword implements Weapon{
 	@Override
 	public int attackDamage() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 30;
 	}
 
 }
