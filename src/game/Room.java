@@ -1,12 +1,17 @@
 package game;
 
+import java.io.File;
+
 public class Room {
-	Board board;
+	public String roomName;
+	public Board board;
+	
 	public Room(){
-		
+		this.roomName = "Testing Room";
+		this.board = new Board();
 	}
-	public Room importRoom(String fileName){
-		return new Room();
-		
-	}
+	
+	//public Room importRoom(File fileName){
+	//	return new Room();
+	//}
 }

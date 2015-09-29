@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import game.Player;
+import game.avatar.Avatar;
 import ui.GameFrame;
 
 
@@ -18,7 +19,7 @@ import ui.GameFrame;
  */
 public class Game {
 	
-	public static final Map<String, String> allAvatars = new HashMap<String, String>();
+	public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
 
 	public Map<Player, Location> players;
 	public List<Room> rooms;
@@ -26,6 +27,7 @@ public class Game {
 	public Game() {
 		players = new HashMap<Player, Location>();
 		rooms = new ArrayList<Room>();
+		
 	}
 	
 	/**
@@ -55,5 +57,12 @@ public class Game {
 			e.printStackTrace();
 		}*/
 		return newGame;
-	}	
+	}
+	
+	private static Game createTestMap() {
+		Game game = new Game();
+		game.rooms.add(new Room());
+		return game;
+		
+	}
 }

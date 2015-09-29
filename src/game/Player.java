@@ -39,7 +39,7 @@ public class Player {
 		return health;
 	}
 
-	public void updateHealth(int change){
+	public void setHealth(int change){
 		health += change;
 		if(health < 0){
 			health = 0;
