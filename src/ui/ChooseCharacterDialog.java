@@ -79,9 +79,7 @@ public class ChooseCharacterDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		JButton button = (JButton) event.getSource();
 		if(button.getName().equals("Master Yi")) {
-			Game.player = new MasterYi(new Location(0, 0));
-			Game.characterChoosed = true;
-			Game.mainStep3();
+
 		}
 		
 	}

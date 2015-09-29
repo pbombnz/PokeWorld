@@ -39,16 +39,8 @@ public class ChooseModeFrame extends JFrame {
 		panel.setLayout(null);
 
 		JPanel jp = (JPanel) getContentPane();
-		jp.setOpaque(false);// she zhi kong jian tou ming
-		//Text
-//		JLabel textJLabel = new JLabel();
-//		textJLabel.setText("How many players?");
-//		textJLabel.setLocation(500, 50);
-//		textJLabel.setSize(200, 50);
-//		textJLabel.setFont(new Font("SanSerif", Font.PLAIN, 21));
-//		textJLabel.setHorizontalAlignment(JLabel.CENTER);
-//		panel.add(textJLabel);
-		// Function buttons will display the amount of players needed
+		jp.setOpaque(false);
+
 		JButton function1JButton = new JButton();
 		function1JButton.setText("Singer Player");
 		function1JButton.setBounds(250, 300, 200, 50);
@@ -58,39 +50,6 @@ public class ChooseModeFrame extends JFrame {
 				Game.mainStep2();
 			}
 		});
-
-//		JButton function2JButton = new JButton();
-//		function2JButton.setText("4");
-//		function2JButton.setBounds(550, 200, 50, 25);
-//		panel.add(function2JButton);
-//		function2JButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent ev) {
-//				Canvas.playerNumberLimited = 4;
-//				Canvas.mainStep2();
-//			}
-//		});
-//
-//		JButton function3JButton = new JButton();
-//		function3JButton.setText("5");
-//		function3JButton.setBounds(550, 300, 50, 25);
-//		panel.add(function3JButton);
-//		function3JButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent ev) {
-//				Canvas.playerNumberLimited = 5;
-//				Canvas.mainStep2();
-//			}
-//		});
-//
-//		JButton function4JButton = new JButton();
-//		function4JButton.setText("6");
-//		function4JButton.setBounds(550, 400, 50, 25);
-//		panel.add(function4JButton);
-//		function4JButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent ev) {
-//				Canvas.playerNumberLimited = 6;
-//				Canvas.mainStep2();
-//			}
-//		});
 
 		//menu
 		//MenuBar

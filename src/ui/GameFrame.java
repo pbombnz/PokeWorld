@@ -1,7 +1,11 @@
 package ui;
 
+import game.Main;
+
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.GregorianCalendar;
@@ -22,6 +26,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import player.Location;
@@ -33,7 +38,7 @@ import ui.ChooseModeFrame.ImagePanel;
  * @author Wang Zhen
  * @contributer Prashant Bhikhu
  */
-public class GamePlayFrame extends JFrame {
+public class GameFrame extends JFrame {
 	// The Size of the Frame
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
@@ -48,7 +53,7 @@ public class GamePlayFrame extends JFrame {
 	private int labelSize = 50;
 	
 
-	public GamePlayFrame() {
+	public GameFrame() {
 		//this.setLocation(100, 100);
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -60,6 +65,34 @@ public class GamePlayFrame extends JFrame {
 		panel.setLayout(null);
 
 
+		// Create Menu
+		JMenuBar menuBar = new JMenuBar();
+		JMenu gameMenu = new JMenu("Game");
+		gameMenu.setMnemonic(KeyEvent.VK_G);
+		
+		menuBar.add(gameMenu);
+
+		JMenuItem createGame = new JMenuItem("Create Game (As Server)");
+		JMenuItem joinGame = new JMenuItem("Join Game (As Client)");
+		JMenuItem exit = new JMenuItem("Exit");
+
+		gameMenu.add(createGame);
+		gameMenu.add(joinGame);
+		gameMenu.add(new JSeparator());
+		gameMenu.add(exit);
+				
+		
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+
+
+		setJMenuBar(menuBar);
+		
+		
+		
 		//add keylistener
 		this.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
