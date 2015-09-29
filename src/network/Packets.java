@@ -1,5 +1,6 @@
 package network;
 
+import game.Game;
 import game.Player;
 
 /**

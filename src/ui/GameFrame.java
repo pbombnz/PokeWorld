@@ -24,7 +24,7 @@ import network.GameClient;
 
 import com.esotericsoftware.kryonet.*;
 
-import player.Player;
+import game.Player;
 
 /**
  * @author Wang Zhen
@@ -94,15 +94,14 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	}
 
 	public ImageIcon getCharacterImage(Player player) {
-		//initialize
-		if (player.direction.equals("fl")) {
-			return player.faceleft;
-		} else if (player.direction.equals("fr")) {
-			return player.faceright;
-		} else if (player.direction.equals("bl")) {
-			return player.backleft;
-		} else if (player.direction.equals("br")) {
-			return player.backright;
+		if (player.getDirection() == Player.Direction.FACE_LEFT) {
+			return player.getAvatar().getFaceleft();
+		} else if (player.getDirection() == Player.Direction.FACE_RIGHT) {
+			return player.getAvatar().getFaceright();
+		} else if (player.getDirection() == Player.Direction.BACK_LEFT) {
+			return player.getAvatar().getBackleft();
+		} else if (player.getDirection() == Player.Direction.BACK_RIGHT) {
+			return player.getAvatar().getBackright();
 		}
 		return null;
 	}
@@ -112,8 +111,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		if (touxiangLabel != null) {
 			panel.remove(touxiangLabel);
 		}
-		//print touxiang
-		JLabel label = new JLabel(player.touxiang);
+		//print normal image
+		JLabel label = new JLabel(player.getAvatar().getName());
 		int xPo = 10;
 		int yPo = 10;
 		int touxiangSize = 200;
@@ -122,7 +121,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		panel.add(touxiangLabel);
 		//print name
 		JLabel textJLabel = new JLabel();
-		textJLabel.setText("Name: " + player.name);
+		textJLabel.setText("Name: " + player.getAvatar().getName());
 		textJLabel.setLocation(40, 210);
 		textJLabel.setSize(400, 20);
 		textJLabel.setFont(new Font("Dialog", 1, 15));
@@ -130,7 +129,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		panel.add(textJLabel);
 
 		JLabel health = new JLabel();
-		health.setText("Health: " + player.health);
+		health.setText("Health: " + player.getHealth());
 		health.setLocation(40, 230);
 		health.setSize(400, 20);
 		health.setFont(new Font("SanSerif", Font.PLAIN, 15));
@@ -138,7 +137,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		panel.add(health);
 
 		JLabel attack = new JLabel();
-		attack.setText("Attack: " + player.attack + "\n");
+		attack.setText("Attack: " + player.getAttack() + "\n");
 		attack.setLocation(40, 250);
 		attack.setSize(400, 20);
 		attack.setFont(new Font("SanSerif", Font.PLAIN, 15));
@@ -155,21 +154,21 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		}
 
 		//print
-		JLabel chaL = null;
-		if (player.direction.equals("fl")) {
+		/*JLabel chaL = null;
+		if (player.getDirection().equals("fl")) {
 			chaL = new JLabel(player.faceleft);
-		} else if (player.direction.equals("fr")) {
+		} else if (player.getDirection().equals("fr")) {
 			chaL = new JLabel(player.faceright);
-		} else if (player.direction.equals("bl")) {
+		} else if (player.getDirection().equals("bl")) {
 			chaL = new JLabel(player.backleft);
-		} else if (player.direction.equals("br")) {
+		} else if (player.getDirection().equals("br")) {
 			chaL = new JLabel(player.backright);
 		}
 		int xPo = trasferX(player.location.col, player.location.row);
 		int yPo = trasferY(player.location.col, player.location.row);
 		int charaSize = 40;
 		chaL.setBounds(xPo, yPo, charaSize, charaSize);
-		characterLabel = chaL;
+		characterLabel = chaL;*/
 		panel.add(characterLabel);
 
 		repaint();

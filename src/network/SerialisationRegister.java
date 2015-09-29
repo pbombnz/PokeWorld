@@ -5,7 +5,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 
 import game.*;
-import gameObjects.*;
+import game.objects.*;
 
 import java.awt.Image;
 import java.util.*;

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import player.Player;
+import game.Player;
 import ui.GameFrame;
 
 
