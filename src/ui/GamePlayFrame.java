@@ -13,6 +13,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -29,9 +30,18 @@ import player.Player;
 import ui.ChooseModeFrame.ImagePanel;
 
 /**
- *@author Wang Zhen
+ * @author Wang Zhen
+ * @contributer Prashant Bhikhu
  */
 public class GamePlayFrame extends JFrame {
+	// The Size of the Frame
+	private static final int FRAME_WIDTH = 1000;
+	private static final int FRAME_HEIGHT = 600;
+	
+	// The size of the tiles when they are displayed
+	private static final int TILE_WIDTH = 64;
+	private static final int TILE_HEIGHT = 64;
+	
 	public JPanel panel;
 	public JLabel touxiangLabel;
 	public JLabel characterLabel;
@@ -39,18 +49,16 @@ public class GamePlayFrame extends JFrame {
 	
 
 	public GamePlayFrame() {
-		this.setLocation(100, 100);
-		this.setSize(1000, 600);
+		//this.setLocation(100, 100);
+		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		panel = new ImagePanel();
+		panel = new GamePanel();
 		setContentPane(panel);
 
 		panel.setOpaque(false);
 		panel.setLayout(null);
 
-		JPanel jp = (JPanel) getContentPane();
-		jp.setOpaque(false);// she zhi kong jian tou ming
 
 		//add keylistener
 		this.addKeyListener(new KeyAdapter() {
@@ -185,12 +193,29 @@ public class GamePlayFrame extends JFrame {
 		return false;
 	}
 
-	class ImagePanel extends JPanel {
+	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			ImageIcon icon = new ImageIcon("src/playBG.png");
-			g.drawImage(icon.getImage(), 0, 0, null);
+			super.paintComponent(g); // Clears panel
 
+			// Draws background
+			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );
+			
+			
+			// Initial starting position of where the first square is going to be drawn
+			int yPos = FRAME_HEIGHT/2; 
+			int xPos = FRAME_WIDTH/5;
+					
+			for (int cellY = 0; cellY < 10; cellY++){
+			    for (int cellX = 9; cellX >= 0; cellX--) {
+		            int tileX = xPos + (cellX * TILE_WIDTH/2);
+		            int tileY = yPos - (cellX * TILE_HEIGHT/4);
+		            
+					g.drawImage(new ImageIcon("./sprites/tiles/grass.png").getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT, null );
+					//g.drawString(cellY+", "+cellX, screenX+20, screenY+20); // Shows the Array dimension associated with the array
+			    }
+			    yPos += TILE_HEIGHT/4;
+			    xPos += TILE_WIDTH/2;
+			}
 		}
 	}
 }

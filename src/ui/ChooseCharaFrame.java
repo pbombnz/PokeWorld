@@ -35,7 +35,8 @@ import player.MasterYi;
 import ui.ChooseModeFrame.ImagePanel;
 
 /**
- *@author Wang Zhen
+ * @author Wang Zhen
+ * 
  */
 public class ChooseCharaFrame extends JFrame {
 	JRadioButton colonelMustard, missScarlett, mrsPeacock, mrsWhite,
