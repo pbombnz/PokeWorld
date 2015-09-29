@@ -1,12 +1,7 @@
 package ui;
 
-
-import java.awt.Frame;
-
-import javax.swing.JDialog;
-
 import player.Player;
-import ui.ChooseModeFrame;
+
 
 /**
  *@author Wang Zhen
@@ -14,11 +9,14 @@ import ui.ChooseModeFrame;
  */
 public class Game {
 	
+	
 	public static Player player;
 	public static Boolean characterChoosed = false;
 //	public static Board board;
 	public static GameFrame gameFrame;
 
+ 
+	
 	public static void mainStep2() {
 	}
 

@@ -1,4 +1,5 @@
-package main;
+package game;
+
 
 public class Location {
 	private Room room;

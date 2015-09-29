@@ -1,43 +1,30 @@
 package ui;
 
-import game.Main;
-
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.GregorianCalendar;
-import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
+
+
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 
-import player.Location;
-import player.MasterYi;
 import player.Player;
-import ui.ChooseModeFrame.ImagePanel;
 
 /**
  * @author Wang Zhen
  * @contributer Prashant Bhikhu
  */
+@SuppressWarnings("serial")
 public class GameFrame extends JFrame {
 	// The Size of the Frame
 	private static final int FRAME_WIDTH = 1000;
@@ -217,6 +204,7 @@ public class GameFrame extends JFrame {
 		return (int) ((offset + edgeLong) * (row) + base);
 	}
 
+	
 	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
