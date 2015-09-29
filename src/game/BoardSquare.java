@@ -3,10 +3,11 @@ package game;
 import game.objects.GameObject;
 
 import java.awt.Image;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 
-public class BoardSquare {
+public class BoardSquare implements Serializable {
 	private static final ImageIcon terrainTileSprite = new ImageIcon("./sprites/tiles/grass.png");
 	
 	private GameObject gameObjectOnSquare;

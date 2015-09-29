@@ -1,9 +1,12 @@
 package game;
 
+import java.io.Serializable;
+
+import game.objects.GiantSword;
 import game.objects.Key;
 
 
-public class Board {
+public class Board implements Serializable {
 	
 	private int width;
 	private int height;
@@ -29,7 +32,7 @@ public class Board {
 				this.squares[i][j] = new BoardSquare(null);
 				
 				if(i == 4 && j == 4) {
-					this.squares[i][j] = new BoardSquare(null);
+					this.squares[i][j] = new BoardSquare(new GiantSword());
 				}
 				
 				if(i == 3 && j == 4) {

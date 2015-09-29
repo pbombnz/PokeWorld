@@ -40,12 +40,16 @@ public class SerialisationRegister {
 			kyro.register(Image.class);
 			kyro.register(ImageIcon.class);
 			
+			kyro.register(game.BoardSquare[].class);
+			kyro.register(BoardSquare.class);
+			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
 			kyro.register(Player.class);
 			kyro.register(Room.class);
 			kyro.register(Board.class);
-			kyro.register(BoardSquare.class);
+			//kyro.register(BoardSquare.class);
+			//kyro.register(BoardSquare[][].class);
 			
 			kyro.register(GameObject.class);
 			kyro.register(Item.class);
@@ -77,12 +81,16 @@ public class SerialisationRegister {
 			kyro.register(Image.class);
 			kyro.register(ImageIcon.class);
 			
+			kyro.register(game.BoardSquare[].class);
+			kyro.register(BoardSquare.class);
+			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
 			kyro.register(Player.class);
 			kyro.register(Room.class);
 			kyro.register(Board.class);
-			kyro.register(BoardSquare.class);
+			//kyro.register(BoardSquare.class);
+			//kyro.register(BoardSquare[][].class);
 			
 			kyro.register(GameObject.class);
 			kyro.register(Item.class);

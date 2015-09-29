@@ -6,6 +6,7 @@ import java.util.Map;
 
 import ui.ServerFrame;
 import game.Game;
+import game.objects.Key;
 import network.Packets.*;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -23,7 +24,7 @@ public class GameServer {
 		//if (port < 1 || port > 65535) {
 		//	throw new NumberFormatException("Port out of range"); 
 		//}
-		this.game = new Game();
+		this.game = Game.createTestMap();
 		this.port = 7777;
 		this.players = new HashMap<Connection, String>();
 		this.serverFrame = serverFrame;	
@@ -37,7 +38,13 @@ public class GameServer {
 			@Override
 			public void connected(Connection connection) {
 				super.connected(connection);
-				serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
+				serverFrame.writeToConsole("[Client] Connected from " + connection.getRemoteAddressTCP() + ".");
+				serverFrame.writeToConsole("[Client] Sending Game to the Client.");
+				connection.sendTCP(game.toByteArray());
+				
+				Game g = Game.fromByteArray(game.toByteArray());
+				System.out.println(g.rooms.size());
+				System.out.println("the key is here: " + (g.rooms.get(0).board.getSquares()[3][4].getGameObjectOnSquare() instanceof Key));
 			}
 
 			@Override

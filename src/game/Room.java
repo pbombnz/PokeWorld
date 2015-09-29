@@ -1,8 +1,8 @@
 package game;
 
-import java.io.File;
+import java.io.Serializable;
 
-public class Room {
+public class Room implements Serializable {
 	public String roomName;
 	public Board board;
 	
@@ -10,8 +10,4 @@ public class Room {
 		this.roomName = "Testing Room";
 		this.board = new Board();
 	}
-	
-	//public Room importRoom(File fileName){
-	//	return new Room();
-	//}
 }

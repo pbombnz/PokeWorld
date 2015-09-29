@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 
-public class Key implements Item{
+public class Key implements Item {
 	@Override
 	public String getName() {
 		return "Key";

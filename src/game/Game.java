@@ -1,8 +1,10 @@
 package game;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +32,23 @@ public class Game {
 		
 	}
 	
+	public byte[] toByteArray() {
+		byte[] bytes = null;
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(this.players);
+			oos.writeObject(this.rooms);
+			oos.flush();
+			oos.close();
+			bos.close();
+			bytes = bos.toByteArray();
+		} catch (IOException e) {
+			System.err.println("Error sending the GameWorld to bytes!");
+			e.printStackTrace();
+		}
+		return bytes;		
+	}
 	/**
 	 * Creates a new Game (typically an updates version from server) from a
 	 * byte array
@@ -44,6 +63,8 @@ public class Game {
 			ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 			ObjectInputStream ois = new ObjectInputStream(bis);
 			newGame = new Game();
+			newGame.players = (Map<Player, Location>) ois.readObject();
+			newGame.rooms = (List<Room>) ois.readObject();
 					//(HashMap<String, Location>) ois.readObject(),
 					//(HashMap<Avatar, Location>) ois.readObject(),
 					//(ArrayList<Avatar>) ois.readObject());
@@ -52,10 +73,10 @@ public class Game {
 		} catch (IOException e) {
 			System.err.println("Error recieving the Game from bytes!");
 			e.printStackTrace();
-		} /*catch (ClassNotFoundException e) {
-			System.err.println("Class not found in from bytes");
+		} catch (ClassNotFoundException e) {
+			System.err.println("Class not found in from bytes. "+e);
 			e.printStackTrace();
-		}*/
+		}
 		return newGame;
 	}
 	
