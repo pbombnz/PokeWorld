@@ -47,7 +47,6 @@ public class GameServer {
 				super.disconnected(connection);
 
 				serverFrame.writeToConsole(players.get(connection) + " disconnected");
-				}
 			}
 
 			public void received(Connection connection, Object object) {

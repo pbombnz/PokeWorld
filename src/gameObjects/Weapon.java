@@ -1,6 +1,6 @@
 package gameObjects;
 
-public interface Weapon {
+public interface Weapon extends GameObject {
 
 	public String getName();
 	

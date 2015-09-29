@@ -1,6 +1,6 @@
 package gameObjects;
 
-public interface Item {
+public interface Item extends GameObject {
 	
 /**
  * @return
