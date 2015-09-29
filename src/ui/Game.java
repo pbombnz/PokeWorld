@@ -3,6 +3,8 @@ package ui;
 
 import java.awt.Frame;
 
+import javax.swing.JDialog;
+
 import player.Player;
 import ui.ChooseModeFrame;
 
@@ -17,7 +19,7 @@ public class Game {
 //	public static Board board;
 	public static GamePlayFrame gameFrame;
 	public static Frame chooseNumFrame;
-	public static Frame chooseCharaFrame;
+	public static JDialog chooseCharacterDialog;
 
 	///////////////////////////////////////////
 	//	public static int playerIndex = -1;
@@ -48,16 +50,10 @@ public class Game {
 
 	public static void mainStep2() {
 		chooseNumFrame.dispose();
-//		board = new Board();
-		//		if (board.players.size() < playerNumberLimited) {
-		chooseCharaFrame = new ChooseCharaFrame();
-		//		} else {
-		//			mainStep3();
-		//		}
+		chooseCharacterDialog = new ChooseCharacterDialog(null);
 	}
 
 	public static void mainStep3() {
-		chooseCharaFrame.dispose();
 		gameFrame = new GamePlayFrame();
 		gameFrame.printInformation(player);
 		gameFrame.printCharacter(player);

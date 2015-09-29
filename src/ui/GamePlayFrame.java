@@ -184,15 +184,6 @@ public class GamePlayFrame extends JFrame {
 		return (int) ((offset + edgeLong) * (row) + base);
 	}
 
-	public boolean contai(List<String> li, String s) {
-		for (String str : li) {
-			if (str.equals(s)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
