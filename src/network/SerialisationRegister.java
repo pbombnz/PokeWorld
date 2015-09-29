@@ -6,6 +6,8 @@ import com.esotericsoftware.kryonet.Server;
 
 import game.*;
 import gameObjects.*;
+
+import java.awt.Image;
 import java.util.*;
 
 /**
@@ -25,7 +27,15 @@ public class SerialisationRegister {
 			kyro.register(byte[].class);
 			kyro.register(int.class);
 			kyro.register(boolean.class);
+			
 			kyro.register(String.class);
+			kyro.register(List.class);
+			kyro.register(ArrayList.class);
+			kyro.register(Map.class);
+			kyro.register(HashMap.class);
+			kyro.register(Set.class);
+			kyro.register(HashSet.class);
+			kyro.register(Image.class);
 			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
@@ -53,7 +63,15 @@ public class SerialisationRegister {
 			kyro.register(byte[].class);
 			kyro.register(int.class);
 			kyro.register(boolean.class);
+
 			kyro.register(String.class);
+			kyro.register(List.class);
+			kyro.register(ArrayList.class);
+			kyro.register(Map.class);
+			kyro.register(HashMap.class);
+			kyro.register(Set.class);
+			kyro.register(HashSet.class);
+			kyro.register(Image.class);
 			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
