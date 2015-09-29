@@ -1,6 +1,6 @@
 package main;
 
-import ui.Game;
+import game.Game;
 import ui.GameFrame;
 
 /**

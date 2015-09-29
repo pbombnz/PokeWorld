@@ -4,10 +4,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
+
+
+import java.awt.event.KeyListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -25,7 +27,9 @@ import player.Player;
  * @contributer Prashant Bhikhu
  */
 @SuppressWarnings("serial")
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements KeyListener, ActionListener {
+	private static enum FRAME_STATE { CREATED_FRAME, GAME_START, GAME_NORMAL}; 
+	
 	// The Size of the Frame
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
@@ -34,6 +38,8 @@ public class GameFrame extends JFrame {
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
 	
+	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
+	
 	public JPanel panel;
 	public JLabel touxiangLabel;
 	public JLabel characterLabel;
@@ -41,9 +47,9 @@ public class GameFrame extends JFrame {
 	
 
 	public GameFrame() {
-		//this.setLocation(100, 100);
-		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		panel = new GamePanel();
 		setContentPane(panel);
@@ -69,43 +75,14 @@ public class GameFrame extends JFrame {
 		gameMenu.add(exit);
 				
 		
-		exit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-
+		createGame.addActionListener(this);
+		exit.addActionListener(this);
+		
 
 		setJMenuBar(menuBar);
-		
-		
-		
-		//add keylistener
-		this.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				// don't fire an event on backspace or delete
-				//fl faceleft fr faceright bl backleft br backright.
-				if (e.getKeyCode() == KeyEvent.VK_W
-						|| e.getKeyCode() == KeyEvent.VK_UP) {
-					Game.player.goUp();
-					printCharacter(Game.player);
-				} else if (e.getKeyCode() == KeyEvent.VK_S
-						|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-					Game.player.goDown();
-					printCharacter(Game.player);
-				} else if (e.getKeyCode() == KeyEvent.VK_A
-						|| e.getKeyCode() == KeyEvent.VK_LEFT) {
-					Game.player.goLeft();
-					printCharacter(Game.player);
-				} else if (e.getKeyCode() == KeyEvent.VK_D
-						|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					Game.player.goRight();
-					printCharacter(Game.player);
-				}
-			}
-		});
-
 		setVisible(true);
+		
+		frameState = GameFrame.FRAME_STATE.CREATED_FRAME;
 	}
 
 	public ImageIcon getCharacterImage(Player player) {
@@ -209,6 +186,11 @@ public class GameFrame extends JFrame {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
 
+			if(frameState == FRAME_STATE.CREATED_FRAME) {
+				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );				
+				return;
+			}
+			
 			// Draws background
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );
 			
@@ -230,4 +212,52 @@ public class GameFrame extends JFrame {
 			}
 		}
 	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// don't fire an event on backspace or delete
+		//fl faceleft fr faceright bl backleft br backright.
+		/*if (e.getKeyCode() == KeyEvent.VK_W
+				|| e.getKeyCode() == KeyEvent.VK_UP) {
+			Game.player.goUp();
+			printCharacter(Game.player);
+		} else if (e.getKeyCode() == KeyEvent.VK_S
+				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
+			Game.player.goDown();
+			printCharacter(Game.player);
+		} else if (e.getKeyCode() == KeyEvent.VK_A
+				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
+			Game.player.goLeft();
+			printCharacter(Game.player);
+		} else if (e.getKeyCode() == KeyEvent.VK_D
+				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			Game.player.goRight();
+			printCharacter(Game.player);
+		}*/
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {	
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		Object source = arg0.getSource();
+		if(source instanceof JMenuItem) {
+			JMenuItem menuItem = (JMenuItem) source;
+			
+			if(menuItem.getText().equals("Create Game (As Server)")) {
+				new ServerFrame();
+				this.dispose();
+			}
+			else if (menuItem.getText().equals("Exit")) {
+				System.exit(0);
+			}
+		}
+		
+	}	
 }
