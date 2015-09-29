@@ -77,8 +77,7 @@ public class GameTask {
 
 
 	private int move(int playerID, Direction direction) {
-		// TODO Auto-generated method stub
-	
+		return 0;
 	}
 
 }
