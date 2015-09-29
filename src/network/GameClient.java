@@ -3,23 +3,16 @@ package network;
 import game.Game;
 
 import java.io.IOException;
-import java.util.Map;
 
-import ui.GameFrame;
-import ui.ServerFrame;
-
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.*;
 
 import network.Packets.*;
 
 public class GameClient {
 	private Game game;
-	private GameFrame gameFrame;
 	private Client client;
 	
-	public GameClient() {
+	public GameClient() throws IOException {
 	    client = new Client();
 	    SerialisationRegister.register(client);
 
@@ -32,8 +25,12 @@ public class GameClient {
 	    try {
 			client.connect(5000, "localhost", 7777);
 		} catch (IOException e) {
-			System.out.println(e);
+			throw new IOException(e);
 		}
-	    client.sendTCP("hi"); System.out.println(client.getID());
+	    //client.sendTCP("hi");
+	}
+
+	public Game getGame() {
+		return game;
 	}
 }

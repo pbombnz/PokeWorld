@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 
 
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -21,8 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import network.GameClient;
-
-import com.esotericsoftware.kryonet.*;
 
 import game.Player;
 
@@ -261,7 +260,12 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				new ServerFrame();
 				//this.dispose();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
-				gameClient = new GameClient();
+				try {
+					gameClient = new GameClient();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
 			}
 			else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
