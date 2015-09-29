@@ -59,7 +59,7 @@ public class Game {
 		return newGame;
 	}
 	
-	private static Game createTestMap() {
+	public static Game createTestMap() {
 		Game game = new Game();
 		game.rooms.add(new Room());
 		return game;
