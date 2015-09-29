@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 
@@ -23,6 +24,7 @@ public class ServerFrame extends JFrame implements ActionListener {
 	private static final int FRAME_HEIGHT = 300;
 	
 	private JTextArea console;
+	private JScrollPane consoleScrollPane;
 	
 	private GameServer gameServer;
 	
@@ -56,8 +58,17 @@ public class ServerFrame extends JFrame implements ActionListener {
 
 
 		setJMenuBar(menuBar);
-		add(console);
+		
+		JScrollPane consoleScrollPane = new JScrollPane(console);
+
+		add(consoleScrollPane);
 		setVisible(true);
+		
+		try {
+			gameServer = new GameServer(this);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		
 	}
 
@@ -69,7 +80,7 @@ public class ServerFrame extends JFrame implements ActionListener {
 		if(menuItem.getText().equals("Connect")) {
 			// Load Game Map 1 for now (NO USER SELECTION)
 			try {
-				gameServer = new GameServer(7777, this);
+				gameServer = new GameServer(this);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

@@ -19,19 +19,17 @@ public class GameServer {
 	private Server server;
 	private Map<Connection, String> players;	
 	
-	public GameServer(int port, ServerFrame serverFrame) throws IOException {
-		if (port < 1 || port > 65535) {
-			throw new NumberFormatException("Port out of range"); 
-		}
+	public GameServer(ServerFrame serverFrame) throws IOException {
+		//if (port < 1 || port > 65535) {
+		//	throw new NumberFormatException("Port out of range"); 
+		//}
 		this.game = new Game();
-		this.port = port;
+		this.port = 7777;
 		this.players = new HashMap<Connection, String>();
 		this.serverFrame = serverFrame;	
 		
 		this.server = new Server(20480, 20480);
 		
-		server.start(); 
-		server.bind(port, port); 
 		SerialisationRegister.register(server);
 		server.addListener(new Listener() {
 			
@@ -50,7 +48,16 @@ public class GameServer {
 			}
 
 			public void received(Connection connection, Object object) {
+				serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
+				if(object instanceof String) {
+					serverFrame.writeToConsole("Received connection from " + (String) object);
+				} //else {
+				//	serverFrame.writeToConsole("WTF " + object.toString());
+				//}
+
 			}
-		});			
+		});	
+		server.bind(port); 
+		server.start(); 
 	}
 }

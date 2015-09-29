@@ -20,6 +20,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import network.GameClient;
+
+import com.esotericsoftware.kryonet.*;
+
 import player.Player;
 
 /**
@@ -28,7 +32,9 @@ import player.Player;
  */
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements KeyListener, ActionListener {
-	private static enum FRAME_STATE { CREATED_FRAME, GAME_START, GAME_NORMAL}; 
+	private static enum FRAME_STATE { CREATED_FRAME, DO_NOTHING, 
+									  GAME_CONNECTING, GAME_START, GAME_NORMAL, 
+									  GAME_ENDED_EXPECTED, GAME_ENDED_UNEXPECTED}; 
 	
 	// The Size of the Frame
 	private static final int FRAME_WIDTH = 1000;
@@ -39,6 +45,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	private static final int TILE_HEIGHT = 64;
 	
 	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
+	private GameClient gameClient;
 	
 	public JPanel panel;
 	public JLabel touxiangLabel;
@@ -76,6 +83,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				
 		
 		createGame.addActionListener(this);
+		joinGame.addActionListener(this);
 		exit.addActionListener(this);
 		
 
@@ -252,7 +260,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			
 			if(menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
-				this.dispose();
+				//this.dispose();
+			} else if (menuItem.getText().equals("Join Game (As Client)")) {
+				gameClient = new GameClient();
 			}
 			else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);

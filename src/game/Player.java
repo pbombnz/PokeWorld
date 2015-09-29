@@ -6,17 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-
-	public static int HEALTH = 100;
-	public static int ATTACK = 10;
+	public static final int HEALTH = 100;
+	public static final int ATTACK = 10;
 
 	private final int id;
-	private final int maxItems = 6;
-
+	private String name;
+	
 	private int health;
 	private int attack;
-	private String name;
 
+	private final int maxItems = 6;
 	private List<Item> inventory = new ArrayList<Item>();
 
 	Location location;
