@@ -1,5 +1,7 @@
 package game.objects;
 
+import javax.swing.ImageIcon;
+
 public class Machete implements Weapon{
 
 	@Override
@@ -9,21 +11,19 @@ public class Machete implements Weapon{
 	}
 
 	@Override
-	public String imagePath() {
+	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String description() {
+	public int getAttackDamage() {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
-	public int attackDamage() {
-		// TODO Auto-generated method stub
-		return 20;
+	public ImageIcon getSpriteImage() {
+		return null;
 	}
-
 }

@@ -1,29 +1,27 @@
 package game.objects;
 
+import javax.swing.ImageIcon;
+
 public class GiantSword implements Weapon{
 
 	@Override
+	public ImageIcon getSpriteImage() {
+		return GameObject.WEAPON_GIANTSWORD;
+	}
+
+	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Giant Sword";
 	}
 
 	@Override
-	public String imagePath() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getDescription() {
+		return "A Giant Sword that looks very dangerous";
 	}
 
 	@Override
-	public String description() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int attackDamage() {
-		// TODO Auto-generated method stub
-		return 30;
+	public int getAttackDamage() {
+		return 10;
 	}
 
 }

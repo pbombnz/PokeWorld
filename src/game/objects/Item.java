@@ -1,20 +1,11 @@
 package game.objects;
 
+import game.Player;
+
 public interface Item extends GameObject {
+	public String getName();
+	public String getDescription();
 	
-/**
- * @return
- */
-public String getName();
-
-/**
- * @return
- */
-public String description();
-
-/**
- * @return
- */
-public String imagePath();
-
+	public void useItem(Player player);
+	public boolean isUsable();
 }

@@ -1,19 +1,16 @@
 package game.objects;
 
+import game.Player;
+
 import java.awt.image.BufferedImage;
 
-public class BadPotion implements Item{
+import javax.swing.ImageIcon;
 
-	private final int hurt;
-	private BufferedImage picture;
+public class BadPotion implements Item{
+	private final int healthDamageAmount;
 	
-	public BadPotion(int hurt){
-		this.hurt = hurt;
-//		try{
-//			picture = ImageIO.read(null);
-//		} catch (IOException e){
-//			e.printStackTrace();
-//		}
+	public BadPotion(int healthDamageAmount){
+		this.healthDamageAmount = healthDamageAmount;
 	}
 	
 	@Override
@@ -22,21 +19,22 @@ public class BadPotion implements Item{
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "This potion smells funny";
-	}
-
-	@Override
-	public String imagePath() {
-		return null;
-	}
-	
-	public int getHurt(){
-		return hurt;
 	}
 	
 	public boolean isUsable(){
 		return true;
+	}
+
+	@Override
+	public ImageIcon getSpriteImage() {
+		return null;
+	}
+
+	@Override
+	public void useItem(Player player) {
+		player.setHealth(healthDamageAmount);
 	}
 	
 	

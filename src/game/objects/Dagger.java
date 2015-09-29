@@ -1,29 +1,27 @@
 package game.objects;
 
+import javax.swing.ImageIcon;
+
 public class Dagger implements Weapon{
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
+		return "Dagger";
+	}
+
+	@Override
+	public ImageIcon getSpriteImage() {
 		return null;
 	}
 
 	@Override
-	public String imagePath() {
-		// TODO Auto-generated method stub
+	public String getDescription() {
 		return null;
 	}
 
 	@Override
-	public String description() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int attackDamage() {
-		// TODO Auto-generated method stub
-		return 10;
+	public int getAttackDamage() {
+		return 2;
 	}
 
 }
