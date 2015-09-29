@@ -4,11 +4,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 
-import game.Game;
-
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
+import game.*;
+import gameObjects.*;
+import java.util.*;
 
 /**
  * This class is used to register classes that will be
@@ -26,17 +24,56 @@ public class SerialisationRegister {
 			
 			kyro.register(byte[].class);
 			kyro.register(int.class);
+			kyro.register(boolean.class);
 			kyro.register(String.class);
 			
 			kyro.register(Game.class);
+			kyro.register(Location.class);
+			kyro.register(Player.class);
 			kyro.register(Room.class);
 			kyro.register(Board.class);
+			kyro.register(BoardSquare.class);
+			
+			kyro.register(GameObject.class);
+			kyro.register(Item.class);
+			kyro.register(Weapon.class);
+			kyro.register(BadPotion.class);
+			kyro.register(Chest.class);
+			kyro.register(Dagger.class);
+			kyro.register(Enemies.class);
+			kyro.register(GiantSword.class);
+			kyro.register(GoodPotion.class);
+			kyro.register(Key.class);
+			kyro.register(Machete.class);
+			kyro.register(Weapon.class);		
 			
 		} else if (host instanceof Client) {
 			Kryo kyro = ((Client) host).getKryo();
 			
-			kyro.register(Game.class);
 			kyro.register(byte[].class);
+			kyro.register(int.class);
+			kyro.register(boolean.class);
+			kyro.register(String.class);
+			
+			kyro.register(Game.class);
+			kyro.register(Location.class);
+			kyro.register(Player.class);
+			kyro.register(Room.class);
+			kyro.register(Board.class);
+			kyro.register(BoardSquare.class);
+			
+			kyro.register(GameObject.class);
+			kyro.register(Item.class);
+			kyro.register(Weapon.class);
+			kyro.register(BadPotion.class);
+			kyro.register(Chest.class);
+			kyro.register(Dagger.class);
+			kyro.register(Enemies.class);
+			kyro.register(GiantSword.class);
+			kyro.register(GoodPotion.class);
+			kyro.register(Key.class);
+			kyro.register(Machete.class);
+			kyro.register(Weapon.class);
 		}
 	}
 }
