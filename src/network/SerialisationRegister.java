@@ -23,11 +23,20 @@ public class SerialisationRegister {
 	public static void register(Object host) {
 		if (host instanceof Server) {
 			Kryo kyro = ((Server) host).getKryo();
+			
+			kyro.register(byte[].class);
+			kyro.register(int.class);
+			kyro.register(String.class);
+			
 			kyro.register(Game.class);
-			kyro.register(byte[].class);;
+			kyro.register(Room.class);
+			kyro.register(Board.class);
+			
 		} else if (host instanceof Client) {
 			Kryo kyro = ((Client) host).getKryo();
+			
 			kyro.register(Game.class);
+			kyro.register(byte[].class);
 		}
 	}
 }
