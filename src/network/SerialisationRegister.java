@@ -10,6 +10,8 @@ import game.objects.*;
 import java.awt.Image;
 import java.util.*;
 
+import javax.swing.ImageIcon;
+
 /**
  * This class is used to register classes that will be
  * sent over the network with both the server and client.
@@ -36,6 +38,7 @@ public class SerialisationRegister {
 			kyro.register(Set.class);
 			kyro.register(HashSet.class);
 			kyro.register(Image.class);
+			kyro.register(ImageIcon.class);
 			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
@@ -72,6 +75,7 @@ public class SerialisationRegister {
 			kyro.register(Set.class);
 			kyro.register(HashSet.class);
 			kyro.register(Image.class);
+			kyro.register(ImageIcon.class);
 			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
