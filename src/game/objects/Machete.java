@@ -3,6 +3,7 @@ package game.objects;
 import javax.swing.ImageIcon;
 
 public class Machete implements Weapon{
+	private static final long serialVersionUID = -8688636923251982474L;
 
 	@Override
 	public String getName() {

@@ -2,7 +2,8 @@ package game.objects;
 
 import javax.swing.ImageIcon;
 
-public class Dagger implements Weapon{
+public class Dagger implements Weapon {
+	private static final long serialVersionUID = -1252162793041162040L;
 
 	@Override
 	public String getName() {

@@ -2,7 +2,8 @@ package game.objects;
 
 import javax.swing.ImageIcon;
 
-public class GiantSword implements Weapon{
+public class GiantSword implements Weapon {
+	private static final long serialVersionUID = 1751235644109188989L;
 
 	@Override
 	public ImageIcon getSpriteImage() {

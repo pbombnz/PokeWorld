@@ -1,37 +1,51 @@
 package game.objects;
 
+import game.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 
-public class Chest {
 
-	private final int id;
-	private List<Item> inventory = new ArrayList<Item>();
+public class Chest implements Item {
+	private static final long serialVersionUID = -5905703818196371005L;
+	
+	private boolean isOpened = false;
+	private Item itemInsideChest;
 
-	public Chest(int ID, List<Item> inv) {
-		this.id = ID;
-		this.inventory = inv;
+	public Chest(Item itemInsideChest) {
+		this.itemInsideChest = itemInsideChest;
 	}
 
-	public List<Item> getLoot() {
-		return inventory;
+	@Override
+	public ImageIcon getSpriteImage() {
+		return null;
 	}
 
-	public int getObjectID() {
-		return id;
+	@Override
+	public String getName() {
+		return "A Chest";
 	}
 
-	public List<Item> openChest() {
-		return inventory;
+	@Override
+	public String getDescription() {
+		return "A Chest with possibly something in it";
 	}
 
-	public void updateLoot(List<Item> items) {
-		this.inventory = items;
+	@Override
+	public void useItem(Player player) {
+		if(isOpened) {
+			
+		} else {
+			
+			isOpened = true;
+		}
 	}
 
-	public void removeInv() {
-		this.inventory = new ArrayList<Item>();
+	@Override
+	public boolean isUsable() {
+		return true;
 	}
 	
 }

@@ -2,13 +2,11 @@ package game.objects;
 
 import game.Player;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class GoodPotion implements Item {
+	private static final long serialVersionUID = -6872048042823538745L;
+	
 	private final int healthHealAmount;
 	
 	public GoodPotion(int healthHealAmount){

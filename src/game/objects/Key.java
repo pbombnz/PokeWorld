@@ -2,15 +2,12 @@ package game.objects;
 
 import game.Player;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 
 public class Key implements Item {
+	private static final long serialVersionUID = 3007881710387627871L;
+
 	@Override
 	public String getName() {
 		return "Key";
