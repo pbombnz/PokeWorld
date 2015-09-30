@@ -18,12 +18,13 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import network.GameClient;
-
 import game.Player;
+import game.avatar.Avatar;
 
 /**
  * @author Wang Zhen
@@ -45,6 +46,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	
 	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
 	private GameClient gameClient;
+	
+	private Player clientPlayer;
 	
 	public JPanel panel;
 	public JLabel touxiangLabel;
@@ -263,9 +266,39 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				try {
 					gameClient = new GameClient();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
+					JOptionPane.showMessageDialog(this, "Game Client was unable to initalise.\n" +
+														" Make sure that you have created and\n" +
+														" connected and the server and the\n" +
+														"ports are unblocked.", "ERROR", JOptionPane.ERROR_MESSAGE);
+					
+					frameState = FRAME_STATE.CREATED_FRAME;
+					return;
 				}
+				
+				// At this point in code, client is connected to server successfully.
+				
+				// Now we need to let the user enter a username and pick a character
+				String clientUsername = null;
+				while (clientUsername == null)
+				{
+					clientUsername = JOptionPane.showInputDialog(this, "Input your Username?");
+					if(clientUsername != null && clientUsername.length() < 3)
+					{
+						clientUsername = null;
+					}
+					
+					if(clientUsername == null) {
+						JOptionPane.showMessageDialog(this, "You need to enter a user name that is at least 3 characters long.", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
+				}	
+				
+				Avatar clientAvatar = ChooseCharacterDialog.Chooser(this);
+				
+				// Created a player for the client
+				clientPlayer = new Player(gameClient.getClientID(), clientUsername);
+				
+				frameState = FRAME_STATE.GAME_START;
+				this.repaint();
 			}
 			else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
