@@ -15,7 +15,7 @@ public class Player {
 	private Avatar avatar;
 	
 	private final int id;
-	private String name;
+	private final String name;
 	
 	private int health;
 	private int attack;
@@ -26,8 +26,9 @@ public class Player {
 	private Location location;
 	private Direction direction = Direction.FACE_RIGHT;
 
-	public Player(int ID, int attack, int health, List<Item> items){
-		this.id = ID;
+	public Player(int id, String name, int attack, int health, List<Item> items){
+		this.id = id;
+		this.name = name;
 		this.attack = attack;
 		this.health = health;
 		if(items != null){
@@ -83,5 +84,21 @@ public class Player {
 
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 }
