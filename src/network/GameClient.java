@@ -14,7 +14,7 @@ public class GameClient {
 	
 	public GameClient() throws IOException {
 	    client = new Client();
-	    SerialisationRegister.register(client);
+	    Network.register(client);
 
 	    /*client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
@@ -23,7 +23,7 @@ public class GameClient {
 		});*/
 	    client.start();
 	    try {
-			client.connect(5000, "localhost", 7777);
+			client.connect(5000, "localhost", Network.PORT);
 		} catch (IOException e) {
 			throw new IOException(e);
 		}
@@ -32,5 +32,13 @@ public class GameClient {
 
 	public Game getGame() {
 		return game;
+	}
+	
+	public int getClientID() {
+		return client.getID();
+	}
+	
+	public void sendTCP(Object object) {
+		client.sendTCP(object);
 	}
 }

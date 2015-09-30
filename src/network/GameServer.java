@@ -25,13 +25,13 @@ public class GameServer {
 		//	throw new NumberFormatException("Port out of range"); 
 		//}
 		this.game = Game.createTestMap();
-		this.port = 7777;
+		this.port = Network.PORT;
 		this.players = new HashMap<Connection, String>();
 		this.serverFrame = serverFrame;	
 		
 		this.server = new Server(20480, 20480);
 		
-		SerialisationRegister.register(server);
+		Network.register(server);
 		server.addListener(new Listener() {
 			
 
@@ -40,17 +40,16 @@ public class GameServer {
 				super.connected(connection);
 				serverFrame.writeToConsole("[Client] Connected from " + connection.getRemoteAddressTCP() + ".");
 				serverFrame.writeToConsole("[Client] Sending Game to the Client.");
-				connection.sendTCP(game.toByteArray());
+				//connection.sendTCP(game.toByteArray());
 				
-				Game g = Game.fromByteArray(game.toByteArray());
-				System.out.println(g.rooms.size());
-				System.out.println("the key is here: " + (g.rooms.get(0).board.getSquares()[3][4].getGameObjectOnSquare() instanceof Key));
+				//Game g = Game.fromByteArray(game.toByteArray());
+				//System.out.println(g.rooms.size());
+				//System.out.println("the key is here: " + (g.rooms.get(0).board.getSquares()[3][4].getGameObjectOnSquare() instanceof Key));
 			}
 
 			@Override
 			public void disconnected(Connection connection) {
 				super.disconnected(connection);
-
 				serverFrame.writeToConsole(players.get(connection) + " disconnected");
 			}
 

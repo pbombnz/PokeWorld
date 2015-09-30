@@ -12,11 +12,12 @@ import game.Player;
 *
 */
 public class Packets {
-
+	// Client -> Server
 	public static class NewPlayer {
-		Player name;
+		Player player;
 	}
 
+	// Server -> Client
 	public static class NewGame {
 		Game game;
 	}

@@ -21,7 +21,9 @@ import javax.swing.ImageIcon;
  *
  * @author Prashant Bhikhu
  */
-public class SerialisationRegister {
+public class Network {
+	public static final int PORT = 7777;
+	
 	public static void register(Object host) {
 		if (host instanceof Server) {
 			Kryo kyro = ((Server) host).getKryo();
@@ -40,16 +42,13 @@ public class SerialisationRegister {
 			kyro.register(Image.class);
 			kyro.register(ImageIcon.class);
 			
-			kyro.register(game.BoardSquare[].class);
-			kyro.register(BoardSquare.class);
-			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
 			kyro.register(Player.class);
 			kyro.register(Room.class);
 			kyro.register(Board.class);
-			//kyro.register(BoardSquare.class);
-			//kyro.register(BoardSquare[][].class);
+			kyro.register(BoardSquare.class);
+			kyro.register(BoardSquare[][].class);
 			
 			kyro.register(GameObject.class);
 			kyro.register(Item.class);
@@ -81,16 +80,13 @@ public class SerialisationRegister {
 			kyro.register(Image.class);
 			kyro.register(ImageIcon.class);
 			
-			kyro.register(game.BoardSquare[].class);
-			kyro.register(BoardSquare.class);
-			
 			kyro.register(Game.class);
 			kyro.register(Location.class);
 			kyro.register(Player.class);
 			kyro.register(Room.class);
 			kyro.register(Board.class);
-			//kyro.register(BoardSquare.class);
-			//kyro.register(BoardSquare[][].class);
+			kyro.register(BoardSquare.class);
+			kyro.register(BoardSquare[][].class);
 			
 			kyro.register(GameObject.class);
 			kyro.register(Item.class);
