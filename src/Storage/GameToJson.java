@@ -8,6 +8,9 @@ import java.io.IOException;
 
 import org.json.simple.*;
 
+import com.google.*;
+import com.google.gson.Gson;
+
 import game.Board;
 import game.Location;
 import jdk.nashorn.internal.parser.JSONParser;
@@ -31,30 +34,33 @@ public class GameToJson {
 		JSONObject jsonobj = new JSONObject();
 		
 		String name = p.getName();
-		int attack = p.getAttack();
-		Avatar avatar = p.getAvatar();
+		Integer attack = p.getAttack();
+		Gson gson = new Gson();
+		String avatar = gson.toJson( p.getAvatar());
 		Direction dir = p.getDirection();
 		int health = p.getHealth();
 		List<Item> items = p.getInventory();
-		Location loc = p.getLocation();	
+		String loc = gson.toJson(p.getLocation());	
 			
 		jsonobj.put("name", name);
 		jsonobj.put("attack",attack);
 		jsonobj.put("avatar", avatar);
-		jsonobj.put("direction",dir);
+		jsonobj.put("direction",dir.ordinal());
 		jsonobj.put("health", health);
-		jsonobj.put("items", items);
+
+		jsonobj.put("items", gson);
+		
 		jsonobj.put("location",loc);
 		
 		FileWriter file = null;
 		try {
-			file = new FileWriter(new File("./playerSave.json"));
+			file = new FileWriter(new File("./playerSave.json"), false);
+			file.write(jsonobj.toJSONString());
+			file.close();
 		} 
 		catch (IOException e){
 			e.printStackTrace();
-		} finally {
-			file.close();
-		}
+		} 
 	}
 	
 }

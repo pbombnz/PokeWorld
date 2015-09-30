@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.sql.Savepoint;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,6 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.RepaintManager;
 
+import Storage.GameToJson;
+import Storage.InvalidSaveException;
+import Storage.JsonToGame;
 import network.GameClient;
 import game.BoardSquare;
 import game.Game;
@@ -80,7 +84,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		// Create Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu gameMenu = new JMenu("Game");
-		gameMenu.setMnemonic(KeyEvent.VK_G);
+		//gameMenu.setMnemonic(KeyEvent.VK_G);
 		
 		menuBar.add(gameMenu);
 
@@ -92,12 +96,23 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		gameMenu.add(joinGame);
 		gameMenu.add(new JSeparator());
 		gameMenu.add(exit);
-				
+		
+		JMenu SaveLoadMenu = new JMenu("Save / Load");
+		
+		menuBar.add(SaveLoadMenu);
+		
+		JMenuItem savePlayer = new JMenuItem("Save Player Info");
+		JMenuItem loadPlayer = new JMenuItem("Load Player Info");
+		
+		SaveLoadMenu.add(savePlayer);
+		SaveLoadMenu.add(loadPlayer);
 		
 		createGame.addActionListener(this);
 		joinGame.addActionListener(this);
 		exit.addActionListener(this);
-		
+	
+		savePlayer.addActionListener(this);
+		loadPlayer.addActionListener(this);
 
 		setJMenuBar(menuBar);
 		setVisible(true);
@@ -234,6 +249,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					//System.out.println(gameClient.getGame().players.size());
 					//System.out.println(gameClient.getGame().players.get(clientPlayer));
 					Location clientPlayerLoc = gameClient.getGame().players.get(clientPlayer);
+					System.out.println(clientPlayerLoc);
 					
 					if(clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY ) {
 						//System.out.println(clientPlayer.getSpriteBasedOnDirection() != null);
@@ -382,6 +398,44 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
 			}
+			else if (menuItem.getText().equals("Save Player Info")) {
+				if(frameState == FRAME_STATE.CREATED_FRAME) {
+					JOptionPane.showMessageDialog(this, "Need to load game first", "ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					try {
+						clientPlayer.setLocation(gameClient.getGame().players.get(clientPlayer));
+						gameClient.getGame().players.put(clientPlayer, clientPlayer.getLocation());
+						GameToJson.savePlayer(clientPlayer);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvalidSaveException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}	
+			else if (menuItem.getText().equals("Load Player Info")) {
+				if(frameState == FRAME_STATE.CREATED_FRAME) {
+					JOptionPane.showMessageDialog(this, "Need to load game first", "ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					Player newClientPlayer = JsonToGame.loadPlayer();
+					if(newClientPlayer != null) {
+						clientPlayer = newClientPlayer;
+						clientPlayer.getLocation().setRoom(gameClient.getGame().rooms.get(0));
+						//hard coded - removes key if player has it, places player in right spot
+						if(clientPlayer.getInventory().contains(gameClient.getGame().rooms.get(0).board.getSquares()[3][4]))
+							gameClient.getGame().rooms.get(0).board.getSquares()[3][4].setGameObjectOnSquare(null);
+						gameClient.getGame().players.clear();
+						gameClient.getGame().players.put(clientPlayer, clientPlayer.getLocation());
+						repaint();
+					}
+				}
+			}	
+			JMenuItem savePlayer = new JMenuItem("Save Player Info");
+			JMenuItem loadPlayer = new JMenuItem("Load Player Info");
 		}
 		
 	}	
