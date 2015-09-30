@@ -1,10 +1,17 @@
 package game;
 
+import java.io.Serializable;
 
-public class Location {
+
+public class Location implements Serializable {
+	private static final long serialVersionUID = -5585594220565441892L;
+	
 	private Room room;
 	private int x;
 	private int y;
+	
+	public Location() {}
+	
 	
 	public Location(Room room, int x, int y) {
 		super();
@@ -38,12 +45,13 @@ public class Location {
 	}
 	
 	public void moveSouth() {
-		this.y = this.y - 1;
+		this.y = this.y + 1;
 	}
 	
 	public void moveWest() {
 		this.x = this.x - 1;
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -54,6 +62,7 @@ public class Location {
 		result = prime * result + y;
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -75,6 +84,6 @@ public class Location {
 			return false;
 		return true;
 	}
-	
+
 
 }

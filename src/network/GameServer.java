@@ -6,12 +6,14 @@ import java.util.Map;
 
 import ui.ServerFrame;
 import game.Game;
+import game.Location;
 import game.objects.Key;
 import network.Packets.*;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 
 public class GameServer {
 	private int port;
@@ -30,6 +32,9 @@ public class GameServer {
 		this.serverFrame = serverFrame;	
 		
 		this.server = new Server(20480, 20480);
+		Log.set(Log.LEVEL_NONE);
+		
+		serverFrame.writeToConsole("[Server] Started");
 		
 		Network.register(server);
 		server.addListener(new Listener() {
@@ -38,8 +43,8 @@ public class GameServer {
 			@Override
 			public void connected(Connection connection) {
 				super.connected(connection);
-				serverFrame.writeToConsole("[Client] Connected from " + connection.getRemoteAddressTCP() + ".");
-				serverFrame.writeToConsole("[Client] Sending Game to the Client.");
+				serverFrame.writeToConsole("[Client] Connected from " + connection.getRemoteAddressTCP() + " (Connection ID: "+connection.getID()+").");
+				//serverFrame.writeToConsole("[Client] Sending Game to the Client...");
 				//connection.sendTCP(game.toByteArray());
 				
 				//Game g = Game.fromByteArray(game.toByteArray());
@@ -57,7 +62,21 @@ public class GameServer {
 				serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
 				if(object instanceof String) {
 					serverFrame.writeToConsole("Received connection from " + (String) object);
-				} //else {
+				}  else if (object instanceof NewPlayer) {
+					NewPlayer np = (NewPlayer) object;
+					Location loc = new Location(game.rooms.get(0), 9, 0);
+					game.players.put(np.player, loc);
+					
+					System.out.println(game);
+					System.out.println(game.players);
+					System.out.println(game.players.size());
+					
+					//System.out.println(Game.fromByteArray(game.toByteArray()).toString());
+					
+					//send game back to client
+					connection.sendTCP(game.toByteArray());
+				}
+				//else {
 				//	serverFrame.writeToConsole("WTF " + object.toString());
 				//}
 

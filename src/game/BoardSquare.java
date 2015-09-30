@@ -29,4 +29,34 @@ public class BoardSquare implements Serializable {
 	public void setGameObjectOnSquare(GameObject gameObjectOnSquare) {
 		this.gameObjectOnSquare = gameObjectOnSquare;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((gameObjectOnSquare == null) ? 0 : gameObjectOnSquare
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BoardSquare other = (BoardSquare) obj;
+		if (gameObjectOnSquare == null) {
+			if (other.gameObjectOnSquare != null)
+				return false;
+		} else if (!gameObjectOnSquare.equals(other.gameObjectOnSquare))
+			return false;
+		return true;
+	}
+	
+	
 }

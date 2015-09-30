@@ -3,10 +3,15 @@ package game;
 import game.avatar.Avatar;
 import game.objects.Item;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+import javax.swing.ImageIcon;
+
+public class Player implements Serializable {
+	private static final long serialVersionUID = -4998808498802462674L;
+
 	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
 	
 	public static final int HEALTH = 100;
@@ -14,7 +19,6 @@ public class Player {
 
 	private Avatar avatar;
 	
-	private final int id;
 	private final String name;
 	
 	private int health;
@@ -26,8 +30,11 @@ public class Player {
 	private Location location;
 	private Direction direction = Direction.FACE_RIGHT;
 
-	public Player(int id, String name){
-		this.id = id;
+	public Player() {
+		this.name = null;
+	}
+	
+	public Player(String name) {
 		this.name = name;
 		this.attack = ATTACK;
 		this.health = HEALTH;
@@ -87,10 +94,6 @@ public class Player {
 		return name;
 	}
 
-	public int getId() {
-		return id;
-	}
-
 	public Location getLocation() {
 		return location;
 	}
@@ -98,4 +101,54 @@ public class Player {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+	
+	public ImageIcon getSpriteBasedOnDirection() {
+		if(avatar != null) {
+			switch(direction) {
+			case FACE_LEFT:
+				return avatar.getFaceleft();
+			case FACE_RIGHT:
+				return avatar.getFaceright();
+			case BACK_LEFT:
+				return avatar.getBackleft();
+			case BACK_RIGHT:
+				return avatar.getBackright();
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	
 }

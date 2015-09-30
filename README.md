@@ -1,11 +1,11 @@
 # SWEN222 Group Assignment
 
 ## Team Memebers and Repsonsibilites
-* Prashant - Networking
+* Prashant - Networking and All Rounder
 * Alex - Graphical User Interface
-* Donald - Game Logic and Objects
+* Donald - Game Logic and Objects (Team Leader)
 * Sushant - Game Logic and Objects
-* Priyanka - Game Saving and Loading (via JSON) / Game Sprite Making
+* Priyanka  - Game Saving and Loading (via JSON) / Game Sprite Making
 
 ## Unknown Repsonsiblities
 * ? - Documentation

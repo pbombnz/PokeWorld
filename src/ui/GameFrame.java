@@ -21,10 +21,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.RepaintManager;
 
 import network.GameClient;
+import game.BoardSquare;
+import game.Game;
+import game.Location;
 import game.Player;
+import game.Room;
 import game.avatar.Avatar;
+import game.objects.GameObject;
+import game.objects.Item;
 
 /**
  * @author Wang Zhen
@@ -32,6 +39,8 @@ import game.avatar.Avatar;
  */
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements KeyListener, ActionListener {
+	// The Emum has holds states for the JFrame so we know what to draw and when
+	// for instance we draw
 	private static enum FRAME_STATE { CREATED_FRAME, DO_NOTHING, 
 									  GAME_CONNECTING, GAME_START, GAME_NORMAL, 
 									  GAME_ENDED_EXPECTED, GAME_ENDED_UNEXPECTED}; 
@@ -56,6 +65,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	
 
 	public GameFrame() {
+		
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -95,7 +105,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		frameState = GameFrame.FRAME_STATE.CREATED_FRAME;
 	}
 
-	public ImageIcon getCharacterImage(Player player) {
+	/*public ImageIcon getCharacterImage(Player player) {
 		if (player.getDirection() == Player.Direction.FACE_LEFT) {
 			return player.getAvatar().getFaceleft();
 		} else if (player.getDirection() == Player.Direction.FACE_RIGHT) {
@@ -106,7 +116,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			return player.getAvatar().getBackright();
 		}
 		return null;
-	}
+	}*/
 
 	public void printInformation(Player player) {
 		//initialize
@@ -146,10 +156,10 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		attack.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(attack);
 
-		repaint();
+		//repaint();
 	}
 
-	public void printCharacter(Player player) {
+	/*public void printCharacter(Player player) {
 		//initialize
 		if (characterLabel != null) {
 			panel.remove(characterLabel);
@@ -170,13 +180,13 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		int yPo = trasferY(player.location.col, player.location.row);
 		int charaSize = 40;
 		chaL.setBounds(xPo, yPo, charaSize, charaSize);
-		characterLabel = chaL;*/
+		characterLabel = chaL;
 		panel.add(characterLabel);
 
 		repaint();
-	}
+	}*/
 
-	public int trasferX(int col, int row) {
+	/*public int trasferX(int col, int row) {
 		int offset = 10;
 		int edgeLong = 30;
 		int base = 470;
@@ -188,20 +198,24 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		int edgeLong = 30;
 		int base = 50;
 		return (int) ((offset + edgeLong) * (row) + base);
-	}
+	}*/
 
 	
 	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
 
-			if(frameState == FRAME_STATE.CREATED_FRAME) {
+			System.out.println(true);
+			
+			if(frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
 				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );				
 				return;
 			}
 			
 			// Draws background
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );
+			
+			printInformation(clientPlayer);
 			
 			
 			// Initial starting position of where the first square is going to be drawn
@@ -215,6 +229,32 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		            
 					g.drawImage(new ImageIcon("./sprites/tiles/grass.png").getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT, null );
 					//g.drawString(cellY+", "+cellX, screenX+20, screenY+20); // Shows the Array dimension associated with the array
+					//System.out.println(gameClient.getGame());
+					//System.out.println(gameClient.getGame().players);
+					//System.out.println(gameClient.getGame().players.size());
+					//System.out.println(gameClient.getGame().players.get(clientPlayer));
+					Location clientPlayerLoc = gameClient.getGame().players.get(clientPlayer);
+					
+					if(clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY ) {
+						//System.out.println(clientPlayer.getSpriteBasedOnDirection() != null);
+						g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage() , tileX, tileY-(TILE_HEIGHT/2), null);
+						continue;
+					}
+					
+					Game ga = gameClient.getGame();
+					Room r = ga.rooms.get(0);
+					BoardSquare[][] bs = r.board.getSquares();
+					if(bs[cellY][cellX].getGameObjectOnSquare() != null)
+					{
+						g.drawImage(bs[cellY][cellX].getGameObjectOnSquare().getSpriteImage().getImage(), tileX, tileY-(TILE_HEIGHT/2), 50,50, null);
+					}
+					
+					
+					printInformation(clientPlayer);
+					
+					for(int i = 0; i < clientPlayer.getInventory().size(); i++) {
+						g.drawImage(clientPlayer.getInventory().get(i).getSpriteImage().getImage(), 40, 400+(i*50), 40, 40, null);
+					}
 			    }
 			    yPos += TILE_HEIGHT/4;
 			    xPos += TILE_WIDTH/2;
@@ -226,31 +266,58 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public void keyReleased(KeyEvent e) {
 		// don't fire an event on backspace or delete
 		//fl faceleft fr faceright bl backleft br backright.
-		/*if (e.getKeyCode() == KeyEvent.VK_W
+		Location loc = gameClient.getGame().players.get(clientPlayer);
+		if (e.getKeyCode() == KeyEvent.VK_W
 				|| e.getKeyCode() == KeyEvent.VK_UP) {
-			Game.player.goUp();
-			printCharacter(Game.player);
+			loc.moveNorth();
+			clientPlayer.setDirection(Player.Direction.BACK_LEFT);
+			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_S
 				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-			Game.player.goDown();
-			printCharacter(Game.player);
+			loc.moveSouth();
+			clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
+			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_A
 				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
-			Game.player.goLeft();
-			printCharacter(Game.player);
+			loc.moveWest();
+			clientPlayer.setDirection(Player.Direction.FACE_LEFT);
+			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_D
 				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			Game.player.goRight();
-			printCharacter(Game.player);
-		}*/
+			loc.moveEast();
+			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
+			//printCharacter(clientPlayer);
+		}
+		
+		if(loc.getY() < 0) {
+			loc.moveSouth();
+		} else if(loc.getY() == loc.getRoom().board.getHeight()) {
+			loc.moveNorth();
+		}
+		
+		if(loc.getX() < 0) {
+			loc.moveEast();
+		} else if(loc.getX() == loc.getRoom().board.getWidth()) {
+			loc.moveWest();
+		}	
+		
+		//check to take items
+		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()].getGameObjectOnSquare();
+		if(go !=null && go instanceof Item)
+		{
+			clientPlayer.addToInventory(((Item) go));
+			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()].setGameObjectOnSquare(null);
+		}
+		
+		repaint();
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e) {		
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {	
+	public void keyTyped(KeyEvent e) {		
 	}
 
 	@Override
@@ -295,10 +362,22 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				Avatar clientAvatar = ChooseCharacterDialog.Chooser(this);
 				
 				// Created a player for the client
-				clientPlayer = new Player(gameClient.getClientID(), clientUsername);
+				clientPlayer = new Player(clientUsername);
+				clientPlayer.setAvatar(clientAvatar);
 				
+				gameClient.joinServer(clientPlayer);
+				
+				
+				// redraw the board
 				frameState = FRAME_STATE.GAME_START;
+				
+				try {
+					Thread.sleep(4000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				this.repaint();
+				addKeyListener(this);
 			}
 			else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);

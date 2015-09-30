@@ -1,12 +1,15 @@
 package game.avatar;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 
-public class Avatar {
+public class Avatar implements Serializable {
+	private static final long serialVersionUID = 3217955654737927285L;
+	
 	private static File avatarPath = new File("./sprites/avatars/");
 	
 	public static List<Avatar> getAllAvatars()
@@ -49,6 +52,15 @@ public class Avatar {
 	private final ImageIcon backright;
 	private final ImageIcon normal;
 
+	public Avatar() {
+		avatarName = null;
+		faceleft = null;
+		faceright = null;
+		backleft = null;
+		backright = null;
+		normal = null;
+	}
+	
 	public Avatar(String avatarName, ImageIcon faceleft, ImageIcon faceright,
 			ImageIcon backleft, ImageIcon backright, ImageIcon normal) {
 		super();
@@ -88,5 +100,31 @@ public class Avatar {
 
 	public ImageIcon getNormal() {
 		return normal;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((avatarName == null) ? 0 : avatarName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Avatar other = (Avatar) obj;
+		if (avatarName == null) {
+			if (other.avatarName != null)
+				return false;
+		} else if (!avatarName.equals(other.avatarName))
+			return false;
+		return true;
 	}
 }
