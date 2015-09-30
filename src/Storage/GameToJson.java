@@ -32,7 +32,6 @@ public class GameToJson {
 		Avatar avatar = p.getAvatar();
 		Direction dir = p.getDirection();
 		int health = p.getHealth();
-		int id = p.getId();
 		List<Item> items = p.getInventory();
 		Location loc = p.getLocation();	
 			
@@ -41,7 +40,6 @@ public class GameToJson {
 		jsonobj.put("avatar", avatar);
 		jsonobj.put("direction",dir);
 		jsonobj.put("health", health);
-		jsonobj.put("id", id);
 		jsonobj.put("items", items);
 		jsonobj.put("location",loc);
 		
