@@ -26,14 +26,11 @@ public class Player {
 	private Location location;
 	private Direction direction = Direction.FACE_RIGHT;
 
-	public Player(int id, String name, int attack, int health, List<Item> items){
+	public Player(int id, String name){
 		this.id = id;
 		this.name = name;
-		this.attack = attack;
-		this.health = health;
-		if(items != null){
-			this.inventory.addAll(items);
-		}
+		this.attack = ATTACK;
+		this.health = HEALTH;
 	}
 
 	public int getHealth(){
