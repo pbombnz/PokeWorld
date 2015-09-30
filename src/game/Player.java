@@ -45,7 +45,7 @@ public class Player implements Serializable {
 	}
 
 	public void setHealth(int change){
-		health += change;
+		health = change;
 		if(health < 0){
 			health = 0;
 		}
@@ -59,8 +59,8 @@ public class Player implements Serializable {
 		return attack;
 	}
 
-	public void updateAttack(int change){
-		this.attack += change;
+	public void setAttack(int change){
+		this.attack = change;
 	}
 
 	public List<Item> getInventory(){
