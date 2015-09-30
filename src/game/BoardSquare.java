@@ -8,6 +8,8 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 
 public class BoardSquare implements Serializable {
+	private static final long serialVersionUID = -5741277974211422063L;
+
 	private static final ImageIcon terrainTileSprite = new ImageIcon("./sprites/tiles/grass.png");
 	
 	private GameObject gameObjectOnSquare;
