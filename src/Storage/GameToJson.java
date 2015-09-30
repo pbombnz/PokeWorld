@@ -1,6 +1,7 @@
 package Storage;
 
 import java.util.List;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,10 +24,12 @@ import game.objects.Item;
  * @author Priyanka Bhula
  */
 public class GameToJson {
-	private JSONObject jsonobj;
+
 	
 	@SuppressWarnings("unchecked")
-	public void savePlayer(String savePath, Player p) throws IOException, InvalidSaveException{
+	public static void savePlayer(Player p) throws IOException, InvalidSaveException{
+		JSONObject jsonobj = new JSONObject();
+		
 		String name = p.getName();
 		int attack = p.getAttack();
 		Avatar avatar = p.getAvatar();
@@ -45,10 +48,12 @@ public class GameToJson {
 		
 		FileWriter file = null;
 		try {
-			file = new FileWriter(savePath+".json");
+			file = new FileWriter(new File("./playerSave.json"));
 		} 
 		catch (IOException e){
 			e.printStackTrace();
+		} finally {
+			file.close();
 		}
 	}
 	

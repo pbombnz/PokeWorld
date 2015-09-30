@@ -6,10 +6,8 @@ package Storage;
  * @author Priyanka Bhula
  */
 
-public class InvalidSaveException extends Exception{
-	
-	private static final long serialVersionUID = 1L;
-	
+@SuppressWarnings("serial")
+public class InvalidSaveException extends Exception{	
 	public InvalidSaveException(){
 		super();
 	}
