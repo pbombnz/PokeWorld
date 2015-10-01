@@ -10,6 +10,7 @@ import java.util.Arrays;
 import game.objects.GiantSword;
 import game.objects.GoodPotion;
 import game.objects.Key;
+import game.objects.Tree;
 
 
 public class Board implements Serializable {
@@ -40,6 +41,10 @@ public class Board implements Serializable {
 				
 				if(i == 4 && j == 4) {
 					this.squares[i][j] = new BoardSquare(new GiantSword());
+				}
+				if(i == 6 && j == 6) {
+					this.squares[i][j] = new BoardSquare(new Tree());
+					System.out.println("TREE");
 				}
 				
 				if(i == 3 && j == 4) {
