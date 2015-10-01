@@ -8,6 +8,7 @@ import java.nio.Buffer;
 import java.util.Arrays;
 
 import game.objects.GiantSword;
+import game.objects.GoodPotion;
 import game.objects.Key;
 
 
@@ -44,22 +45,41 @@ public class Board implements Serializable {
 				if(i == 3 && j == 4) {
 					this.squares[i][j] = new BoardSquare(new Key());
 				}
+				if(i == 2 && j == 4) {
+					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
+				}
 				
 			}
 		}
 		
 	}
+//	public Board(String filename) throws IOException{
+//		this.squares = new BoardSquare[height][width];
+//		BufferedReader in = new BufferedReader(new FileReader(filename));
+//
+//		String formatingLine = in.readLine();
+//		String[] formatArray = formatingLine.split(",");
+//		this.width = Integer.parseInt(formatArray[0]);
+//		this.height = Integer.parseInt(formatArray[1]);
+//		int y = 0;
+//		loop: while (true) {
+//			String line = in.readLine();
+//			if (line == null) {
+//				break loop;
+//			}
+//			String[] values = line.split(",");
+//
+//			for (int x = 0; x < values.length; x++) { switch (values[x]) {
+//				case "1":
+//				this.squares[y][x] = new BoardSquare(null);
+//				System.out.println("case 1");
+//			}
+//			y++;
+//	}
+//		}}
+	
 	public Board(String filename) throws IOException{
-		BufferedReader in = new BufferedReader(new FileReader(filename));
-
-		String line;
-		while((line = in.readLine()) != null)
-		{
-		    System.out.println(line);
-		}
-		in.close();
 	}
-
 	public BoardSquare[][] getSquares() {
 		return squares;
 	}
