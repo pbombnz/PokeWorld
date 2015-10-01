@@ -1,6 +1,10 @@
 package game;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.Buffer;
 import java.util.Arrays;
 
 import game.objects.GiantSword;
@@ -45,6 +49,16 @@ public class Board implements Serializable {
 		}
 		
 	}
+	public Board(String filename) throws IOException{
+		BufferedReader in = new BufferedReader(new FileReader(filename));
+
+		String line;
+		while((line = in.readLine()) != null)
+		{
+		    System.out.println(line);
+		}
+		in.close();
+	}
 
 	public BoardSquare[][] getSquares() {
 		return squares;
@@ -85,6 +99,8 @@ public class Board implements Serializable {
 			return false;
 		return true;
 	}
-	
+//	public static void main(String[] args) throws IOException {
+//		new Board("board.txt");
+//	}
 	
 }
