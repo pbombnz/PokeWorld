@@ -9,5 +9,7 @@ public interface GameObject extends Serializable {
 	
 	public static ImageIcon WEAPON_GIANTSWORD = new ImageIcon("./sprites/weapons/giantsword.png");
 	
+	public static ImageIcon GOBLIN = new ImageIcon("./sprites/weapons/giantsword.png");
+	
 	public ImageIcon getSpriteImage();
 }

@@ -2,8 +2,11 @@ package monster;
 
 import javax.swing.ImageIcon;
 
-import com.sun.jdi.Location;
+import game.Location;
 
+/**
+ *@author Wang Zhen
+ */
 public abstract class Monster {
 	public String name;
 	public int attack ;

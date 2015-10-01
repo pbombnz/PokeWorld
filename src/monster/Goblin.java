@@ -2,8 +2,11 @@ package monster;
 
 import javax.swing.ImageIcon;
 
-import com.sun.jdi.Location;
+import game.Location;
 
+/**
+ *@author Wang Zhen
+ */
 public class Goblin extends Monster{
 	public Goblin(Location loc){
 		name = "Goblin";
