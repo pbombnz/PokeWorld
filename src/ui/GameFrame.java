@@ -37,6 +37,7 @@ import game.Room;
 import game.avatar.Avatar;
 import game.objects.GameObject;
 import game.objects.Item;
+import game.objects.Tree;
 
 /**
  * @author Wang Zhen
@@ -269,7 +270,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					if(clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY ) {
 						//System.out.println(clientPlayer.getSpriteBasedOnDirection() != null);
 						g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage() , tileX+(TILE_WIDTH/5), tileY-(TILE_HEIGHT/3), null);
-						continue;
+						//continue;
 					}
 					
 					Game ga = gameClient.getGame();
@@ -277,9 +278,14 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					BoardSquare[][] bs = r.board.getSquares();
 					if(bs[cellY][cellX].getGameObjectOnSquare() != null)
 					{
+						if(bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree){
+							g.drawImage(bs[cellY][cellX].getGameObjectOnSquare().getSpriteImage().getImage(), tileX, tileY-200, null);
+							//tree bounding box faulty check x and y
+						}
+						else{
 						g.drawImage(bs[cellY][cellX].getGameObjectOnSquare().getSpriteImage().getImage(), tileX, tileY-(TILE_HEIGHT/2), 50,50, null);
+				}
 					}
-					
 					
 					printInformation(clientPlayer);
 					
