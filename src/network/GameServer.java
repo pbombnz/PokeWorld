@@ -22,7 +22,7 @@ public class GameServer {
 	private Server server;
 	private Map<Connection, String> players;	
 	
-	public GameServer(ServerFrame serverFrame) throws IOException {
+	public GameServer(final ServerFrame serverFrame) throws IOException {
 		//if (port < 1 || port > 65535) {
 		//	throw new NumberFormatException("Port out of range"); 
 		//}
