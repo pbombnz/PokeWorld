@@ -33,8 +33,7 @@ public class GoodPotion implements Item {
 
 	@Override
 	public ImageIcon getSpriteImage() {
-		// TODO Auto-generated method stub
-		return null;
+		return GameObject.ITEM_GOODPOTION;
 	}
 
 	@Override
