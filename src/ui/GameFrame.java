@@ -21,6 +21,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.RepaintManager;
 
@@ -66,9 +67,12 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public JLabel touxiangLabel;
 	public JLabel characterLabel;
 	private int labelSize = 50;
+	public JScrollPane itemX;
 	
 
 	public GameFrame() {
+		
+		
 		
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -114,10 +118,16 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		savePlayer.addActionListener(this);
 		loadPlayer.addActionListener(this);
 
+		
+		
+		
 		setJMenuBar(menuBar);
 		setVisible(true);
 		
 		frameState = GameFrame.FRAME_STATE.CREATED_FRAME;
+		
+		
+		
 	}
 
 	/*public ImageIcon getCharacterImage(Player player) {
@@ -149,7 +159,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		//print name
 		JLabel textJLabel = new JLabel();
 		textJLabel.setText("Name: " + player.getAvatar().getName());
-		textJLabel.setLocation(40, 210);
+		textJLabel.setLocation(10, 10);
 		textJLabel.setSize(400, 20);
 		textJLabel.setFont(new Font("Dialog", 1, 15));
 		textJLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -157,7 +167,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		JLabel health = new JLabel();
 		health.setText("Health: " + player.getHealth());
-		health.setLocation(40, 230);
+		health.setLocation(10, 30);
 		health.setSize(400, 20);
 		health.setFont(new Font("SanSerif", Font.PLAIN, 15));
 		health.setHorizontalAlignment(JLabel.LEFT);
@@ -165,12 +175,17 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		JLabel attack = new JLabel();
 		attack.setText("Attack: " + player.getAttack() + "\n");
-		attack.setLocation(40, 250);
+		attack.setLocation(10, 50);
 		attack.setSize(400, 20);
 		attack.setFont(new Font("SanSerif", Font.PLAIN, 15));
 		attack.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(attack);
 
+		
+		itemX = new JScrollPane();
+		itemX.setSize(150, 390);
+		itemX.setLocation(20,150);
+		panel.add(itemX);
 		//repaint();
 	}
 
@@ -220,7 +235,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
 
-			System.out.println(true);
+			//System.out.println(true);
 			
 			if(frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
 				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );				
@@ -249,7 +264,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					//System.out.println(gameClient.getGame().players.size());
 					//System.out.println(gameClient.getGame().players.get(clientPlayer));
 					Location clientPlayerLoc = gameClient.getGame().players.get(clientPlayer);
-					System.out.println(clientPlayerLoc);
+					//System.out.println(clientPlayerLoc);
 					
 					if(clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY ) {
 						//System.out.println(clientPlayer.getSpriteBasedOnDirection() != null);

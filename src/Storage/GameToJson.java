@@ -13,7 +13,6 @@ import com.google.gson.Gson;
 
 import game.Board;
 import game.Location;
-import jdk.nashorn.internal.parser.JSONParser;
 import game.Player;
 import game.Player.Direction;
 import game.avatar.Avatar;
