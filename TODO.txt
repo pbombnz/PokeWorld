@@ -12,7 +12,8 @@ GUI
 - Make UI Nicer
 - Draw Tree in correct Place
 - Add Compass on Game JPanel
--Deal with Rotation (Rotate compass accordingly)
+- Deal with Rotation (Rotate compass accordingly)
+- Make board drawing dynamically draw, based on room's board size
 
 Networking
 - ServerFrame Improvements
