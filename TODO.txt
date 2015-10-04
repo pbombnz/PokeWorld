@@ -12,7 +12,7 @@ GUI
 - Make UI Nicer
 - Draw Tree in correct Place
 - Add Compass on Game JPanel
--Deal with Rotation (Rotate compass accordingly)
+- Deal with Rotation (Rotate compass accordingly)
 
 Networking
 - ServerFrame Improvements
@@ -22,3 +22,6 @@ Networking
 
 Player
 - Get Player Saving/Loading Working
+
+Extra for Experts
+- Map Editor
