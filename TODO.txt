@@ -1,1 +1,24 @@
 TODO
+
+Next Meeting
+- Talking about restructing Rooms, Boards, Positioning
+
+General
+- Get More Avatars Sprites (Player Skins)
+- Add Door Game Object (Linkage to next Room?)
+- Get Sprites for all Objects
+
+GUI
+- Make UI Nicer
+- Draw Tree in correct Place
+- Add Compass on Game JPanel
+-Deal with Rotation (Rotate compass accordingly)
+
+Networking
+- ServerFrame Improvements
+- Automatic Server Searching
+- Send Back Clients Actions (Move) back to server
+- Server Client Exception Handling
+
+Player
+- Get Player Saving/Loading Working
