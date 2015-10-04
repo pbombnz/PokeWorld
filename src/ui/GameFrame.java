@@ -5,13 +5,11 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
-
-
-
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.sql.Savepoint;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -47,34 +45,32 @@ import game.objects.Tree;
 public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
-	private static enum FRAME_STATE { CREATED_FRAME, DO_NOTHING, 
-									  GAME_CONNECTING, GAME_START, GAME_NORMAL, 
-									  GAME_ENDED_EXPECTED, GAME_ENDED_UNEXPECTED}; 
-	
+	private static enum FRAME_STATE {
+		CREATED_FRAME, DO_NOTHING, GAME_CONNECTING, GAME_START, GAME_NORMAL, GAME_ENDED_EXPECTED, GAME_ENDED_UNEXPECTED
+	};
+
 	// The Size of the Frame
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
-	
+
 	// The size of the tiles when they are displayed
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
-	
+
 	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
 	private GameClient gameClient;
-	
+
 	private Player clientPlayer;
-	
+
 	public JPanel panel;
 	public JLabel touxiangLabel;
 	public JLabel characterLabel;
 	private int labelSize = 50;
 	public JScrollPane itemX;
-	
+	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
 	public GameFrame() {
-		
-		
-		
+
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -85,12 +81,11 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		panel.setOpaque(false);
 		panel.setLayout(null);
 
-
 		// Create Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu gameMenu = new JMenu("Game");
 		//gameMenu.setMnemonic(KeyEvent.VK_G);
-		
+
 		menuBar.add(gameMenu);
 
 		JMenuItem createGame = new JMenuItem("Create Game (As Server)");
@@ -101,34 +96,29 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		gameMenu.add(joinGame);
 		gameMenu.add(new JSeparator());
 		gameMenu.add(exit);
-		
+
 		JMenu SaveLoadMenu = new JMenu("Save / Load");
-		
+
 		menuBar.add(SaveLoadMenu);
-		
+
 		JMenuItem savePlayer = new JMenuItem("Save Player Info");
 		JMenuItem loadPlayer = new JMenuItem("Load Player Info");
-		
+
 		SaveLoadMenu.add(savePlayer);
 		SaveLoadMenu.add(loadPlayer);
-		
+
 		createGame.addActionListener(this);
 		joinGame.addActionListener(this);
 		exit.addActionListener(this);
-	
+
 		savePlayer.addActionListener(this);
 		loadPlayer.addActionListener(this);
 
-		
-		
-		
 		setJMenuBar(menuBar);
 		setVisible(true);
-		
+
 		frameState = GameFrame.FRAME_STATE.CREATED_FRAME;
-		
-		
-		
+
 	}
 
 	/*public ImageIcon getCharacterImage(Player player) {
@@ -148,6 +138,10 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		//initialize
 		if (touxiangLabel != null) {
 			panel.remove(touxiangLabel);
+		}
+		//clear all info labels 1st
+		for (JLabel jl : infoLabels) {
+			panel.remove(jl);
 		}
 		//print normal image
 		JLabel label = new JLabel(player.getAvatar().getName());
@@ -185,9 +179,14 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		
 		itemX = new JScrollPane();
 		itemX.setSize(150, 390);
-		itemX.setLocation(20,150);
+		itemX.setLocation(20, 150);
 		panel.add(itemX);
-		//repaint();
+		//store labels into list and can remove them 1st when everytime refresh
+		infoLabels.add(health);
+		infoLabels.add(textJLabel);
+		infoLabels.add(attack);
+		
+		repaint();
 	}
 
 	/*public void printCharacter(Player player) {
@@ -231,81 +230,92 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		return (int) ((offset + edgeLong) * (row) + base);
 	}*/
 
-	
 	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
 
 			//System.out.println(true);
-			
-			if(frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
-				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );				
+
+			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
+				g.drawImage(new ImageIcon(
+						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
+						0, FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
-			
+
 			// Draws background
-			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg").getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null );
-			
+			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
+					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+
 			printInformation(clientPlayer);
-			
-			
+
 			// Initial starting position of where the first square is going to be drawn
-			int yPos = FRAME_HEIGHT/2; 
-			int xPos = FRAME_WIDTH/5;
-					
-			for (int cellY = 0; cellY < 10; cellY++){
-			    for (int cellX = 9; cellX >= 0; cellX--) {
-		            int tileX = xPos + (cellX * TILE_WIDTH/2);
-		            int tileY = yPos - (cellX * TILE_HEIGHT/4);
-		            
-					g.drawImage(new ImageIcon("./sprites/tiles/grass.png").getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT, null );
+			int yPos = FRAME_HEIGHT / 2;
+			int xPos = FRAME_WIDTH / 5;
+
+			for (int cellY = 0; cellY < 10; cellY++) {
+				for (int cellX = 9; cellX >= 0; cellX--) {
+					int tileX = xPos + (cellX * TILE_WIDTH / 2);
+					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
+
+					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
+							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
+							null);
 					//g.drawString(cellY+", "+cellX, screenX+20, screenY+20); // Shows the Array dimension associated with the array
 					//System.out.println(gameClient.getGame());
 					//System.out.println(gameClient.getGame().players);
 					//System.out.println(gameClient.getGame().players.size());
 					//System.out.println(gameClient.getGame().players.get(clientPlayer));
-					Location clientPlayerLoc = gameClient.getGame().players.get(clientPlayer);
+					Location clientPlayerLoc = gameClient.getGame().players
+							.get(clientPlayer);
 					//System.out.println(clientPlayerLoc);
-					
-					if(clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY ) {
+
+					if (clientPlayerLoc.getX() == cellX
+							&& clientPlayerLoc.getY() == cellY) {
 						//System.out.println(clientPlayer.getSpriteBasedOnDirection() != null);
-						g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage() , tileX+(TILE_WIDTH/5), tileY-(TILE_HEIGHT/3), null);
+						g.drawImage(clientPlayer.getSpriteBasedOnDirection()
+								.getImage(), tileX + (TILE_WIDTH / 5), tileY
+								- (TILE_HEIGHT / 3), null);
 						//continue;
 					}
-					
+
 					Game ga = gameClient.getGame();
 					Room r = ga.rooms.get(0);
 					BoardSquare[][] bs = r.board.getSquares();
-					if(bs[cellY][cellX].getGameObjectOnSquare() != null)
-					{
-						if(bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree){
-							g.drawImage(bs[cellY][cellX].getGameObjectOnSquare().getSpriteImage().getImage(), tileX, tileY-200, null);
+					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
+							g.drawImage(bs[cellY][cellX]
+									.getGameObjectOnSquare().getSpriteImage()
+									.getImage(), tileX, tileY - 200, null);
 							//tree bounding box faulty check x and y
+						} else {
+							g.drawImage(bs[cellY][cellX]
+									.getGameObjectOnSquare().getSpriteImage()
+									.getImage(), tileX, tileY
+									- (TILE_HEIGHT / 2), 50, 50, null);
 						}
-						else{
-						g.drawImage(bs[cellY][cellX].getGameObjectOnSquare().getSpriteImage().getImage(), tileX, tileY-(TILE_HEIGHT/2), 50,50, null);
-				}
 					}
-					
+
 					printInformation(clientPlayer);
-					
-					for(int i = 0; i < clientPlayer.getInventory().size(); i++) {
-						g.drawImage(clientPlayer.getInventory().get(i).getSpriteImage().getImage(), 40, 400+(i*50), 40, 40, null);
+
+					for (int i = 0; i < clientPlayer.getInventory().size(); i++) {
+						g.drawImage(clientPlayer.getInventory().get(i)
+								.getSpriteImage().getImage(), 40,
+								400 + (i * 50), 40, 40, null);
 					}
-			    }
-			    yPos += TILE_HEIGHT/4;
-			    xPos += TILE_WIDTH/2;
+				}
+				yPos += TILE_HEIGHT / 4;
+				xPos += TILE_WIDTH / 2;
 			}
 		}
 	}
-	
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// don't fire an event on backspace or delete
 		//fl faceleft fr faceright bl backleft br backright.
 		Location loc = gameClient.getGame().players.get(clientPlayer);
-		if (e.getKeyCode() == KeyEvent.VK_W
-				|| e.getKeyCode() == KeyEvent.VK_UP) {
+		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 			loc.moveNorth();
 			clientPlayer.setDirection(Player.Direction.BACK_LEFT);
 			//printCharacter(clientPlayer);
@@ -325,89 +335,94 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			//printCharacter(clientPlayer);
 		}
-		
-		if(loc.getY() < 0) {
+
+		if (loc.getY() < 0) {
 			loc.moveSouth();
-		} else if(loc.getY() == loc.getRoom().board.getHeight()) {
+		} else if (loc.getY() == loc.getRoom().board.getHeight()) {
 			loc.moveNorth();
 		}
-		
-		if(loc.getX() < 0) {
+
+		if (loc.getX() < 0) {
 			loc.moveEast();
-		} else if(loc.getX() == loc.getRoom().board.getWidth()) {
+		} else if (loc.getX() == loc.getRoom().board.getWidth()) {
 			loc.moveWest();
-		}	
-		
-		//check to take items
-		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()].getGameObjectOnSquare();
-		if(go !=null && go instanceof Item)
-		{
-			clientPlayer.addToInventory(((Item) go));
-			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()].setGameObjectOnSquare(null);
 		}
-		
+
+		//check to take items
+		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.getGameObjectOnSquare();
+		if (go != null && go instanceof Item) {
+			clientPlayer.addToInventory(((Item) go));
+			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+					.setGameObjectOnSquare(null);
+		}
+
 		repaint();
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {		
+	public void keyPressed(KeyEvent e) {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {		
+	public void keyTyped(KeyEvent e) {
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Object source = arg0.getSource();
-		if(source instanceof JMenuItem) {
+		if (source instanceof JMenuItem) {
 			JMenuItem menuItem = (JMenuItem) source;
-			
-			if(menuItem.getText().equals("Create Game (As Server)")) {
+
+			if (menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
 				//this.dispose();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
 				try {
 					gameClient = new GameClient();
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(this, "Game Client was unable to initalise.\n" +
-														" Make sure that you have created and\n" +
-														" connected and the server and the\n" +
-														"ports are unblocked.", "ERROR", JOptionPane.ERROR_MESSAGE);
-					
+					JOptionPane.showMessageDialog(this,
+							"Game Client was unable to initalise.\n"
+									+ " Make sure that you have created and\n"
+									+ " connected and the server and the\n"
+									+ "ports are unblocked.", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
+
 					frameState = FRAME_STATE.CREATED_FRAME;
 					return;
 				}
-				
+
 				// At this point in code, client is connected to server successfully.
-				
+
 				// Now we need to let the user enter a username and pick a character
 				String clientUsername = null;
-				while (clientUsername == null)
-				{
-					clientUsername = JOptionPane.showInputDialog(this, "Input your Username?");
-					if(clientUsername != null && clientUsername.length() < 3)
-					{
+				while (clientUsername == null) {
+					clientUsername = JOptionPane.showInputDialog(this,
+							"Input your Username?");
+					if (clientUsername != null && clientUsername.length() < 3) {
 						clientUsername = null;
 					}
-					
-					if(clientUsername == null) {
-						JOptionPane.showMessageDialog(this, "You need to enter a user name that is at least 3 characters long.", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+					if (clientUsername == null) {
+						JOptionPane
+								.showMessageDialog(
+										this,
+										"You need to enter a user name that is at least 3 characters long.",
+										"ERROR", JOptionPane.ERROR_MESSAGE);
 					}
-				}	
-				
+				}
+
 				Avatar clientAvatar = ChooseCharacterDialog.Chooser(this);
-				
+
 				// Created a player for the client
 				clientPlayer = new Player(clientUsername);
 				clientPlayer.setAvatar(clientAvatar);
-				
+
 				gameClient.joinServer(clientPlayer);
-				
-				
+
 				// redraw the board
 				frameState = FRAME_STATE.GAME_START;
-				
+
 				try {
 					Thread.sleep(4000);
 				} catch (InterruptedException e) {
@@ -415,18 +430,20 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				}
 				this.repaint();
 				addKeyListener(this);
-			}
-			else if (menuItem.getText().equals("Exit")) {
+			} else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
-			}
-			else if (menuItem.getText().equals("Save Player Info")) {
-				if(frameState == FRAME_STATE.CREATED_FRAME) {
-					JOptionPane.showMessageDialog(this, "Need to load game first", "ERROR", JOptionPane.ERROR_MESSAGE);
+			} else if (menuItem.getText().equals("Save Player Info")) {
+				if (frameState == FRAME_STATE.CREATED_FRAME) {
+					JOptionPane.showMessageDialog(this,
+							"Need to load game first", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
 					try {
-						clientPlayer.setLocation(gameClient.getGame().players.get(clientPlayer));
-						gameClient.getGame().players.put(clientPlayer, clientPlayer.getLocation());
+						clientPlayer.setLocation(gameClient.getGame().players
+								.get(clientPlayer));
+						gameClient.getGame().players.put(clientPlayer,
+								clientPlayer.getLocation());
 						GameToJson.savePlayer(clientPlayer);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -436,28 +453,35 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 						e.printStackTrace();
 					}
 				}
-			}	
-			else if (menuItem.getText().equals("Load Player Info")) {
-				if(frameState == FRAME_STATE.CREATED_FRAME) {
-					JOptionPane.showMessageDialog(this, "Need to load game first", "ERROR", JOptionPane.ERROR_MESSAGE);
+			} else if (menuItem.getText().equals("Load Player Info")) {
+				if (frameState == FRAME_STATE.CREATED_FRAME) {
+					JOptionPane.showMessageDialog(this,
+							"Need to load game first", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
 					Player newClientPlayer = JsonToGame.loadPlayer();
-					if(newClientPlayer != null) {
+					if (newClientPlayer != null) {
 						clientPlayer = newClientPlayer;
-						clientPlayer.getLocation().setRoom(gameClient.getGame().rooms.get(0));
+						clientPlayer.getLocation().setRoom(
+								gameClient.getGame().rooms.get(0));
 						//hard coded - removes key if player has it, places player in right spot
-						if(clientPlayer.getInventory().contains(gameClient.getGame().rooms.get(0).board.getSquares()[3][4]))
-							gameClient.getGame().rooms.get(0).board.getSquares()[3][4].setGameObjectOnSquare(null);
+						if (clientPlayer.getInventory().contains(
+								gameClient.getGame().rooms.get(0).board
+										.getSquares()[3][4]))
+							gameClient.getGame().rooms.get(0).board
+									.getSquares()[3][4]
+									.setGameObjectOnSquare(null);
 						gameClient.getGame().players.clear();
-						gameClient.getGame().players.put(clientPlayer, clientPlayer.getLocation());
+						gameClient.getGame().players.put(clientPlayer,
+								clientPlayer.getLocation());
 						repaint();
 					}
 				}
-			}	
+			}
 			JMenuItem savePlayer = new JMenuItem("Save Player Info");
 			JMenuItem loadPlayer = new JMenuItem("Load Player Info");
 		}
-		
-	}	
+
+	}
 }
