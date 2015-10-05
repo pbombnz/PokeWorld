@@ -11,6 +11,7 @@ import game.objects.GiantSword;
 import game.objects.Goblin;
 import game.objects.GoodPotion;
 import game.objects.Key;
+import game.objects.RareCandy;
 import game.objects.Tree;
 
 
@@ -41,7 +42,7 @@ public class Board implements Serializable {
 				this.squares[i][j] = new BoardSquare(null);
 				
 				if(i == 4 && j == 4) {
-					this.squares[i][j] = new BoardSquare(new GiantSword());
+					this.squares[i][j] = new BoardSquare(new RareCandy());
 				}
 				if(i == 9 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new Tree());
