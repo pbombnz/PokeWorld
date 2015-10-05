@@ -78,6 +78,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	public GameFrame() {
 
+		
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -125,6 +126,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		setVisible(true);
 
 		frameState = GameFrame.FRAME_STATE.CREATED_FRAME;
+		
+		
 
 	}
 
@@ -241,7 +244,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
 			.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
-			printInformation(clientPlayer);
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
@@ -278,6 +280,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 						//continue;
 					}
 
+					printInformation(clientPlayer);
+					
 					Game ga = gameClient.getGame();
 					Room r = ga.rooms.get(0);
 					BoardSquare[][] bs = r.board.getSquares();
@@ -295,7 +299,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 						}
 					}
 
-					printInformation(clientPlayer);
 
 					for (int i = 0; i < clientPlayer.getInventory().size(); i++) {
 						g.drawImage(clientPlayer.getInventory().get(i)
@@ -319,21 +322,25 @@ public void keyReleased(KeyEvent e) {
 	//fl faceleft fr faceright bl backleft br backright.
 	Location loc = clientPlayer.getLocation();
 	if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+		printInformation(clientPlayer);
 		loc.moveNorth();
 		clientPlayer.setDirection(Player.Direction.BACK_LEFT);
 		//printCharacter(clientPlayer);
 	} else if (e.getKeyCode() == KeyEvent.VK_S
 			|| e.getKeyCode() == KeyEvent.VK_DOWN) {
+		printInformation(clientPlayer);
 		loc.moveSouth();
 		clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
 		//printCharacter(clientPlayer);
 	} else if (e.getKeyCode() == KeyEvent.VK_A
 			|| e.getKeyCode() == KeyEvent.VK_LEFT) {
+		printInformation(clientPlayer);
 		loc.moveWest();
 		clientPlayer.setDirection(Player.Direction.FACE_LEFT);
 		//printCharacter(clientPlayer);
 	} else if (e.getKeyCode() == KeyEvent.VK_D
 			|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		printInformation(clientPlayer);
 		loc.moveEast();
 		clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 		//printCharacter(clientPlayer);
