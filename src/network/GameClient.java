@@ -25,7 +25,7 @@ public class GameClient {
 				//System.out.println();
 				if(object instanceof NewGame) {
 					byte[] gameBytes = ((NewGame) object).gameByteArray;
-					System.out.println(Game.fromByteArray(gameBytes).toString());
+					//System.out.println(Game.fromByteArray(gameBytes).toString());
 					game = Game.fromByteArray(gameBytes);
 					System.out.println("game is received from server to client");
 				}
