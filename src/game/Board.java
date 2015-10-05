@@ -152,5 +152,12 @@ public class Board implements Serializable {
 		//	public static void main(String[] args) throws IOException {
 		//		new Board("board.txt");
 		//	}
+		
+		public BoardSquare getSquareAt(int y, int x) {
+			if(y < 0 || y >= getHeight() || x < 0 || x >= getWidth()) {
+				throw new NullPointerException("Cannot get Board Square at ("+y+", "+x+") because the indices are out of range.");
+			}
+			return squares[y][x];
+		}
 
 	}
