@@ -65,11 +65,12 @@ public class GameServer {
 				}  else if (object instanceof NewPlayer) {
 					NewPlayer np = (NewPlayer) object;
 					Location loc = new Location(game.rooms.get(0), 9, 0);
-					game.players.put(np.player, loc);
+					np.player.setLocation(loc);
+					game.players2.add(np.player);
 					
 					System.out.println(game);
-					System.out.println(game.players);
-					System.out.println(game.players.size());
+					System.out.println(game.players2);
+					System.out.println(game.players2.size());
 					
 					//System.out.println(Game.fromByteArray(game.toByteArray()).toString());
 					

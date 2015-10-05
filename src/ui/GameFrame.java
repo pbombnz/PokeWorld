@@ -266,8 +266,13 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					//System.out.println(gameClient.getGame().players);
 					//System.out.println(gameClient.getGame().players.size());
 					//System.out.println(gameClient.getGame().players.get(clientPlayer));
-					Location clientPlayerLoc = gameClient.getGame().players
-							.get(clientPlayer);
+					Location clientPlayerLoc = clientPlayer.getLocation();
+					
+					// HARDED CODED. Change later. Gets clientPlayer location
+					if(clientPlayerLoc == null) {
+						clientPlayerLoc = gameClient.getGame().players2.get(0).getLocation();
+						clientPlayer.setLocation(clientPlayerLoc);
+					}
 					//System.out.println(clientPlayerLoc);
 
 					if (clientPlayerLoc.getX() == cellX
@@ -314,7 +319,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public void keyReleased(KeyEvent e) {
 		// don't fire an event on backspace or delete
 		//fl faceleft fr faceright bl backleft br backright.
-		Location loc = gameClient.getGame().players.get(clientPlayer);
+		Location loc = clientPlayer.getLocation();
 		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 			loc.moveNorth();
 			clientPlayer.setDirection(Player.Direction.BACK_LEFT);
@@ -440,10 +445,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					return;
 				} else {
 					try {
-						clientPlayer.setLocation(gameClient.getGame().players
-								.get(clientPlayer));
-						gameClient.getGame().players.put(clientPlayer,
-								clientPlayer.getLocation());
 						GameToJson.savePlayer(clientPlayer);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -472,9 +473,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 							gameClient.getGame().rooms.get(0).board
 									.getSquares()[3][4]
 									.setGameObjectOnSquare(null);
-						gameClient.getGame().players.clear();
-						gameClient.getGame().players.put(clientPlayer,
-								clientPlayer.getLocation());
+						gameClient.getGame().players2.clear();
+						gameClient.getGame().players2.add(clientPlayer);
 						repaint();
 					}
 				}

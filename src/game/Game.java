@@ -23,11 +23,11 @@ public class Game {
 	
 	public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
 
-	public HashMap<Player, Location> players;
+	public ArrayList<Player> players2;
 	public ArrayList<Room> rooms;
 
 	public Game() {
-		players = new HashMap<Player, Location>();
+		players2 = new ArrayList<Player>();
 		rooms = new ArrayList<Room>();	
 	}
 	
@@ -36,7 +36,7 @@ public class Game {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(this.players);
+			oos.writeObject(this.players2);
 			oos.writeObject(this.rooms);
 			oos.flush();
 			oos.close();
@@ -62,7 +62,7 @@ public class Game {
 			ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 			ObjectInputStream ois = new ObjectInputStream(bis);
 			newGame = new Game();
-			newGame.players = (HashMap<Player, Location>) ois.readObject();
+			newGame.players2 = (ArrayList<Player>) ois.readObject();
 			newGame.rooms = (ArrayList<Room>) ois.readObject();
 		} catch (StreamCorruptedException e) {
 			return null;
@@ -87,7 +87,7 @@ public class Game {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((players == null) ? 0 : players.hashCode());
+		result = prime * result + ((players2 == null) ? 0 : players2.hashCode());
 		result = prime * result + ((rooms == null) ? 0 : rooms.hashCode());
 		return result;
 	}
@@ -101,10 +101,10 @@ public class Game {
 		if (getClass() != obj.getClass())
 			return false;
 		Game other = (Game) obj;
-		if (players == null) {
-			if (other.players != null)
+		if (players2 == null) {
+			if (other.players2 != null)
 				return false;
-		} else if (!players.equals(other.players))
+		} else if (!players2.equals(other.players2))
 			return false;
 		if (rooms == null) {
 			if (other.rooms != null)
