@@ -40,6 +40,7 @@ import game.objects.GoodPotion;
 import game.objects.Item;
 import game.objects.Key;
 import game.objects.Monster;
+import game.objects.RareCandy;
 import game.objects.Tree;
 import game.objects.Weapon;
 
@@ -78,7 +79,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	public GameFrame() {
 
-		
+
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -126,8 +127,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		setVisible(true);
 
 		frameState = GameFrame.FRAME_STATE.CREATED_FRAME;
-		
-		
+
+
 
 	}
 
@@ -173,6 +174,14 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		attack.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(attack);
 
+		JLabel level = new JLabel();
+		level.setText("Level: " + player.getPlayerLevel() + "\n");
+		level.setLocation(10, 70);
+		level.setSize(400, 20);
+		level.setFont(new Font("SanSerif", Font.PLAIN, 15));
+		level.setHorizontalAlignment(JLabel.LEFT);
+		panel.add(level);
+
 
 		//itemX = new JScrollPane();
 		//itemX.setSize(150, 390);
@@ -182,6 +191,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		infoLabels.add(health);
 		infoLabels.add(textJLabel);
 		infoLabels.add(attack);
+		infoLabels.add(level);
 
 		repaint();
 	}
@@ -281,7 +291,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					}
 
 					printInformation(clientPlayer);
-					
+
 					Game ga = gameClient.getGame();
 					Room r = ga.rooms.get(0);
 					BoardSquare[][] bs = r.board.getSquares();
@@ -316,261 +326,258 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	}
 
 
-@Override
-public void keyReleased(KeyEvent e) {
-	// don't fire an event on backspace or delete
-	//fl faceleft fr faceright bl backleft br backright.
-	Location loc = clientPlayer.getLocation();
-	if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
-		printInformation(clientPlayer);
-		loc.moveNorth();
-		clientPlayer.setDirection(Player.Direction.BACK_LEFT);
-		//printCharacter(clientPlayer);
-	} else if (e.getKeyCode() == KeyEvent.VK_S
-			|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-		printInformation(clientPlayer);
-		loc.moveSouth();
-		clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
-		//printCharacter(clientPlayer);
-	} else if (e.getKeyCode() == KeyEvent.VK_A
-			|| e.getKeyCode() == KeyEvent.VK_LEFT) {
-		printInformation(clientPlayer);
-		loc.moveWest();
-		clientPlayer.setDirection(Player.Direction.FACE_LEFT);
-		//printCharacter(clientPlayer);
-	} else if (e.getKeyCode() == KeyEvent.VK_D
-			|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
-		printInformation(clientPlayer);
-		loc.moveEast();
-		clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
-		//printCharacter(clientPlayer);
-	}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// don't fire an event on backspace or delete
+		//fl faceleft fr faceright bl backleft br backright.
+		Location loc = clientPlayer.getLocation();
+		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+			printInformation(clientPlayer);
+			loc.moveNorth();
+			clientPlayer.setDirection(Player.Direction.BACK_LEFT);
+			//printCharacter(clientPlayer);
+		} else if (e.getKeyCode() == KeyEvent.VK_S
+				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
+			printInformation(clientPlayer);
+			loc.moveSouth();
+			clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
+			//printCharacter(clientPlayer);
+		} else if (e.getKeyCode() == KeyEvent.VK_A
+				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
+			printInformation(clientPlayer);
+			loc.moveWest();
+			clientPlayer.setDirection(Player.Direction.FACE_LEFT);
+			//printCharacter(clientPlayer);
+		} else if (e.getKeyCode() == KeyEvent.VK_D
+				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			printInformation(clientPlayer);
+			loc.moveEast();
+			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
+			//printCharacter(clientPlayer);
+		}
 
-	if (loc.getY() < 0) {
-		loc.moveSouth();
-	} else if (loc.getY() == loc.getRoom().board.getHeight()) {
-		loc.moveNorth();
-	}
+		if (loc.getY() < 0) {
+			loc.moveSouth();
+		} else if (loc.getY() == loc.getRoom().board.getHeight()) {
+			loc.moveNorth();
+		}
 
-	if (loc.getX() < 0) {
-		loc.moveEast();
-	} else if (loc.getX() == loc.getRoom().board.getWidth()) {
-		loc.moveWest();
-	}
+		if (loc.getX() < 0) {
+			loc.moveEast();
+		} else if (loc.getX() == loc.getRoom().board.getWidth()) {
+			loc.moveWest();
+		}
 
-	//check to take items
-	GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-			.getGameObjectOnSquare();
-	
-	if (go != null && go instanceof Key) {
-		clientPlayer.addToInventory(((Key) go));
-		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-				.setGameObjectOnSquare(null);
-		
+		//check to take items
+		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.getGameObjectOnSquare();
+
+		if (go instanceof Key) {
+			clientPlayer.addToInventory(((Key) go));
+			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+					.setGameObjectOnSquare(null);
+		}
 		if(go instanceof GoodPotion){
+			System.out.println("is this working");
 			clientPlayer.setHealth(clientPlayer.getHealth() + ((GoodPotion)go).getHealthHealAmount());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
-	}
-	if(go instanceof Monster){
-		fightDialog();
-//		JOptionPane.showMessageDialog(null, " Monster Type: " + ((Monster)go).getName() + 
-//				" \n Monster Attack: " + ((Monster)go).attack() + " \n Monster Health: " +
-//				((Monster)go).health() + "\n Would you like to fight this " + ((Monster)go).getName() + "?");
-	
-	}
-	if(go instanceof Weapon){
-		clientPlayer.setAttack(clientPlayer.getAttack() + ((Weapon)go).getAttackDamage());
-		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-				.setGameObjectOnSquare(null);
-	}
-	repaint();
-}
 
-public void fightDialog() {
-	final Location loc = clientPlayer.getLocation();
-	
-	GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-			.getGameObjectOnSquare();
-	final int damage = ((Monster)go).attack();
-	JButton yes = new JButton("Yes");
-	JButton no = new JButton("No");
-	
-	yes.addActionListener(new ActionListener(){
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			fight();
+		if(go instanceof Monster){
+			fightDialog();
+
 		}
-		private void fight() {
-			
-			clientPlayer.setHealth(clientPlayer.getHealth() - damage);	
-			fightBox.dispose();
-			
+		if(go instanceof RareCandy){
+			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel() + ((RareCandy)go).level());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
-			
 		}
-
-	});
-	no.addActionListener(new ActionListener(){
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			fightBox.dispose();
-		}
-	});
-
-	yes.setLocation(20, 100);
-	yes.setSize(yes.getPreferredSize());
-	no.setLocation(150, 100);
-	no.setSize(no.getPreferredSize());
-
-	JLabel type = new JLabel("Monster Type: " + ((Monster)go).getName());
-	JLabel attack = new JLabel("Monster Attack: " + ((Monster)go).attack());
-	JLabel health = new JLabel("Monster Health: " + ((Monster)go).health());
-	JLabel ask = new JLabel("Fight?");
-	
-	type.setLocation(10, 10);
-	attack.setLocation(10, 30);
-	health.setLocation(10, 50);
-	ask.setLocation(10, 70);
-	
-	type.setSize(type.getPreferredSize());
-	attack.setSize(type.getPreferredSize());
-	health.setSize(type.getPreferredSize());
-	ask.setSize(type.getPreferredSize());
-	
-	fightBox = new JDialog();
-	fightBox.setLayout(null);
-	fightBox.setSize(250, 200);
-	fightBox.setLocationRelativeTo(null);
-	fightBox.add(type);
-	fightBox.add(attack);
-	fightBox.add(health);
-	fightBox.add(ask);
-	fightBox.add(yes);
-	fightBox.add(no);
-	fightBox.setVisible(true); 
-
-}
-
-@Override
-public void keyPressed(KeyEvent e) {
-}
-
-@Override
-public void keyTyped(KeyEvent e) {
-}
-
-@Override
-public void actionPerformed(ActionEvent arg0) {
-	Object source = arg0.getSource();
-	if (source instanceof JMenuItem) {
-		JMenuItem menuItem = (JMenuItem) source;
-
-		if (menuItem.getText().equals("Create Game (As Server)")) {
-			new ServerFrame();
-			//this.dispose();
-		} else if (menuItem.getText().equals("Join Game (As Client)")) {
-			try {
-				gameClient = new GameClient();
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(this,
-						"Game Client was unable to initalise.\n"
-								+ " Make sure that you have created and\n"
-								+ " connected and the server and the\n"
-								+ "ports are unblocked.", "ERROR",
-								JOptionPane.ERROR_MESSAGE);
-
-				frameState = FRAME_STATE.CREATED_FRAME;
-				return;
-			}
-
-			// At this point in code, client is connected to server successfully.
-
-			// Now we need to let the user enter a username and pick a character
-			String clientUsername = null;
-			while (clientUsername == null) {
-				clientUsername = JOptionPane.showInputDialog(this,
-						"Input your Username?");
-				if (clientUsername != null && clientUsername.length() < 3) {
-					clientUsername = null;
-				}
-
-				if (clientUsername == null) {
-					JOptionPane
-					.showMessageDialog(
-							this,
-							"You need to enter a user name that is at least 3 characters long.",
-							"ERROR", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-
-			Avatar clientAvatar = ChooseCharacterDialog.Chooser(this);
-
-			// Created a player for the client
-			clientPlayer = new Player(clientUsername);
-			clientPlayer.setAvatar(clientAvatar);
-
-			gameClient.joinServer(clientPlayer);
-
-			// redraw the board
-			frameState = FRAME_STATE.GAME_START;
-
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			this.repaint();
-			addKeyListener(this);
-		} else if (menuItem.getText().equals("Exit")) {
-			System.exit(0);
-		} else if (menuItem.getText().equals("Save Player Info")) {
-			if (frameState == FRAME_STATE.CREATED_FRAME) {
-				JOptionPane.showMessageDialog(this,
-						"Need to load game first", "ERROR",
-						JOptionPane.ERROR_MESSAGE);
-				return;
-			} else {
-				try {
-					GameToJson.savePlayer(clientPlayer);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidSaveException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} else if (menuItem.getText().equals("Load Player Info")) {
-			if (frameState == FRAME_STATE.CREATED_FRAME) {
-				JOptionPane.showMessageDialog(this,
-						"Need to load game first", "ERROR",
-						JOptionPane.ERROR_MESSAGE);
-				return;
-			} else {
-				Player newClientPlayer = JsonToGame.loadPlayer();
-				if (newClientPlayer != null) {
-					clientPlayer = newClientPlayer;
-					clientPlayer.getLocation().setRoom(
-							gameClient.getGame().rooms.get(0));
-					//hard coded - removes key if player has it, places player in right spot
-					if (clientPlayer.getInventory().contains(
-							gameClient.getGame().rooms.get(0).board
-							.getSquares()[3][4]))
-						gameClient.getGame().rooms.get(0).board
-						.getSquares()[3][4]
-								.setGameObjectOnSquare(null);
-					gameClient.getGame().players2.clear();
-					gameClient.getGame().players2.add(clientPlayer);
-					repaint();
-				}
-			}
-		}
-		JMenuItem savePlayer = new JMenuItem("Save Player Info");
-		JMenuItem loadPlayer = new JMenuItem("Load Player Info");
+		repaint();
 	}
 
-}
+	public void fightDialog() {
+		final Location loc = clientPlayer.getLocation();
+
+		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.getGameObjectOnSquare();
+		final int damage = ((Monster)go).attack();
+		JButton yes = new JButton("Yes");
+		JButton no = new JButton("No");
+
+		yes.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fight();
+			}
+			private void fight() {
+
+				clientPlayer.setHealth(clientPlayer.getHealth() - damage);	
+				fightBox.dispose();
+
+				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+						.setGameObjectOnSquare(null);
+			}
+
+		});
+		no.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fightBox.dispose();
+			}
+		});
+
+		yes.setLocation(20, 100);
+		yes.setSize(yes.getPreferredSize());
+		no.setLocation(150, 100);
+		no.setSize(no.getPreferredSize());
+
+		JLabel type = new JLabel("Monster Type: " + ((Monster)go).getName());
+		JLabel attack = new JLabel("Monster Attack: " + ((Monster)go).attack());
+		JLabel health = new JLabel("Monster Health: " + ((Monster)go).health());
+		JLabel ask = new JLabel("Fight?");
+
+		type.setLocation(10, 10);
+		attack.setLocation(10, 30);
+		health.setLocation(10, 50);
+		ask.setLocation(10, 70);
+
+		type.setSize(type.getPreferredSize());
+		attack.setSize(type.getPreferredSize());
+		health.setSize(type.getPreferredSize());
+		ask.setSize(type.getPreferredSize());
+
+		fightBox = new JDialog();
+		fightBox.setLayout(null);
+		fightBox.setSize(250, 200);
+		fightBox.setLocationRelativeTo(null);
+		fightBox.add(type);
+		fightBox.add(attack);
+		fightBox.add(health);
+		fightBox.add(ask);
+		fightBox.add(yes);
+		fightBox.add(no);
+		fightBox.setVisible(true); 
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		Object source = arg0.getSource();
+		if (source instanceof JMenuItem) {
+			JMenuItem menuItem = (JMenuItem) source;
+
+			if (menuItem.getText().equals("Create Game (As Server)")) {
+				new ServerFrame();
+				//this.dispose();
+			} else if (menuItem.getText().equals("Join Game (As Client)")) {
+				try {
+					gameClient = new GameClient();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(this,
+							"Game Client was unable to initalise.\n"
+									+ " Make sure that you have created and\n"
+									+ " connected and the server and the\n"
+									+ "ports are unblocked.", "ERROR",
+									JOptionPane.ERROR_MESSAGE);
+
+					frameState = FRAME_STATE.CREATED_FRAME;
+					return;
+				}
+
+				// At this point in code, client is connected to server successfully.
+
+				// Now we need to let the user enter a username and pick a character
+				String clientUsername = null;
+				while (clientUsername == null) {
+					clientUsername = JOptionPane.showInputDialog(this,
+							"Input your Username?");
+					if (clientUsername != null && clientUsername.length() < 3) {
+						clientUsername = null;
+					}
+
+					if (clientUsername == null) {
+						JOptionPane
+						.showMessageDialog(
+								this,
+								"You need to enter a user name that is at least 3 characters long.",
+								"ERROR", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+
+				Avatar clientAvatar = ChooseCharacterDialog.Chooser(this);
+
+				// Created a player for the client
+				clientPlayer = new Player(clientUsername);
+				clientPlayer.setAvatar(clientAvatar);
+
+				gameClient.joinServer(clientPlayer);
+
+				// redraw the board
+				frameState = FRAME_STATE.GAME_START;
+
+				try {
+					Thread.sleep(4000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				this.repaint();
+				addKeyListener(this);
+			} else if (menuItem.getText().equals("Exit")) {
+				System.exit(0);
+			} else if (menuItem.getText().equals("Save Player Info")) {
+				if (frameState == FRAME_STATE.CREATED_FRAME) {
+					JOptionPane.showMessageDialog(this,
+							"Need to load game first", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					try {
+						GameToJson.savePlayer(clientPlayer);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvalidSaveException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} else if (menuItem.getText().equals("Load Player Info")) {
+				if (frameState == FRAME_STATE.CREATED_FRAME) {
+					JOptionPane.showMessageDialog(this,
+							"Need to load game first", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					Player newClientPlayer = JsonToGame.loadPlayer();
+					if (newClientPlayer != null) {
+						clientPlayer = newClientPlayer;
+						clientPlayer.getLocation().setRoom(
+								gameClient.getGame().rooms.get(0));
+						//hard coded - removes key if player has it, places player in right spot
+						if (clientPlayer.getInventory().contains(
+								gameClient.getGame().rooms.get(0).board
+								.getSquares()[3][4]))
+							gameClient.getGame().rooms.get(0).board
+							.getSquares()[3][4]
+									.setGameObjectOnSquare(null);
+						gameClient.getGame().players2.clear();
+						gameClient.getGame().players2.add(clientPlayer);
+						repaint();
+					}
+				}
+			}
+			JMenuItem savePlayer = new JMenuItem("Save Player Info");
+			JMenuItem loadPlayer = new JMenuItem("Load Player Info");
+		}
+
+	}
 }

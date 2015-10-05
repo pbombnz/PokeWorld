@@ -5,11 +5,12 @@ import game.Player;
 import javax.swing.ImageIcon;
 
 public class RareCandy implements Item {
+
+	int currLevel;
 	
 	public RareCandy(){
-
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Rare Candy";
@@ -32,6 +33,9 @@ public class RareCandy implements Item {
 	@Override
 	public void useItem(Player player) {
 		//level up
-		
+	}
+
+	public int level(){
+		return currLevel + 1;
 	}
 }
