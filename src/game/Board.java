@@ -45,7 +45,6 @@ public class Board implements Serializable {
 				}
 				if(i == 9 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new Tree());
-					System.out.println("TREE");
 				}
 				if(i == 3 && j == 4) {
 					this.squares[i][j] = new BoardSquare(new Key());

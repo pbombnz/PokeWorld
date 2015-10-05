@@ -362,13 +362,15 @@ public void keyReleased(KeyEvent e) {
 	GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 			.getGameObjectOnSquare();
 	
-	if (go != null && go instanceof Item) {
-		clientPlayer.addToInventory(((Item) go));
+	if (go != null && go instanceof Key) {
+		clientPlayer.addToInventory(((Key) go));
 		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.setGameObjectOnSquare(null);
 		
 		if(go instanceof GoodPotion){
 			clientPlayer.setHealth(clientPlayer.getHealth() + ((GoodPotion)go).getHealthHealAmount());
+			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+					.setGameObjectOnSquare(null);
 		}
 	}
 	if(go instanceof Monster){
