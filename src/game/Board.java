@@ -21,7 +21,7 @@ public class Board implements Serializable {
 	private int width;
 	private int height;
 
-	private BoardSquare[][] squares;
+	public BoardSquare[][] squares;
 
 	public Board(int width, int height)
 	{
