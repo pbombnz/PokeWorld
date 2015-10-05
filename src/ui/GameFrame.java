@@ -77,6 +77,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	private int labelSize = 50;
 	private JDialog fightBox;
 	private int roomIndex = 0;
+	public int printPlayerOffset = 0;
 
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
@@ -278,7 +279,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 							&& clientPlayerLoc.getY() == cellY) {
 						g.drawImage(clientPlayer.getSpriteBasedOnDirection()
 								.getImage(), tileX + (TILE_WIDTH / 5), tileY
-								- (TILE_HEIGHT / 3), null);
+								- (TILE_HEIGHT / 3)+printPlayerOffset, null);
 					}
 
 					//printInformation of player
@@ -393,6 +394,11 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			//let the player image turn left 
 			turnPlayerImageRight(clientPlayer);
 
+		}
+		//jump
+		else if (e.getKeyCode() == KeyEvent.VK_J) {
+				printPlayerOffset+=20;
+			
 		}
 
 		if (loc.getY() < 0) {
@@ -546,6 +552,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_J) {
+			printPlayerOffset-=20;
+		}
 	}
 
 	@Override
@@ -608,7 +617,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				frameState = FRAME_STATE.GAME_START;
 
 				try {
-					Thread.sleep(4000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
