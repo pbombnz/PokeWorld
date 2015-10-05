@@ -240,7 +240,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
 				g.drawImage(new ImageIcon(
 						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
-						0, FRAME_WIDTH, FRAME_HEIGHT, null);
+						0, FULL_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
 
