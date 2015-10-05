@@ -12,6 +12,10 @@ public class Room implements Serializable {
 		this.roomName = "Testing Room";
 		this.board = new Board();
 	}
+	
+	public String getName(){
+		return roomName;
+	}
 
 	@Override
 	public int hashCode() {
