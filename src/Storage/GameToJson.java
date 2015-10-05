@@ -8,9 +8,6 @@ import java.io.IOException;
 
 import org.json.simple.*;
 
-import com.google.*;
-import com.google.gson.Gson;
-
 import game.Board;
 import game.Location;
 import game.Player;
@@ -39,6 +36,9 @@ public class GameToJson {
 		int health = p.getHealth();
 		List<Item> items = p.getInventory();
 		String loc = p.getLocation().toString();	
+		int locX = p.getLocation().getX();
+		int locY = p.getLocation().getY();
+		String roomName = p.getLocation().getRoom().getName();
 			
 		jsonobj.put("name", name);
 		jsonobj.put("attack",attack);
@@ -46,7 +46,9 @@ public class GameToJson {
 		jsonobj.put("direction",dir);
 		jsonobj.put("health", health);
 		//jsonobj.put("items", items);
-		jsonobj.put("location",loc);
+		jsonobj.put("locX",locX);
+		jsonobj.put("locY",locY);
+		jsonobj.put("room",roomName);
 		
 		FileWriter file = null;
 		try {
