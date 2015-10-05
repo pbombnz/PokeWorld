@@ -387,11 +387,11 @@ public void keyReleased(KeyEvent e) {
 }
 
 public void fightDialog() {
-	Location loc = clientPlayer.getLocation();
+	final Location loc = clientPlayer.getLocation();
 	
 	GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 			.getGameObjectOnSquare();
-	final int damage = ((Monster)go).attack()/4;
+	final int damage = ((Monster)go).attack();
 	JButton yes = new JButton("Yes");
 	JButton no = new JButton("No");
 	
@@ -401,7 +401,13 @@ public void fightDialog() {
 			fight();
 		}
 		private void fight() {
-			clientPlayer.setHealth(clientPlayer.getHealth() - damage);			
+			
+			clientPlayer.setHealth(clientPlayer.getHealth() - damage);	
+			fightBox.dispose();
+			
+			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+					.setGameObjectOnSquare(null);
+			
 		}
 
 	});
