@@ -70,4 +70,4 @@ public class GameClient extends Listener {
 		}
 	} 
 }
-}
+
