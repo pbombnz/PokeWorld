@@ -1,6 +1,5 @@
 package network;
 
-import game.Game;
 import game.Player;
 
 /**
@@ -40,7 +39,7 @@ public class Packets {
 	 *
 	 */
 	public static class NewGame {
-		Game game;
+		byte[] gameByteArray;
 	}
 	
 }

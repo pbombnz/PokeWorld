@@ -23,7 +23,8 @@ import javax.swing.ImageIcon;
  * @author Prashant Bhikhu
  */
 public class Network {
-	public static final int PORT = 7777;
+	public static final int DEFAULT_SERVER_PORT_TCP = 8777; // Used for Game Server Communication
+	public static final int DEFAULT_SERVER_PORT_UDP = 8778; // Used for Game Server Discovery
 	
 	public static void register(Object host) {
 		Kryo kyro;

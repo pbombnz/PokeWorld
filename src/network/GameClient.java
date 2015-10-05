@@ -13,6 +13,7 @@ public class GameClient {
 	private Game game;
 	private Client client;
 	
+	
 	public GameClient() throws IOException {
 	    client = new Client(20480, 20480);
 	    Network.register(client);
@@ -31,7 +32,7 @@ public class GameClient {
 	    
 	    client.start();
 	    try {
-			client.connect(5000, "localhost", Network.PORT);
+			client.connect(5000, "localhost", Network.DEFAULT_SERVER_PORT_TCP);
 		} catch (IOException e) {
 			throw new IOException(e);
 		}
