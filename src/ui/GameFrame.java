@@ -344,15 +344,15 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			//turn the gui to left side
-			
 			//change the board(change the locations of object)
 			Board newBoard = new Board();
 			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
-					newBoard.squares[j][i] = oldBoard.squares[gameClient.getGame().rooms.get(roomIndex).board
-					                                					.getWidth() -(i+offset)][j];
+					newBoard.squares[i][j] = oldBoard.squares[gameClient
+							.getGame().rooms.get(roomIndex).board.getHeight()
+							- (j + offset)][i];
 				}
 			}
 			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
@@ -362,16 +362,37 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			newloc.setRoom(clientPlayer.getLocation().getRoom());
 			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 			newloc.setX(gameClient.getGame().rooms.get(roomIndex).board
-					.getWidth() - (clientPlayer.getLocation().getY() + offset));
+					.getHeight() - (clientPlayer.getLocation().getY() + offset));
 			newloc.setY(clientPlayer.getLocation().getX());
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
 			turnPlayerImageLeft(clientPlayer);
 
-			
-
 		} else if (e.getKeyCode() == KeyEvent.VK_E) {
-			//turn the gui to left side
+			//turn the gui to right side
+			//change the board(change the locations of object)
+			Board newBoard = new Board();
+			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
+			for (int i = 0; i < oldBoard.getWidth(); i++) {
+				for (int j = 0; j < oldBoard.getHeight(); j++) {
+					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
+					newBoard.squares[i][j] = oldBoard.squares[j][gameClient
+					                 							.getGame().rooms.get(roomIndex).board.getWidth()-(i+offset)];
+				}
+			}
+			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
+
+			//change the locations of player 
+			Location newloc = new Location();
+			newloc.setRoom(clientPlayer.getLocation().getRoom());
+			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
+			newloc.setX(clientPlayer.getLocation().getY());
+			newloc.setY(gameClient.getGame().rooms.get(roomIndex).board
+					.getWidth() - (clientPlayer.getLocation().getX() + offset));
+			clientPlayer.setLocation(newloc);
+			//let the player image turn left 
+			turnPlayerImageRight(clientPlayer);
+
 		}
 
 		if (loc.getY() < 0) {
