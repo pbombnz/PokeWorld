@@ -39,6 +39,7 @@ import game.objects.Item;
 import game.objects.Key;
 import game.objects.Monster;
 import game.objects.Tree;
+import game.objects.Weapon;
 
 /**
  * @author Wang Zhen
@@ -357,13 +358,18 @@ public void keyReleased(KeyEvent e) {
 				.setGameObjectOnSquare(null);
 		
 		if(go instanceof GoodPotion){
-			clientPlayer.setHealth(clientPlayer.getHealth() + 100);
+			clientPlayer.setHealth(clientPlayer.getHealth() + ((GoodPotion)go).getHealthHealAmount());
 		}
 	}
 	if(go instanceof Monster){
 		JOptionPane.showMessageDialog(null, " Monster Type: " + ((Monster)go).getName() + 
 				" \n Monster Attack: " + ((Monster)go).attack() + " \n Monster Health: " +
 				((Monster)go).health() + "\n Would you like to fight this " + ((Monster)go).getName());
+	}
+	if(go instanceof Weapon){
+		clientPlayer.setAttack(clientPlayer.getAttack() + ((Weapon)go).getAttackDamage());
+		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.setGameObjectOnSquare(null);
 	}
 	repaint();
 }
