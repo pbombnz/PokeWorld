@@ -28,37 +28,38 @@ import game.objects.Item;
 public class GameToJson {
 
 	
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	public static void savePlayer(Player p) throws IOException, InvalidSaveException{
 		JSONObject jsonobj = new JSONObject();
 		
 		String name = p.getName();
 		Integer attack = p.getAttack();
-		Gson gson = new Gson();
-		String avatar = gson.toJson( p.getAvatar());
-		Direction dir = p.getDirection();
+		//Gson gson = new Gson();
+		String avatar = p.getAvatar().getName();
+		int dir = p.getDirection().ordinal();
 		int health = p.getHealth();
 		List<Item> items = p.getInventory();
-		String loc = gson.toJson(p.getLocation());	
+		String loc = p.getLocation().toString();	
 			
 		jsonobj.put("name", name);
 		jsonobj.put("attack",attack);
 		jsonobj.put("avatar", avatar);
-		jsonobj.put("direction",dir.ordinal());
+		jsonobj.put("direction",dir);
 		jsonobj.put("health", health);
-
-		jsonobj.put("items", gson);
-		
+		//jsonobj.put("items", items);
 		jsonobj.put("location",loc);
 		
 		FileWriter file = null;
 		try {
 			file = new FileWriter(new File("./playerSave.json"), false);
 			file.write(jsonobj.toJSONString());
+			file.flush();
 			file.close();
+			System.out.println("File saved");
 		} 
 		catch (IOException e){
 			e.printStackTrace();
+			System.out.println("File not saved");
 		} 
 	}
 	
