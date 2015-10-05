@@ -29,6 +29,7 @@ import Storage.GameToJson;
 import Storage.InvalidSaveException;
 import Storage.JsonToGame;
 import network.GameClient;
+import game.Board;
 import game.BoardSquare;
 import game.Game;
 import game.Location;
@@ -345,6 +346,23 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			loc.moveEast();
 			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			//printCharacter(clientPlayer);
+		}else if (e.getKeyCode() == KeyEvent.VK_Q) {
+			//turn the gui to left side
+			//change the board
+			Board newBoard = new Board();
+			Board oldBoard = gameClient.getGame().rooms.get(0).board;
+			for (int i = 0; i < oldBoard.getWidth(); i++) {
+				for (int j = 0; j < oldBoard.getHeight(); j++) {
+					oldBoard.getSquares()[j][i] = newBoard.getSquares()[i][j];
+				}
+			}
+			gameClient.getGame().rooms.get(0).board = newBoard;
+			//change the locations of player 
+			Location newloc = new Location(); 
+			newloc.setRoom(clientPlayer.getLocation().getRoom());
+			//change the locations of 
+		} else if (e.getKeyCode() == KeyEvent.VK_E) {
+			//turn the gui to left side
 		}
 
 		if (loc.getY() < 0) {
