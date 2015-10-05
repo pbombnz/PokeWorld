@@ -37,6 +37,7 @@ import game.objects.GameObject;
 import game.objects.GoodPotion;
 import game.objects.Item;
 import game.objects.Key;
+import game.objects.Monster;
 import game.objects.Tree;
 
 /**
@@ -359,7 +360,11 @@ public void keyReleased(KeyEvent e) {
 			clientPlayer.setHealth(clientPlayer.getHealth() + 100);
 		}
 	}
-
+	if(go instanceof Monster){
+		JOptionPane.showMessageDialog(null, " Monster Type: " + ((Monster)go).getName() + 
+				" \n Monster Attack: " + ((Monster)go).attack() + " \n Monster Health: " +
+				((Monster)go).health() + "\n Would you like to fight this " + ((Monster)go).getName());
+	}
 	repaint();
 }
 

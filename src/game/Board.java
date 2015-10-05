@@ -8,6 +8,7 @@ import java.nio.Buffer;
 import java.util.Arrays;
 
 import game.objects.GiantSword;
+import game.objects.Goblin;
 import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.Tree;
@@ -51,6 +52,9 @@ public class Board implements Serializable {
 				}
 				if(i == 2 && j == 4) {
 					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
+				}
+				if(i == 0 && j == 0) {
+					this.squares[i][j] = new BoardSquare(new Goblin());
 				}
 
 			}
