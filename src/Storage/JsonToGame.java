@@ -13,8 +13,6 @@ import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.google.gson.Gson;
-
 import game.Location;
 import game.Player;
 import game.Player.Direction;
@@ -26,11 +24,12 @@ import game.objects.Key;
 public class JsonToGame {
 	@SuppressWarnings("unchecked")
 	public static Player loadPlayer(){
+		return null;
 		///JSONParser jp = new JSONParser();
-		try{
+		/*try{
 			Object o = new JSONParser().parse(new FileReader(new File("./playerSave.json")));
 			JSONObject jo = (JSONObject) o;
-			Gson gson = new Gson();
+			
 			
 			String name = (String) jo.get("name");
 			Integer attack = ((Long) jo.get("attack")).intValue();
@@ -63,6 +62,7 @@ public class JsonToGame {
 			e.printStackTrace();
 		}
 		return null;
+	*/
 	}
 	
 }
