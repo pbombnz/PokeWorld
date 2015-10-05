@@ -1,6 +1,7 @@
 package game.avatar;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class Avatar implements Serializable {
 	
 	private static File avatarPath = new File("./sprites/avatars/");
 	
-	public static List<Avatar> getAllAvatars()
+	public static List<Avatar> getAllAvatars() throws IOException
 	{
 		List<Avatar> avatars;
 		
@@ -26,14 +27,38 @@ public class Avatar implements Serializable {
 		
 	    for (File file : fList) {
 	        if (file.isDirectory()) {
-	        	Avatar avatar = new Avatar(file.getName(), 
-	        	new ImageIcon(file.getAbsolutePath() + "/evolution1_faceleft.png"),
-	        	new ImageIcon(file.getAbsolutePath() + "/faceright.png"),
-	        	new ImageIcon(file.getAbsolutePath() + "/backleft.png"),
-	        	new ImageIcon(file.getAbsolutePath() + "/backright.png"),
-	        	new ImageIcon(file.getAbsolutePath() + "/normal.png"));
+	        	String avatarName = file.getName();
+	        	ImageIcon evolution1_faceleft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
+	        	ImageIcon evolution1_faceright = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
+    			ImageIcon evolution1_backleft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
+				ImageIcon evolution1_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
+				ImageIcon normal = new ImageIcon(file.getAbsolutePath() + "/normal.png");
 	        	
+	        	if(file.listFiles().length != 1) {
+	        		throw new IOException("Second Evolution for \""+avatarName+"\" Sprite doesn't Exist");
+	        	}
 	        	
+	        	ImageIcon evolution2_faceleft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
+	        	ImageIcon evolution2_faceright = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
+    			ImageIcon evolution2_backleft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
+				ImageIcon evolution2_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
+
+	        	if(file.listFiles()[0].listFiles().length != 1) {
+	        		throw new IOException("Third Evolution for \""+avatarName+"\" Sprite doesn't Exist");
+	        	}
+
+	        	ImageIcon evolution3_faceleft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
+	        	ImageIcon evolution3_faceright = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
+    			ImageIcon evolution3_backleft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
+				ImageIcon evolution3_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
+
+				Avatar avatar = new Avatar(avatarName, evolution1_faceleft,
+						 evolution1_faceright, evolution1_backleft,
+						 evolution1_backright, normal,
+						 evolution2_faceleft, evolution2_faceright,
+						 evolution2_backleft, evolution2_backright,
+						 evolution3_faceleft, evolution3_faceright,
+						 evolution3_backleft, evolution3_backright);		
 	        	avatars.add(avatar);
 	            //System.out.println(file.getAbsolutePath());
 	            //System.out.println(file.getName());
@@ -67,7 +92,6 @@ public class Avatar implements Serializable {
 	private final ImageIcon evolution3_backright;
 	
 
-	
 	public Avatar(String avatarName, ImageIcon evolution1_faceleft,
 			ImageIcon evolution1_faceright, ImageIcon evolution1_backleft,
 			ImageIcon evolution1_backright, ImageIcon normal,
@@ -127,6 +151,58 @@ public class Avatar implements Serializable {
 		return normal;
 	}
 
+	public String getAvatarName() {
+		return avatarName;
+	}
+
+	public ImageIcon getEvolution1_faceleft() {
+		return evolution1_faceleft;
+	}
+
+	public ImageIcon getEvolution1_faceright() {
+		return evolution1_faceright;
+	}
+
+	public ImageIcon getEvolution1_backleft() {
+		return evolution1_backleft;
+	}
+
+	public ImageIcon getEvolution1_backright() {
+		return evolution1_backright;
+	}
+
+	public ImageIcon getEvolution2_faceleft() {
+		return evolution2_faceleft;
+	}
+
+	public ImageIcon getEvolution2_faceright() {
+		return evolution2_faceright;
+	}
+
+	public ImageIcon getEvolution2_backleft() {
+		return evolution2_backleft;
+	}
+
+	public ImageIcon getEvolution2_backright() {
+		return evolution2_backright;
+	}
+
+	public ImageIcon getEvolution3_faceleft() {
+		return evolution3_faceleft;
+	}
+
+	public ImageIcon getEvolution3_faceright() {
+		return evolution3_faceright;
+	}
+
+	public ImageIcon getEvolution3_backleft() {
+		return evolution3_backleft;
+	}
+
+	public ImageIcon getEvolution3_backright() {
+		return evolution3_backright;
+	}	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
