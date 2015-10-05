@@ -14,7 +14,7 @@ public class Player implements Serializable {
 
 	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
 	
-	public static final int HEALTH = 100;
+	public static final int HEALTH =  100;
 	public static final int ATTACK = 10;
 
 	private Avatar avatar;

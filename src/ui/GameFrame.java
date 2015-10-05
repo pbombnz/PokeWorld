@@ -74,7 +74,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public JLabel characterLabel;
 	private int labelSize = 50;
 	private JDialog fightBox;
-	//public JScrollPane itemX;
+
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
 	public GameFrame() {
@@ -182,11 +182,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		level.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(level);
 
-
-		//itemX = new JScrollPane();
-		//itemX.setSize(150, 390);
-		//itemX.setLocation(20, 150);
-		//panel.add(itemX);
 		//store labels into list and can remove them 1st when everytime refresh
 		infoLabels.add(health);
 		infoLabels.add(textJLabel);
@@ -390,6 +385,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		}
 		if(go instanceof RareCandy){
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel() + ((RareCandy)go).level());
+			clientPlayer.setAttack(clientPlayer.getAttack() * clientPlayer.getPlayerLevel());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
@@ -414,9 +410,15 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 				clientPlayer.setHealth(clientPlayer.getHealth() - damage);	
 				fightBox.dispose();
+				
+				JOptionPane.showMessageDialog(null, "You suffered " + damage +" damage" );
 
 				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 						.setGameObjectOnSquare(null);
+				
+				if(clientPlayer.isDead()){
+					System.out.println("You died");
+				}
 			}
 
 		});
