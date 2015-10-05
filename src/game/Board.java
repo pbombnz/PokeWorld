@@ -54,7 +54,7 @@ public class Board implements Serializable {
 					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 				}
 				if(i == 0 && j == 0 || i == 7 && j == 3 || i == 1 && j == 5) {
-					this.squares[i][j] = new BoardSquare(new Goblin());
+					this.squares[i][j] = new BoardSquare(new Goblin(5,5));
 				}
 
 			}

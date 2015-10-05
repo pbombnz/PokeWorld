@@ -38,6 +38,7 @@ import game.Player.Direction;
 import game.Room;
 import game.avatar.Avatar;
 import game.objects.GameObject;
+import game.objects.Goblin;
 import game.objects.GoodPotion;
 import game.objects.Item;
 import game.objects.Key;
@@ -492,21 +493,21 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				fight();
 			}
 
-			private void fight() {
-
-				clientPlayer.setHealth(clientPlayer.getHealth() - damage);
-				fightBox.dispose();
-
-				JOptionPane.showMessageDialog(null, "You suffered " + damage
-						+ " damage");
-
-				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-						.setGameObjectOnSquare(null);
-
-				if (clientPlayer.isDead()) {
-					System.out.println("You died");
-				}
-			}
+//			private void fight() {
+//
+//				clientPlayer.setHealth(clientPlayer.getHealth() - damage);
+//				fightBox.dispose();
+//
+//				JOptionPane.showMessageDialog(null, "You suffered " + damage
+//						+ " damage");
+//
+//				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+//						.setGameObjectOnSquare(null);
+//
+//				if (clientPlayer.isDead()) {
+//					System.out.println("You died");
+//				}
+//			}
 
 		});
 		no.addActionListener(new ActionListener() {
@@ -523,13 +524,13 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		JLabel type = new JLabel("Monster Type: " + ((Monster) go).getName());
 		JLabel attack = new JLabel("Monster Attack: " + ((Monster) go).attack());
-		JLabel health = new JLabel("Monster Health: " + ((Monster) go).health());
+		JLabel health = new JLabel("Monster Health: " + ((Monster) go).getHealth());
 		JLabel ask = new JLabel("Fight?");
 
 		type.setLocation(10, 10);
 		attack.setLocation(10, 30);
 		health.setLocation(10, 50);
-		ask.setLocation(10, 70);
+		ask.setLocation(10, 80);
 
 		type.setSize(type.getPreferredSize());
 		attack.setSize(type.getPreferredSize());
@@ -548,6 +549,29 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		fightBox.add(no);
 		fightBox.setVisible(true);
 
+	}
+	
+	private void fight() {
+		
+		final Location loc = clientPlayer.getLocation();
+
+		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.getGameObjectOnSquare();
+		
+		final int damage = ((Monster) go).attack();
+
+		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
+		fightBox.dispose();
+
+		JOptionPane.showMessageDialog(null, "You suffered " + damage
+				+ " damage");
+
+		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.setGameObjectOnSquare(null);
+
+		if (clientPlayer.isDead()) {
+			System.out.println("You died");
+		}
 	}
 
 	@Override
