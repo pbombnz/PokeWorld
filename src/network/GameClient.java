@@ -8,10 +8,11 @@ import java.net.InetAddress;
 import java.util.List;
 
 import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.kryonet.Listener;
 
 import network.Packets.*;
 
-public class GameClient {
+public class GameClient extends Listener {
 	private Game game;
 	private Client client;
 	
@@ -20,17 +21,7 @@ public class GameClient {
 	    client = new Client(20480, 20480);
 	    Network.register(client);
 
-	    client.addListener(new Listener() {
-			public void received (Connection connection, Object object) {
-				//System.out.println();
-				if(object instanceof NewGame) {
-					byte[] gameBytes = ((NewGame) object).gameByteArray;
-					//System.out.println(Game.fromByteArray(gameBytes).toString());
-					game = Game.fromByteArray(gameBytes);
-					System.out.println("game is received from server to client");
-				}
-			} 
-		});
+	    client.addListener(this);
 	    
 	    client.start();
 	    try {
@@ -67,4 +58,16 @@ public class GameClient {
 	public List<InetAddress> getServerList() {
 		return client.discoverHosts(Network.DEFAULT_SERVER_PORT_UDP, 5000);
 	}
+	
+	@Override
+	public void received (Connection connection, Object object) {
+		//System.out.println();
+		if(object instanceof NewGame) {
+			byte[] gameBytes = ((NewGame) object).gameByteArray;
+			//System.out.println(Game.fromByteArray(gameBytes).toString());
+			game = Game.fromByteArray(gameBytes);
+			System.out.println("game is received from server to client");
+		}
+	} 
+}
 }
