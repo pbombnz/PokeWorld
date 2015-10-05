@@ -45,7 +45,7 @@ public class GameToJson {
 		jsonobj.put("avatar", avatar);
 		jsonobj.put("direction",dir);
 		jsonobj.put("health", health);
-		//jsonobj.put("items", items);
+		jsonobj.put("items", items);
 		jsonobj.put("locX",locX);
 		jsonobj.put("locY",locY);
 		jsonobj.put("room",roomName);
