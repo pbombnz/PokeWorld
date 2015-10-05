@@ -27,7 +27,7 @@ public class Avatar implements Serializable {
 	    for (File file : fList) {
 	        if (file.isDirectory()) {
 	        	Avatar avatar = new Avatar(file.getName(), 
-	        	new ImageIcon(file.getAbsolutePath() + "/faceleft.png"),
+	        	new ImageIcon(file.getAbsolutePath() + "/evolution1_faceleft.png"),
 	        	new ImageIcon(file.getAbsolutePath() + "/faceright.png"),
 	        	new ImageIcon(file.getAbsolutePath() + "/backleft.png"),
 	        	new ImageIcon(file.getAbsolutePath() + "/backright.png"),
@@ -46,56 +46,81 @@ public class Avatar implements Serializable {
 	
 	
 	private final String avatarName;
-	private final ImageIcon faceleft;
-	private final ImageIcon faceright;
-	private final ImageIcon backleft;
-	private final ImageIcon backright;
+	
+	// Intital Evolution Sprites
+	private final ImageIcon evolution1_faceleft;
+	private final ImageIcon evolution1_faceright;
+	private final ImageIcon evolution1_backleft;
+	private final ImageIcon evolution1_backright;
 	private final ImageIcon normal;
 
-	public Avatar() {
-		avatarName = null;
-		faceleft = null;
-		faceright = null;
-		backleft = null;
-		backright = null;
-		normal = null;
-	}
-	
-	public Avatar(String avatarName, ImageIcon faceleft, ImageIcon faceright,
-			ImageIcon backleft, ImageIcon backright, ImageIcon normal) {
-		super();
-		this.avatarName = avatarName;
-		this.faceleft = faceleft;
-		this.faceright = faceright;
-		this.backleft = backleft;
-		this.backright = backright;
-		this.normal = normal;
-	}
-	
-	//public static void main(String[] args) {
-	//	getAllAvatars();
-	//}
+	// Second Evolution Sprites
+	private final ImageIcon evolution2_faceleft;
+	private final ImageIcon evolution2_faceright;
+	private final ImageIcon evolution2_backleft;
+	private final ImageIcon evolution2_backright;
 
+	// Third Evolution Sprites
+	private final ImageIcon evolution3_faceleft;
+	private final ImageIcon evolution3_faceright;
+	private final ImageIcon evolution3_backleft;
+	private final ImageIcon evolution3_backright;
+	
+
+	
+	public Avatar(String avatarName, ImageIcon evolution1_faceleft,
+			ImageIcon evolution1_faceright, ImageIcon evolution1_backleft,
+			ImageIcon evolution1_backright, ImageIcon normal,
+			ImageIcon evolution2_faceleft, ImageIcon evolution2_faceright,
+			ImageIcon evolution2_backleft, ImageIcon evolution2_backright,
+			ImageIcon evolution3_faceleft, ImageIcon evolution3_faceright,
+			ImageIcon evolution3_backleft, ImageIcon evolution3_backright) {
+		
+		this.avatarName = avatarName;
+		this.evolution1_faceleft = evolution1_faceleft;
+		this.evolution1_faceright = evolution1_faceright;
+		this.evolution1_backleft = evolution1_backleft;
+		this.evolution1_backright = evolution1_backright;
+		
+		this.normal = normal;
+		
+		this.evolution2_faceleft = evolution2_faceleft;
+		this.evolution2_faceright = evolution2_faceright;
+		this.evolution2_backleft = evolution2_backleft;
+		this.evolution2_backright = evolution2_backright;
+		
+		this.evolution3_faceleft = evolution3_faceleft;
+		this.evolution3_faceright = evolution3_faceright;
+		this.evolution3_backleft = evolution3_backleft;
+		this.evolution3_backright = evolution3_backright;
+	}
+
+	/**
+	 * No-args Constructor for Network Serialization (DO NOT USE)
+	 */
+	public Avatar() {
+		
+		this.avatarName = null;
+		this.evolution1_faceleft = null;
+		this.evolution1_faceright = null;
+		this.evolution1_backleft = null;
+		this.evolution1_backright = null;
+		
+		this.normal = null;
+		
+		this.evolution2_faceleft = null;
+		this.evolution2_faceright = null;
+		this.evolution2_backleft = null;
+		this.evolution2_backright = null;
+		
+		this.evolution3_faceleft = null;
+		this.evolution3_faceright = null;
+		this.evolution3_backleft = null;
+		this.evolution3_backright = null;
+	}	
+	
 	public String getName() {
 		return avatarName;
-	}
-
-	public ImageIcon getFaceleft() {
-		return faceleft;
-	}
-
-
-	public ImageIcon getFaceright() {
-		return faceright;
-	}
-
-
-	public ImageIcon getBackleft() {
-		return backleft;
-	}
-
-	public ImageIcon getBackright() {
-		return backright;
 	}
 
 	public ImageIcon getNormal() {
