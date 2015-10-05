@@ -34,7 +34,9 @@ import game.Player;
 import game.Room;
 import game.avatar.Avatar;
 import game.objects.GameObject;
+import game.objects.GoodPotion;
 import game.objects.Item;
+import game.objects.Key;
 import game.objects.Tree;
 
 /**
@@ -360,10 +362,15 @@ public void keyReleased(KeyEvent e) {
 	//check to take items
 	GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 			.getGameObjectOnSquare();
+	
 	if (go != null && go instanceof Item) {
 		clientPlayer.addToInventory(((Item) go));
 		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.setGameObjectOnSquare(null);
+		
+		if(go instanceof GoodPotion){
+			clientPlayer.setHealth(clientPlayer.getHealth() + 100);
+		}
 	}
 
 	repaint();

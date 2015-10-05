@@ -82,30 +82,30 @@ public class Board implements Serializable {
 	//	}
 	//		}}
 
-	public Board(String filename) throws IOException{
-		//parses one line needs work
-		this.width = 10;
-		this.height = 10;
-		this.squares = new BoardSquare[height][width];
-		BufferedReader in = new BufferedReader(new FileReader(filename));
-		while(in.readLine() != null){
-		String line = in.readLine();
-		String[] values = line.split(",");
-		int y = 0;
-		for(int x = 0; x < values.length; x++){
-			switch(values[x]){
-			case "1":
-				this.squares[x][y] = new BoardSquare(null);
-
-			case "2":
-				this.squares[x][y] = new BoardSquare(new Key());
-
-			case "3":
-				this.squares[x][y] = new BoardSquare(new GiantSword());
-			}
-		}
-		}
-	}
+//	public Board(String filename) throws IOException{
+//		//parses one line needs work
+//		this.width = 10;
+//		this.height = 10;
+//		this.squares = new BoardSquare[height][width];
+//		BufferedReader in = new BufferedReader(new FileReader(filename));
+//		while(in.readLine() != null){
+//		String line = in.readLine();
+//		String[] values = line.split(",");
+//		int y = 0;
+//		for(int x = 0; x < values.length; x++){
+//			switch(values[x]){
+//			case "1":
+//				this.squares[x][y] = new BoardSquare(null);
+//
+//			case "2":
+//				this.squares[x][y] = new BoardSquare(new Key());
+//
+//			case "3":
+//				this.squares[x][y] = new BoardSquare(new GiantSword());
+//			}
+//		}
+//		}
+//	}
 		public BoardSquare[][] getSquares() {
 			return squares;
 		}
