@@ -327,25 +327,21 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		//fl faceleft fr faceright bl backleft br backright.
 		Location loc = clientPlayer.getLocation();
 		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
-			printInformation(clientPlayer);
 			loc.moveNorth();
 			clientPlayer.setDirection(Player.Direction.BACK_LEFT);
 			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_S
 				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-			printInformation(clientPlayer);
 			loc.moveSouth();
 			clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
 			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_A
 				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
-			printInformation(clientPlayer);
 			loc.moveWest();
 			clientPlayer.setDirection(Player.Direction.FACE_LEFT);
 			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_D
 				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			printInformation(clientPlayer);
 			loc.moveEast();
 			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			//printCharacter(clientPlayer);
