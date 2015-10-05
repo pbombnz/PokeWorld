@@ -29,6 +29,7 @@ public class Player implements Serializable {
 
 	private Location location;
 	private Direction direction = Direction.FACE_RIGHT;
+	private int playerLevel = 1;
 
 	public Player() {
 		this.name = null;
@@ -100,6 +101,14 @@ public class Player implements Serializable {
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+	
+	public int getPlayerLevel(){
+		return playerLevel;
+	}
+	
+	public void setPlayerLevel(int change){
+		this.playerLevel = change;
 	}
 	
 	public ImageIcon getSpriteBasedOnDirection() {
