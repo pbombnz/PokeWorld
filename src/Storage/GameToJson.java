@@ -34,7 +34,6 @@ public class GameToJson {
 		
 		String name = p.getName();
 		Integer attack = p.getAttack();
-		//Gson gson = new Gson();
 		String avatar = p.getAvatar().getName();
 		int dir = p.getDirection().ordinal();
 		int health = p.getHealth();
