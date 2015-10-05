@@ -41,19 +41,19 @@ public class Board implements Serializable {
 			for(int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
 				
-				if(i == 4 && j == 4) {
+				if(i == 5 && j == 0) {
 					this.squares[i][j] = new BoardSquare(new RareCandy());
 				}
 				if(i == 9 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new Tree());
 				}
-				if(i == 3 && j == 4) {
+				if(i == 4 && j == 6) {
 					this.squares[i][j] = new BoardSquare(new Key());
 				}
-				if(i == 2 && j == 4) {
+				if(i == 6 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 				}
-				if(i == 0 && j == 0) {
+				if(i == 0 && j == 0 || i == 7 && j == 3 || i == 1 && j == 5) {
 					this.squares[i][j] = new BoardSquare(new Goblin());
 				}
 

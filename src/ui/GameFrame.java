@@ -29,6 +29,7 @@ import Storage.GameToJson;
 import Storage.InvalidSaveException;
 import Storage.JsonToGame;
 import network.GameClient;
+import game.Board;
 import game.BoardSquare;
 import game.Game;
 import game.Location;
@@ -74,7 +75,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public JLabel characterLabel;
 	private int labelSize = 50;
 	private JDialog fightBox;
-	//public JScrollPane itemX;
+
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
 	public GameFrame() {
@@ -182,11 +183,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		level.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(level);
 
-
-		//itemX = new JScrollPane();
-		//itemX.setSize(150, 390);
-		//itemX.setLocation(20, 150);
-		//panel.add(itemX);
 		//store labels into list and can remove them 1st when everytime refresh
 		infoLabels.add(health);
 		infoLabels.add(textJLabel);
@@ -332,28 +328,41 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		//fl faceleft fr faceright bl backleft br backright.
 		Location loc = clientPlayer.getLocation();
 		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
-			printInformation(clientPlayer);
 			loc.moveNorth();
 			clientPlayer.setDirection(Player.Direction.BACK_LEFT);
 			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_S
 				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-			printInformation(clientPlayer);
 			loc.moveSouth();
 			clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
 			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_A
 				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
-			printInformation(clientPlayer);
 			loc.moveWest();
 			clientPlayer.setDirection(Player.Direction.FACE_LEFT);
 			//printCharacter(clientPlayer);
 		} else if (e.getKeyCode() == KeyEvent.VK_D
 				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			printInformation(clientPlayer);
 			loc.moveEast();
 			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			//printCharacter(clientPlayer);
+		}else if (e.getKeyCode() == KeyEvent.VK_Q) {
+			//turn the gui to left side
+			//change the board
+			Board newBoard = new Board();
+			Board oldBoard = gameClient.getGame().rooms.get(0).board;
+			for (int i = 0; i < oldBoard.getWidth(); i++) {
+				for (int j = 0; j < oldBoard.getHeight(); j++) {
+					oldBoard.getSquares()[j][i] = newBoard.getSquares()[i][j];
+				}
+			}
+			gameClient.getGame().rooms.get(0).board = newBoard;
+			//change the locations of player 
+			Location newloc = new Location(); 
+			newloc.setRoom(clientPlayer.getLocation().getRoom());
+			//change the locations of 
+		} else if (e.getKeyCode() == KeyEvent.VK_E) {
+			//turn the gui to left side
 		}
 
 		if (loc.getY() < 0) {
@@ -390,6 +399,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		}
 		if(go instanceof RareCandy){
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel() + ((RareCandy)go).level());
+			clientPlayer.setAttack(clientPlayer.getAttack() * clientPlayer.getPlayerLevel());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
@@ -414,9 +424,15 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 				clientPlayer.setHealth(clientPlayer.getHealth() - damage);	
 				fightBox.dispose();
+				
+				JOptionPane.showMessageDialog(null, "You suffered " + damage +" damage" );
 
 				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 						.setGameObjectOnSquare(null);
+				
+				if(clientPlayer.isDead()){
+					System.out.println("You died");
+				}
 			}
 
 		});
