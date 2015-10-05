@@ -66,7 +66,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public JLabel touxiangLabel;
 	public JLabel characterLabel;
 	private int labelSize = 50;
-	public JScrollPane itemX;
+	//public JScrollPane itemX;
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
 	public GameFrame() {
@@ -177,10 +177,10 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		panel.add(attack);
 
 		
-		itemX = new JScrollPane();
-		itemX.setSize(150, 390);
-		itemX.setLocation(20, 150);
-		panel.add(itemX);
+		//itemX = new JScrollPane();
+		//itemX.setSize(150, 390);
+		//itemX.setLocation(20, 150);
+		//panel.add(itemX);
 		//store labels into list and can remove them 1st when everytime refresh
 		infoLabels.add(health);
 		infoLabels.add(textJLabel);
@@ -259,7 +259,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
 					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
+							.getImage(), tileX , tileY, TILE_WIDTH, TILE_HEIGHT,
 							null);
 					//g.drawString(cellY+", "+cellX, screenX+20, screenY+20); // Shows the Array dimension associated with the array
 					//System.out.println(gameClient.getGame());
@@ -286,7 +286,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), tileX, tileY - 200, null);
+									.getImage(), tileX - 60 , tileY - 170  , null);
 							//tree bounding box faulty check x and y
 						} else {
 							g.drawImage(bs[cellY][cellX]
