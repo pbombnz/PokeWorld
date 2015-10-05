@@ -116,11 +116,11 @@ public class Game {
 	}
 	
 	public ArrayList<Player> getPlayers() {
-		return (ArrayList<Player>) Collections.unmodifiableList(players2);
+		return players2;
 	}
 
-	public ArrayList<Room> getRooms() {
-		return (ArrayList<Room>) Collections.unmodifiableList(rooms);
+	public List<Room> getRooms() {
+		return rooms;
 	}
 	
 }
