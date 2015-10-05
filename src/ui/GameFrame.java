@@ -384,14 +384,17 @@ public void fightDialog() {
 	
 	GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 			.getGameObjectOnSquare();
-	
+	final int damage = ((Monster)go).attack()/4;
 	JButton yes = new JButton("Yes");
 	JButton no = new JButton("No");
 	
 	yes.addActionListener(new ActionListener(){
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//fight();
+			fight();
+		}
+		private void fight() {
+			clientPlayer.setHealth(clientPlayer.getHealth() - damage);			
 		}
 
 	});
