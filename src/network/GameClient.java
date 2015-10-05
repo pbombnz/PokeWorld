@@ -4,6 +4,8 @@ import game.Game;
 import game.Player;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.List;
 
 import com.esotericsoftware.kryonet.*;
 
@@ -21,8 +23,8 @@ public class GameClient {
 	    client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
 				//System.out.println();
-				if(object instanceof byte[]) {
-					byte[] gameBytes = (byte[]) object;
+				if(object instanceof NewGame) {
+					byte[] gameBytes = ((NewGame) object).gameByteArray;
 					System.out.println(Game.fromByteArray(gameBytes).toString());
 					game = Game.fromByteArray(gameBytes);
 					System.out.println("game is received from server to client");
@@ -32,7 +34,7 @@ public class GameClient {
 	    
 	    client.start();
 	    try {
-			client.connect(5000, "localhost", Network.DEFAULT_SERVER_PORT_TCP);
+			client.connect(5000, "localhost", Network.DEFAULT_SERVER_PORT_TCP, Network.DEFAULT_SERVER_PORT_UDP);
 		} catch (IOException e) {
 			throw new IOException(e);
 		}
@@ -55,5 +57,14 @@ public class GameClient {
 		NewPlayer np = new NewPlayer();
 		np.player = player;
 		client.sendTCP(np);
+	}
+	
+	/**
+	 * Returns the list of servers that the client can join
+	 * 
+	 * @return
+	 */
+	public List<InetAddress> getServerList() {
+		return client.discoverHosts(Network.DEFAULT_SERVER_PORT_UDP, 5000);
 	}
 }
