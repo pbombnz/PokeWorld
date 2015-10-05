@@ -34,6 +34,7 @@ import game.BoardSquare;
 import game.Game;
 import game.Location;
 import game.Player;
+import game.Player.Direction;
 import game.Room;
 import game.avatar.Avatar;
 import game.objects.GameObject;
@@ -347,7 +348,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			//printCharacter(clientPlayer);
 		}else if (e.getKeyCode() == KeyEvent.VK_Q) {
-			//turn the gui to left side
+		//turn the gui to left side
 			//change the board
 			Board newBoard = new Board();
 			Board oldBoard = gameClient.getGame().rooms.get(0).board;
@@ -357,12 +358,20 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				}
 			}
 			gameClient.getGame().rooms.get(0).board = newBoard;
+
 			//change the locations of player 
 			Location newloc = new Location(); 
 			newloc.setRoom(clientPlayer.getLocation().getRoom());
-			//change the locations of 
+			newloc.setX(clientPlayer.getLocation().getY());
+			newloc.setY(clientPlayer.getLocation().getX());
+			clientPlayer.setLocation(newloc);
+			//let the player image turn left 
+			turnPlayerImageLeft(clientPlayer);
+			turnPlayerImageRight(clientPlayer);
+			
+			//change the locations of mo
 		} else if (e.getKeyCode() == KeyEvent.VK_E) {
-			//turn the gui to left side
+		//turn the gui to left side
 		}
 
 		if (loc.getY() < 0) {
@@ -405,6 +414,44 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		}
 		repaint();
 	}
+	
+	/**
+	 * let the player image turn left
+	 * @param player
+	 */
+	public void turnPlayerImageLeft(Player player){
+		if(player.getDirection().equals(Direction.FACE_LEFT)){
+			player.setDirection(Direction.BACK_LEFT);
+		}else if(player.getDirection().equals(Direction.BACK_LEFT)){
+			player.setDirection(Direction.BACK_RIGHT);
+		}else if(player.getDirection().equals(Direction.BACK_RIGHT)){
+			player.setDirection(Direction.FACE_RIGHT);
+		}else if(player.getDirection().equals(Direction.FACE_RIGHT)){
+			player.setDirection(Direction.FACE_LEFT);
+		}
+	}
+	
+	/**
+	 * let the player image turn right
+	 * @param player
+	 */
+	public void turnPlayerImageRight(Player player){
+		if(player.getDirection()==Direction.FACE_LEFT){
+			player.setDirection(Direction.FACE_RIGHT);
+		}else if(player.getDirection()==Direction.FACE_RIGHT){
+			player.setDirection(Direction.BACK_RIGHT);
+		}else if(player.getDirection()==Direction.BACK_RIGHT){
+			player.setDirection(Direction.BACK_LEFT);
+		}else if(player.getDirection()==Direction.BACK_LEFT){
+			player.setDirection(Direction.FACE_LEFT);
+		}
+	}
+	
+//	public boolean directionEquals(Direction d1,Direction d2){
+//		if(di){
+//			
+//		}
+//	}
 
 	public void fightDialog() {
 		final Location loc = clientPlayer.getLocation();
