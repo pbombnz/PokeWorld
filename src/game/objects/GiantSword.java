@@ -22,7 +22,7 @@ public class GiantSword implements Weapon {
 
 	@Override
 	public int getAttackDamage() {
-		return 10;
+		return 100;
 	}
 
 }

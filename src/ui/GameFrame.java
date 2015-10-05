@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -70,6 +72,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public JLabel touxiangLabel;
 	public JLabel characterLabel;
 	private int labelSize = 50;
+	private JDialog fightBox;
 	//public JScrollPane itemX;
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
@@ -362,9 +365,11 @@ public void keyReleased(KeyEvent e) {
 		}
 	}
 	if(go instanceof Monster){
-		JOptionPane.showMessageDialog(null, " Monster Type: " + ((Monster)go).getName() + 
-				" \n Monster Attack: " + ((Monster)go).attack() + " \n Monster Health: " +
-				((Monster)go).health() + "\n Would you like to fight this " + ((Monster)go).getName());
+		fightDialog();
+//		JOptionPane.showMessageDialog(null, " Monster Type: " + ((Monster)go).getName() + 
+//				" \n Monster Attack: " + ((Monster)go).attack() + " \n Monster Health: " +
+//				((Monster)go).health() + "\n Would you like to fight this " + ((Monster)go).getName() + "?");
+	
 	}
 	if(go instanceof Weapon){
 		clientPlayer.setAttack(clientPlayer.getAttack() + ((Weapon)go).getAttackDamage());
@@ -372,6 +377,63 @@ public void keyReleased(KeyEvent e) {
 				.setGameObjectOnSquare(null);
 	}
 	repaint();
+}
+
+public void fightDialog() {
+	Location loc = clientPlayer.getLocation();
+	
+	GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+			.getGameObjectOnSquare();
+	
+	JButton yes = new JButton("Yes");
+	JButton no = new JButton("No");
+	
+	yes.addActionListener(new ActionListener(){
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//fight();
+		}
+
+	});
+	no.addActionListener(new ActionListener(){
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fightBox.dispose();
+		}
+	});
+
+	yes.setLocation(20, 100);
+	yes.setSize(yes.getPreferredSize());
+	no.setLocation(150, 100);
+	no.setSize(no.getPreferredSize());
+
+	JLabel type = new JLabel("Monster Type: " + ((Monster)go).getName());
+	JLabel attack = new JLabel("Monster Attack: " + ((Monster)go).attack());
+	JLabel health = new JLabel("Monster Health: " + ((Monster)go).health());
+	JLabel ask = new JLabel("Fight?");
+	
+	type.setLocation(10, 10);
+	attack.setLocation(10, 30);
+	health.setLocation(10, 50);
+	ask.setLocation(10, 70);
+	
+	type.setSize(type.getPreferredSize());
+	attack.setSize(type.getPreferredSize());
+	health.setSize(type.getPreferredSize());
+	ask.setSize(type.getPreferredSize());
+	
+	fightBox = new JDialog();
+	fightBox.setLayout(null);
+	fightBox.setSize(250, 200);
+	fightBox.setLocationRelativeTo(null);
+	fightBox.add(type);
+	fightBox.add(attack);
+	fightBox.add(health);
+	fightBox.add(ask);
+	fightBox.add(yes);
+	fightBox.add(no);
+	fightBox.setVisible(true); 
+
 }
 
 @Override
