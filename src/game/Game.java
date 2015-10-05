@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import ui.GameFrame;
  */
 public class Game {
 	
-	public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
+	//public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
 
 	public ArrayList<Player> players2;
 	public ArrayList<Room> rooms;
@@ -114,6 +115,12 @@ public class Game {
 		return true;
 	}
 	
-	
+	public ArrayList<Player> getPlayers() {
+		return (ArrayList<Player>) Collections.unmodifiableList(players2);
+	}
+
+	public ArrayList<Room> getRooms() {
+		return (ArrayList<Room>) Collections.unmodifiableList(rooms);
+	}
 	
 }

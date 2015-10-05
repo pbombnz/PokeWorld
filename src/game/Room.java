@@ -49,5 +49,9 @@ public class Room implements Serializable {
 		return true;
 	}
 	
+	public Board getBoard() {
+		return board;
+		
+	}
 	
 }
