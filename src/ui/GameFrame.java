@@ -342,7 +342,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			loc.moveEast();
 			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			//printCharacter(clientPlayer);
-		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
+		} else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the gui to left side
 			//change the board(change the locations of object)
 			Board newBoard = new Board();
@@ -368,7 +368,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			//let the player image turn left 
 			turnPlayerImageLeft(clientPlayer);
 
-		} else if (e.getKeyCode() == KeyEvent.VK_E) {
+		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			//turn the gui to right side
 			//change the board(change the locations of object)
 			Board newBoard = new Board();
