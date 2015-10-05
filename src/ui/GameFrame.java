@@ -123,19 +123,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	}
 
-	/*public ImageIcon getCharacterImage(Player player) {
-		if (player.getDirection() == Player.Direction.FACE_LEFT) {
-			return player.getAvatar().getFaceleft();
-		} else if (player.getDirection() == Player.Direction.FACE_RIGHT) {
-			return player.getAvatar().getFaceright();
-		} else if (player.getDirection() == Player.Direction.BACK_LEFT) {
-			return player.getAvatar().getBackleft();
-		} else if (player.getDirection() == Player.Direction.BACK_RIGHT) {
-			return player.getAvatar().getBackright();
-		}
-		return null;
-	}*/
-
 	public void printInformation(Player player) {
 		//initialize
 		if (touxiangLabel != null) {
