@@ -61,7 +61,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	// The Size of the Frame
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
-	private static final int FULL_FRAME_WIDTH = 1250;
+	private static final int FULL_FRAME_WIDTH = 1350;
 	// The size of the tiles when they are displayed
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
