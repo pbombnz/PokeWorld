@@ -3,8 +3,10 @@ package network;
 import java.io.IOException;
 
 import ui.ServerFrame;
+import game.Board;
 import game.Game;
 import game.Location;
+import game.Player;
 import network.Packets.*;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -70,28 +72,77 @@ public class GameServer extends Listener {
 	public void received (Connection connection, Object object) {
 		serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
 		
-		/*if(object instanceof String) {
-			serverFrame.writeToConsole("Received connection from " + (String) object);
-		}  
-		else*/ 
 		if (object instanceof NewPlayer) {
+			// Get the NewPlayer Packet
 			NewPlayer np = (NewPlayer) object;
-			Location loc = new Location(game.rooms.get(0), 9, 0);
-			np.player.setLocation(loc);
-			game.players2.add(np.player);
 			
-			//System.out.println(game);
-			//System.out.println(game.players2);
-			//System.out.println(game.players2.size());
+			// Make sure the newly created player from the new client 
+			// doesn't have a conflicting name with other players
+			for(Player connectedPlayer: game.getPlayers()) {
+				if(connectedPlayer.getName().equalsIgnoreCase(np.player.getName())) {
+					// In the case that there is an name conflict, we tell the client to enter another name
+					server.sendToTCP(connection.getID(), new NewPlayer_Error_NameAlreadyInUse());
+					serverFrame.writeToConsole("[Server][Received] New player from new client has a name already in use. Requesting client to change name...");
+					return;
+				}
+			}
 			
-			//System.out.println(Game.fromByteArray(game.toByteArray()).toString());
+			//Once all client validation is done, we need to create the location for the player
 			
-			//send game back to client
+			// From top-right to top-left and going all the way, we find a location to put the player on the board
+			// which involves checking if their are any conflicting game objects in the new position
+			int newLocY = 0;
+			int newLocX = 0;//..9;
+			Board boardOfFirstRoom = game.getRooms().get(0).getBoard();
+			
+			yLoop:
+			for(int y = 0; y < boardOfFirstRoom.getHeight(); y++) {
+				xLoop:
+				for(int x = boardOfFirstRoom.getWidth()-1; x >= 0; x--) {
+					// Checks if any connected player is on the same location (x,y position & same room)
+					// as the possible new position for the new player
+					System.out.println("y:" +y+" x:"+x);
+					
+					for(Player player: game.getPlayers()) {
+						Location playerLocation = player.getLocation();
+						
+						// Compares the location. if a player is found at the current location
+						if(playerLocation.getRoom().equals(game.getRooms().get(0)) &&
+						   playerLocation.getX() == x && 
+						   playerLocation.getY() == y) {
+							//System.out.println(playerLocation.toString());
+							continue xLoop;
+						}
+					}
+					
+					// When any object (another player or game object) is occupying the location or the space, we keep looking for a new location
+					if(boardOfFirstRoom.getSquareAt(y, x).getGameObjectOnSquare() != null) {
+						continue xLoop;
+					}
+					
+					//Reaching here, indicates the square is available for the player to be placed
+					newLocY = y;
+					newLocX = x;
+					System.out.println("FOUND: y:" +y+" x:"+x);
+					break yLoop;	
+				}
+			}
+			
+			serverFrame.writeToConsole("[Server][Recieved] Calculated new location for new player at ("+newLocY+","+newLocX+") in start room.");
+			
+			// Finally we create the new location and assign it the new player
+			Location newLoc = new Location(game.rooms.get(0), newLocX, newLocY);
+			np.player.setLocation(newLoc);
+			game.getPlayers().add(np.player);
+
+			// Send game world object to client so they can load the game, as well as the final
+			// version of the client player (so their client player can actually be drawn)
 			NewGame newGame = new NewGame();
 			newGame.gameByteArray = game.toByteArray();
 			
-			
-			connection.sendTCP(newGame);
+			// Send packet to client
+			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
+			server.sendToTCP(connection.getID(), newGame);
 		}		
 		
 	}
