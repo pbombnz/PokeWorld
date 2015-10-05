@@ -86,4 +86,10 @@ public class Location implements Serializable {
 	}
 
 
+	@Override
+	public String toString() {
+		return "Location [room=" + room.getName() + ", x=" + x + ", y=" + y + "]";
+	}
+
+
 }
