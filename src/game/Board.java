@@ -41,7 +41,7 @@ public class Board implements Serializable {
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
-				
+
 				if(i == 5 && j == 0) {
 					this.squares[i][j] = new BoardSquare(new RareCandy());
 				}
@@ -68,103 +68,53 @@ public class Board implements Serializable {
 		}
 
 	}
-	//	public Board(String filename) throws IOException{
-	//		this.squares = new BoardSquare[height][width];
-	//		BufferedReader in = new BufferedReader(new FileReader(filename));
-	//
-	//		String formatingLine = in.readLine();
-	//		String[] formatArray = formatingLine.split(",");
-	//		this.width = Integer.parseInt(formatArray[0]);
-	//		this.height = Integer.parseInt(formatArray[1]);
-	//		int y = 0;
-	//		loop: while (true) {
-	//			String line = in.readLine();
-	//			if (line == null) {
-	//				break loop;
-	//			}
-	//			String[] values = line.split(",");
-	//
-	//			for (int x = 0; x < values.length; x++) { switch (values[x]) {
-	//				case "1":
-	//				this.squares[y][x] = new BoardSquare(null);
-	//				System.out.println("case 1");
-	//			}
-	//			y++;
-	//	}
-	//		}}
 
-//	public Board(String filename) throws IOException{
-//		//parses one line needs work
-//		this.width = 10;
-//		this.height = 10;
-//		this.squares = new BoardSquare[height][width];
-//		BufferedReader in = new BufferedReader(new FileReader(filename));
-//		while(in.readLine() != null){
-//		String line = in.readLine();
-//		String[] values = line.split(",");
-//		int y = 0;
-//		for(int x = 0; x < values.length; x++){
-//			switch(values[x]){
-//			case "1":
-//				this.squares[x][y] = new BoardSquare(null);
-//
-//			case "2":
-//				this.squares[x][y] = new BoardSquare(new Key());
-//
-//			case "3":
-//				this.squares[x][y] = new BoardSquare(new GiantSword());
-//			}
-//		}
-//		}
-//	}
-		public BoardSquare[][] getSquares() {
-			return squares;
-		}
-
-		public int getWidth() {
-			return width;
-		}
-
-		public int getHeight() {
-			return height;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + height;
-			result = prime * result + Arrays.hashCode(squares);
-			result = prime * result + width;
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Board other = (Board) obj;
-			if (height != other.height)
-				return false;
-			if (!Arrays.deepEquals(squares, other.squares))
-				return false;
-			if (width != other.width)
-				return false;
-			return true;
-		}
-		//	public static void main(String[] args) throws IOException {
-		//		new Board("board.txt");
-		//	}
-		
-		public BoardSquare getSquareAt(int y, int x) {
-			if(y < 0 || y >= getHeight() || x < 0 || x >= getWidth()) {
-				throw new NullPointerException("Cannot get Board Square at ("+y+", "+x+") because the indices are out of range.");
-			}
-			return squares[y][x];
-		}
-
+	public BoardSquare[][] getSquares() {
+		return squares;
 	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + height;
+		result = prime * result + Arrays.hashCode(squares);
+		result = prime * result + width;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Board other = (Board) obj;
+		if (height != other.height)
+			return false;
+		if (!Arrays.deepEquals(squares, other.squares))
+			return false;
+		if (width != other.width)
+			return false;
+		return true;
+	}
+
+
+	public BoardSquare getSquareAt(int y, int x) {
+		if(y < 0 || y >= getHeight() || x < 0 || x >= getWidth()) {
+			throw new NullPointerException("Cannot get Board Square at ("+y+", "+x+") because the indices are out of range.");
+		}
+		return squares[y][x];
+	}
+
+}

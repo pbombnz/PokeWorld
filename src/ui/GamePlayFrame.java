@@ -25,9 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import Storage.GameToJson;
-import Storage.InvalidSaveException;
-import Storage.JsonToGame;
+
 import network.GameClient;
 import game.Board;
 import game.BoardSquare;
@@ -48,6 +46,8 @@ import game.objects.Tree;
 
 /**
  * @author Wang Zhen
+ * @author Sushant Balajee
+ * @author Donald Tang
  */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
@@ -62,35 +62,34 @@ ActionListener {
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
 	private static final int FULL_FRAME_WIDTH = 1350;
-	private static final int POP_UP_WIDTH = 790;
-	private static final int POP_UP_HEIGHT = 75;
 	// The size of the tiles when they are displayed
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
 
 	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
-	private GameClient gameClient;
 
+	private GameClient gameClient;
 	private Player clientPlayer;
 
-	public JPanel panel;
-	public JLabel characterLabel;
-	private int labelSize = 100;
-	private JDialog fightBox;
 	private int roomIndex = 0;
 	public int jumpOffset = 0;
-	public int shakeOffset = 0;//the player will keep shake when they are stand
-	public int shakeTimer = 0;//using catulationg number as timer. the shakeoffset will change when timer get timerLimit;
-	public final int SHAKE_TIMER_LIMIT = 40;//using catulationg number as timer. the shakeoffset will change when timer get timerLimit;
+	public int shakeOffset = 0;//the player will keep shake when they are standing in one place
+	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
+	public final int SHAKE_TIMER_LIMIT = 40;// the shakeoffset will change when it reaches the timer limit
 
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
+
 	public JLabel headPictureLabel = null;
 	public JLabel bgHeadViewLabel = null;
 	public JLabel dieLabel = null;
 	public JLabel attackLabel = null;
+	public JPanel panel;
+	public JLabel characterLabel;
+	private JDialog fightBox;
 
 	public GamePlayFrame() {
 
+		//initialises game frame
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -130,7 +129,7 @@ ActionListener {
 
 	public void loadLabels() {
 		//load labels of player information
-		//create backgroundlabel
+		//create background label
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
 		//load head picture
 		JLabel headPictureLabel = null;
@@ -153,34 +152,35 @@ ActionListener {
 		//load labels of die and attack
 		JLabel dieLabel = null;
 		JLabel attackLabel = null;
+
 		//print head picture
 		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
 			dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
-			//add attack gif here
 			attackLabel = new JLabel(new ImageIcon("src/Bulbasaur_attack.gif"));
-		} else if (clientPlayer.getAvatar().getAvatarName()
-				.equals("Charmander")) {
+		} 
+		else if (clientPlayer.getAvatar().getAvatarName().equals("Charmander")) {
 			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
-
-		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
+		} 
+		else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
 			dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Squirtle_attack.gif"));
 		}
+
 		int diexPo = 250;
 		int dieyPo = 0;
 		int dieOrAttackLabelSize = 300;
-		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
-				dieOrAttackLabelSize);
-		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
-				dieOrAttackLabelSize);
+
+		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,dieOrAttackLabelSize);
+		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,dieOrAttackLabelSize);
+
 		this.dieLabel = dieLabel;
 		this.attackLabel = attackLabel;
 	}
 
 	public void printInformation(Player player) {
-		//initialize
-		//clear all info labels 1st
+
+		//clear all info labels first
 		for (JLabel jl : infoLabels) {
 			panel.remove(jl);
 		}
@@ -200,7 +200,7 @@ ActionListener {
 		textJLabel.setFont(new Font("Dialog", 1, 15));
 		textJLabel.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(textJLabel);
-
+		//print character health
 		JLabel health = new JLabel();
 		health.setText("Health: " + player.getHealth());
 		health.setLocation(10, 180);
@@ -208,7 +208,7 @@ ActionListener {
 		health.setFont(new Font("SanSerif", Font.PLAIN, 15));
 		health.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(health);
-
+		//print character attack
 		JLabel attack = new JLabel();
 		attack.setText("Attack: " + player.getAttack() + "\n");
 		attack.setLocation(10, 200);
@@ -216,7 +216,7 @@ ActionListener {
 		attack.setFont(new Font("SanSerif", Font.PLAIN, 15));
 		attack.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(attack);
-
+		//print character level
 		JLabel level = new JLabel();
 		level.setText("Level: " + player.getPlayerLevel() + "\n");
 		level.setLocation(10, 220);
@@ -225,7 +225,7 @@ ActionListener {
 		level.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(level);
 
-		//store labels into list and can remove them 1st when everytime refresh
+		//store labels into a list and remove them first everytime you refresh
 		infoLabels.add(playerNameTextLabel);
 		infoLabels.add(textJLabel);
 		infoLabels.add(health);
@@ -243,64 +243,21 @@ ActionListener {
 		}
 	}
 
-	/**
-	 * these is another way to print the character-create a jlabel for character and add it to the panel
-	 * */
-	/*public void printCharacter(Player player) {
-		//initialize
-		if (characterLabel != null) {
-			panel.remove(characterLabel);
-		}
-
-		//print
-		/*JLabel chaL = null;
-		if (player.getDirection().equals("fl")) {
-			chaL = new JLabel(player.faceleft);
-		} else if (player.getDirection().equals("fr")) {
-			chaL = new JLabel(player.faceright);
-		} else if (player.getDirection().equals("bl")) {
-			chaL = new JLabel(player.backleft);
-		} else if (player.getDirection().equals("br")) {
-			chaL = new JLabel(player.backright);
-		}
-		int xPo = trasferX(player.location.col, player.location.row);
-		int yPo = trasferY(player.location.col, player.location.row);
-		int charaSize = 40;
-		chaL.setBounds(xPo, yPo, charaSize, charaSize);
-		characterLabel = chaL;
-		panel.add(characterLabel);
-
-		repaint();
-	}*/
-
-	/*public int trasferX(int col, int row) {
-		int offset = 10;
-		int edgeLong = 30;
-		int base = 470;
-		return (int) ((offset + edgeLong) * (col) - offset * row+ base);
-	}
-
-	public int trasferY(int col, int row) {
-		int offset = 10;
-		int edgeLong = 30;
-		int base = 50;
-		return (int) ((offset + edgeLong) * (row) + base);
-	}*/
-
 	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
 
 			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
 				g.drawImage(new ImageIcon(
-						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
-						0, FRAME_WIDTH, FRAME_HEIGHT, null);
+						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0, 0,
+						FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
 
 			// Draw background picture
-			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
-			.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+			g.drawImage(new ImageIcon(
+					"./sprites/backgrounds/game_bg.jpg").getImage(), 0, 0,
+					FRAME_WIDTH, FRAME_HEIGHT, null);
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
@@ -311,49 +268,29 @@ ActionListener {
 					int tileX = xPos + (cellX * TILE_WIDTH / 2);
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
-					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-					.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
-					null);
+					g.drawImage(new ImageIcon(
+							"./sprites/tiles/grass.png").getImage(), tileX, tileY,
+							TILE_WIDTH, TILE_HEIGHT, null);
 
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
-					// HARDED CODED. Change later. Gets clientPlayer location
-					/*if (clientPlayerLoc == null) {
-						clientPlayerLoc = gameClient.getGame().players2.get(0)
-								.getLocation();
-						clientPlayer.setLocation(clientPlayerLoc);
-					}*/
-
 					//print player
-					if (clientPlayerLoc.getX() == cellX
-							&& clientPlayerLoc.getY() == cellY) {
+					if (clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
 							shakeTimer = 0;
 							changeShakeLimit();
-							g.drawImage(clientPlayer
-									.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
-						} else {
+							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5),tileY- (TILE_HEIGHT / 3)
+									+ jumpOffset + shakeOffset, null);
+						} 
+						else {
 							shakeTimer++;
-							g.drawImage(clientPlayer
-									.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY- (TILE_HEIGHT / 3) 
+									+ jumpOffset + shakeOffset, null);
 						}
 					}					
-					
-					//Location clientPlayerLoc = clientPlayer.getLocation();
-					//System.out.println(clientPlayerLoc.toString());
 
-					// HARDED CODED. Change later. Gets clientPlayer location
-					/*if (clientPlayerLoc == null) {
-						clientPlayerLoc = gameClient.getGame().players2.get(0)
-								.getLocation();
-						clientPlayer.setLocation(clientPlayerLoc);
-					}*/
 					for (Player connectedPlayer : gameClient.getGame().getPlayers()) {
 						/*if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.ABORTED) {
 							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: ABORTED");
@@ -370,43 +307,37 @@ ActionListener {
 						}else {
 							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: "+connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus());							
 						}*/
-						
+
 						System.out.println("PlayerID: "+connectedPlayer.getId()+"  Image: "+connectedPlayer.getSpriteBasedOnDirection().getImage());							
-	
+
 						if(connectedPlayer != clientPlayer) {
 							if (connectedPlayer.getLocation().getX() == cellX
-							&& connectedPlayer.getLocation().getY() == cellY) {
-								g.drawImage(connectedPlayer
-										.getSpriteBasedOnDirection().getImage(),
-										tileX + (TILE_WIDTH / 5), tileY
-										- (TILE_HEIGHT / 3), null);	
+									&& connectedPlayer.getLocation().getY() == cellY) {
+								g.drawImage(connectedPlayer.getSpriteBasedOnDirection().getImage(),
+										tileX + (TILE_WIDTH / 5), tileY - (TILE_HEIGHT / 3), null);	
 							}
 						}
 					}
 					//System.out.println(clientPlayer
 					//		.getSpriteBasedOnDirection().getImage());
-						
+
 					//Location clientPlayerLoc = clientPlayer.getLocation();	
 					//print player
 					System.out.println("PlayerID: "+clientPlayer.getId()+"  Image: "+clientPlayer.getSpriteBasedOnDirection().getImage());							
-					
-					if (clientPlayerLoc.getX() == cellX
-							&& clientPlayerLoc.getY() == cellY) {
+
+					if (clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
 							shakeTimer = 0;
 							changeShakeLimit();
-							g.drawImage(clientPlayer
-									.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
-						} else {
+							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY - (TILE_HEIGHT / 3) 
+									+ jumpOffset + shakeOffset, null);
+						} 
+						else {
 							shakeTimer++;
-							g.drawImage(clientPlayer
-									.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY - (TILE_HEIGHT / 3) 
+									+ jumpOffset + shakeOffset, null);
 						}
 					}
 
@@ -419,15 +350,14 @@ ActionListener {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX - 60, tileY - 170, null);
-							//tree bounding box faulty check x and y
-						} else {
+						} 
+						else {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY
 									- (TILE_HEIGHT / 2), 50, 50, null);
 						}
 					}
-
 				}
 				yPos += TILE_HEIGHT / 4;
 				xPos += TILE_WIDTH / 2;
@@ -442,9 +372,8 @@ ActionListener {
 						.getImage(), 40, 400 + (i * 50), 40, 40, null);
 			}
 
-			//printcompass
-			g.drawImage(
-					new ImageIcon("./sprites/other/compass.png").getImage(),
+			//print compass
+			g.drawImage(new ImageIcon("./sprites/other/compass.png").getImage(),
 					800, 355, 200, 200, null);
 		}
 	}
@@ -454,47 +383,56 @@ ActionListener {
 		// don't fire an event on backspace or delete
 		Location loc = clientPlayer.getLocation();
 		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
-			//character will turn 1st if the character is not face that side
+			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				loc.moveNorth();
-			} else {
+			} 
+			else {
 				clientPlayer.setDirection(Player.Direction.BACK_LEFT);
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_S
+		} 
+		else if (e.getKeyCode() == KeyEvent.VK_S
 				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-			//character will turn 1st if the character is not face that side
+			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				loc.moveSouth();
-			} else {
+			} 
+			else {
 				clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_A
+		} 
+		else if (e.getKeyCode() == KeyEvent.VK_A
 				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
-			//character will turn 1st if the character is not face that side
+			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
 				loc.moveWest();
-			} else {
+			} 
+			else {
 				clientPlayer.setDirection(Player.Direction.FACE_LEFT);
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_D
+		} 
+		else if (e.getKeyCode() == KeyEvent.VK_D
 				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			//character will turn 1st if the character is not face that side
+			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 				loc.moveEast();
-			} else {
+			} 
+			else {
 				clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_E) {
-			//turn the gui to left side
-			//change the board(change the locations of object)
+		} 
+		else if (e.getKeyCode() == KeyEvent.VK_E) {
+			//turn the GUI to the left side
+			//change the board(change the location of objects)
 			Board newBoard = new Board();
 			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
+
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
-					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
+					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[gameClient
-					                                          .getGame().rooms.get(roomIndex).board.getHeight()
-					                                          - (j + offset)][i];
+					                                          .getGame().rooms.get(roomIndex).
+					                                          board.getHeight() - (j + offset)][i];
 				}
 			}
 			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
@@ -502,19 +440,23 @@ ActionListener {
 			//change the locations of player 
 			Location newloc = new Location();
 			newloc.setRoom(clientPlayer.getLocation().getRoom());
+
 			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
+
 			newloc.setX(gameClient.getGame().rooms.get(roomIndex).board
 					.getHeight() - (clientPlayer.getLocation().getY() + offset));
+
 			newloc.setY(clientPlayer.getLocation().getX());
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
 			turnPlayerImageLeft(clientPlayer);
-
-		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
+		} 
+		else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			//turn the gui to right side
 			//change the board(change the locations of object)
 			Board newBoard = new Board();
 			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
+
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
@@ -527,43 +469,48 @@ ActionListener {
 
 			//change the locations of player 
 			Location newloc = new Location();
+
 			newloc.setRoom(clientPlayer.getLocation().getRoom());
+
 			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
+
 			newloc.setX(clientPlayer.getLocation().getY());
+
 			newloc.setY(gameClient.getGame().rooms.get(roomIndex).board
 					.getWidth() - (clientPlayer.getLocation().getX() + offset));
+
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
 			turnPlayerImageRight(clientPlayer);
 
 		}
-		//jump
+		//allows player to jump on the spot
 		else if (e.getKeyCode() == KeyEvent.VK_J) {
 			jumpOffset += 20;
-
 		}
-
 		if (loc.getY() < 0) {
 			loc.moveSouth();
-		} else if (loc.getY() == loc.getRoom().board.getHeight()) {
+		} 
+		else if (loc.getY() == loc.getRoom().board.getHeight()) {
 			loc.moveNorth();
 		}
-
 		if (loc.getX() < 0) {
 			loc.moveEast();
-		} else if (loc.getX() == loc.getRoom().board.getWidth()) {
+		} 
+		else if (loc.getX() == loc.getRoom().board.getWidth()) {
 			loc.moveWest();
 		}
 
 		//check to take items
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
-
+		//If you find a key, adds it to the inventory and removes from the board
 		if (go instanceof Key) {
 			clientPlayer.addToInventory(((Key) go));
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
+		//If you find a goodPotion, increases your health and removes it from the board
 		if (go instanceof GoodPotion) {
 			System.out.println("is this working");
 			clientPlayer.setHealth(clientPlayer.getHealth()
@@ -571,11 +518,11 @@ ActionListener {
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
-
+		//If you encounter a monster, fight prompt appears
 		if (go instanceof Monster) {
 			fightDialog();
-
 		}
+		//If you find a RareCandy, increases your level and removes it from the board
 		if (go instanceof RareCandy) {
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
 					+ ((RareCandy) go).level());
@@ -584,10 +531,14 @@ ActionListener {
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
+		//If you find a Door, checks your inventory for a Key
+		//If you have a Key, compares the Key ID and Door ID for a match
+		//If they match, allows you to enter a different room
 		if (go instanceof Door){
 			for(Item items : clientPlayer.getInventory()){
 				if(items instanceof Key){
 					if(((Door)go).id() == items.id()){
+						//this is where the next room needs to be alex
 						System.out.println("I have a key for this door");
 					}
 				}
@@ -641,16 +592,16 @@ ActionListener {
 		att.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//add fight giflabel here
+				//fight giflabel 
 				panel.add(attackLabel);
-
 				//add a timer 
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
+
 					@Override
 					public void run() {
 						timer.cancel();
-						//here is the motheds run after timer here 
+						//here is the methods run after timer here 
 						//////////////////////////////////
 						panel.remove(attackLabel);
 						fight();
@@ -658,7 +609,6 @@ ActionListener {
 					}
 				};
 				timer.schedule(tt, 2000);
-
 			}
 		});
 		run.addActionListener(new ActionListener() {
@@ -675,8 +625,7 @@ ActionListener {
 
 		JLabel type = new JLabel("Monster Type: " + ((Monster) go).getName());
 		JLabel attack = new JLabel("Monster Attack: " + ((Monster) go).attack());
-		JLabel health = new JLabel("Monster Health: "
-				+ ((Monster) go).getHealth());
+		JLabel health = new JLabel("Monster Health: " + ((Monster) go).getHealth());
 
 		type.setLocation(10, 10);
 		attack.setLocation(10, 30);
@@ -692,7 +641,7 @@ ActionListener {
 		fightBox.setLayout(null);
 		fightBox.setLocation(600, 400);
 		fightBox.setSize(200, 150);
-		//		fightBox.setLocation(POP_UP_WIDTH, POP_UP_HEIGHT);
+
 		fightBox.add(type);
 		fightBox.add(attack);
 		fightBox.add(health);
@@ -711,31 +660,30 @@ ActionListener {
 
 		final int damage = ((Monster) go).attack();
 
+		//Monster attacks first
 		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
-		((Monster) go).setHealth(((Monster) go).getHealth()
-				- clientPlayer.getAttack());
+		//Player attacks second
+		((Monster) go).setHealth(((Monster) go).getHealth() - clientPlayer.getAttack());
 
 		fightBox.dispose();
 
-		//if the player die, it will show die movie and messagedialog
+		//if the player dies, it will show a gif and a message dialog
 		if (clientPlayer.isDead()) {
 			panel.add(dieLabel);
 			JOptionPane.showMessageDialog(null, " You Died ");
 			System.exit(0);
 		}
-
 		else if (((Monster) go).isDead()) {
 			JOptionPane.showMessageDialog(null, " You Won! \n" + " You lost "
-					+ damage + " health \n" + " You gained " + damage
-					+ " attack");
+					+ damage + " health \n" + " You gained " + damage + " attack");
 
+			//increases the player attack if they win
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
 
+			//removes the monster from the board
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
-
 		}
-
 	}
 
 	@Override
@@ -757,8 +705,8 @@ ActionListener {
 
 			if (menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
-				//this.dispose();
-			} else if (menuItem.getText().equals("Join Game (As Client)")) {
+			} 
+			else if (menuItem.getText().equals("Join Game (As Client)")) {
 				try {
 					gameClient = new GameClient(this);
 				} catch (IOException e) {
@@ -774,7 +722,6 @@ ActionListener {
 				}
 
 				// At this point in code, client is connected to server successfully.
-
 				// Now we need to let the user enter a username and pick a character
 				String clientUsername = null;
 				while (clientUsername == null) {
@@ -783,13 +730,12 @@ ActionListener {
 					if (clientUsername != null && clientUsername.length() < 3) {
 						clientUsername = null;
 					}
-
 					if (clientUsername == null) {
 						JOptionPane
 						.showMessageDialog(
-								this,
-								"You need to enter a user name that is at least 3 characters long.",
-								"ERROR", JOptionPane.ERROR_MESSAGE);
+								this,"You need to enter a user name that"
+										+ " is at least 3 characters long.",
+										"ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 
@@ -815,16 +761,17 @@ ActionListener {
 				}
 				this.repaint();
 				addKeyListener(this);
-			} else if (menuItem.getText().equals("Exit")) {
+			} 
+			else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
 			}
 		}
 	}
-	
+
 	public void setClientPlayer(Player player) {
 		this.clientPlayer = player;
 	}
-	
+
 	public Player getClientPlayer() {
 		return clientPlayer;
 	}
