@@ -90,6 +90,7 @@ public class ServerFrame extends JFrame implements ActionListener {
 			connect.setEnabled(true);
 			disconnect.setEnabled(false);
 			gameServer.disconnect();
+			gameServer = null;
 		} else if(menuItem.getText().equals("Exit")) {
 			gameServer.disconnect();
 			System.exit(0);
