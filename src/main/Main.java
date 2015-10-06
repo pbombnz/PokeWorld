@@ -1,7 +1,7 @@
 package main;
 
 import game.Game;
-import ui.GameFrame;
+import ui.GamePlayFrame;
 import ui.GameLauncher;
 
 /**

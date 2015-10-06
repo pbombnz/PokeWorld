@@ -14,7 +14,7 @@ import java.util.Map;
 
 import game.Player;
 import game.avatar.Avatar;
-import ui.GameFrame;
+import ui.GamePlayFrame;
 
 
 /**

@@ -7,6 +7,6 @@ import java.awt.Frame;
  */
 public class GameLauncher {
 	public GameLauncher() {
-		Frame gameFrame = new GameFrame();
+		Frame gameFrame = new GamePlayFrame();
 	}
 }

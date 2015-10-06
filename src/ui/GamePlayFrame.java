@@ -50,10 +50,9 @@ import game.objects.Weapon;
 
 /**
  * @author Wang Zhen
- * @contributer Prashant Bhikhu
  */
 @SuppressWarnings("serial")
-public class GameFrame extends JFrame implements KeyListener, ActionListener {
+public class GamePlayFrame extends JFrame implements KeyListener, ActionListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -76,7 +75,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	private Player clientPlayer;
 
 	public JPanel panel;
-	public JLabel touxiangLabel;
 	public JLabel characterLabel;
 	private int labelSize = 50;
 	private JDialog fightBox;
@@ -84,8 +82,10 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public int printPlayerOffset = 0;
 
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
+	public JLabel headPictureLabel = null;
+	public JLabel bgHeadViewLabel = null;
 
-	public GameFrame() {
+	public GamePlayFrame() {
 
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -133,31 +133,41 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		setJMenuBar(menuBar);
 		setVisible(true);
 
-		frameState = GameFrame.FRAME_STATE.CREATED_FRAME;
+		frameState = GamePlayFrame.FRAME_STATE.CREATED_FRAME;
 
+	}
+
+	public void createHeadViewLabels() {
+		//print head picture
+		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
+		JLabel headPictureLabel = new JLabel(new ImageIcon("src/newtu.gif"));
+		int xPo = 10;
+		int yPo = 0;
+		int touxiangSize = 130;
+		bgHeadViewLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
+		headPictureLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
+		this.bgHeadViewLabel = bgHeadViewLabel;
+		this.headPictureLabel = headPictureLabel;
 	}
 
 	public void printInformation(Player player) {
 		//initialize
-		if (touxiangLabel != null) {
-			panel.remove(touxiangLabel);
-		}
 		//clear all info labels 1st
 		for (JLabel jl : infoLabels) {
 			panel.remove(jl);
 		}
-		//print normal image
-		JLabel label = new JLabel(player.getAvatar().getName());
-		int xPo = 10;
-		int yPo = 10;
-		int touxiangSize = 200;
-		label.setBounds(xPo, yPo, touxiangSize, touxiangSize);
-		touxiangLabel = label;
-		panel.add(touxiangLabel);
-		//print name
+		//print player name
+		JLabel playerNameTextLabel = new JLabel();
+		playerNameTextLabel.setText("Player Name: "+player.getName());
+		playerNameTextLabel.setLocation(10, 130);
+		playerNameTextLabel.setSize(400, 20);
+		playerNameTextLabel.setFont(new Font("Dialog", 1, 20));
+		playerNameTextLabel.setHorizontalAlignment(JLabel.LEFT);
+		panel.add(playerNameTextLabel);
+		//print character type
 		JLabel textJLabel = new JLabel();
-		textJLabel.setText("Name: " + player.getAvatar().getName());
-		textJLabel.setLocation(10, 10);
+		textJLabel.setText("Character Name: " + player.getAvatar().getName());
+		textJLabel.setLocation(10, 160);
 		textJLabel.setSize(400, 20);
 		textJLabel.setFont(new Font("Dialog", 1, 15));
 		textJLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -165,7 +175,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		JLabel health = new JLabel();
 		health.setText("Health: " + player.getHealth());
-		health.setLocation(10, 30);
+		health.setLocation(10, 180);
 		health.setSize(400, 20);
 		health.setFont(new Font("SanSerif", Font.PLAIN, 15));
 		health.setHorizontalAlignment(JLabel.LEFT);
@@ -173,7 +183,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		JLabel attack = new JLabel();
 		attack.setText("Attack: " + player.getAttack() + "\n");
-		attack.setLocation(10, 50);
+		attack.setLocation(10, 200);
 		attack.setSize(400, 20);
 		attack.setFont(new Font("SanSerif", Font.PLAIN, 15));
 		attack.setHorizontalAlignment(JLabel.LEFT);
@@ -181,15 +191,16 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		JLabel level = new JLabel();
 		level.setText("Level: " + player.getPlayerLevel() + "\n");
-		level.setLocation(10, 70);
+		level.setLocation(10, 220);
 		level.setSize(400, 20);
 		level.setFont(new Font("SanSerif", Font.PLAIN, 15));
 		level.setHorizontalAlignment(JLabel.LEFT);
 		panel.add(level);
 
 		//store labels into list and can remove them 1st when everytime refresh
-		infoLabels.add(health);
+		infoLabels.add(playerNameTextLabel);
 		infoLabels.add(textJLabel);
+		infoLabels.add(health);
 		infoLabels.add(attack);
 		infoLabels.add(level);
 
@@ -242,14 +253,15 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			super.paintComponent(g); // Clears panel
 
 			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
-				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(),
-						0,0, FRAME_WIDTH, FRAME_HEIGHT, null);
+				g.drawImage(new ImageIcon(
+						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
+						0, FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
 
 			// Draw background picture
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
-			.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
@@ -261,9 +273,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
 					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-					.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
-					null);
-			
+							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
+							null);
+
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
 					// HARDED CODED. Change later. Gets clientPlayer location
@@ -278,9 +290,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 							&& clientPlayerLoc.getY() == cellY) {
 						g.drawImage(clientPlayer.getSpriteBasedOnDirection()
 								.getImage(), tileX + (TILE_WIDTH / 5), tileY
-								- (TILE_HEIGHT / 3)+printPlayerOffset, null);
+								- (TILE_HEIGHT / 3) + printPlayerOffset, null);
 					}
-
 
 					//print object of game
 					Game ga = gameClient.getGame();
@@ -304,17 +315,16 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				yPos += TILE_HEIGHT / 4;
 				xPos += TILE_WIDTH / 2;
 			}
-			
+
 			//printInformation of player
 			printInformation(clientPlayer);
-			
+
 			//print players'inventory
 			for (int i = 0; i < clientPlayer.getInventory().size(); i++) {
-				g.drawImage(clientPlayer.getInventory().get(i)
-						.getSpriteImage().getImage(), 40,
-						400 + (i * 50), 40, 40, null);
+				g.drawImage(clientPlayer.getInventory().get(i).getSpriteImage()
+						.getImage(), 40, 400 + (i * 50), 40, 40, null);
 			}
-			
+
 			//printcompass
 			g.drawImage(
 					new ImageIcon("./sprites/other/compass.png").getImage(),
@@ -355,8 +365,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[gameClient
-					                                          .getGame().rooms.get(roomIndex).board.getHeight()
-					                                          - (j + offset)][i];
+							.getGame().rooms.get(roomIndex).board.getHeight()
+							- (j + offset)][i];
 				}
 			}
 			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
@@ -381,7 +391,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][gameClient
-					                                             .getGame().rooms.get(roomIndex).board.getWidth()-(i+offset)];
+							.getGame().rooms.get(roomIndex).board.getWidth()
+							- (i + offset)];
 				}
 			}
 			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
@@ -400,7 +411,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		}
 		//jump
 		else if (e.getKeyCode() == KeyEvent.VK_J) {
-			printPlayerOffset+=20;
+			printPlayerOffset += 20;
 
 		}
 
@@ -481,12 +492,12 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	}
 
 	public void fightDialog() {
-		
+
 		final Location loc = clientPlayer.getLocation();
 
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
-		
+
 		JButton att = new JButton("Attack");
 		JButton run = new JButton("Run Away");
 
@@ -510,16 +521,17 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		JLabel type = new JLabel("Monster Type: " + ((Monster) go).getName());
 		JLabel attack = new JLabel("Monster Attack: " + ((Monster) go).attack());
-		JLabel health = new JLabel("Monster Health: " + ((Monster) go).getHealth());
+		JLabel health = new JLabel("Monster Health: "
+				+ ((Monster) go).getHealth());
 
 		type.setLocation(10, 10);
 		attack.setLocation(10, 30);
 		health.setLocation(10, 50);
-		
+
 		type.setSize(type.getPreferredSize());
 		attack.setSize(type.getPreferredSize());
 		health.setSize(type.getPreferredSize());
-		
+
 		fightBox = new JDialog();
 		fightBox.setTitle("An enemy!");
 		fightBox.setBackground(Color.GRAY);
@@ -545,7 +557,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		final int damage = ((Monster) go).attack();
 
 		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
-		((Monster)go).setHealth(((Monster)go).getHealth() - clientPlayer.getAttack());
+		((Monster) go).setHealth(((Monster) go).getHealth()
+				- clientPlayer.getAttack());
 
 		fightBox.dispose();
 
@@ -553,20 +566,20 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			JOptionPane.showMessageDialog(null, " You Died ");
 			//System.exit(0);
 		}
-		
-		else if(((Monster)go).isDead()){
-			
-			JOptionPane.showMessageDialog(null," You Won! \n"
-				+ " You lost " + damage + " health \n"
-					+ " You gained " + damage + " attack");
-			
+
+		else if (((Monster) go).isDead()) {
+
+			JOptionPane.showMessageDialog(null, " You Won! \n" + " You lost "
+					+ damage + " health \n" + " You gained " + damage
+					+ " attack");
+
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
 
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 
 		}
-		
+
 	}
 
 	@Override
@@ -598,7 +611,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 									+ " Make sure that you have created and\n"
 									+ " connected and the server and the\n"
 									+ "ports are unblocked.", "ERROR",
-									JOptionPane.ERROR_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 
 					frameState = FRAME_STATE.CREATED_FRAME;
 					return;
@@ -617,10 +630,10 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 					if (clientUsername == null) {
 						JOptionPane
-						.showMessageDialog(
-								this,
-								"You need to enter a user name that is at least 3 characters long.",
-								"ERROR", JOptionPane.ERROR_MESSAGE);
+								.showMessageDialog(
+										this,
+										"You need to enter a user name that is at least 3 characters long.",
+										"ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 
@@ -634,6 +647,10 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 				// redraw the board
 				frameState = FRAME_STATE.GAME_START;
+				//add all jlabel after picking character
+				createHeadViewLabels();
+				panel.add(headPictureLabel);
+				panel.add(bgHeadViewLabel);
 
 				try {
 					Thread.sleep(1000);
@@ -674,9 +691,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 						//hard coded - removes key if player has it, places player in right spot
 						if (clientPlayer.getInventory().contains(
 								gameClient.getGame().rooms.get(0).board
-								.getSquares()[3][4]))
+										.getSquares()[3][4]))
 							gameClient.getGame().rooms.get(0).board
-							.getSquares()[3][4]
+									.getSquares()[3][4]
 									.setGameObjectOnSquare(null);
 						gameClient.getGame().players2.clear();
 						gameClient.getGame().players2.add(clientPlayer);
