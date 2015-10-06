@@ -1,6 +1,7 @@
 package game.avatar;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +36,13 @@ public class Avatar implements Serializable {
 				ImageIcon evolution1_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
 				ImageIcon normal = new ImageIcon(file.getAbsolutePath() + "/normal.png");
 	        	
-				File[] directories = new File(file.getAbsolutePath()).listFiles(File::isDirectory);
+				File[] directories = new File(file.getAbsolutePath()).listFiles(new FilenameFilter() {
+				  @Override
+				  public boolean accept(File current, String name) {
+				    return new File(current, name).isDirectory();
+				  }
+				});
+				
 				if(directories.length != 1) {
 	        		throw new IOException("Second Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 	        	}
@@ -46,8 +53,14 @@ public class Avatar implements Serializable {
     			ImageIcon evolution2_backleft = new ImageIcon(directories[0].getAbsolutePath() + "/backleft.png");
 				ImageIcon evolution2_backright = new ImageIcon(directories[0].getAbsolutePath() + "/backright.png");
 
-				directories = new File(directories[0].getAbsolutePath()).listFiles(File::isDirectory);
-	        	if(directories.length != 1) {
+				//directories = new File(directories[0].getAbsolutePath()).listFiles(File::isDirectory);
+				directories = new File(directories[0].getAbsolutePath()).listFiles(new FilenameFilter() {
+					  @Override
+					  public boolean accept(File current, String name) {
+					    return new File(current, name).isDirectory();
+					  }
+					});	 
+				if(directories.length != 1) {
 	        		throw new IOException("Third Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 	        	}
 
