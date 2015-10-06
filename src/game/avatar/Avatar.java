@@ -28,36 +28,41 @@ public class Avatar implements Serializable {
 	    for (File file : fList) {
 	        if (file.isDirectory()) {
 	        	String avatarName = file.getName();
+	        	String evoluton1_name = file.getName();
 	        	ImageIcon evolution1_faceleft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
 	        	ImageIcon evolution1_faceright = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
     			ImageIcon evolution1_backleft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
 				ImageIcon evolution1_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
 				ImageIcon normal = new ImageIcon(file.getAbsolutePath() + "/normal.png");
 	        	
-	        	if(file.listFiles().length != 1) {
+				File[] directories = new File(file.getAbsolutePath()).listFiles(File::isDirectory);
+				if(directories.length != 1) {
 	        		throw new IOException("Second Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 	        	}
 	        	
-	        	ImageIcon evolution2_faceleft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
-	        	ImageIcon evolution2_faceright = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
-    			ImageIcon evolution2_backleft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
-				ImageIcon evolution2_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
+				String evolution2_name = directories[0].getName();
+	        	ImageIcon evolution2_faceleft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
+	        	ImageIcon evolution2_faceright = new ImageIcon(directories[0].getAbsolutePath() + "/faceright.png");
+    			ImageIcon evolution2_backleft = new ImageIcon(directories[0].getAbsolutePath() + "/backleft.png");
+				ImageIcon evolution2_backright = new ImageIcon(directories[0].getAbsolutePath() + "/backright.png");
 
-	        	if(file.listFiles()[0].listFiles().length != 1) {
+				directories = new File(directories[0].getAbsolutePath()).listFiles(File::isDirectory);
+	        	if(directories.length != 1) {
 	        		throw new IOException("Third Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 	        	}
 
-	        	ImageIcon evolution3_faceleft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
-	        	ImageIcon evolution3_faceright = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
-    			ImageIcon evolution3_backleft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
-				ImageIcon evolution3_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
+	        	String evolution3_name = directories[0].getName();
+	        	ImageIcon evolution3_faceleft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
+	        	ImageIcon evolution3_faceright = new ImageIcon(directories[0].getAbsolutePath() + "/faceright.png");
+    			ImageIcon evolution3_backleft = new ImageIcon(directories[0].getAbsolutePath() + "/backleft.png");
+				ImageIcon evolution3_backright = new ImageIcon(directories[0].getAbsolutePath() + "/backright.png");
 
 				Avatar avatar = new Avatar(avatarName, evolution1_faceleft,
 						 evolution1_faceright, evolution1_backleft,
 						 evolution1_backright, normal,
-						 evolution2_faceleft, evolution2_faceright,
+						 evolution2_name, evolution2_faceleft, evolution2_faceright,
 						 evolution2_backleft, evolution2_backright,
-						 evolution3_faceleft, evolution3_faceright,
+						 evolution3_name, evolution3_faceleft, evolution3_faceright,
 						 evolution3_backleft, evolution3_backright);		
 	        	avatars.add(avatar);
 	            //System.out.println(file.getAbsolutePath());
@@ -73,6 +78,7 @@ public class Avatar implements Serializable {
 	private final String avatarName;
 	
 	// Intital Evolution Sprites
+	private final String evolution1_name;
 	private final ImageIcon evolution1_faceleft;
 	private final ImageIcon evolution1_faceright;
 	private final ImageIcon evolution1_backleft;
@@ -80,12 +86,14 @@ public class Avatar implements Serializable {
 	private final ImageIcon normal;
 
 	// Second Evolution Sprites
+	private final String evolution2_name;
 	private final ImageIcon evolution2_faceleft;
 	private final ImageIcon evolution2_faceright;
 	private final ImageIcon evolution2_backleft;
 	private final ImageIcon evolution2_backright;
 
 	// Third Evolution Sprites
+	private final String evolution3_name;
 	private final ImageIcon evolution3_faceleft;
 	private final ImageIcon evolution3_faceright;
 	private final ImageIcon evolution3_backleft;
@@ -94,13 +102,16 @@ public class Avatar implements Serializable {
 
 	public Avatar(String avatarName, ImageIcon evolution1_faceleft,
 			ImageIcon evolution1_faceright, ImageIcon evolution1_backleft,
-			ImageIcon evolution1_backright, ImageIcon normal,
+			ImageIcon evolution1_backright, ImageIcon normal, 
+			String evolution2_name,
 			ImageIcon evolution2_faceleft, ImageIcon evolution2_faceright,
 			ImageIcon evolution2_backleft, ImageIcon evolution2_backright,
+			String evolution3_name,
 			ImageIcon evolution3_faceleft, ImageIcon evolution3_faceright,
 			ImageIcon evolution3_backleft, ImageIcon evolution3_backright) {
 		
 		this.avatarName = avatarName;
+		this.evolution1_name = avatarName;
 		this.evolution1_faceleft = evolution1_faceleft;
 		this.evolution1_faceright = evolution1_faceright;
 		this.evolution1_backleft = evolution1_backleft;
@@ -108,11 +119,13 @@ public class Avatar implements Serializable {
 		
 		this.normal = normal;
 		
+		this.evolution2_name = evolution2_name;
 		this.evolution2_faceleft = evolution2_faceleft;
 		this.evolution2_faceright = evolution2_faceright;
 		this.evolution2_backleft = evolution2_backleft;
 		this.evolution2_backright = evolution2_backright;
 		
+		this.evolution3_name = evolution3_name;
 		this.evolution3_faceleft = evolution3_faceleft;
 		this.evolution3_faceright = evolution3_faceright;
 		this.evolution3_backleft = evolution3_backleft;
@@ -125,6 +138,7 @@ public class Avatar implements Serializable {
 	public Avatar() {
 		
 		this.avatarName = null;
+		this.evolution1_name = null;
 		this.evolution1_faceleft = null;
 		this.evolution1_faceright = null;
 		this.evolution1_backleft = null;
@@ -132,11 +146,13 @@ public class Avatar implements Serializable {
 		
 		this.normal = null;
 		
+		this.evolution2_name = null;
 		this.evolution2_faceleft = null;
 		this.evolution2_faceright = null;
 		this.evolution2_backleft = null;
 		this.evolution2_backright = null;
 		
+		this.evolution3_name = null;
 		this.evolution3_faceleft = null;
 		this.evolution3_faceright = null;
 		this.evolution3_backleft = null;
@@ -227,5 +243,14 @@ public class Avatar implements Serializable {
 		} else if (!avatarName.equals(other.avatarName))
 			return false;
 		return true;
+	}
+	
+	public static void main(String[] args) {
+		try {
+			Avatar.getAllAvatars();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
