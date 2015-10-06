@@ -633,8 +633,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		fightBox.setTitle("An enemy!");
 		fightBox.setBackground(Color.GRAY);
 		fightBox.setLayout(null);
-		fightBox.setSize(200, 120);
-		fightBox.setLocation(POP_UP_WIDTH, POP_UP_HEIGHT);
+		fightBox.setLocation(600, 400);
+		fightBox.setSize(200, 150);
+//		fightBox.setLocation(POP_UP_WIDTH, POP_UP_HEIGHT);
 		fightBox.add(type);
 		fightBox.add(attack);
 		fightBox.add(health);
