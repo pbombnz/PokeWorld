@@ -7,17 +7,21 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
+import ui.GamePlayFrame;
+
 import com.esotericsoftware.kryonet.*;
-import com.esotericsoftware.kryonet.Listener;
 
 import network.Packets.*;
 
 public class GameClient extends Listener {
 	private Game game;
 	private Client client;
+	private GamePlayFrame clientFrame;
 	
 	
-	public GameClient() throws IOException {
+	public GameClient(GamePlayFrame clientFrame) throws IOException {
+		this.clientFrame = clientFrame;
+		
 	    client = new Client(20480, 20480);
 	    Network.register(client);
 
@@ -65,16 +69,30 @@ public class GameClient extends Listener {
 		if(object instanceof NewGame) {
 			byte[] gameBytes = ((NewGame) object).gameByteArray;
 			game = Game.fromByteArray(gameBytes);
+			
+			if(game.getPlayers().size() == 1) {
+				clientFrame.getClientPlayer().setLocation(game.getPlayers().get(0).getLocation());
+				return;
+			}
+			for(Player connectedPlayer : game.getPlayers()) {
+				if(connectedPlayer.getId() == clientFrame.getClientPlayer().getId()) {
+					//System.out.println(connectedPlayer.getLocation().toString());
+					clientFrame.setClientPlayer(connectedPlayer);
+					clientFrame.repaint();
+					return;
+				}
+			}
 			// GET CLIENT PLAYER BY CONNECTION ID
 			// SET CLIENT PLAYER
 		}
 		else if(object instanceof PlayerUpdate) {
 			PlayerUpdate packet = ((PlayerUpdate) object);
-			//if(packet.player == CLIENT PLAYER) {
-			// 	IGNORE
-			//} else {
+			for(Player connectedPlayer: game.getPlayers()) {
+				if(connectedPlayer.getId() == packet.player.getId()) {
+					connectedPlayer.setLocation( packet.player.getLocation());
+				}
+			}
 			//	GAME.GET(PLAYER) BY ID, UPDATE CLIENT GAME
-			//}
 		}
 	} 
 }

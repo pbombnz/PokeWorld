@@ -163,7 +163,8 @@ public class Player implements Serializable {
 				}
 			}
 		}
-		return null;
+		throw new RuntimeException("no way to get avatar");
+		//return null;
 	}
 
 

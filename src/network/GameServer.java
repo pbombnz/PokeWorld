@@ -93,7 +93,7 @@ public class GameServer extends Listener {
 
 	@Override
 	public void received (Connection connection, Object object) {
-		serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
+		//serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
 		
 		if (object instanceof NewPlayer) {
 			// Get the NewPlayer Packet

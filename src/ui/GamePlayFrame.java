@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -24,9 +23,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.RepaintManager;
 
 import Storage.GameToJson;
 import Storage.InvalidSaveException;
@@ -42,14 +39,12 @@ import game.Room;
 import game.avatar.Avatar;
 import game.objects.Door;
 import game.objects.GameObject;
-import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Item;
 import game.objects.Key;
 import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
-import game.objects.Weapon;
 
 /**
  * @author Wang Zhen
@@ -336,13 +331,78 @@ ActionListener {
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
 					// HARDED CODED. Change later. Gets clientPlayer location
-					if (clientPlayerLoc == null) {
+					/*if (clientPlayerLoc == null) {
 						clientPlayerLoc = gameClient.getGame().players2.get(0)
 								.getLocation();
 						clientPlayer.setLocation(clientPlayerLoc);
-					}
+					}*/
 
 					//print player
+					if (clientPlayerLoc.getX() == cellX
+							&& clientPlayerLoc.getY() == cellY) {
+						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
+							shakeTimer = 0;
+							changeShakeLimit();
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+									- (TILE_HEIGHT / 3) + jumpOffset
+									+ shakeOffset, null);
+						} else {
+							shakeTimer++;
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+									- (TILE_HEIGHT / 3) + jumpOffset
+									+ shakeOffset, null);
+						}
+					}					
+					
+					//Location clientPlayerLoc = clientPlayer.getLocation();
+					//System.out.println(clientPlayerLoc.toString());
+
+					// HARDED CODED. Change later. Gets clientPlayer location
+					/*if (clientPlayerLoc == null) {
+						clientPlayerLoc = gameClient.getGame().players2.get(0)
+								.getLocation();
+						clientPlayer.setLocation(clientPlayerLoc);
+					}*/
+					for (Player connectedPlayer : gameClient.getGame().getPlayers()) {
+						/*if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.ABORTED) {
+							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: ABORTED");
+						} else if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.COMPLETE) {
+							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: COMPLETED");
+						}
+						else if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.ERRORED)
+						{
+							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: ERRORED");
+						}
+						else if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.LOADING)
+						{
+							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: LOADING");
+						}else {
+							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: "+connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus());							
+						}*/
+						
+						System.out.println("PlayerID: "+connectedPlayer.getId()+"  Image: "+connectedPlayer.getSpriteBasedOnDirection().getImage());							
+	
+						if(connectedPlayer != clientPlayer) {
+							if (connectedPlayer.getLocation().getX() == cellX
+							&& connectedPlayer.getLocation().getY() == cellY) {
+								g.drawImage(connectedPlayer
+										.getSpriteBasedOnDirection().getImage(),
+										tileX + (TILE_WIDTH / 5), tileY
+										- (TILE_HEIGHT / 3), null);	
+							}
+						}
+					}
+					//System.out.println(clientPlayer
+					//		.getSpriteBasedOnDirection().getImage());
+						
+					//Location clientPlayerLoc = clientPlayer.getLocation();	
+					//print player
+					System.out.println("PlayerID: "+clientPlayer.getId()+"  Image: "+clientPlayer.getSpriteBasedOnDirection().getImage());							
+					
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
@@ -713,7 +773,7 @@ ActionListener {
 				//this.dispose();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
 				try {
-					gameClient = new GameClient();
+					gameClient = new GameClient(this);
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(this,
 							"Game Client was unable to initalise.\n"
@@ -814,5 +874,13 @@ ActionListener {
 			JMenuItem loadPlayer = new JMenuItem("Load Player Info");
 		}
 
+	}
+	
+	public void setClientPlayer(Player player) {
+		this.clientPlayer = player;
+	}
+	
+	public Player getClientPlayer() {
+		return clientPlayer;
 	}
 }
