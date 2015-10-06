@@ -241,5 +241,15 @@ public class Player implements Serializable {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return "Player [avatar=" + avatar + ", id=" + id + ", name=" + name
+				+ ", health=" + health + ", attack=" + attack
+				+ ", evolutionLevel=" + evolutionLevel + ", maxItems="
+				+ maxItems + ", inventory=" + inventory + ", location="
+				+ location + ", direction=" + direction + ", playerLevel="
+				+ playerLevel + "]";
+	}
+
 	
 }
