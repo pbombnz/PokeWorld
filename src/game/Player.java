@@ -110,8 +110,16 @@ public class Player implements Serializable {
 	
 	public void setPlayerLevel(int change){
 		this.playerLevel = change;
-	}
+	}	
 	
+	public int getEvolutionLevel() {
+		return evolutionLevel;
+	}
+
+	public void setEvolutionLevel(int evolutionLevel) {
+		this.evolutionLevel = evolutionLevel;
+	}
+
 	public ImageIcon getSpriteBasedOnDirection() {
 		if(avatar != null) {
 			switch(evolutionLevel) {
