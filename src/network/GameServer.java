@@ -155,4 +155,10 @@ public class GameServer extends Listener {
 	@Override
 	public void idle (Connection connection) {
 	}
+	
+	public void disconnect() {
+		serverFrame.writeToConsole("[Server][Request] User requested to stop server. Disconnecting clients...");
+		server.stop();
+		serverFrame.writeToConsole("[Server][Sent] Server Ended.");
+	}
 }
