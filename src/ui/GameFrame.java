@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -63,6 +64,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
 	private static final int FULL_FRAME_WIDTH = 1350;
+	private static final int POP_UP_WIDTH = 790;
+	private static final int POP_UP_HEIGHT = 75;
 	// The size of the tiles when they are displayed
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
@@ -77,6 +80,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public JLabel characterLabel;
 	private int labelSize = 50;
 	private JDialog fightBox;
+	private JDialog win;
 	private int roomIndex = 0;
 	public int printPlayerOffset = 0;
 
@@ -483,78 +487,62 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	}
 
 	public void fightDialog() {
+		
 		final Location loc = clientPlayer.getLocation();
 
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
-		final int damage = ((Monster) go).attack();
-		JButton yes = new JButton("Yes");
-		JButton no = new JButton("No");
+		
+		JButton att = new JButton("Attack");
+		JButton run = new JButton("Run Away");
 
-		yes.addActionListener(new ActionListener() {
+		att.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fight();
 			}
-
-			//			private void fight() {
-			//
-			//				clientPlayer.setHealth(clientPlayer.getHealth() - damage);
-			//				fightBox.dispose();
-			//
-			//				JOptionPane.showMessageDialog(null, "You suffered " + damage
-			//						+ " damage");
-			//
-			//				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-			//						.setGameObjectOnSquare(null);
-			//
-			//				if (clientPlayer.isDead()) {
-			//					System.out.println("You died");
-			//				}
-			//			}
-
 		});
-		no.addActionListener(new ActionListener() {
+		run.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fightBox.dispose();
 			}
 		});
 
-		yes.setLocation(20, 100);
-		yes.setSize(yes.getPreferredSize());
-		no.setLocation(150, 100);
-		no.setSize(no.getPreferredSize());
+		att.setLocation(10, 70);
+		att.setSize(att.getPreferredSize());
+		run.setLocation(90, 70);
+		run.setSize(run.getPreferredSize());
 
 		JLabel type = new JLabel("Monster Type: " + ((Monster) go).getName());
 		JLabel attack = new JLabel("Monster Attack: " + ((Monster) go).attack());
 		JLabel health = new JLabel("Monster Health: " + ((Monster) go).getHealth());
-		JLabel ask = new JLabel("Fight?");
 
 		type.setLocation(10, 10);
 		attack.setLocation(10, 30);
 		health.setLocation(10, 50);
-		ask.setLocation(10, 80);
-
+		
 		type.setSize(type.getPreferredSize());
 		attack.setSize(type.getPreferredSize());
 		health.setSize(type.getPreferredSize());
-		ask.setSize(type.getPreferredSize());
-
+		
 		fightBox = new JDialog();
+		fightBox.setTitle("An enemy!");
+		fightBox.setBackground(Color.GRAY);
 		fightBox.setLayout(null);
-		fightBox.setSize(250, 200);
-		fightBox.setLocationRelativeTo(null);
+		fightBox.setSize(200, 120);
+		//fightBox.setLocationRelativeTo(null);
+		fightBox.setLocation(POP_UP_WIDTH, POP_UP_HEIGHT);
 		fightBox.add(type);
 		fightBox.add(attack);
 		fightBox.add(health);
-		fightBox.add(ask);
-		fightBox.add(yes);
-		fightBox.add(no);
+		fightBox.add(att);
+		fightBox.add(run);
 		fightBox.setVisible(true);
 
 	}
 
+	@SuppressWarnings("static-access")
 	private void fight() {
 
 		final Location loc = clientPlayer.getLocation();
@@ -575,10 +563,16 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		}
 		
 		else if(((Monster)go).isDead()){
-
-			JOptionPane.showMessageDialog(null, " You Won! \n"
+			
+			win = new JDialog();
+			JOptionPane win = new JOptionPane();
+		
+			win.showMessageDialog(null," You Won! \n"
 					+ " You lost " + damage + " health \n"
 					+ " You gained " + damage + " attack");
+			win.setLocation(POP_UP_WIDTH, POP_UP_HEIGHT);
+			win.setVisible(true);
+
 			
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
 
