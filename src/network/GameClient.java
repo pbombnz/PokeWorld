@@ -44,9 +44,10 @@ public class GameClient extends Listener {
 	//}
 	
 	public void joinServer(Player player) {
-		NewPlayer np = new NewPlayer();
-		np.player = player;
-		client.sendTCP(np);
+		NewPlayer packet = new NewPlayer();
+		packet.player = player;
+		packet.player.setId(client.getID());
+		client.sendTCP(packet);
 	}
 	
 	/**
@@ -63,9 +64,17 @@ public class GameClient extends Listener {
 		//System.out.println();
 		if(object instanceof NewGame) {
 			byte[] gameBytes = ((NewGame) object).gameByteArray;
-			//System.out.println(Game.fromByteArray(gameBytes).toString());
 			game = Game.fromByteArray(gameBytes);
-			//System.out.println("game is received from server to client");
+			// GET CLIENT PLAYER BY CONNECTION ID
+			// SET CLIENT PLAYER
+		}
+		else if(object instanceof PlayerUpdate) {
+			PlayerUpdate packet = ((PlayerUpdate) object);
+			//if(packet.player == CLIENT PLAYER) {
+			// 	IGNORE
+			//} else {
+			//	GAME.GET(PLAYER) BY ID, UPDATE CLIENT GAME
+			//}
 		}
 	} 
 }

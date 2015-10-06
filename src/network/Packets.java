@@ -52,8 +52,32 @@ public class Packets {
 	 * any change in variables for a player (including move).
 	 *
 	 */
-	public static class UpdatePlayer {
+	public static class PlayerUpdate {
 		Player player;
 	}
 	
+	/**
+	 * USED: Client -> Server, then Server -> All Clients 
+	 * 
+	 * A packet that sends both ways, initially from client to server,
+	 * then the server passes it to the all clients. Used when there is
+	 * a player sends a message for other players to view.
+	 *
+	 */
+	public static class PlayerMessage {
+		String playerName;
+		String message;
+	}	
+	
+	/**
+	 * USED: Client -> Server, then Server -> All Clients 
+	 * 
+	 * A packet that sends both ways, initially from client to server,
+	 * then the server passes it to the all clients. Used when there is
+	 * any change in variables for a player (including move).
+	 *
+	 */
+	public static class PlayerQuit {
+		int connectionID;
+	}
 }
