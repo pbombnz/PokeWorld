@@ -77,10 +77,13 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	public JPanel panel;
 	public JLabel characterLabel;
-	private int labelSize = 50;
+	private int labelSize = 100;
 	private JDialog fightBox;
 	private int roomIndex = 0;
-	public int printPlayerOffset = 0;
+	public int jumpOffset = 0;
+	public int shakeOffset = 0;//the player will keep shake when they are stand
+	public int shakeTimer = 0;//using catulationg number as timer. the shakeoffset will change when timer get timerLimit;
+	public final int SHAKE_TIMER_LIMIT = 40;//using catulationg number as timer. the shakeoffset will change when timer get timerLimit;
 
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 	public JLabel headPictureLabel = null;
@@ -142,11 +145,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//create backgroundlabel
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
 		//print head picture
-		JLabel headPictureLabel =null;
-		if(clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")){
-		headPictureLabel = new JLabel(new ImageIcon("src/Bulbasaur.gif"));
-		}
-		else if(clientPlayer.getAvatar().getAvatarName().equals("Charmander")){
+		JLabel headPictureLabel = null;
+		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
+			headPictureLabel = new JLabel(new ImageIcon("src/Bulbasaur.gif"));
+		} else if (clientPlayer.getAvatar().getAvatarName()
+				.equals("Charmander")) {
 			headPictureLabel = new JLabel(new ImageIcon("src/Charmander.gif"));
 		}
 		int xPo = 10;
@@ -213,6 +216,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		infoLabels.add(level);
 
 		repaint();
+	}
+	
+	private void changeShakeLimit(){
+		if(shakeOffset==0){
+			shakeOffset=5;
+		}else{
+			shakeOffset=0;
+		}
 	}
 
 	/**
@@ -299,9 +310,22 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					//print player
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
-						g.drawImage(clientPlayer.getSpriteBasedOnDirection()
-								.getImage(), tileX + (TILE_WIDTH / 5), tileY
-								- (TILE_HEIGHT / 3) + printPlayerOffset, null);
+						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
+							shakeTimer=0;
+							changeShakeLimit();
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
+						} else {
+							shakeTimer++;
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
+						}
 					}
 
 					//print object of game
@@ -421,7 +445,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		//jump
 		else if (e.getKeyCode() == KeyEvent.VK_J) {
-			printPlayerOffset += 20;
+			jumpOffset += 20;
 
 		}
 
@@ -595,7 +619,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_J) {
-			printPlayerOffset -= 20;
+			jumpOffset -= 20;
 		}
 	}
 
