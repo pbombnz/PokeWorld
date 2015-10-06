@@ -14,7 +14,7 @@ public class Player implements Serializable {
 
 	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
 	
-	public static final int HEALTH =  100;
+	public static final int HEALTH =  10;
 	public static final int ATTACK = 10;
 
 	private Avatar avatar;
@@ -23,6 +23,7 @@ public class Player implements Serializable {
 	
 	private int health;
 	private int attack;
+	private int evolutionLevel = 1;
 
 	private final int maxItems = 6;
 	private List<Item> inventory = new ArrayList<Item>();
@@ -109,19 +110,52 @@ public class Player implements Serializable {
 	
 	public void setPlayerLevel(int change){
 		this.playerLevel = change;
-	}
+	}	
 	
+	public int getEvolutionLevel() {
+		return evolutionLevel;
+	}
+
+	public void setEvolutionLevel(int evolutionLevel) {
+		this.evolutionLevel = evolutionLevel;
+	}
+
 	public ImageIcon getSpriteBasedOnDirection() {
 		if(avatar != null) {
-			switch(direction) {
-			case FACE_LEFT:
-				return avatar.getFaceleft();
-			case FACE_RIGHT:
-				return avatar.getFaceright();
-			case BACK_LEFT:
-				return avatar.getBackleft();
-			case BACK_RIGHT:
-				return avatar.getBackright();
+			switch(evolutionLevel) {
+			case 1:
+				switch(direction) {
+				case FACE_LEFT:
+					return avatar.getEvolution1_faceleft();
+				case FACE_RIGHT:
+					return avatar.getEvolution1_faceright();
+				case BACK_LEFT:
+					return avatar.getEvolution1_backleft();
+				case BACK_RIGHT:
+					return avatar.getEvolution1_backright();
+				}
+			case 2:
+				switch(direction) {
+				case FACE_LEFT:
+					return avatar.getEvolution2_faceleft();
+				case FACE_RIGHT:
+					return avatar.getEvolution2_faceright();
+				case BACK_LEFT:
+					return avatar.getEvolution2_backleft();
+				case BACK_RIGHT:
+					return avatar.getEvolution2_backright();
+				}
+			case 3:
+				switch(direction) {
+				case FACE_LEFT:
+					return avatar.getEvolution3_faceleft();
+				case FACE_RIGHT:
+					return avatar.getEvolution3_faceright();
+				case BACK_LEFT:
+					return avatar.getEvolution3_backleft();
+				case BACK_RIGHT:
+					return avatar.getEvolution3_backright();
+				}
 			}
 		}
 		return null;
