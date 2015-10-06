@@ -52,7 +52,8 @@ import game.objects.Weapon;
  * @author Wang Zhen
  */
 @SuppressWarnings("serial")
-public class GamePlayFrame extends JFrame implements KeyListener, ActionListener {
+public class GamePlayFrame extends JFrame implements KeyListener,
+		ActionListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -138,9 +139,16 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	}
 
 	public void createHeadViewLabels() {
-		//print head picture
+		//create backgroundlabel
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
-		JLabel headPictureLabel = new JLabel(new ImageIcon("src/miaowazhongzi.gif"));
+		//print head picture
+		JLabel headPictureLabel =null;
+		if(clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")){
+		headPictureLabel = new JLabel(new ImageIcon("src/Bulbasaur.gif"));
+		}
+		else if(clientPlayer.getAvatar().getAvatarName().equals("Charmander")){
+			headPictureLabel = new JLabel(new ImageIcon("src/Charmander.gif"));
+		}
 		int xPo = 10;
 		int yPo = 0;
 		int touxiangSize = 130;
@@ -158,7 +166,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		}
 		//print player name
 		JLabel playerNameTextLabel = new JLabel();
-		playerNameTextLabel.setText("Player Name: "+player.getName());
+		playerNameTextLabel.setText("Player Name: " + player.getName());
 		playerNameTextLabel.setLocation(10, 130);
 		playerNameTextLabel.setSize(400, 20);
 		playerNameTextLabel.setFont(new Font("Dialog", 1, 20));
@@ -207,6 +215,9 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		repaint();
 	}
 
+	/**
+	 * these is another way to print the character-create a jlabel for character and add it to the panel
+	 * */
 	/*public void printCharacter(Player player) {
 		//initialize
 		if (characterLabel != null) {
@@ -335,7 +346,6 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// don't fire an event on backspace or delete
-		//fl faceleft fr faceright bl backleft br backright.
 		Location loc = clientPlayer.getLocation();
 		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 			loc.moveNorth();
