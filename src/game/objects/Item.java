@@ -8,4 +8,5 @@ public interface Item extends GameObject {
 	
 	public void useItem(Player player);
 	public boolean isUsable();
+	public int id();
 }

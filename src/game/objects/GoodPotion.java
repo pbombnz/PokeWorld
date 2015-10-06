@@ -40,4 +40,10 @@ public class GoodPotion implements Item {
 	public void useItem(Player player) {
 		player.setHealth(healthHealAmount);
 	}
+
+	@Override
+	public int id() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -38,4 +38,10 @@ public class RareCandy implements Item {
 	public int level(){
 		return currLevel + 1;
 	}
+
+	@Override
+	public int id() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

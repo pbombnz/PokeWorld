@@ -47,5 +47,11 @@ public class Chest implements Item {
 	public boolean isUsable() {
 		return true;
 	}
+
+	@Override
+	public int id() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
