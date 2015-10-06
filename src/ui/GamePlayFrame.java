@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -47,6 +49,7 @@ import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
 import game.objects.Weapon;
+
 /**
  * @author Wang Zhen
  */
@@ -153,10 +156,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		} else if (clientPlayer.getAvatar().getAvatarName()
 				.equals("Charmander")) {
 			headPictureLabel = new JLabel(new ImageIcon("src/Charmander.gif"));
-		}
-		else if (clientPlayer.getAvatar().getAvatarName()
-			.equals("Squirtle")) {
-		headPictureLabel = new JLabel(new ImageIcon("src/Squirtle.gif"));
+		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
+			headPictureLabel = new JLabel(new ImageIcon("src/Squirtle.gif"));
 		}
 		int xPo = 10;
 		int yPo = 0;
@@ -165,31 +166,33 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		headPictureLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
 		this.bgHeadViewLabel = bgHeadViewLabel;
 		this.headPictureLabel = headPictureLabel;
-		
+
 		//load labels of die and attack
-		JLabel dieLabel =null;
-		JLabel attackLabel =null;
+		JLabel dieLabel = null;
+		JLabel attackLabel = null;
 		//print head picture
 		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
 			dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
+			//add attack gif here
 			attackLabel = new JLabel(new ImageIcon("src/Bulbasaur_attack.gif"));
 		} else if (clientPlayer.getAvatar().getAvatarName()
 				.equals("Charmander")) {
 			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
-		
-		} else if (clientPlayer.getAvatar().getAvatarName()
-			.equals("Squirtle")) {
-		dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
-		attackLabel = new JLabel(new ImageIcon("src/Squirtle_attack.gif"));
+
+		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
+			dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
+			attackLabel = new JLabel(new ImageIcon("src/Squirtle_attack.gif"));
 		}
 		int diexPo = 250;
 		int dieyPo = 0;
 		int dieOrAttackLabelSize = 300;
-		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize*2, dieOrAttackLabelSize);
-		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize*2, dieOrAttackLabelSize);
+		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
+				dieOrAttackLabelSize);
+		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
+				dieOrAttackLabelSize);
 		this.dieLabel = dieLabel;
-		this.attackLabel =attackLabel;
+		this.attackLabel = attackLabel;
 	}
 
 	public void printInformation(Player player) {
@@ -581,8 +584,24 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		att.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fight();
-				
+				//add fight giflabel here
+				panel.add(attackLabel);
+
+				//add a timer 
+				final Timer timer = new Timer();
+				TimerTask tt = new TimerTask() {
+					@Override
+					public void run() {
+						timer.cancel();
+						//here is the motheds run after timer here 
+						//////////////////////////////////
+						panel.remove(attackLabel);
+						fight();
+						//////////////////////////////////
+					}
+				};
+				timer.schedule(tt, 2000);
+
 			}
 		});
 		run.addActionListener(new ActionListener() {
