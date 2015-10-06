@@ -36,6 +36,12 @@ public class BadPotion implements Item{
 	public void useItem(Player player) {
 		player.setHealth(healthDamageAmount);
 	}
+
+	@Override
+	public int id() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 
