@@ -33,7 +33,7 @@ public class Board implements Serializable {
 	}
 
 	public Board()
-	{
+	{ 
 		this.width = 10;
 		this.height = 10;
 		this.squares = new BoardSquare[height][width];
