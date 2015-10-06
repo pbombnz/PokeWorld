@@ -22,7 +22,7 @@ public class Rattata implements Monster{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "Goblin";
+		return "Rattata";
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class Rattata implements Monster{
 	@Override
 	public ImageIcon getSpriteImage() {
 		// TODO Auto-generated method stub
-		return GameObject.GOBLIN;
+		return GameObject.RATTATA;
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;

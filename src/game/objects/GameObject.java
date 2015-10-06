@@ -11,7 +11,7 @@ public interface GameObject extends Serializable {
 
 	public static ImageIcon ITEM_GOODPOTION = new ImageIcon("./sprites/items/goodpotion.png");
 	
-	public static ImageIcon GOBLIN = new ImageIcon("./sprites/monster/Rattata/backright.png");
+	public static ImageIcon RATTATA = new ImageIcon("./sprites/monster/Rattata/backright.png");
 
 	public static ImageIcon TREE = new ImageIcon("./sprites/tiles/tree.png");
 	
