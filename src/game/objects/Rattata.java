@@ -2,14 +2,13 @@ package game.objects;
 
 import javax.swing.ImageIcon;
 
-
-import game.Location;
-import game.Player.Direction;
-
 /**
  *@author Wang Zhen
  */
 public class Rattata implements Monster{
+
+	private static final long serialVersionUID = 6696995125055330253L;
+	
 	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
 	public int health;
 	public int attack;
