@@ -21,9 +21,6 @@ public class GameServer extends Listener {
 	private Server server;	
 	
 	public GameServer(final ServerFrame serverFrame) throws IOException {
-		//if (port < 1 || port > 65535) {
-		//	throw new NumberFormatException("Port out of range"); 
-		//}
 		
 		this.game = Game.createTestMap();
 		this.port = Network.DEFAULT_SERVER_PORT_TCP;
@@ -156,9 +153,20 @@ public class GameServer extends Listener {
 	public void idle (Connection connection) {
 	}
 	
+	
 	public void disconnect() {
+		// Ask the user if the want to save (MAYBE FEATURE)
+		
+		// Send a packet to each client that the game is going to end.
 		serverFrame.writeToConsole("[Server][Request] User requested to stop server. Disconnecting clients...");
+		// Stop the server
 		server.stop();
+		
+		// Safety measure just to make sure all server resources are let go
+		try {
+			server.dispose();
+		} catch (IOException e) {
+		}
 		serverFrame.writeToConsole("[Server][Sent] Server Ended.");
 	}
 }
