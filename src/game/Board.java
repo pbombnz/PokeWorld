@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.nio.Buffer;
 import java.util.Arrays;
 
+import game.objects.Door;
 import game.objects.GiantSword;
 import game.objects.Goblin;
 import game.objects.GoodPotion;
@@ -48,13 +49,13 @@ public class Board implements Serializable {
 					this.squares[i][j] = new BoardSquare(new Tree());
 				}
 				if(i == 4 && j == 6) {
-					this.squares[i][j] = new BoardSquare(new Key());
+					this.squares[i][j] = new BoardSquare(new Key(1));
 				}
 				if(i == 6 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 				}
 				if(i == 0 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Goblin(5,5));
+					this.squares[i][j] = new BoardSquare(new Door(1));
 				}
 				if(i == 7 && j == 3) {
 					this.squares[i][j] = new BoardSquare(new Goblin(10,10));

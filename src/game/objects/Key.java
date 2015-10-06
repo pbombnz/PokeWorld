@@ -8,6 +8,15 @@ import javax.swing.ImageIcon;
 public class Key implements Item {
 	private static final long serialVersionUID = 3007881710387627871L;
 
+	private int id;
+	
+	public Key(int id){
+		this.id = id;
+	}
+	
+	public int id(){
+		return id;
+	}
 	@Override
 	public String getName() {
 		return "Key";
