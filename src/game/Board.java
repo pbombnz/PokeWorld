@@ -1,14 +1,9 @@
 package game;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.Buffer;
 import java.util.Arrays;
 
 import game.objects.Door;
-import game.objects.GiantSword;
 import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Key;
