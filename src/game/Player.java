@@ -124,9 +124,6 @@ public class Player implements Serializable {
 		this.evolutionLevel = evolutionLevel;
 	}
 	
-	public boolean hasKey(){
-		return false;
-	}
 
 	public ImageIcon getSpriteBasedOnDirection() {
 		if(avatar != null) {
