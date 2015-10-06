@@ -25,11 +25,11 @@ public class Game {
 	//public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
 
 	public ArrayList<Player> players2;
-	public ArrayList<Room> rooms;
+	public ArrayList<Room1> rooms;
 
 	public Game() {
 		players2 = new ArrayList<Player>();
-		rooms = new ArrayList<Room>();	
+		rooms = new ArrayList<Room1>();	
 	}
 	
 	public byte[] toByteArray() {
@@ -64,7 +64,7 @@ public class Game {
 			ObjectInputStream ois = new ObjectInputStream(bis);
 			newGame = new Game();
 			newGame.players2 = (ArrayList<Player>) ois.readObject();
-			newGame.rooms = (ArrayList<Room>) ois.readObject();
+			newGame.rooms = (ArrayList<Room1>) ois.readObject();
 		} catch (StreamCorruptedException e) {
 			return null;
 		} catch (IOException e) {
@@ -79,7 +79,7 @@ public class Game {
 	
 	public static Game createTestMap() {
 		Game game = new Game();
-		game.rooms.add(new Room());
+		game.rooms.add(new Room1());
 		return game;
 		
 	}
@@ -119,7 +119,7 @@ public class Game {
 		return players2;
 	}
 
-	public List<Room> getRooms() {
+	public List<Room1> getRooms() {
 		return rooms;
 	}
 	

@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-
 import network.GameClient;
 import game.Board;
 import game.BoardSquare;
@@ -33,7 +32,7 @@ import game.Game;
 import game.Location;
 import game.Player;
 import game.Player.Direction;
-import game.Room;
+import game.Room1;
 import game.avatar.Avatar;
 import game.objects.Door;
 import game.objects.GameObject;
@@ -46,12 +45,10 @@ import game.objects.Tree;
 
 /**
  * @author Wang Zhen
- * @author Sushant Balajee
- * @author Donald Tang
  */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
-ActionListener {
+		ActionListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -157,12 +154,11 @@ ActionListener {
 		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
 			dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Bulbasaur_attack.gif"));
-		} 
-		else if (clientPlayer.getAvatar().getAvatarName().equals("Charmander")) {
+		} else if (clientPlayer.getAvatar().getAvatarName()
+				.equals("Charmander")) {
 			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
-		} 
-		else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
+		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
 			dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Squirtle_attack.gif"));
 		}
@@ -171,8 +167,10 @@ ActionListener {
 		int dieyPo = 0;
 		int dieOrAttackLabelSize = 300;
 
-		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,dieOrAttackLabelSize);
-		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,dieOrAttackLabelSize);
+		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
+				dieOrAttackLabelSize);
+		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
+				dieOrAttackLabelSize);
 
 		this.dieLabel = dieLabel;
 		this.attackLabel = attackLabel;
@@ -249,15 +247,14 @@ ActionListener {
 
 			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
 				g.drawImage(new ImageIcon(
-						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0, 0,
-						FRAME_WIDTH, FRAME_HEIGHT, null);
+						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
+						0, FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
 
 			// Draw background picture
-			g.drawImage(new ImageIcon(
-					"./sprites/backgrounds/game_bg.jpg").getImage(), 0, 0,
-					FRAME_WIDTH, FRAME_HEIGHT, null);
+			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
+					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
@@ -268,30 +265,35 @@ ActionListener {
 					int tileX = xPos + (cellX * TILE_WIDTH / 2);
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
-					g.drawImage(new ImageIcon(
-							"./sprites/tiles/grass.png").getImage(), tileX, tileY,
-							TILE_WIDTH, TILE_HEIGHT, null);
+					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
+							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
+							null);
 
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
 					//print player
-					if (clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY) {
+					if (clientPlayerLoc.getX() == cellX
+							&& clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
 							shakeTimer = 0;
 							changeShakeLimit();
-							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5),tileY- (TILE_HEIGHT / 3)
-									+ jumpOffset + shakeOffset, null);
-						} 
-						else {
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
+						} else {
 							shakeTimer++;
-							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5), tileY- (TILE_HEIGHT / 3) 
-									+ jumpOffset + shakeOffset, null);
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
-					}					
+					}
 
-					for (Player connectedPlayer : gameClient.getGame().getPlayers()) {
+					for (Player connectedPlayer : gameClient.getGame()
+							.getPlayers()) {
 						/*if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.ABORTED) {
 							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: ABORTED");
 						} else if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.COMPLETE) {
@@ -308,13 +310,21 @@ ActionListener {
 							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: "+connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus());							
 						}*/
 
-						System.out.println("PlayerID: "+connectedPlayer.getId()+"  Image: "+connectedPlayer.getSpriteBasedOnDirection().getImage());							
+						System.out.println("PlayerID: "
+								+ connectedPlayer.getId()
+								+ "  Image: "
+								+ connectedPlayer.getSpriteBasedOnDirection()
+										.getImage());
 
-						if(connectedPlayer != clientPlayer) {
+						if (connectedPlayer != clientPlayer) {
 							if (connectedPlayer.getLocation().getX() == cellX
 									&& connectedPlayer.getLocation().getY() == cellY) {
-								g.drawImage(connectedPlayer.getSpriteBasedOnDirection().getImage(),
-										tileX + (TILE_WIDTH / 5), tileY - (TILE_HEIGHT / 3), null);	
+								g.drawImage(
+										connectedPlayer
+												.getSpriteBasedOnDirection()
+												.getImage(), tileX
+												+ (TILE_WIDTH / 5), tileY
+												- (TILE_HEIGHT / 3), null);
 							}
 						}
 					}
@@ -323,35 +333,42 @@ ActionListener {
 
 					//Location clientPlayerLoc = clientPlayer.getLocation();	
 					//print player
-					System.out.println("PlayerID: "+clientPlayer.getId()+"  Image: "+clientPlayer.getSpriteBasedOnDirection().getImage());							
+					System.out.println("PlayerID: "
+							+ clientPlayer.getId()
+							+ "  Image: "
+							+ clientPlayer.getSpriteBasedOnDirection()
+									.getImage());
 
-					if (clientPlayerLoc.getX() == cellX && clientPlayerLoc.getY() == cellY) {
+					if (clientPlayerLoc.getX() == cellX
+							&& clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
 							shakeTimer = 0;
 							changeShakeLimit();
-							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5), tileY - (TILE_HEIGHT / 3) 
-									+ jumpOffset + shakeOffset, null);
-						} 
-						else {
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
+						} else {
 							shakeTimer++;
-							g.drawImage(clientPlayer.getSpriteBasedOnDirection().getImage(),
-									tileX + (TILE_WIDTH / 5), tileY - (TILE_HEIGHT / 3) 
-									+ jumpOffset + shakeOffset, null);
+							g.drawImage(clientPlayer
+									.getSpriteBasedOnDirection().getImage(),
+									tileX + (TILE_WIDTH / 5), tileY
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
 					}
 
 					//print object of game
 					Game ga = gameClient.getGame();
-					Room r = ga.rooms.get(0);
+					Room1 r = ga.rooms.get(0);
 					BoardSquare[][] bs = r.board.getSquares();
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX - 60, tileY - 170, null);
-						} 
-						else {
+						} else {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY
@@ -373,7 +390,8 @@ ActionListener {
 			}
 
 			//print compass
-			g.drawImage(new ImageIcon("./sprites/other/compass.png").getImage(),
+			g.drawImage(
+					new ImageIcon("./sprites/other/compass.png").getImage(),
 					800, 355, 200, 200, null);
 		}
 	}
@@ -386,42 +404,34 @@ ActionListener {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				loc.moveNorth();
-			} 
-			else {
+			} else {
 				clientPlayer.setDirection(Player.Direction.BACK_LEFT);
 			}
-		} 
-		else if (e.getKeyCode() == KeyEvent.VK_S
+		} else if (e.getKeyCode() == KeyEvent.VK_S
 				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				loc.moveSouth();
-			} 
-			else {
+			} else {
 				clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
 			}
-		} 
-		else if (e.getKeyCode() == KeyEvent.VK_A
+		} else if (e.getKeyCode() == KeyEvent.VK_A
 				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
 				loc.moveWest();
-			} 
-			else {
+			} else {
 				clientPlayer.setDirection(Player.Direction.FACE_LEFT);
 			}
-		} 
-		else if (e.getKeyCode() == KeyEvent.VK_D
+		} else if (e.getKeyCode() == KeyEvent.VK_D
 				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 				loc.moveEast();
-			} 
-			else {
+			} else {
 				clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 			}
-		} 
-		else if (e.getKeyCode() == KeyEvent.VK_E) {
+		} else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
 			//change the board(change the location of objects)
 			Board newBoard = new Board();
@@ -431,8 +441,8 @@ ActionListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[gameClient
-					                                          .getGame().rooms.get(roomIndex).
-					                                          board.getHeight() - (j + offset)][i];
+							.getGame().rooms.get(roomIndex).board.getHeight()
+							- (j + offset)][i];
 				}
 			}
 			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
@@ -450,8 +460,7 @@ ActionListener {
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
 			turnPlayerImageLeft(clientPlayer);
-		} 
-		else if (e.getKeyCode() == KeyEvent.VK_Q) {
+		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			//turn the gui to right side
 			//change the board(change the locations of object)
 			Board newBoard = new Board();
@@ -461,8 +470,8 @@ ActionListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][gameClient
-					                                             .getGame().rooms.get(roomIndex).board.getWidth()
-					                                             - (i + offset)];
+							.getGame().rooms.get(roomIndex).board.getWidth()
+							- (i + offset)];
 				}
 			}
 			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
@@ -490,14 +499,12 @@ ActionListener {
 		}
 		if (loc.getY() < 0) {
 			loc.moveSouth();
-		} 
-		else if (loc.getY() == loc.getRoom().board.getHeight()) {
+		} else if (loc.getY() == loc.getRoom().board.getHeight()) {
 			loc.moveNorth();
 		}
 		if (loc.getX() < 0) {
 			loc.moveEast();
-		} 
-		else if (loc.getX() == loc.getRoom().board.getWidth()) {
+		} else if (loc.getX() == loc.getRoom().board.getWidth()) {
 			loc.moveWest();
 		}
 
@@ -534,10 +541,10 @@ ActionListener {
 		//If you find a Door, checks your inventory for a Key
 		//If you have a Key, compares the Key ID and Door ID for a match
 		//If they match, allows you to enter a different room
-		if (go instanceof Door){
-			for(Item items : clientPlayer.getInventory()){
-				if(items instanceof Key){
-					if(((Door)go).id() == items.id()){
+		if (go instanceof Door) {
+			for (Item items : clientPlayer.getInventory()) {
+				if (items instanceof Key) {
+					if (((Door) go).id() == items.id()) {
 						//this is where the next room needs to be alex
 						System.out.println("I have a key for this door");
 					}
@@ -579,6 +586,10 @@ ActionListener {
 		}
 	}
 
+	/**
+	 *@author Sushant Balajee
+	 *@author Donald Tang
+	 */
 	public void fightDialog() {
 
 		final Location loc = clientPlayer.getLocation();
@@ -625,7 +636,8 @@ ActionListener {
 
 		JLabel type = new JLabel("Monster Type: " + ((Monster) go).getName());
 		JLabel attack = new JLabel("Monster Attack: " + ((Monster) go).attack());
-		JLabel health = new JLabel("Monster Health: " + ((Monster) go).getHealth());
+		JLabel health = new JLabel("Monster Health: "
+				+ ((Monster) go).getHealth());
 
 		type.setLocation(10, 10);
 		attack.setLocation(10, 30);
@@ -651,6 +663,10 @@ ActionListener {
 
 	}
 
+	/**
+	 * @author Sushant Balajee
+	 * @author Donald Tang
+	 */
 	private void fight() {
 
 		final Location loc = clientPlayer.getLocation();
@@ -663,7 +679,8 @@ ActionListener {
 		//Monster attacks first
 		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
 		//Player attacks second
-		((Monster) go).setHealth(((Monster) go).getHealth() - clientPlayer.getAttack());
+		((Monster) go).setHealth(((Monster) go).getHealth()
+				- clientPlayer.getAttack());
 
 		fightBox.dispose();
 
@@ -672,10 +689,10 @@ ActionListener {
 			panel.add(dieLabel);
 			JOptionPane.showMessageDialog(null, " You Died ");
 			System.exit(0);
-		}
-		else if (((Monster) go).isDead()) {
+		} else if (((Monster) go).isDead()) {
 			JOptionPane.showMessageDialog(null, " You Won! \n" + " You lost "
-					+ damage + " health \n" + " You gained " + damage + " attack");
+					+ damage + " health \n" + " You gained " + damage
+					+ " attack");
 
 			//increases the player attack if they win
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
@@ -697,6 +714,9 @@ ActionListener {
 	public void keyTyped(KeyEvent e) {
 	}
 
+	/**
+	 * @author Prashant Bhikhu
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Object source = arg0.getSource();
@@ -705,8 +725,7 @@ ActionListener {
 
 			if (menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
-			} 
-			else if (menuItem.getText().equals("Join Game (As Client)")) {
+			} else if (menuItem.getText().equals("Join Game (As Client)")) {
 				try {
 					gameClient = new GameClient(this);
 				} catch (IOException e) {
@@ -715,7 +734,7 @@ ActionListener {
 									+ " Make sure that you have created and\n"
 									+ " connected and the server and the\n"
 									+ "ports are unblocked.", "ERROR",
-									JOptionPane.ERROR_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 
 					frameState = FRAME_STATE.CREATED_FRAME;
 					return;
@@ -731,11 +750,10 @@ ActionListener {
 						clientUsername = null;
 					}
 					if (clientUsername == null) {
-						JOptionPane
-						.showMessageDialog(
-								this,"You need to enter a user name that"
+						JOptionPane.showMessageDialog(this,
+								"You need to enter a user name that"
 										+ " is at least 3 characters long.",
-										"ERROR", JOptionPane.ERROR_MESSAGE);
+								"ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 
@@ -761,8 +779,7 @@ ActionListener {
 				}
 				this.repaint();
 				addKeyListener(this);
-			} 
-			else if (menuItem.getText().equals("Exit")) {
+			} else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
 			}
 		}

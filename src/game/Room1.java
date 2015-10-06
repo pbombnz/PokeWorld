@@ -2,13 +2,13 @@ package game;
 
 import java.io.Serializable;
 
-public class Room implements Serializable {
+public class Room1 implements Serializable {
 	private static final long serialVersionUID = -6734434217984592426L;
 	
 	public String roomName;
 	public Board board;
 	
-	public Room() {
+	public Room1() {
 		this.roomName = "Testing Room";
 		this.board = new Board();
 	}
@@ -35,7 +35,7 @@ public class Room implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Room other = (Room) obj;
+		Room1 other = (Room1) obj;
 		if (board == null) {
 			if (other.board != null)
 				return false;
