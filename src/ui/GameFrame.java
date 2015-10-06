@@ -283,8 +283,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 								- (TILE_HEIGHT / 3)+printPlayerOffset, null);
 					}
 
-					//printInformation of player
-					printInformation(clientPlayer);
 
 					//print object of game
 					Game ga = gameClient.getGame();
@@ -304,16 +302,22 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 						}
 					}
 
-					//print players'inventory
-					for (int i = 0; i < clientPlayer.getInventory().size(); i++) {
-						g.drawImage(clientPlayer.getInventory().get(i)
-								.getSpriteImage().getImage(), 40,
-								400 + (i * 50), 40, 40, null);
-					}
 				}
 				yPos += TILE_HEIGHT / 4;
 				xPos += TILE_WIDTH / 2;
 			}
+			
+			//printInformation of player
+			printInformation(clientPlayer);
+			
+			//print players'inventory
+			for (int i = 0; i < clientPlayer.getInventory().size(); i++) {
+				g.drawImage(clientPlayer.getInventory().get(i)
+						.getSpriteImage().getImage(), 40,
+						400 + (i * 50), 40, 40, null);
+			}
+			
+			//printcompass
 			g.drawImage(
 					new ImageIcon("./sprites/other/compass.png").getImage(),
 					800, 355, 200, 200, null);
