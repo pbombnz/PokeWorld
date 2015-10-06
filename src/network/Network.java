@@ -52,6 +52,7 @@ public class Network {
 		
 		kyro.register(Packets.NewPlayer.class);
 		kyro.register(Packets.NewGame.class);
+		kyro.register(Packets.UpdatePlayer.class);
 		
 		kyro.register(Game.class);
 		kyro.register(Location.class);

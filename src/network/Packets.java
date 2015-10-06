@@ -1,5 +1,6 @@
 package network;
 
+import game.Location;
 import game.Player;
 
 /**
@@ -34,12 +35,25 @@ public class Packets {
 	 * USED: Server -> Client
 	 * 
 	 * A packet that sends over the game object from the server to
-	 * a client when the client has already initalized a connection
+	 * a client when the client has already initialized a connection
 	 * and chosen the player name and avatar.
 	 *
 	 */
 	public static class NewGame {
 		byte[] gameByteArray;
+	}
+	
+	
+	/**
+	 * USED: Client -> Server, then Server -> All Clients 
+	 * 
+	 * A packet that sends both ways, initially from client to server,
+	 * then the server passes it to the all clients. Used when there is
+	 * any change in variables for a player (including move).
+	 *
+	 */
+	public static class UpdatePlayer {
+		Player player;
 	}
 	
 }
