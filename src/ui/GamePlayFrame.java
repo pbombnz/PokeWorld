@@ -573,6 +573,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fight();
+				
 			}
 		});
 		run.addActionListener(new ActionListener() {
