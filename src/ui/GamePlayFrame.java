@@ -117,22 +117,9 @@ ActionListener {
 		gameMenu.add(new JSeparator());
 		gameMenu.add(exit);
 
-		JMenu SaveLoadMenu = new JMenu("Save / Load");
-
-		menuBar.add(SaveLoadMenu);
-
-		JMenuItem savePlayer = new JMenuItem("Save Player Info");
-		JMenuItem loadPlayer = new JMenuItem("Load Player Info");
-
-		SaveLoadMenu.add(savePlayer);
-		SaveLoadMenu.add(loadPlayer);
-
 		createGame.addActionListener(this);
 		joinGame.addActionListener(this);
 		exit.addActionListener(this);
-
-		savePlayer.addActionListener(this);
-		loadPlayer.addActionListener(this);
 
 		setJMenuBar(menuBar);
 		setVisible(true);
@@ -830,50 +817,8 @@ ActionListener {
 				addKeyListener(this);
 			} else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
-			} else if (menuItem.getText().equals("Save Player Info")) {
-				if (frameState == FRAME_STATE.CREATED_FRAME) {
-					JOptionPane.showMessageDialog(this,
-							"Need to load game first", "ERROR",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				} else {
-					try {
-						GameToJson.savePlayer(clientPlayer);
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (InvalidSaveException e) {
-						e.printStackTrace();
-					}
-				}
-			} else if (menuItem.getText().equals("Load Player Info")) {
-				if (frameState == FRAME_STATE.CREATED_FRAME) {
-					JOptionPane.showMessageDialog(this,
-							"Need to load game first", "ERROR",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				} else {
-					Player newClientPlayer = JsonToGame.loadPlayer();
-					if (newClientPlayer != null) {
-						clientPlayer = newClientPlayer;
-						clientPlayer.getLocation().setRoom(
-								gameClient.getGame().rooms.get(0));
-						//hard coded - removes key if player has it, places player in right spot
-						if (clientPlayer.getInventory().contains(
-								gameClient.getGame().rooms.get(0).board
-								.getSquares()[3][4]))
-							gameClient.getGame().rooms.get(0).board
-							.getSquares()[3][4]
-									.setGameObjectOnSquare(null);
-						gameClient.getGame().players2.clear();
-						gameClient.getGame().players2.add(clientPlayer);
-						repaint();
-					}
-				}
 			}
-			JMenuItem savePlayer = new JMenuItem("Save Player Info");
-			JMenuItem loadPlayer = new JMenuItem("Load Player Info");
 		}
-
 	}
 	
 	public void setClientPlayer(Player player) {
