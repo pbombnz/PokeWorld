@@ -123,6 +123,10 @@ public class Player implements Serializable {
 	public void setEvolutionLevel(int evolutionLevel) {
 		this.evolutionLevel = evolutionLevel;
 	}
+	
+	public boolean hasKey(){
+		return false;
+	}
 
 	public ImageIcon getSpriteBasedOnDirection() {
 		if(avatar != null) {

@@ -38,6 +38,7 @@ import game.Player;
 import game.Player.Direction;
 import game.Room;
 import game.avatar.Avatar;
+import game.objects.Door;
 import game.objects.GameObject;
 import game.objects.Goblin;
 import game.objects.GoodPotion;
@@ -524,6 +525,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
+//		if (go instanceof Door){
+//			if(clientPlayer.{
+//				System.out.println("I have a key");
+//			}
+//			System.out.println("I dont have a key!");
+////			if(((Door)go).id() == ((Key)go).id()){
+////				System.out.println("this is the key to this door");
+////			}
+//		}
 		repaint();
 	}
 
