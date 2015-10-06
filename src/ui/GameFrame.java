@@ -80,7 +80,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	public JLabel characterLabel;
 	private int labelSize = 50;
 	private JDialog fightBox;
-	private JDialog win;
 	private int roomIndex = 0;
 	public int printPlayerOffset = 0;
 
@@ -243,9 +242,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 			super.paintComponent(g); // Clears panel
 
 			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
-				g.drawImage(new ImageIcon(
-						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
-						0, FRAME_WIDTH, FRAME_HEIGHT, null);
+				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(),
+						0,0, FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
 
@@ -265,11 +263,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
 					.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
 					null);
-					//g.drawString(cellY+", "+cellX, screenX+20, screenY+20); // Shows the Array dimension associated with the array
-					//System.out.println(gameClient.getGame());
-					//System.out.println(gameClient.getGame().players);
-					//System.out.println(gameClient.getGame().players.size());
-					//System.out.println(gameClient.getGame().players.get(clientPlayer));
+			
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
 					// HARDED CODED. Change later. Gets clientPlayer location
@@ -531,7 +525,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		fightBox.setBackground(Color.GRAY);
 		fightBox.setLayout(null);
 		fightBox.setSize(200, 120);
-		//fightBox.setLocationRelativeTo(null);
 		fightBox.setLocation(POP_UP_WIDTH, POP_UP_HEIGHT);
 		fightBox.add(type);
 		fightBox.add(attack);
@@ -542,7 +535,6 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 	}
 
-	@SuppressWarnings("static-access")
 	private void fight() {
 
 		final Location loc = clientPlayer.getLocation();
@@ -564,15 +556,9 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 		
 		else if(((Monster)go).isDead()){
 			
-			win = new JDialog();
-			JOptionPane win = new JOptionPane();
-		
-			win.showMessageDialog(null," You Won! \n"
-					+ " You lost " + damage + " health \n"
+			JOptionPane.showMessageDialog(null," You Won! \n"
+				+ " You lost " + damage + " health \n"
 					+ " You gained " + damage + " attack");
-			win.setLocation(POP_UP_WIDTH, POP_UP_HEIGHT);
-			win.setVisible(true);
-
 			
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
 
@@ -586,7 +572,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_J) {
-			printPlayerOffset-=20;
+			printPlayerOffset -= 20;
 		}
 	}
 
