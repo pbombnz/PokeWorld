@@ -47,7 +47,6 @@ import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
 import game.objects.Weapon;
-
 /**
  * @author Wang Zhen
  */
@@ -175,8 +174,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
 		}
-		int diexPo = 200;
-		int dieyPo = 100;
+		int diexPo = 250;
+		int dieyPo = 0;
 		int dieOrAttackLabelSize = 300;
 		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize*2, dieOrAttackLabelSize);
 		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize*2, dieOrAttackLabelSize);
@@ -631,7 +630,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		fightBox.dispose();
 
-		//if die
+		//if the player die, it will show die movie and messagedialog
 		if (clientPlayer.isDead()) {
 			panel.add(dieLabel);
 			JOptionPane.showMessageDialog(null, " You Died ");
@@ -639,7 +638,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 
 		else if (((Monster) go).isDead()) {
-
 			JOptionPane.showMessageDialog(null, " You Won! \n" + " You lost "
 					+ damage + " health \n" + " You gained " + damage
 					+ " attack");
