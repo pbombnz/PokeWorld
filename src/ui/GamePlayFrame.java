@@ -217,12 +217,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		repaint();
 	}
-	
-	private void changeShakeLimit(){
-		if(shakeOffset==0){
-			shakeOffset=5;
-		}else{
-			shakeOffset=0;
+
+	private void changeShakeLimit() {
+		if (shakeOffset == 0) {
+			shakeOffset = 5;
+		} else {
+			shakeOffset = 0;
 		}
 	}
 
@@ -311,7 +311,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
-							shakeTimer=0;
+							shakeTimer = 0;
 							changeShakeLimit();
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
@@ -372,24 +372,36 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		// don't fire an event on backspace or delete
 		Location loc = clientPlayer.getLocation();
 		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
-			loc.moveNorth();
-			clientPlayer.setDirection(Player.Direction.BACK_LEFT);
-			//printCharacter(clientPlayer);
+			//character will turn 1st if the character is not face that side
+			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+				loc.moveNorth();
+			} else {
+				clientPlayer.setDirection(Player.Direction.BACK_LEFT);
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_S
 				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-			loc.moveSouth();
-			clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
-			//printCharacter(clientPlayer);
+			//character will turn 1st if the character is not face that side
+			if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+				loc.moveSouth();
+			} else {
+				clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_A
 				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
-			loc.moveWest();
-			clientPlayer.setDirection(Player.Direction.FACE_LEFT);
-			//printCharacter(clientPlayer);
+			//character will turn 1st if the character is not face that side
+			if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+				loc.moveWest();
+			} else {
+				clientPlayer.setDirection(Player.Direction.FACE_LEFT);
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_D
 				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			loc.moveEast();
-			clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
-			//printCharacter(clientPlayer);
+			//character will turn 1st if the character is not face that side
+			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+				loc.moveEast();
+			} else {
+				clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the gui to left side
 			//change the board(change the locations of object)
