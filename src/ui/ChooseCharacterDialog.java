@@ -8,9 +8,9 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,14 +39,18 @@ public class ChooseCharacterDialog extends JDialog implements ActionListener {
 		
 		buttonsPanel.setLayout(new FlowLayout());
 
-		for (Avatar avatar : Avatar.getAllAvatars()) {
-			JButton avatarButton = new JButton();
-			avatarButton.setText(avatar.getName());
-			avatarButton.setName(avatar.getName());
-			avatarButton.setIcon(avatar.getNormal());
-			avatarButton.addActionListener(this);
-			
-			buttonsPanel.add(avatarButton);
+		try {
+			for (Avatar avatar : Avatar.getAllAvatars()) {
+				JButton avatarButton = new JButton();
+				avatarButton.setText(avatar.getName());
+				avatarButton.setName(avatar.getName());
+				avatarButton.setIcon(avatar.getNormal());
+				avatarButton.addActionListener(this);
+				
+				buttonsPanel.add(avatarButton);
+			}
+		} catch (IOException e) {
+			new RuntimeException(e);
 		}
 		
 		add(new JLabel("What Character would you like to pick?"), BorderLayout.PAGE_START);
@@ -66,12 +70,16 @@ public class ChooseCharacterDialog extends JDialog implements ActionListener {
 		
 		JButton button = (JButton) event.getSource();
 		
-		for (Avatar avatar : Avatar.getAllAvatars()) {
-			if(avatar.getName().equals(button.getName())) {
-				choosenAvatar = avatar;
-				this.dispose();
-				return;
+		try {
+			for (Avatar avatar : Avatar.getAllAvatars()) {
+				if(avatar.getName().equals(button.getName())) {
+					choosenAvatar = avatar;
+					this.dispose();
+					return;
+				}
 			}
+		} catch (IOException e) {
+			new RuntimeException(e);
 		}
 	}
 	
