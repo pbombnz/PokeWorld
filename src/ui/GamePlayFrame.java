@@ -38,7 +38,6 @@ import game.Player;
 import game.Player.Direction;
 import game.Room;
 import game.avatar.Avatar;
-import game.objects.Door;
 import game.objects.GameObject;
 import game.objects.Rattata;
 import game.objects.GoodPotion;
@@ -155,6 +154,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				.equals("Charmander")) {
 			headPictureLabel = new JLabel(new ImageIcon("src/Charmander.gif"));
 		}
+		else if (clientPlayer.getAvatar().getAvatarName()
+			.equals("Squirtle")) {
+		headPictureLabel = new JLabel(new ImageIcon("src/Squirtle.gif"));
+		}
 		int xPo = 10;
 		int yPo = 0;
 		int touxiangSize = 130;
@@ -174,6 +177,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				.equals("Charmander")) {
 			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
+		
+		} else if (clientPlayer.getAvatar().getAvatarName()
+			.equals("Squirtle")) {
+		dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
+		attackLabel = new JLabel(new ImageIcon("src/Squirtle_attack.gif"));
 		}
 		int diexPo = 250;
 		int dieyPo = 0;
@@ -525,15 +533,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
-//		if (go instanceof Door){
-//			if(clientPlayer.{
-//				System.out.println("I have a key");
-//			}
-//			System.out.println("I dont have a key!");
-////			if(((Door)go).id() == ((Key)go).id()){
-////				System.out.println("this is the key to this door");
-////			}
-//		}
 		repaint();
 	}
 
