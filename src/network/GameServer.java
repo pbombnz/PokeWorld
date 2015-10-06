@@ -76,7 +76,7 @@ public class GameServer extends Listener {
 			// Get the NewPlayer Packet
 			NewPlayer np = (NewPlayer) object;
 			
-			// Make sure the newly created player from the new client 
+			/*// Make sure the newly created player from the new client 
 			// doesn't have a conflicting name with other players
 			for(Player connectedPlayer: game.getPlayers()) {
 				if(connectedPlayer.getName().equalsIgnoreCase(np.player.getName())) {
@@ -85,14 +85,14 @@ public class GameServer extends Listener {
 					serverFrame.writeToConsole("[Server][Received] New player from new client has a name already in use. Requesting client to change name...");
 					return;
 				}
-			}
+			}*/
 			
 			//Once all client validation is done, we need to create the location for the player
 			
 			// From top-right to top-left and going all the way, we find a location to put the player on the board
 			// which involves checking if their are any conflicting game objects in the new position
 			int newLocY = 0;
-			int newLocX = 0;//..9;
+			int newLocX = 0;
 			Board boardOfFirstRoom = game.getRooms().get(0).getBoard();
 			
 			yLoop:
@@ -101,7 +101,7 @@ public class GameServer extends Listener {
 				for(int x = boardOfFirstRoom.getWidth()-1; x >= 0; x--) {
 					// Checks if any connected player is on the same location (x,y position & same room)
 					// as the possible new position for the new player
-					System.out.println("y:" +y+" x:"+x);
+					//System.out.println("y:" +y+" x:"+x);
 					
 					for(Player player: game.getPlayers()) {
 						Location playerLocation = player.getLocation();
@@ -123,7 +123,7 @@ public class GameServer extends Listener {
 					//Reaching here, indicates the square is available for the player to be placed
 					newLocY = y;
 					newLocX = x;
-					System.out.println("FOUND: y:" +y+" x:"+x);
+					//System.out.println("FOUND: y:" +y+" x:"+x);
 					break yLoop;	
 				}
 			}
@@ -133,6 +133,7 @@ public class GameServer extends Listener {
 			// Finally we create the new location and assign it the new player
 			Location newLoc = new Location(game.rooms.get(0), newLocX, newLocY);
 			np.player.setLocation(newLoc);
+			np.player.setId(connection.getID());
 			game.getPlayers().add(np.player);
 
 			// Send game world object to client so they can load the game, as well as the final
