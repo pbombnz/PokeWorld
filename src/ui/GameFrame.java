@@ -562,14 +562,17 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
 		((Monster)go).setHealth(((Monster)go).getHealth() - clientPlayer.getAttack());
-		
+
 		fightBox.dispose();
 
 		if(((Monster)go).isDead()){
+
+			JOptionPane.showMessageDialog(null, " You Won! \n"
+					+ " You suffered " + damage + " damage \n"
+					+ " You gained" + damage + "attack");
 			
-			JOptionPane.showMessageDialog(null, " You Won but You suffered " + damage
-					+ " damage");
-			
+			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
+
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 
