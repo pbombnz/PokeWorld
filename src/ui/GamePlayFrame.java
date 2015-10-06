@@ -140,7 +140,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	public void createHeadViewLabels() {
 		//print head picture
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
-		JLabel headPictureLabel = new JLabel(new ImageIcon("src/newtu.gif"));
+		JLabel headPictureLabel = new JLabel(new ImageIcon("src/miaowazhongzi.gif"));
 		int xPo = 10;
 		int yPo = 0;
 		int touxiangSize = 130;
