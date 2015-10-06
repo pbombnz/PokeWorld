@@ -19,6 +19,7 @@ public class Player implements Serializable {
 
 	private Avatar avatar;
 	
+	private int id;
 	private final String name;
 	
 	private int health;
@@ -32,6 +33,9 @@ public class Player implements Serializable {
 	private Direction direction = Direction.FACE_RIGHT;
 	private int playerLevel = 1;
 
+	/**
+	 * No-Args Constructor for Networking Serialisation 
+	 */
 	public Player() {
 		this.name = null;
 	}
@@ -191,6 +195,14 @@ public class Player implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	

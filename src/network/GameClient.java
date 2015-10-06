@@ -22,7 +22,6 @@ public class GameClient extends Listener {
 	    Network.register(client);
 
 	    client.addListener(this);
-	    
 	    client.start();
 	    try {
 			client.connect(5000, "localhost", Network.DEFAULT_SERVER_PORT_TCP, Network.DEFAULT_SERVER_PORT_UDP);
@@ -66,7 +65,7 @@ public class GameClient extends Listener {
 			byte[] gameBytes = ((NewGame) object).gameByteArray;
 			//System.out.println(Game.fromByteArray(gameBytes).toString());
 			game = Game.fromByteArray(gameBytes);
-			System.out.println("game is received from server to client");
+			//System.out.println("game is received from server to client");
 		}
 	} 
 }
