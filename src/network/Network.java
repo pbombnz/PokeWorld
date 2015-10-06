@@ -13,6 +13,8 @@ import java.util.*;
 
 import javax.swing.ImageIcon;
 
+import rooms.Room1;
+
 /**
  * This class is used to register classes that will be
  * sent over the network with both the server and client.

@@ -1,12 +1,13 @@
-package game;
+package rooms;
+
+import game.Board;
 
 import java.io.Serializable;
 
-public class Room1 implements Serializable {
+public class Room1 extends Room{
 	private static final long serialVersionUID = -6734434217984592426L;
 	
-	public String roomName;
-	public Board board;
+	
 	
 	public Room1() {
 		this.roomName = "Testing Room";

@@ -2,29 +2,32 @@ package game;
 
 import java.io.Serializable;
 
+import rooms.Room;
+import rooms.Room1;
+
 
 public class Location implements Serializable {
 	private static final long serialVersionUID = -5585594220565441892L;
 	
-	private Room1 room;
+	private Room room;
 	private int x;
 	private int y;
 	
 	public Location() {}
 	
 	
-	public Location(Room1 room, int x, int y) {
+	public Location(Room room, int x, int y) {
 		super();
 		this.room = room;
 		this.x = x;
 		this.y = y;
 	}
 
-	public Room1 getRoom() {
+	public Room getRoom() {
 		return room;
 	}
 
-	public void setRoom(Room1 room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 

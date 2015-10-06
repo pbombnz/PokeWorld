@@ -1,9 +1,14 @@
-package game;
+package rooms;
+
+import java.io.Serializable;
+
+import game.Board;
 
 /**
  *@author Wang Zhen
+ *@author Sushant
  */
-public class Room2 {
+public class Room2 extends Room{
 	private static final long serialVersionUID = -6734434217984592426L;
 
 	public String roomName;

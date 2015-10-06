@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rooms.Room;
+import rooms.Room1;
+import rooms.Room2;
+import rooms.Room3;
 import game.Player;
 import game.avatar.Avatar;
 import ui.GamePlayFrame;
@@ -25,11 +29,11 @@ public class Game {
 	//public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
 
 	public ArrayList<Player> players2;
-	public ArrayList<Room1> rooms;
+	public ArrayList<Room> rooms;
 
 	public Game() {
 		players2 = new ArrayList<Player>();
-		rooms = new ArrayList<Room1>();	
+		rooms = new ArrayList<Room>();	
 	}
 	
 	public byte[] toByteArray() {
@@ -64,7 +68,7 @@ public class Game {
 			ObjectInputStream ois = new ObjectInputStream(bis);
 			newGame = new Game();
 			newGame.players2 = (ArrayList<Player>) ois.readObject();
-			newGame.rooms = (ArrayList<Room1>) ois.readObject();
+			newGame.rooms = (ArrayList<Room>) ois.readObject();
 		} catch (StreamCorruptedException e) {
 			return null;
 		} catch (IOException e) {
@@ -79,7 +83,10 @@ public class Game {
 	
 	public static Game createTestMap() {
 		Game game = new Game();
+		//add rooms here
 		game.rooms.add(new Room1());
+		game.rooms.add(new Room2());
+		game.rooms.add(new Room3());
 		return game;
 		
 	}
@@ -119,7 +126,7 @@ public class Game {
 		return players2;
 	}
 
-	public List<Room1> getRooms() {
+	public List<Room> getRooms() {
 		return rooms;
 	}
 	

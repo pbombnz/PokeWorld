@@ -25,6 +25,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import rooms.Room;
+import rooms.Room1;
 import network.GameClient;
 import game.Board;
 import game.BoardSquare;
@@ -32,7 +34,6 @@ import game.Game;
 import game.Location;
 import game.Player;
 import game.Player.Direction;
-import game.Room1;
 import game.avatar.Avatar;
 import game.objects.Door;
 import game.objects.GameObject;
@@ -361,7 +362,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 					//print object of game
 					Game ga = gameClient.getGame();
-					Room1 r = ga.rooms.get(0);
+					Room r = ga.rooms.get(0);
 					BoardSquare[][] bs = r.board.getSquares();
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
