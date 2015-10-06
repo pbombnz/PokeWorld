@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import game.objects.Door;
 import game.objects.GiantSword;
-import game.objects.Goblin;
+import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;
@@ -58,10 +58,10 @@ public class Board implements Serializable {
 					this.squares[i][j] = new BoardSquare(new Door(1));
 				}
 				if(i == 7 && j == 3) {
-					this.squares[i][j] = new BoardSquare(new Goblin(10,10));
+					this.squares[i][j] = new BoardSquare(new Rattata(10,10));
 				}
 				if(i == 1 && j == 5) {
-					this.squares[i][j] = new BoardSquare(new Goblin(15,15));
+					this.squares[i][j] = new BoardSquare(new Rattata(15,15));
 				}
 
 			}

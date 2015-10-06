@@ -4,16 +4,17 @@ import javax.swing.ImageIcon;
 
 
 import game.Location;
+import game.Player.Direction;
 
 /**
  *@author Wang Zhen
  */
-public class Goblin implements Monster{
-	
+public class Rattata implements Monster{
+	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
 	public int health;
 	public int attack;
-
-	public Goblin(int attack, int health){
+	public Direction direction = Direction.FACE_RIGHT;
+	public Rattata(int attack, int health){
 		this.attack = attack;
 		this.health = health;
 	}
@@ -52,5 +53,7 @@ public class Goblin implements Monster{
 		// TODO Auto-generated method stub
 		return GameObject.GOBLIN;
 	}
-
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
 }
