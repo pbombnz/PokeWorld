@@ -40,7 +40,7 @@ import game.Room;
 import game.avatar.Avatar;
 import game.objects.Door;
 import game.objects.GameObject;
-import game.objects.Goblin;
+import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Item;
 import game.objects.Key;
