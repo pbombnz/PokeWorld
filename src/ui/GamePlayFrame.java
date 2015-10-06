@@ -88,6 +88,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 	public JLabel headPictureLabel = null;
 	public JLabel bgHeadViewLabel = null;
+	public JLabel dieLabel = null;
+	public JLabel attackLabel = null;
 
 	public GamePlayFrame() {
 
@@ -141,10 +143,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	}
 
-	public void createHeadViewLabels() {
+	public void loadLabels() {
+		//load labels of player information
 		//create backgroundlabel
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
-		//print head picture
+		//load head picture
 		JLabel headPictureLabel = null;
 		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
 			headPictureLabel = new JLabel(new ImageIcon("src/Bulbasaur.gif"));
@@ -159,6 +162,26 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		headPictureLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
 		this.bgHeadViewLabel = bgHeadViewLabel;
 		this.headPictureLabel = headPictureLabel;
+		
+		//load labels of die and attack
+		JLabel dieLabel =null;
+		JLabel attackLabel =null;
+		//print head picture
+		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
+			dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
+			attackLabel = new JLabel(new ImageIcon("src/Bulbasaur_attack.gif"));
+		} else if (clientPlayer.getAvatar().getAvatarName()
+				.equals("Charmander")) {
+			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
+			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
+		}
+		int diexPo = 200;
+		int dieyPo = 100;
+		int dieOrAttackLabelSize = 300;
+		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize*2, dieOrAttackLabelSize);
+		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize*2, dieOrAttackLabelSize);
+		this.dieLabel = dieLabel;
+		this.attackLabel =attackLabel;
 	}
 
 	public void printInformation(Player player) {
@@ -608,9 +631,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		fightBox.dispose();
 
+		//if die
 		if (clientPlayer.isDead()) {
+			panel.add(dieLabel);
 			JOptionPane.showMessageDialog(null, " You Died ");
-			//System.exit(0);
+			System.exit(0);
 		}
 
 		else if (((Monster) go).isDead()) {
@@ -694,7 +719,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				// redraw the board
 				frameState = FRAME_STATE.GAME_START;
 				//add all jlabel after picking character
-				createHeadViewLabels();
+				loadLabels();
 				panel.add(headPictureLabel);
 				panel.add(bgHeadViewLabel);
 
