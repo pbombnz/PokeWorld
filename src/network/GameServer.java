@@ -133,7 +133,6 @@ public class GameServer extends Listener {
 			// Finally we create the new location and assign it the new player
 			Location newLoc = new Location(game.rooms.get(0), newLocX, newLocY);
 			np.player.setLocation(newLoc);
-			np.player.setId(connection.getID());
 			game.getPlayers().add(np.player);
 
 			// Send game world object to client so they can load the game, as well as the final
@@ -145,7 +144,12 @@ public class GameServer extends Listener {
 			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 			server.sendToTCP(connection.getID(), newGame);
 		}		
-		
+		else if(object instanceof PlayerUpdate) {
+			serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
+			serverFrame.writeToConsole("[Server][Sent] Sent Recieved UpdatePlayer Packet to all other clients.");
+			PlayerUpdate packet = ((PlayerUpdate) object);
+			server.sendToAllExceptTCP(connection.getID(), packet);
+		}
 	}
 
 	@Override

@@ -165,13 +165,25 @@ public class Player implements Serializable {
 		return null;
 	}
 
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + attack;
+		result = prime * result + ((avatar == null) ? 0 : avatar.hashCode());
+		result = prime * result
+				+ ((direction == null) ? 0 : direction.hashCode());
+		result = prime * result + evolutionLevel;
+		result = prime * result + health;
+		result = prime * result + id;
+		result = prime * result
+				+ ((inventory == null) ? 0 : inventory.hashCode());
 		result = prime * result
 				+ ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + playerLevel;
 		return result;
 	}
 
@@ -184,6 +196,26 @@ public class Player implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Player other = (Player) obj;
+		if (attack != other.attack)
+			return false;
+		if (avatar == null) {
+			if (other.avatar != null)
+				return false;
+		} else if (!avatar.equals(other.avatar))
+			return false;
+		if (direction != other.direction)
+			return false;
+		if (evolutionLevel != other.evolutionLevel)
+			return false;
+		if (health != other.health)
+			return false;
+		if (id != other.id)
+			return false;
+		if (inventory == null) {
+			if (other.inventory != null)
+				return false;
+		} else if (!inventory.equals(other.inventory))
+			return false;
 		if (location == null) {
 			if (other.location != null)
 				return false;
@@ -193,6 +225,8 @@ public class Player implements Serializable {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (playerLevel != other.playerLevel)
 			return false;
 		return true;
 	}
