@@ -569,11 +569,16 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
 		fightBox.dispose();
 
-		if(((Monster)go).isDead()){
+		if (clientPlayer.isDead()) {
+			JOptionPane.showMessageDialog(null, " You Died ");
+			//System.exit(0);
+		}
+		
+		else if(((Monster)go).isDead()){
 
 			JOptionPane.showMessageDialog(null, " You Won! \n"
-					+ " You suffered " + damage + " damage \n"
-					+ " You gained" + damage + "attack");
+					+ " You lost " + damage + " health \n"
+					+ " You gained " + damage + " attack");
 			
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
 
@@ -581,9 +586,7 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 					.setGameObjectOnSquare(null);
 
 		}
-		if (clientPlayer.isDead()) {
-			JOptionPane.showMessageDialog(null, " You Died ");
-		}
+		
 	}
 
 	@Override
