@@ -1,14 +1,14 @@
 # SWEN222 Group Assignment
 
-## Team Memebers and Repsonsibilites
-* Prashant - Networking and All Rounder
-* Alex - Graphical User Interface
-* Donald - Game Logic and Objects (Team Leader)
-* Sushant - Game Logic and Objects
-* Priyanka  - Game Saving and Loading (via JSON) / Game Sprite Making
-
+## Team Members and Repsonsibilites
+* Prashant Bhikhu - Networking / All Rounder
+* Alex (Zhen) Wang - Graphical User Interface and Extras
+* Donald Tang (Team Leader) - Game Logic and Objects / Game Sprite Making
+* Sushant Balajee - Game Logic and Objects
+* Priyanka Bhula  - Game Saving and Loading (via JSON)
 ## Unknown Repsonsiblities
-* ? - Documentation
+* ? - Documentation (Class Diagram and CSC Cards)
+* ? - JUnit Testing
 
 ## Git Rules
 1. When you open Eclipse, make sure the first thing you do before coding is 'pull' so you are synced with the remote server.
