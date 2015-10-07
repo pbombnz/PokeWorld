@@ -16,7 +16,7 @@ public class Door implements GameObject{
 	@Override
 	public ImageIcon getSpriteImage() {
 		// TODO Auto-generated method stub
-		return GameObject.WEAPON_GIANTSWORD;
+		return GameObject.DOOR;
 	}
 	
 	public int id(){

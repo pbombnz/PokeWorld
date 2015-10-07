@@ -7,7 +7,8 @@ public class GiantSword implements Weapon {
 
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.WEAPON_GIANTSWORD;
+		//return GameObject.WEAPON_GIANTSWORD;
+		return null;
 	}
 
 	@Override
