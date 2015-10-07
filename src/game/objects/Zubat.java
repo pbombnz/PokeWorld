@@ -51,7 +51,7 @@ public class Zubat implements Monster{
 	@Override
 	public ImageIcon getSpriteImage() {
 		// TODO Auto-generated method stub
-		return GameObject.RATTATA;
+		return GameObject.ZUBAT;
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;

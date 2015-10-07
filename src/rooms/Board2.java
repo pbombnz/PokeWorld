@@ -9,7 +9,9 @@ import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;
+import game.objects.Rhydon;
 import game.objects.Tree;
+import game.objects.Zubat;
 /**
  * @author Sushant Balajee
  * @author Prashant Bhikhu
@@ -33,12 +35,30 @@ public class Board2 extends Board {
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
 
-				
 				if (i == 0 && j == 0) {
 					this.squares[i][j] = new BoardSquare(new Door(1,2,1));
 				}
-				
-
+				if (i == 3 && j == 7) {
+					this.squares[i][j] = new BoardSquare(new Zubat(20, 20));
+				}
+				if (i == 6 && j == 2) {
+					this.squares[i][j] = new BoardSquare(new Zubat(25, 25));
+				}
+				if (i == 9 && j == 9) {
+					this.squares[i][j] = new BoardSquare(new Zubat(30, 30));
+				}
+				if (i == 6 && j == 2) {
+					this.squares[i][j] = new BoardSquare(new Zubat(25, 25));
+				}
+				if (i == 9 && j == 9) {
+					this.squares[i][j] = new BoardSquare(new Zubat(30, 30));
+				}
+				if (i == 3 && j == 3) {
+					this.squares[i][j] = new BoardSquare(new Key(2));
+				}
+				if (i == 8 && j == 0 || i == 7 && j == 7|| i == 2 && j == 4) {
+					this.squares[i][j] = new BoardSquare(new Tree());
+				}
 			}
 		}
 
