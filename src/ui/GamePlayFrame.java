@@ -54,7 +54,7 @@ import game.objects.Tree;
  */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
-ActionListener {
+		ActionListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -261,7 +261,7 @@ ActionListener {
 
 			// Draw background picture
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
-			.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
@@ -273,8 +273,8 @@ ActionListener {
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
 					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-					.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
-					null);
+							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
+							null);
 
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
@@ -287,15 +287,15 @@ ActionListener {
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
 					}
 
@@ -328,10 +328,10 @@ ActionListener {
 									&& connectedPlayer.getLocation().getY() == cellY) {
 								g.drawImage(
 										connectedPlayer
-										.getSpriteBasedOnDirection()
-										.getImage(), tileX
-										+ (TILE_WIDTH / 5), tileY
-										- (TILE_HEIGHT / 3), null);
+												.getSpriteBasedOnDirection()
+												.getImage(), tileX
+												+ (TILE_WIDTH / 5), tileY
+												- (TILE_HEIGHT / 3), null);
 							}
 						}
 					}
@@ -354,15 +354,15 @@ ActionListener {
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
 					}
 
@@ -454,9 +454,9 @@ ActionListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[gameClient
-					                                          .getGame().rooms.get(GameLauncher.ROOMINDEX).board
-					                                          .getHeight()
-					                                          - (j + offset)][i];
+							.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+							.getHeight()
+							- (j + offset)][i];
 				}
 			}
 			gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board = newBoard;
@@ -484,9 +484,9 @@ ActionListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][gameClient
-					                                             .getGame().rooms.get(GameLauncher.ROOMINDEX).board
-					                                             .getWidth()
-					                                             - (i + offset)];
+							.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+							.getWidth()
+							- (i + offset)];
 				}
 			}
 			gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board = newBoard;
@@ -527,8 +527,6 @@ ActionListener {
 
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
-
-
 
 		//If you find a key, adds it to the inventory and removes from the board
 		if (go instanceof Key) {
@@ -572,13 +570,21 @@ ActionListener {
 								.get(GameLauncher.ROOMINDEX);
 
 						if (nowRoom.level == theDoor.linkFrom) {
+							//for change room 
+							//1. i change change board
+							//2. i change the location of player
 							GameLauncher.ROOMINDEX = theDoor.linkTo - 1;
-							System.out.println(loc.getRoom());
-						}
-						else if(nowRoom.level == theDoor.linkFrom + 1){
+							clientPlayer.getLocation().setRoom(
+									gameClient.getGame().rooms
+											.get(GameLauncher.ROOMINDEX));
+
+						} else if (nowRoom.level == theDoor.linkFrom + 1) {
 							System.out.println("this door goes to level 1");
 							GameLauncher.ROOMINDEX = theDoor.linkTo - 2;
-							System.out.println(loc.getRoom());
+							clientPlayer.getLocation().setRoom(
+									gameClient.getGame().rooms
+											.get(GameLauncher.ROOMINDEX));
+
 						}
 					}
 				}
@@ -768,7 +774,7 @@ ActionListener {
 									+ " Make sure that you have created and\n"
 									+ " connected and the server and the\n"
 									+ "ports are unblocked.", "ERROR",
-									JOptionPane.ERROR_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 
 					frameState = FRAME_STATE.CREATED_FRAME;
 					return;
@@ -787,7 +793,7 @@ ActionListener {
 						JOptionPane.showMessageDialog(this,
 								"You need to enter a user name that"
 										+ " is at least 3 characters long.",
-										"ERROR", JOptionPane.ERROR_MESSAGE);
+								"ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 
