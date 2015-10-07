@@ -12,6 +12,7 @@ import game.objects.RareCandy;
 import game.objects.Tree;
 /**
  *@author Wang Zhen
+ *this board is for store information
  */
 
 public abstract class Board implements Serializable {

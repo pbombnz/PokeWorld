@@ -9,14 +9,11 @@ import game.objects.Rattata;
 import game.objects.Tree;
 
 import java.util.Arrays;
-
+/**
+ * this board is for store information of stage1
+ */
 public class Board1 extends Board{
 	private static final long serialVersionUID = -3601832062619945416L;
-
-	private int width;
-	private int height;
-
-	public BoardSquare[][] squares;
 
 	public Board1(int width, int height) {
 		this.width = width;
@@ -26,7 +23,6 @@ public class Board1 extends Board{
 	}
 
 	public Board1() {
-		System.out.println("board1");
 		this.width = 10;
 		this.height = 10;
 		this.squares = new BoardSquare[height][width];

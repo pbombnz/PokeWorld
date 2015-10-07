@@ -365,6 +365,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					Game ga = gameClient.getGame();
 					Room r = ga.rooms.get(roomIndex);
 					BoardSquare[][] bs = r.board.getSquares();
+					
+					
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
 							g.drawImage(bs[cellY][cellX]
@@ -439,11 +441,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
 			Board newBoard = new EmptyBoard();
 
-			if (oldBoard.squares == null) {
-				System.out.println("ss");
-				return;
-			}
-
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
@@ -517,14 +514,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//check to take items
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
-		//debug
-		Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
-		Board newBoard = new EmptyBoard();
-
-		if (oldBoard.squares == null) {
-			System.out.println("aaaa");
-			return;
-		}
 		
 		//If you find a key, adds it to the inventory and removes from the board
 		if (go instanceof Key) {

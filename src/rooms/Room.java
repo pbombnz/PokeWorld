@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  *@author Wang Zhen
+ *this class is for ceate a room and store information
  */
 public abstract class Room implements Serializable{
 	public String roomName;

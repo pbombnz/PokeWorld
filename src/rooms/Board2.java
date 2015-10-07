@@ -13,10 +13,6 @@ import game.objects.Tree;
 
 public class Board2 extends Board {
 	private static final long serialVersionUID = -3601832062619945416L;
-	private int width;
-	private int height;
-
-	public BoardSquare[][] squares;
 
 	public Board2(int width, int height) {
 		this.width = width;
