@@ -562,8 +562,13 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						Door theDoor = (Door) go;
 						Room nowRoom = gameClient.getGame().rooms
 								.get(GameLauncher.ROOMINDEX);
+					
 						if (nowRoom.level == theDoor.linkFrom) {
 							GameLauncher.ROOMINDEX = theDoor.linkTo - 1;
+						}
+						else if(nowRoom.level == theDoor.linkFrom + 1){
+							System.out.println("this door goes to level 1");
+							GameLauncher.ROOMINDEX = theDoor.linkTo - 2;
 						}
 					}
 				}
