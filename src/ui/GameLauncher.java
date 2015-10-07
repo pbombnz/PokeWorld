@@ -6,7 +6,7 @@ import java.awt.Frame;
  *@author Wang Zhen
  */
 public class GameLauncher {
-	public static int ROOMINDEX = 1;
+	public static int ROOMINDEX = 0;
 	public GameLauncher() {
 		Frame gameFrame = new GamePlayFrame();
 	}
