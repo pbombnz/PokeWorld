@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import org.json.simple.*;
 
-import game.Board;
 import game.Location;
 import game.Player;
 import game.Player.Direction;

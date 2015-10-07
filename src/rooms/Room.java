@@ -1,7 +1,5 @@
 package rooms;
 
-import game.Board;
-
 import java.io.Serializable;
 
 /**

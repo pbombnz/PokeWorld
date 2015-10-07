@@ -25,10 +25,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import rooms.Board;
+import rooms.Board1;
+import rooms.Board2;
+import rooms.Board3;
+import rooms.EmptyBoard;
 import rooms.Room;
 import rooms.Room1;
 import network.GameClient;
-import game.Board;
 import game.BoardSquare;
 import game.Game;
 import game.Location;
@@ -44,9 +48,6 @@ import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
 
-/**
- * @author Wang Zhen
- */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
 		ActionListener {
@@ -311,11 +312,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: "+connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus());							
 						}*/
 
-						System.out.println("PlayerID: "
-								+ connectedPlayer.getId()
-								+ "  Image: "
-								+ connectedPlayer.getSpriteBasedOnDirection()
-										.getImage());
+						//						System.out.println("PlayerID: "
+						//								+ connectedPlayer.getId()
+						//								+ "  Image: "
+						//								+ connectedPlayer.getSpriteBasedOnDirection()
+						//										.getImage());
 
 						if (connectedPlayer != clientPlayer) {
 							if (connectedPlayer.getLocation().getX() == cellX
@@ -334,11 +335,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 					//Location clientPlayerLoc = clientPlayer.getLocation();	
 					//print player
-					System.out.println("PlayerID: "
-							+ clientPlayer.getId()
-							+ "  Image: "
-							+ clientPlayer.getSpriteBasedOnDirection()
-									.getImage());
+					//					System.out.println("PlayerID: "
+					//							+ clientPlayer.getId()
+					//							+ "  Image: "
+					//							+ clientPlayer.getSpriteBasedOnDirection()
+					//									.getImage());
 
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
@@ -362,7 +363,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 					//print object of game
 					Game ga = gameClient.getGame();
-					Room r = ga.rooms.get(0);
+					Room r = ga.rooms.get(roomIndex);
 					BoardSquare[][] bs = r.board.getSquares();
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
@@ -435,8 +436,13 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		} else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
 			//change the board(change the location of objects)
-			Board newBoard = new Board();
 			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
+			Board newBoard = new EmptyBoard();
+
+			if (oldBoard.squares == null) {
+				System.out.println("ss");
+				return;
+			}
 
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
@@ -464,9 +470,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			//turn the gui to right side
 			//change the board(change the locations of object)
-			Board newBoard = new Board();
+			Board newBoard = new EmptyBoard();
 			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
-
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
@@ -512,6 +517,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//check to take items
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
+		//debug
+		Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
+		Board newBoard = new EmptyBoard();
+
+		if (oldBoard.squares == null) {
+			System.out.println("aaaa");
+			return;
+		}
+		
 		//If you find a key, adds it to the inventory and removes from the board
 		if (go instanceof Key) {
 			clientPlayer.addToInventory(((Key) go));
@@ -520,7 +534,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		//If you find a goodPotion, increases your health and removes it from the board
 		if (go instanceof GoodPotion) {
-			System.out.println("is this working");
+			//			System.out.println("is this working");
 			clientPlayer.setHealth(clientPlayer.getHealth()
 					+ ((GoodPotion) go).getHealthHealAmount());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
@@ -547,7 +561,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				if (items instanceof Key) {
 					if (((Door) go).id() == items.id()) {
 						//this is where the next room needs to be alex
-						System.out.println("I have a key for this door");
+						//						System.out.println("I have a key for this door");
+						Door theDoor = (Door) go;
+						if (theDoor.linkTo == Door.LinkTo.GO_NEXT_ROOM) {
+
+						} else if (theDoor.linkTo == Door.LinkTo.GO_LAST_ROOM) {
+
+						}
+
 					}
 				}
 			}
@@ -590,6 +611,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	/**
 	 *@author Sushant Balajee
 	 *@author Donald Tang
+	 *@author Wang Zhen
 	 */
 	public void fightDialog() {
 
@@ -793,4 +815,49 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public Player getClientPlayer() {
 		return clientPlayer;
 	}
+
+	//=========================================================================
+	/**
+	 * these is another way to print the character-create a jlabel for character and add it to the panel
+	 * */
+	/*public void printCharacter(Player player) {
+		//initialize
+		if (characterLabel != null) {
+			panel.remove(characterLabel);
+		}
+
+		//print
+		/*JLabel chaL = null;
+		if (player.getDirection().equals("fl")) {
+			chaL = new JLabel(player.faceleft);
+		} else if (player.getDirection().equals("fr")) {
+			chaL = new JLabel(player.faceright);
+		} else if (player.getDirection().equals("bl")) {
+			chaL = new JLabel(player.backleft);
+		} else if (player.getDirection().equals("br")) {
+			chaL = new JLabel(player.backright);
+		}
+		int xPo = trasferX(player.location.col, player.location.row);
+		int yPo = trasferY(player.location.col, player.location.row);
+		int charaSize = 40;
+		chaL.setBounds(xPo, yPo, charaSize, charaSize);
+		characterLabel = chaL;
+		panel.add(characterLabel);
+
+		repaint();
+	}*/
+
+	/*public int trasferX(int col, int row) {
+		int offset = 10;
+		int edgeLong = 30;
+		int base = 470;
+		return (int) ((offset + edgeLong) * (col) - offset * row+ base);
+	}
+
+	public int trasferY(int col, int row) {
+		int offset = 10;
+		int edgeLong = 30;
+		int base = 50;
+		return (int) ((offset + edgeLong) * (row) + base);
+	}*/
 }

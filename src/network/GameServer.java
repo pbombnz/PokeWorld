@@ -2,8 +2,8 @@ package network;
 
 import java.io.IOException;
 
+import rooms.Board;
 import ui.ServerFrame;
-import game.Board;
 import game.Game;
 import game.Location;
 import game.Player;

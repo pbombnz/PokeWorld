@@ -13,6 +13,7 @@ import java.util.*;
 
 import javax.swing.ImageIcon;
 
+import rooms.Board;
 import rooms.Room1;
 
 /**

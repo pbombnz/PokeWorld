@@ -1,7 +1,5 @@
 package rooms;
 
-import game.Board;
-
 import java.io.Serializable;
 
 public class Room1 extends Room{
@@ -11,7 +9,7 @@ public class Room1 extends Room{
 	
 	public Room1() {
 		this.roomName = "Testing Room";
-		this.board = new Board();
+		this.board = new Board1();
 	}
 	
 	public String getName(){
