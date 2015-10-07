@@ -127,7 +127,7 @@ public class Player implements Serializable {
 
 	public ImageIcon getSpriteBasedOnDirection() {
 		if(avatar != null) {
-			switch(evolutionLevel) {
+			switch(playerLevel) {
 			case 1:
 				switch(direction) {
 				case FACE_LEFT:
