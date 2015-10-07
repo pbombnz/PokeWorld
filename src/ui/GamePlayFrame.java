@@ -705,7 +705,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	 * @author Sushant Balajee
 	 * @author Donald Tang
 	 */
-	private void fight() {
+	public void fight() {
 
 		final Location loc = clientPlayer.getLocation();
 
