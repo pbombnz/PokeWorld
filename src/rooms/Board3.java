@@ -5,10 +5,12 @@ import java.util.Arrays;
 
 import game.BoardSquare;
 import game.objects.Door;
+import game.objects.Fence;
 import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;
+import game.objects.Rhydon;
 import game.objects.Tree;
 /**
  * @author Sushant Balajee
@@ -37,31 +39,32 @@ public class Board3 extends Board{
 			for(int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
 
-				if(i == 5 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new RareCandy());
-				}
-				if(i == 9 && j == 9) {
+				if(i == 9 && j == 9 || i == 1 && j == 0  || i == 1 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new Tree());
 				}
-				if(i == 4 && j == 6) {
-					this.squares[i][j] = new BoardSquare(new Key(1));
+				if(i == 0 && j == 9) {
+					this.squares[i][j] = new BoardSquare(new Key(3));
 				}
-				if(i == 6 && j == 9) {
-					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
+				if(i == 0 && j == 0 || i == 4 && j == 5) {
+					this.squares[i][j] = new BoardSquare(new Key(100));
 				}
-				if(i == 8 && j == 8) {
-					this.squares[i][j] = new BoardSquare(new Door(2,3,2));
+				if(i == 7 && j == 4) {
+					this.squares[i][j] = new BoardSquare(new GoodPotion(100));
 				}
-				if(i == 7 && j == 3) {
-					this.squares[i][j] = new BoardSquare(new Rattata(10,10));
+				if(i == 9 && j == 0) {
+					this.squares[i][j] = new BoardSquare(new Door(3,3,4));
 				}
-				if(i == 1 && j == 5) {
-					this.squares[i][j] = new BoardSquare(new Rattata(15,15));
+				if(i == 2 && j == 5) {
+					this.squares[i][j] = new BoardSquare(new Rhydon(50,50));
 				}
-
+				if(i == 6 && j == 0) {
+					this.squares[i][j] = new BoardSquare(new Rhydon(60,60));
+				}
+				if(i == 4 && j == 9) {
+					this.squares[i][j] = new BoardSquare(new Rhydon(70,70));
+				}
 			}
 		}
-
 	}
 
 	public BoardSquare[][] getSquares() {
