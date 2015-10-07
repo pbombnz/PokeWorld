@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -143,10 +144,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			headPictureLabel = new JLabel(new ImageIcon("src/Squirtle.gif"));
 		}
 		int xPo = 10;
-		int yPo = 0;
+		int yPo = 10;
 		int touxiangSize = 130;
 		bgHeadViewLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
 		headPictureLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
+		headPictureLabel.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.BLACK));
 		this.bgHeadViewLabel = bgHeadViewLabel;
 		this.headPictureLabel = headPictureLabel;
 
@@ -189,7 +191,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//print player name
 		JLabel playerNameTextLabel = new JLabel();
 		playerNameTextLabel.setText("Player Name: " + player.getName());
-		playerNameTextLabel.setLocation(10, 130);
+		playerNameTextLabel.setLocation(10, 140);
 		playerNameTextLabel.setSize(400, 20);
 		playerNameTextLabel.setFont(new Font("Dialog", 1, 20));
 		playerNameTextLabel.setHorizontalAlignment(JLabel.LEFT);
