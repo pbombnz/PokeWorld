@@ -26,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import com.sun.image.codec.jpeg.TruncatedFileException;
+
 import rooms.Board;
 import rooms.Board1;
 import rooms.Board2;
@@ -100,10 +102,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public int viewWidth = 550;
 	public int viewHight = 550;
 	//	public int horizonLine = 188;
-	public int squareHeigh = 130;
+	public int squareHeigh = 60;
 	public int squareWidth = 200;
 	public int midOfView = startX + viewWidth / 2;
 	private int jumpOffsetFirstView = 0;
+	private int turnOffset = 750;
+	private int turnCounter = 0;
 
 	///==================================
 
@@ -278,7 +282,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				return;
 			}
 
-			///================================================================
+			////================================================================
 			//1st view
 			//draw frame
 			g.setColor(Color.black);
@@ -286,9 +290,28 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//			g.drawLine(startX - 10, startY, startX + viewWidth, startY
 			//					+ viewHight);
 			//print background
+			if (turnOffset <0) {
+				turnOffset = 2250;
+			}
+			if (turnOffset >2250) {
+				turnOffset = 0;
+			}
+			
 			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
-					startX + 2, startY + 2 - jumpOffsetFirstView-50, null);
+					startX + 2 - turnOffset, startY + 2 - jumpOffsetFirstView
+							- 60, null);
+			int changeOffset =50;
+			if (turnCounter > 0) {
+				//turn right
+				turnCounter--;
+				turnOffset+=changeOffset;
+			} else if (turnCounter < 0) {
+				//turn left
+				turnCounter++;
+				turnOffset-=changeOffset;
+			}
 
+			System.out.println(turnOffset);
 			int numSquaresFace = 0;
 			int numSquaresLeft = 0;
 			int numSquaresRight = 0;
@@ -315,8 +338,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 			//			System.out.println(numSquaresFace);
 			//			System.out.println(playerLoc.getX()+","+playerLoc.getY());
-			System.out.println(numSquaresFace + " left:" + numSquaresLeft
-					+ "right:" + numSquaresRight);
+//			System.out.println(numSquaresFace + " left:" + numSquaresLeft
+//					+ "right:" + numSquaresRight);
 
 			double nowDrawLine = viewHight;//the height of line now draw(it is the bot of the frame at start)
 			double previouDrawLine = viewHight;
@@ -570,11 +593,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		}
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_J) {
@@ -655,6 +678,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				clientPlayer.setDirection(Direction.BACK_RIGHT);
 			}
+			turnCounter -= 15;
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
@@ -666,6 +690,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				clientPlayer.setDirection(Direction.FACE_LEFT);
 			}
+			turnCounter += 15;
 		}
 		// these are for changing game direction
 		else if (e.getKeyCode() == KeyEvent.VK_E) {
@@ -968,10 +993,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					.setGameObjectOnSquare(null);
 		}
 	}
-
-	
-
-	
 
 	/**
 	 * @author Prashant Bhikhu
