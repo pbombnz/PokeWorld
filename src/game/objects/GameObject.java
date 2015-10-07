@@ -16,6 +16,8 @@ public interface GameObject extends Serializable {
 	public static ImageIcon RHYDON = new ImageIcon("./sprites/monster/Rhydon/faceleft.png");
 	
 	public static ImageIcon ZUBAT = new ImageIcon("./sprites/monster/Zubat/faceleft.png");
+	
+	public static ImageIcon MEWTWO = new ImageIcon("./sprites/monster/Mewtwo/faceleft.png");
 
 	public static ImageIcon TREE = new ImageIcon("./sprites/tiles/tree.png");
 	
