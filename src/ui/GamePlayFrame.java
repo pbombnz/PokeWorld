@@ -537,6 +537,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		if (go instanceof RareCandy) {
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
 					+ ((RareCandy) go).level());
+			clientPlayer.setEvolutionLevel(clientPlayer.getPlayerLevel()
+					+ ((RareCandy) go).level());
+			
+			
 			clientPlayer.setAttack(clientPlayer.getAttack()
 					* clientPlayer.getPlayerLevel());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
