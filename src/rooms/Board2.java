@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import game.BoardSquare;
 import game.objects.Door;
+import game.objects.Plant;
 import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Key;
@@ -34,27 +35,31 @@ public class Board2 extends Board {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
-
+				
+				if(j == 0 || j == 9 || i == 0 || i == 9 || i == 1 && j == 7 || i == 1 && j == 8
+						|| i == 2 && j == 7 || i == 2 && j == 8){
+						this.squares[i][j] = new BoardSquare(new Plant());
+				}
 				if (i == 0 && j == 0) {
 					this.squares[i][j] = new BoardSquare(new Door(1,2,1));
 				}
-				if (i == 3 && j == 7) {
+				if (i == 3 && j == 6) {
 					this.squares[i][j] = new BoardSquare(new Zubat(20, 20));
 				}
-				if (i == 6 && j == 2) {
+				if (i == 6 && j == 3) {
 					this.squares[i][j] = new BoardSquare(new Zubat(25, 25));
 				}
-				if (i == 9 && j == 9) {
+				if (i == 9 && j == 7) {
 					this.squares[i][j] = new BoardSquare(new Zubat(30, 30));
 				}
-				if (i == 6 && j == 2) {
-					this.squares[i][j] = new BoardSquare(new Zubat(25, 25));
-				}
-				if (i == 9 && j == 9) {
-					this.squares[i][j] = new BoardSquare(new Zubat(30, 30));
-				}
-				if (i == 3 && j == 3) {
+				if (i == 0 && j == 8) {
 					this.squares[i][j] = new BoardSquare(new Key(2));
+				}
+				if (i == 4 && j == 2) {
+					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
+				}
+				if (i == 5 && j == 9) {
+					this.squares[i][j] = new BoardSquare(new RareCandy());
 				}
 				if (i == 8 && j == 8) {
 					this.squares[i][j] = new BoardSquare(new Door(2,2,3));

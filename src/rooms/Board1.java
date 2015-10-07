@@ -4,7 +4,6 @@ import game.BoardSquare;
 import game.objects.Door;
 import game.objects.GoodPotion;
 import game.objects.Key;
-import game.objects.Mushroom;
 import game.objects.Plant;
 import game.objects.RareCandy;
 import game.objects.Rattata;
