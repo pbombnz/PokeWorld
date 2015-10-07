@@ -47,7 +47,9 @@ import game.objects.Key;
 import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
-
+/**
+ * @author Wang Zhen
+ */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
 		ActionListener {
@@ -70,7 +72,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private GameClient gameClient;
 	private Player clientPlayer;
 
-	private int roomIndex = 0;
+	
 	public int jumpOffset = 0;
 	public int shakeOffset = 0;//the player will keep shake when they are standing in one place
 	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
@@ -363,7 +365,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 					//print object of game
 					Game ga = gameClient.getGame();
-					Room r = ga.rooms.get(roomIndex);
+					Room r = ga.rooms.get(GameLauncher.ROOMINDEX);
 					BoardSquare[][] bs = r.board.getSquares();
 					
 					
@@ -438,18 +440,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		} else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
 			//change the board(change the location of objects)
-			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
+			Board oldBoard = gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board;
 			Board newBoard = new EmptyBoard();
 
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[gameClient
-							.getGame().rooms.get(roomIndex).board.getHeight()
+							.getGame().rooms.get(GameLauncher.ROOMINDEX).board.getHeight()
 							- (j + offset)][i];
 				}
 			}
-			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
+			gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board = newBoard;
 
 			//change the locations of player 
 			Location newloc = new Location();
@@ -457,7 +459,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 
-			newloc.setX(gameClient.getGame().rooms.get(roomIndex).board
+			newloc.setX(gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board
 					.getHeight() - (clientPlayer.getLocation().getY() + offset));
 
 			newloc.setY(clientPlayer.getLocation().getX());
@@ -468,16 +470,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//turn the gui to right side
 			//change the board(change the locations of object)
 			Board newBoard = new EmptyBoard();
-			Board oldBoard = gameClient.getGame().rooms.get(roomIndex).board;
+			Board oldBoard = gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board;
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][gameClient
-							.getGame().rooms.get(roomIndex).board.getWidth()
+							.getGame().rooms.get(GameLauncher.ROOMINDEX).board.getWidth()
 							- (i + offset)];
 				}
 			}
-			gameClient.getGame().rooms.get(roomIndex).board = newBoard;
+			gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board = newBoard;
 
 			//change the locations of player 
 			Location newloc = new Location();
@@ -488,7 +490,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			newloc.setX(clientPlayer.getLocation().getY());
 
-			newloc.setY(gameClient.getGame().rooms.get(roomIndex).board
+			newloc.setY(gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board
 					.getWidth() - (clientPlayer.getLocation().getX() + offset));
 
 			clientPlayer.setLocation(newloc);
@@ -553,13 +555,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			for (Item items : clientPlayer.getInventory()) {
 				if (items instanceof Key) {
 					if (((Door) go).id() == items.id()) {
-						//this is where the next room needs to be alex
-						//						System.out.println("I have a key for this door");
+						//this is where the next room needs to be alex 
 						Door theDoor = (Door) go;
 						if (theDoor.linkTo == Door.LinkTo.GO_NEXT_ROOM) {
-
+							GameLauncher.ROOMINDEX++;
 						} else if (theDoor.linkTo == Door.LinkTo.GO_LAST_ROOM) {
-
+							GameLauncher.ROOMINDEX--;
 						}
 
 					}
@@ -604,7 +605,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	/**
 	 *@author Sushant Balajee
 	 *@author Donald Tang
-	 *@author Wang Zhen
+	 *@contributer Wang Zhen(add Timer)
 	 */
 	public void fightDialog() {
 
@@ -808,6 +809,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public Player getClientPlayer() {
 		return clientPlayer;
 	}
+}
 
 	//=========================================================================
 	/**
@@ -853,4 +855,3 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		int base = 50;
 		return (int) ((offset + edgeLong) * (row) + base);
 	}*/
-}
