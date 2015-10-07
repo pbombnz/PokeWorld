@@ -20,12 +20,11 @@ import game.Player;
 import game.avatar.Avatar;
 import ui.GamePlayFrame;
 
-
 /**
  *@author Prashant Bhikhu
  */
 public class Game {
-	
+
 	//public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
 
 	public ArrayList<Player> players2;
@@ -33,9 +32,9 @@ public class Game {
 
 	public Game() {
 		players2 = new ArrayList<Player>();
-		rooms = new ArrayList<Room>();	
+		rooms = new ArrayList<Room>();
 	}
-	
+
 	public byte[] toByteArray() {
 		byte[] bytes = null;
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -51,8 +50,9 @@ public class Game {
 			System.err.println("Error sending the GameWorld to bytes!");
 			e.printStackTrace();
 		}
-		return bytes;		
+		return bytes;
 	}
+
 	/**
 	 * Creates a new Game (typically an updates version from server) from a
 	 * byte array
@@ -75,12 +75,12 @@ public class Game {
 			System.err.println("Error recieving the Game from bytes!");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			System.err.println("Class not found in from bytes. "+e);
+			System.err.println("Class not found in from bytes. " + e);
 			e.printStackTrace();
 		}
 		return newGame;
 	}
-	
+
 	public static Game createTestMap() {
 		Game game = new Game();
 		//add rooms here
@@ -88,14 +88,15 @@ public class Game {
 		game.rooms.add(new Room2());
 		game.rooms.add(new Room3());
 		return game;
-		
+
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((players2 == null) ? 0 : players2.hashCode());
+		result = prime * result
+				+ ((players2 == null) ? 0 : players2.hashCode());
 		result = prime * result + ((rooms == null) ? 0 : rooms.hashCode());
 		return result;
 	}
@@ -121,7 +122,7 @@ public class Game {
 			return false;
 		return true;
 	}
-	
+
 	public ArrayList<Player> getPlayers() {
 		return players2;
 	}
@@ -129,5 +130,5 @@ public class Game {
 	public List<Room> getRooms() {
 		return rooms;
 	}
-	
+
 }

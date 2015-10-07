@@ -3,6 +3,7 @@ package network;
 import java.io.IOException;
 
 import rooms.Board;
+import ui.GameLauncher;
 import ui.ServerFrame;
 import game.Game;
 import game.Location;
@@ -154,7 +155,7 @@ public class GameServer extends Listener {
 			serverFrame.writeToConsole("[Server][Recieved] Calculated new location for new player at ("+newLocY+","+newLocX+") in start room.");
 			
 			// Finally we create the new location and assign it the new player
-			Location newLoc = new Location(game.rooms.get(0), newLocX, newLocY);
+			Location newLoc = new Location(game.rooms.get(GameLauncher.ROOMINDEX), newLocX, newLocY);
 			np.player.setLocation(newLoc);
 			game.getPlayers().add(np.player);
 
