@@ -166,6 +166,48 @@ public class Player implements Serializable {
 		throw new RuntimeException("no way to get avatar");
 		//return null;
 	}
+	
+	public ImageIcon getSpriteBasedOnDirection(Direction direction) {
+		if(avatar != null) {
+			switch(playerLevel) {
+			case 1:
+				switch(direction) {
+				case FACE_LEFT:
+					return avatar.getEvolution1_faceleft();
+				case FACE_RIGHT:
+					return avatar.getEvolution1_faceright();
+				case BACK_LEFT:
+					return avatar.getEvolution1_backleft();
+				case BACK_RIGHT:
+					return avatar.getEvolution1_backright();
+				}
+			case 2:
+				switch(direction) {
+				case FACE_LEFT:
+					return avatar.getEvolution2_faceleft();
+				case FACE_RIGHT:
+					return avatar.getEvolution2_faceright();
+				case BACK_LEFT:
+					return avatar.getEvolution2_backleft();
+				case BACK_RIGHT:
+					return avatar.getEvolution2_backright();
+				}
+			case 3:
+				switch(direction) {
+				case FACE_LEFT:
+					return avatar.getEvolution3_faceleft();
+				case FACE_RIGHT:
+					return avatar.getEvolution3_faceright();
+				case BACK_LEFT:
+					return avatar.getEvolution3_backleft();
+				case BACK_RIGHT:
+					return avatar.getEvolution3_backright();
+				}
+			}
+		}
+		throw new RuntimeException("no way to get avatar");
+		//return null;
+	}
 
 
 

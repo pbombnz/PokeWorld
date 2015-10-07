@@ -3,6 +3,7 @@ package ui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -108,6 +109,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private int jumpOffsetFirstView = 0;
 	private int turnOffset = 750;
 	private int turnCounter = 0;
+	private Direction firstViewDirection = Direction.BACK_LEFT;
 
 	///==================================
 
@@ -290,28 +292,27 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//			g.drawLine(startX - 10, startY, startX + viewWidth, startY
 			//					+ viewHight);
 			//print background
-			if (turnOffset <0) {
+			if (turnOffset < 0) {
 				turnOffset = 2250;
 			}
-			if (turnOffset >2250) {
+			if (turnOffset > 2250) {
 				turnOffset = 0;
 			}
-			
+
 			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
 					startX + 2 - turnOffset, startY + 2 - jumpOffsetFirstView
 							- 60, null);
-			int changeOffset =50;
+			int changeOffset = 50;
 			if (turnCounter > 0) {
 				//turn right
 				turnCounter--;
-				turnOffset+=changeOffset;
+				turnOffset += changeOffset;
 			} else if (turnCounter < 0) {
 				//turn left
 				turnCounter++;
-				turnOffset-=changeOffset;
+				turnOffset -= changeOffset;
 			}
 
-			System.out.println(turnOffset);
 			int numSquaresFace = 0;
 			int numSquaresLeft = 0;
 			int numSquaresRight = 0;
@@ -338,8 +339,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 			//			System.out.println(numSquaresFace);
 			//			System.out.println(playerLoc.getX()+","+playerLoc.getY());
-//			System.out.println(numSquaresFace + " left:" + numSquaresLeft
-//					+ "right:" + numSquaresRight);
+			//			System.out.println(numSquaresFace + " left:" + numSquaresLeft
+			//					+ "right:" + numSquaresRight);
 
 			double nowDrawLine = viewHight;//the height of line now draw(it is the bot of the frame at start)
 			double previouDrawLine = viewHight;
@@ -370,15 +371,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				g.fillPolygon(xPoint, yPoint, 4);
 				g.setColor(Color.BLACK);
 				g.drawPolygon(xPoint, yPoint, 4);
-				//				xPoint[2]=(int) nowStartX;
-				//				yPoint[2]=(int) (nowDrawLine - squareHeigh* Math.pow(scaleY, i));
-				//				xPoint[3]=(int) (nowStartX + nowWidthOfSquare);
-				//				yPoint[3]=(int) (nowDrawLine - squareHeigh * Math.pow(scaleY, i));
-				//===============================================================
-				//				g.drawLine((int) nowStartX, 
-				//						(int) (nowDrawLine - squareHeigh* Math.pow(scaleY, i)),
-				//						(int) (nowStartX + nowWidthOfSquare),
-				//						(int) (nowDrawLine - squareHeigh * Math.pow(scaleY, i)));
 
 				//draw left squares
 				for (int j = 0; j < numSquaresLeft; j++) {
@@ -442,8 +434,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 			//print edge 
 			g.setColor(Color.black);
-			//print character
 
+			//print character
+			Image characterImage = clientPlayer.getSpriteBasedOnDirection(firstViewDirection).getImage();
+			g.drawImage(characterImage,midOfView,500+shakeOffset, null);
+			
 			g.fillRect(startX - 10, 0, 20, FRAME_HEIGHT);
 			g.fillRect(FULL_FRAME_WIDTH - 20, 0, 20, FRAME_HEIGHT);
 			///=============================================
@@ -678,6 +673,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				clientPlayer.setDirection(Direction.BACK_RIGHT);
 			}
+			firstViewDirection = Direction.BACK_LEFT;
 			turnCounter -= 15;
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			//character will turn 1st if the character is not facing that side
@@ -691,6 +687,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				clientPlayer.setDirection(Direction.FACE_LEFT);
 			}
 			turnCounter += 15;
+			firstViewDirection = Direction.BACK_RIGHT;
 		}
 		// these are for changing game direction
 		else if (e.getKeyCode() == KeyEvent.VK_E) {
