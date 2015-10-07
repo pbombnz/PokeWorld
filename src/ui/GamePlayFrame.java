@@ -75,7 +75,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public int jumpOffset = 0;
 	public int shakeOffset = 0;//the player will keep shake when they are standing in one place
 	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
-	public final int SHAKE_TIMER_LIMIT = 40;// the shakeoffset will change when it reaches the timer limit
+	public final int SHAKE_TIMER_LIMIT = 200;// the shakeoffset will change when it reaches the timer limit
 
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
@@ -287,7 +287,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//					+ viewHight);
 			//print background
 			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
-					startX + 2, startY + 2, null);
+					startX + 2, startY + 2 - jumpOffsetFirstView-50, null);
 
 			int numSquaresFace = 0;
 			int numSquaresLeft = 0;
@@ -570,6 +570,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		}
 	}
+	
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_J) {
+			jumpOffset = -20;
+			jumpOffsetFirstView = -50;
+		}
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -723,8 +735,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		//allows player to jump on the spot
 		else if (e.getKeyCode() == KeyEvent.VK_J) {
-			jumpOffset += 20;
-			jumpOffsetFirstView += 50;
+			jumpOffset = 0;
+			jumpOffsetFirstView = 0;
 		}
 		if (loc.getY() < 0) {
 			loc.moveSouth();
@@ -957,17 +969,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_J) {
-			jumpOffset -= 20;
-			jumpOffsetFirstView -= 50;
-		}
-	}
+	
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
+	
 
 	/**
 	 * @author Prashant Bhikhu
