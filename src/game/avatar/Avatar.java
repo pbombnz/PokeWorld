@@ -48,10 +48,10 @@ public class Avatar implements Serializable {
 	        	}
 	        	
 				String evolution2_name = directories[0].getName();
-	        	ImageIcon evolution2_faceleft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
-	        	ImageIcon evolution2_faceright = new ImageIcon(directories[0].getAbsolutePath() + "/faceright.png");
-    			ImageIcon evolution2_backleft = new ImageIcon(directories[0].getAbsolutePath() + "/backleft.png");
-				ImageIcon evolution2_backright = new ImageIcon(directories[0].getAbsolutePath() + "/backright.png");
+	        	ImageIcon evolution2_faceleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "faceleft.png");
+	        	ImageIcon evolution2_faceright = new ImageIcon(directories[0].getAbsolutePath()+ File.separator + "faceright.png");
+    			ImageIcon evolution2_backleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backleft.png");
+				ImageIcon evolution2_backright = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backright.png");
 
 				//directories = new File(directories[0].getAbsolutePath()).listFiles(File::isDirectory);
 				directories = new File(directories[0].getAbsolutePath()).listFiles(new FilenameFilter() {
@@ -65,10 +65,10 @@ public class Avatar implements Serializable {
 	        	}
 
 	        	String evolution3_name = directories[0].getName();
-	        	ImageIcon evolution3_faceleft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
-	        	ImageIcon evolution3_faceright = new ImageIcon(directories[0].getAbsolutePath() + "/faceright.png");
-    			ImageIcon evolution3_backleft = new ImageIcon(directories[0].getAbsolutePath() + "/backleft.png");
-				ImageIcon evolution3_backright = new ImageIcon(directories[0].getAbsolutePath() + "/backright.png");
+	        	ImageIcon evolution3_faceleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "faceleft.png");
+	        	ImageIcon evolution3_faceright = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "faceright.png");
+    			ImageIcon evolution3_backleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backleft.png");
+				ImageIcon evolution3_backright = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backright.png");
 
 				Avatar avatar = new Avatar(avatarName, evolution1_faceleft,
 						 evolution1_faceright, evolution1_backleft,
@@ -78,9 +78,6 @@ public class Avatar implements Serializable {
 						 evolution3_name, evolution3_faceleft, evolution3_faceright,
 						 evolution3_backleft, evolution3_backright);		
 	        	avatars.add(avatar);
-	            //System.out.println(file.getAbsolutePath());
-	            //System.out.println(file.getName());
-	        	//System.out.println(file.getParentFile());
 	        }
 	    }
 		return avatars;
