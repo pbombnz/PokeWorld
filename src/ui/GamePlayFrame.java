@@ -100,9 +100,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public int viewWidth = 550;
 	public int viewHight = 550;
 	//	public int horizonLine = 188;
-	public int squareHeigh = 160;
+	public int squareHeigh = 130;
 	public int squareWidth = 200;
 	public int midOfView = startX + viewWidth / 2;
+	private int jumpOffsetFirstView = 0;
 
 	///==================================
 
@@ -333,15 +334,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				int[] yPoint = new int[4];
 				//draw Polygon
 				xPoint[0] = (int) previouX0;
-				yPoint[0] = (int) previouY0;
+				yPoint[0] = (int) previouY0 - jumpOffsetFirstView;
 				xPoint[1] = (int) previouX1;
-				yPoint[1] = (int) previouY1;
+				yPoint[1] = (int) previouY1 - jumpOffsetFirstView;
 				xPoint[2] = (int) (nowStartX + nowWidthOfSquare);
 				yPoint[2] = (int) (nowDrawLine - squareHeigh
-						* Math.pow(scaleY, i + 1));
+						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 				xPoint[3] = (int) nowStartX;
 				yPoint[3] = (int) (nowDrawLine - squareHeigh
-						* Math.pow(scaleY, i + 1));
+						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 				g.setColor(Color.green.darker());
 				g.fillPolygon(xPoint, yPoint, 4);
 				g.setColor(Color.BLACK);
@@ -363,16 +364,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					//draw Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
 					xPointLeft[0] = (int) (previouX0 - j * previouWidthOfSquare);
-					yPointLeft[0] = (int) (previouY0);
+					yPointLeft[0] = (int) (previouY0 - jumpOffsetFirstView);
 					xPointLeft[1] = (int) (previouX1 - j * previouWidthOfSquare);
-					yPointLeft[1] = (int) (previouY1);
+					yPointLeft[1] = (int) (previouY1 - jumpOffsetFirstView);
 					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare - j
 							* nowWidthOfSquare);
 					yPointLeft[2] = (int) (nowDrawLine - squareHeigh
-							* Math.pow(scaleY, i + 1));
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
-							* Math.pow(scaleY, i + 1));
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 					g.setColor(Color.green.darker());
 					g.fillPolygon(xPointLeft, yPointLeft, 4);
 					g.setColor(Color.BLACK);
@@ -386,16 +387,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					//draw Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
 					xPointLeft[0] = (int) (previouX0 + j * previouWidthOfSquare);
-					yPointLeft[0] = (int) (previouY0);
+					yPointLeft[0] = (int) (previouY0 - jumpOffsetFirstView);
 					xPointLeft[1] = (int) (previouX1 + j * previouWidthOfSquare);
-					yPointLeft[1] = (int) (previouY1);
+					yPointLeft[1] = (int) (previouY1 - jumpOffsetFirstView);
 					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare + j
 							* nowWidthOfSquare);
 					yPointLeft[2] = (int) (nowDrawLine - squareHeigh
-							* Math.pow(scaleY, i + 1));
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
-							* Math.pow(scaleY, i + 1));
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 					g.setColor(Color.green.darker());
 					g.fillPolygon(xPointLeft, yPointLeft, 4);
 					g.setColor(Color.BLACK);
@@ -424,7 +425,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			g.fillRect(FULL_FRAME_WIDTH - 20, 0, 20, FRAME_HEIGHT);
 			///=============================================
 
-			// Draw background picture
+			/// Draw background picture
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
 					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
@@ -574,7 +575,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public void keyReleased(KeyEvent e) {
 		// don't fire an event on backspace or delete
 		Location loc = clientPlayer.getLocation();
-		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+		//for third view control
+		if (e.getKeyCode() == KeyEvent.VK_W) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				loc.moveNorth();
@@ -582,8 +584,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				clientPlayer.setDirection(Player.Direction.BACK_LEFT);
 				loc.moveNorth();
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_S
-				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
+		} else if (e.getKeyCode() == KeyEvent.VK_S) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				loc.moveSouth();//oo
@@ -591,8 +592,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
 				loc.moveSouth();//oo
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_A
-				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
+		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
 				loc.moveWest();
@@ -600,8 +600,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				clientPlayer.setDirection(Player.Direction.FACE_LEFT);
 				loc.moveWest();//oo
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_D
-				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		} else if (e.getKeyCode() == KeyEvent.VK_D) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 				loc.moveEast();
@@ -609,7 +608,55 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
 				loc.moveEast();//oo
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_E) {
+		}
+		//these are for 1st person view contrl
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			//character will turn 1st if the character is not facing that side
+			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+				loc.moveEast();
+			} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+				loc.moveNorth();
+			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+				loc.moveWest();
+			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+				loc.moveSouth();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			//character will turn 1st if the character is not facing that side
+			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+				clientPlayer.setDirection(Direction.FACE_RIGHT);
+			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+				clientPlayer.setDirection(Direction.FACE_LEFT);
+			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+				clientPlayer.setDirection(Direction.BACK_RIGHT);
+			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+				clientPlayer.setDirection(Direction.BACK_LEFT);
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			//character will turn 1st if the character is not facing that side
+			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+				clientPlayer.setDirection(Direction.FACE_LEFT);
+			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+				clientPlayer.setDirection(Direction.BACK_LEFT);
+			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+				clientPlayer.setDirection(Direction.FACE_RIGHT);
+			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+				clientPlayer.setDirection(Direction.BACK_RIGHT);
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			//character will turn 1st if the character is not facing that side
+			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+				clientPlayer.setDirection(Direction.BACK_RIGHT);
+			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+				clientPlayer.setDirection(Direction.FACE_RIGHT);
+			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+				clientPlayer.setDirection(Direction.BACK_LEFT);
+			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+				clientPlayer.setDirection(Direction.FACE_LEFT);
+			}
+		}
+		// these are for changing game direction
+		else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
 			//change the board(change the location of objects)
 			Board oldBoard = gameClient.getGame().rooms
@@ -677,6 +724,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//allows player to jump on the spot
 		else if (e.getKeyCode() == KeyEvent.VK_J) {
 			jumpOffset += 20;
+			jumpOffsetFirstView += 50;
 		}
 		if (loc.getY() < 0) {
 			loc.moveSouth();
@@ -913,6 +961,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_J) {
 			jumpOffset -= 20;
+			jumpOffsetFirstView -= 50;
 		}
 	}
 
