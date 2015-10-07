@@ -60,9 +60,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	// The Size of the Frame
 	//
-	private static final int FRAME_WIDTH = 1000;
-	private static final int FRAME_HEIGHT = 600;
-	private static final int FULL_FRAME_WIDTH = 1350;
+	private static final int FRAME_HEIGHT = 610;
+	private static final int FULL_FRAME_WIDTH = 1400;
+	private static final int WELCOME_FRAME_WIDTH = 1000;
 	// The size of the tiles when they are displayed
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
@@ -86,6 +86,25 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public JPanel panel;
 	public JLabel characterLabel;
 	private JDialog fightBox;
+	///================================================
+	//the file below is for drawing 1st view
+	//assume the is width of 1 square is 300 in 1st view
+	private static final int FRAME_WIDTH = 800;//the width of the left backgroud picture
+	public int squareWidthView = 300;
+	public int playerXView = (FULL_FRAME_WIDTH - FRAME_WIDTH) / 2;//push player in the mid of view window
+	public int playerYView = FRAME_HEIGHT;
+	public double speedOfScaleChange = 0.1;
+	public double scaleY = 0.8;
+	public int startX = 810;
+	public int startY = 3;
+	public int viewWidth = 550;
+	public int viewHight = 550;
+	//	public int horizonLine = 188;
+	public int squareHeigh = 160;
+	public int squareWidth = 200;
+	public int midOfView = startX + viewWidth / 2;
+
+	///==================================
 
 	public GamePlayFrame() {
 
@@ -250,20 +269,173 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
 
+			//draw welcome picture
 			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
 				g.drawImage(new ImageIcon(
 						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
-						0, FRAME_WIDTH, FRAME_HEIGHT, null);
+						0, WELCOME_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
+
+			///================================================================
+			//1st view
+			//draw frame
+			g.setColor(Color.black);
+			g.fillRect(startX - 10, 0, FULL_FRAME_WIDTH - startX, FRAME_HEIGHT);
+			//			g.drawLine(startX - 10, startY, startX + viewWidth, startY
+			//					+ viewHight);
+			//print background
+			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
+					startX + 2, startY + 2, null);
+
+			int numSquaresFace = 0;
+			int numSquaresLeft = 0;
+			int numSquaresRight = 0;
+			Location playerLoc = clientPlayer.getLocation();
+			int boardSize = 10;
+			int offset = 1;//this offset is cuz the locaion is from 0 not 1
+			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+				numSquaresFace = playerLoc.getY();
+				numSquaresLeft = playerLoc.getX();
+				numSquaresRight = boardSize - playerLoc.getX() - offset;
+			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+				numSquaresFace = boardSize - playerLoc.getX() - offset;
+				numSquaresLeft = playerLoc.getY();
+				numSquaresRight = boardSize - playerLoc.getY() - offset;
+			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+				numSquaresFace = playerLoc.getX();
+				numSquaresLeft = boardSize - playerLoc.getY() - offset;
+				numSquaresRight = playerLoc.getY();
+				;
+			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+				numSquaresFace = boardSize - playerLoc.getY() - offset;
+				numSquaresLeft = boardSize - playerLoc.getX() - offset;
+				numSquaresRight = playerLoc.getX();
+			}
+			//			System.out.println(numSquaresFace);
+			//			System.out.println(playerLoc.getX()+","+playerLoc.getY());
+			System.out.println(numSquaresFace + " left:" + numSquaresLeft
+					+ "right:" + numSquaresRight);
+
+			double nowDrawLine = viewHight;//the height of line now draw(it is the bot of the frame at start)
+			double previouDrawLine = viewHight;
+			double previouX0 = midOfView - squareWidth / 2;//the line in the bot of the frame
+			double previouY0 = viewHight;
+			double previouX1 = midOfView + squareWidth / 2;//the line in the bot of the frame
+			double previouY1 = viewHight;
+
+			for (int i = 0; i < numSquaresFace + 1; i++) {
+				//draw face square
+				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
+				double nowStartX = midOfView - nowWidthOfSquare / 2;
+				//add points for drawing Polygon
+				int[] xPoint = new int[4];
+				int[] yPoint = new int[4];
+				//draw Polygon
+				xPoint[0] = (int) previouX0;
+				yPoint[0] = (int) previouY0;
+				xPoint[1] = (int) previouX1;
+				yPoint[1] = (int) previouY1;
+				xPoint[2] = (int) (nowStartX + nowWidthOfSquare);
+				yPoint[2] = (int) (nowDrawLine - squareHeigh
+						* Math.pow(scaleY, i + 1));
+				xPoint[3] = (int) nowStartX;
+				yPoint[3] = (int) (nowDrawLine - squareHeigh
+						* Math.pow(scaleY, i + 1));
+				g.setColor(Color.green.darker());
+				g.fillPolygon(xPoint, yPoint, 4);
+				g.setColor(Color.BLACK);
+				g.drawPolygon(xPoint, yPoint, 4);
+				//				xPoint[2]=(int) nowStartX;
+				//				yPoint[2]=(int) (nowDrawLine - squareHeigh* Math.pow(scaleY, i));
+				//				xPoint[3]=(int) (nowStartX + nowWidthOfSquare);
+				//				yPoint[3]=(int) (nowDrawLine - squareHeigh * Math.pow(scaleY, i));
+				//===============================================================
+				//				g.drawLine((int) nowStartX, 
+				//						(int) (nowDrawLine - squareHeigh* Math.pow(scaleY, i)),
+				//						(int) (nowStartX + nowWidthOfSquare),
+				//						(int) (nowDrawLine - squareHeigh * Math.pow(scaleY, i)));
+
+				//draw left squares
+				for (int j = 0; j < numSquaresLeft; j++) {
+					int[] xPointLeft = new int[4];
+					int[] yPointLeft = new int[4];
+					//draw Polygon
+					int previouWidthOfSquare = (int) (previouX1 - previouX0);
+					xPointLeft[0] = (int) (previouX0 - j * previouWidthOfSquare);
+					yPointLeft[0] = (int) (previouY0);
+					xPointLeft[1] = (int) (previouX1 - j * previouWidthOfSquare);
+					yPointLeft[1] = (int) (previouY1);
+					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare - j
+							* nowWidthOfSquare);
+					yPointLeft[2] = (int) (nowDrawLine - squareHeigh
+							* Math.pow(scaleY, i + 1));
+					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
+					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
+							* Math.pow(scaleY, i + 1));
+					g.setColor(Color.green.darker());
+					g.fillPolygon(xPointLeft, yPointLeft, 4);
+					g.setColor(Color.BLACK);
+					g.drawPolygon(xPointLeft, yPointLeft, 4);
+				}
+
+				//draw right squares
+				for (int j = 0; j < numSquaresRight; j++) {
+					int[] xPointLeft = new int[4];
+					int[] yPointLeft = new int[4];
+					//draw Polygon
+					int previouWidthOfSquare = (int) (previouX1 - previouX0);
+					xPointLeft[0] = (int) (previouX0 + j * previouWidthOfSquare);
+					yPointLeft[0] = (int) (previouY0);
+					xPointLeft[1] = (int) (previouX1 + j * previouWidthOfSquare);
+					yPointLeft[1] = (int) (previouY1);
+					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare + j
+							* nowWidthOfSquare);
+					yPointLeft[2] = (int) (nowDrawLine - squareHeigh
+							* Math.pow(scaleY, i + 1));
+					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
+					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
+							* Math.pow(scaleY, i + 1));
+					g.setColor(Color.green.darker());
+					g.fillPolygon(xPointLeft, yPointLeft, 4);
+					g.setColor(Color.BLACK);
+					g.drawPolygon(xPointLeft, yPointLeft, 4);
+				}
+
+				//draw right squares
+				for (int j = 0; j < numSquaresLeft; j++) {
+
+				}
+
+				//updata previou
+				previouX0 = nowStartX;
+				previouY0 = nowDrawLine - squareHeigh * Math.pow(scaleY, i + 1);
+				previouX1 = nowStartX + nowWidthOfSquare;
+				previouY1 = nowDrawLine - squareHeigh * Math.pow(scaleY, i + 1);
+				previouDrawLine = nowDrawLine;
+				nowDrawLine = nowDrawLine - squareHeigh
+						* Math.pow(scaleY, i + 1);
+			}
+			//print edge 
+			g.setColor(Color.black);
+			//print character
+
+			g.fillRect(startX - 10, 0, 20, FRAME_HEIGHT);
+			g.fillRect(FULL_FRAME_WIDTH - 20, 0, 20, FRAME_HEIGHT);
+			///=============================================
 
 			// Draw background picture
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
 					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
+			///print compass
+			g.drawImage(
+					new ImageIcon("./sprites/other/compass.png").getImage(),
+					600, 355, 200, 200, null);
+
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
-			int xPos = FRAME_WIDTH / 5;
+			int xPos = 110;
 
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
@@ -395,10 +567,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						.getImage(), 40, 400 + (i * 50), 40, 40, null);
 			}
 
-			//print compass
-			g.drawImage(
-					new ImageIcon("./sprites/other/compass.png").getImage(),
-					800, 355, 200, 200, null);
 		}
 	}
 
