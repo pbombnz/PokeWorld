@@ -49,9 +49,6 @@ import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
 
-/**
- * @author Wang Zhen
- */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
 		ActionListener {
@@ -62,6 +59,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	};
 
 	// The Size of the Frame
+	//
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT = 600;
 	private static final int FULL_FRAME_WIDTH = 1350;
