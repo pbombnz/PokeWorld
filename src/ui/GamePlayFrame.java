@@ -373,10 +373,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				g.fillPolygon(xPoint, yPoint, 4);
 				g.setColor(Color.BLACK);
 				g.drawPolygon(xPoint, yPoint, 4);
-				
-				//print the object on this location
-				Location nextLoc= nextSquareLocation(clientPlayer);
-				
 
 				//draw left squares
 				for (int j = 0; j < numSquaresLeft; j++) {
@@ -437,6 +433,32 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				previouDrawLine = nowDrawLine;
 				nowDrawLine = nowDrawLine - squareHeigh
 						* Math.pow(scaleY, i + 1);
+				//print the object on this location
+				Location nextLoc = nextSquareLocation(clientPlayer,i);
+
+				Game ga = gameClient.getGame();
+				Room r = ga.rooms.get(GameLauncher.ROOMINDEX);
+				BoardSquare[][] bs = r.board.getSquares();
+
+				//check whether next square is out of board
+				if (nextLoc.getX() != -1 && nextLoc.getX() != 10
+						&& nextLoc.getY() != -1 && nextLoc.getY() != 10) {
+					if (bs[nextLoc.getX()][nextLoc.getY()]
+							.getGameObjectOnSquare() != null) {
+						if (bs[nextLoc.getX()][nextLoc.getY()]
+								.getGameObjectOnSquare() instanceof Tree) {
+							g.drawImage(bs[nextLoc.getX()][nextLoc.getY() ]
+									.getGameObjectOnSquare().getSpriteImage()
+									.getImage(), (int) previouX0,
+									(int) previouY0, null);
+						} else {
+							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
+									.getGameObjectOnSquare().getSpriteImage()
+									.getImage(), (int) previouX0,
+									(int) previouY1, 50, 50, null);
+						}
+					}
+				}
 			}
 			//print edge 
 			g.setColor(Color.black);
@@ -595,17 +617,21 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		}
 	}
-	
-	public Location nextSquareLocation(Player player){
+
+	public Location nextSquareLocation(Player player,int steps) {
 		Direction dir = player.getDirection();
-		if(dir==Direction.BACK_LEFT){
-			return new Location(player.getLocation().getRoom(),player.getLocation().getX(),player.getLocation().getY()-1);
-		}else if(dir==Direction.BACK_RIGHT){
-			return new Location(player.getLocation().getRoom(),player.getLocation().getX()+1,player.getLocation().getY());
-		}else if(dir==Direction.FACE_LEFT){
-			return new Location(player.getLocation().getRoom(),player.getLocation().getX()-1,player.getLocation().getY());
-		}else if(dir==Direction.FACE_RIGHT){
-			return new Location(player.getLocation().getRoom(),player.getLocation().getX(),player.getLocation().getY()+1);
+		if (dir == Direction.BACK_LEFT) {
+			return new Location(player.getLocation().getRoom(), player
+					.getLocation().getX(), player.getLocation().getY() - steps);
+		} else if (dir == Direction.BACK_RIGHT) {
+			return new Location(player.getLocation().getRoom(), player
+					.getLocation().getX() + steps, player.getLocation().getY());
+		} else if (dir == Direction.FACE_LEFT) {
+			return new Location(player.getLocation().getRoom(), player
+					.getLocation().getX() - steps, player.getLocation().getY());
+		} else if (dir == Direction.FACE_RIGHT) {
+			return new Location(player.getLocation().getRoom(), player
+					.getLocation().getX(), player.getLocation().getY() + steps);
 		}
 		return null;
 	}
