@@ -4,6 +4,7 @@ import game.BoardSquare;
 import game.objects.Door;
 import game.objects.GoodPotion;
 import game.objects.Key;
+import game.objects.Plant;
 import game.objects.RareCandy;
 import game.objects.Rattata;
 import game.objects.Tree;
@@ -58,6 +59,9 @@ public class Board1 extends Board{
 				}
 				if (i == 1 && j == 5) {
 					this.squares[i][j] = new BoardSquare(new Rattata(15, 15));
+				}
+				if (i == 7 && j == 7 || i == 6 && j == 3|| i == 2 && j ==9) {
+					this.squares[i][j] = new BoardSquare(new Plant());
 				}
 
 			}

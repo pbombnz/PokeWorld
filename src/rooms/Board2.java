@@ -56,6 +56,9 @@ public class Board2 extends Board {
 				if (i == 3 && j == 3) {
 					this.squares[i][j] = new BoardSquare(new Key(2));
 				}
+				if (i == 8 && j == 8) {
+					this.squares[i][j] = new BoardSquare(new Door(2,2,3));
+				}
 				if (i == 8 && j == 0 || i == 7 && j == 7|| i == 2 && j == 4) {
 					this.squares[i][j] = new BoardSquare(new Tree());
 				}
