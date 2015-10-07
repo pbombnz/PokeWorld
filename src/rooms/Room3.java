@@ -9,6 +9,7 @@ public class Room3 extends Room {
 	private static final long serialVersionUID = -6734434217984592426L;
 
 	public Room3() {
+		this.level=3;
 		this.roomName = "Testing Room";
 		this.board = new Board3();
 	}

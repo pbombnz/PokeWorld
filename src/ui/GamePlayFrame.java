@@ -48,6 +48,7 @@ import game.objects.Key;
 import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
+
 /**
  * @author Wang Zhen
  */
@@ -73,7 +74,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private GameClient gameClient;
 	private Player clientPlayer;
 
-	
 	public int jumpOffset = 0;
 	public int shakeOffset = 0;//the player will keep shake when they are standing in one place
 	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
@@ -148,7 +148,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		int touxiangSize = 130;
 		bgHeadViewLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
 		headPictureLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
-		headPictureLabel.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.BLACK));
+		headPictureLabel.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5,
+				Color.BLACK));
 		this.bgHeadViewLabel = bgHeadViewLabel;
 		this.headPictureLabel = headPictureLabel;
 
@@ -264,7 +265,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
-			int xPos = FRAME_WIDTH / 15;
+			int xPos = FRAME_WIDTH / 5;
 
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
@@ -369,8 +370,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					Game ga = gameClient.getGame();
 					Room r = ga.rooms.get(GameLauncher.ROOMINDEX);
 					BoardSquare[][] bs = r.board.getSquares();
-					
-					
+
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
 							g.drawImage(bs[cellY][cellX]
@@ -442,14 +442,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		} else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
 			//change the board(change the location of objects)
-			Board oldBoard = gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board;
+			Board oldBoard = gameClient.getGame().rooms
+					.get(GameLauncher.ROOMINDEX).board;
 			Board newBoard = new EmptyBoard();
 
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[gameClient
-							.getGame().rooms.get(GameLauncher.ROOMINDEX).board.getHeight()
+							.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+							.getHeight()
 							- (j + offset)][i];
 				}
 			}
@@ -472,12 +474,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//turn the gui to right side
 			//change the board(change the locations of object)
 			Board newBoard = new EmptyBoard();
-			Board oldBoard = gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board;
+			Board oldBoard = gameClient.getGame().rooms
+					.get(GameLauncher.ROOMINDEX).board;
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][gameClient
-							.getGame().rooms.get(GameLauncher.ROOMINDEX).board.getWidth()
+							.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+							.getWidth()
 							- (i + offset)];
 				}
 			}
@@ -518,7 +522,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//check to take items
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
-		
+
 		//If you find a key, adds it to the inventory and removes from the board
 		if (go instanceof Key) {
 			clientPlayer.addToInventory(((Key) go));
@@ -542,8 +546,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
 					+ ((RareCandy) go).level());
 
-			
-			
 			clientPlayer.setAttack(clientPlayer.getAttack()
 					* clientPlayer.getPlayerLevel());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
@@ -556,17 +558,13 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			for (Item items : clientPlayer.getInventory()) {
 				if (items instanceof Key) {
 					if (((Door) go).id() == items.id()) {
-						//this is where the next room needs to be alex 
-						System.out.println("code works");
+						//the door is oneway
 						Door theDoor = (Door) go;
-						if (theDoor.linkTo == Door.LinkTo.GO_NEXT_ROOM) {
-							GameLauncher.ROOMINDEX++;
-							System.out.println("in next room");
-							//GameLauncher.ROOMINDEX++;
-						} else if (theDoor.linkTo == Door.LinkTo.GO_LAST_ROOM) {
-							GameLauncher.ROOMINDEX--;
+						Room nowRoom = gameClient.getGame().rooms
+								.get(GameLauncher.ROOMINDEX);
+						if (nowRoom.level == theDoor.linkFrom) {
+							GameLauncher.ROOMINDEX = theDoor.linkTo - 1;
 						}
-
 					}
 				}
 			}
@@ -626,7 +624,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			public void actionPerformed(ActionEvent e) {
 				//fight giflabel 
 				panel.add(attackLabel);
-				attackLabel.setLocation(565,-50);
 				//add a timer 
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
@@ -709,7 +706,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//if the player dies, it will show a gif and a message dialog
 		if (clientPlayer.isDead()) {
 			panel.add(dieLabel);
-			dieLabel.setLocation(560,-50);
 			JOptionPane.showMessageDialog(null, " You Died ");
 			System.exit(0);
 		} else if (((Monster) go).isDead()) {
@@ -817,47 +813,47 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 }
 
-	//=========================================================================
-	/**
-	 * these is another way to print the character-create a jlabel for character and add it to the panel
-	 * */
-	/*public void printCharacter(Player player) {
-		//initialize
-		if (characterLabel != null) {
-			panel.remove(characterLabel);
-		}
-
-		//print
-		/*JLabel chaL = null;
-		if (player.getDirection().equals("fl")) {
-			chaL = new JLabel(player.faceleft);
-		} else if (player.getDirection().equals("fr")) {
-			chaL = new JLabel(player.faceright);
-		} else if (player.getDirection().equals("bl")) {
-			chaL = new JLabel(player.backleft);
-		} else if (player.getDirection().equals("br")) {
-			chaL = new JLabel(player.backright);
-		}
-		int xPo = trasferX(player.location.col, player.location.row);
-		int yPo = trasferY(player.location.col, player.location.row);
-		int charaSize = 40;
-		chaL.setBounds(xPo, yPo, charaSize, charaSize);
-		characterLabel = chaL;
-		panel.add(characterLabel);
-
-		repaint();
-	}*/
-
-	/*public int trasferX(int col, int row) {
-		int offset = 10;
-		int edgeLong = 30;
-		int base = 470;
-		return (int) ((offset + edgeLong) * (col) - offset * row+ base);
+//=========================================================================
+/**
+ * these is another way to print the character-create a jlabel for character and add it to the panel
+ * */
+/*public void printCharacter(Player player) {
+	//initialize
+	if (characterLabel != null) {
+		panel.remove(characterLabel);
 	}
 
-	public int trasferY(int col, int row) {
-		int offset = 10;
-		int edgeLong = 30;
-		int base = 50;
-		return (int) ((offset + edgeLong) * (row) + base);
-	}*/
+	//print
+	/*JLabel chaL = null;
+	if (player.getDirection().equals("fl")) {
+		chaL = new JLabel(player.faceleft);
+	} else if (player.getDirection().equals("fr")) {
+		chaL = new JLabel(player.faceright);
+	} else if (player.getDirection().equals("bl")) {
+		chaL = new JLabel(player.backleft);
+	} else if (player.getDirection().equals("br")) {
+		chaL = new JLabel(player.backright);
+	}
+	int xPo = trasferX(player.location.col, player.location.row);
+	int yPo = trasferY(player.location.col, player.location.row);
+	int charaSize = 40;
+	chaL.setBounds(xPo, yPo, charaSize, charaSize);
+	characterLabel = chaL;
+	panel.add(characterLabel);
+
+	repaint();
+}*/
+
+/*public int trasferX(int col, int row) {
+	int offset = 10;
+	int edgeLong = 30;
+	int base = 470;
+	return (int) ((offset + edgeLong) * (col) - offset * row+ base);
+}
+
+public int trasferY(int col, int row) {
+	int offset = 10;
+	int edgeLong = 30;
+	int base = 50;
+	return (int) ((offset + edgeLong) * (row) + base);
+}*/

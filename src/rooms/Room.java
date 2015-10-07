@@ -9,6 +9,7 @@ import java.io.Serializable;
 public abstract class Room implements Serializable{
 	public String roomName;
 	public Board board;
+	public int level;
 	public String getName(){
 		return roomName;
 	}

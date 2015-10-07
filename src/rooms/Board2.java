@@ -10,7 +10,10 @@ import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;
 import game.objects.Tree;
-
+/**
+ * @author Sushant Balajee
+ * @author Prashant Bhikhu
+ */
 public class Board2 extends Board {
 	private static final long serialVersionUID = -3601832062619945416L;
 

@@ -10,6 +10,9 @@ import game.objects.Tree;
 
 import java.util.Arrays;
 /**
+ * @author Sushant Balajee
+ * @author Prashant Bhikhu
+ * @author Wang Zhen
  * this board is for store information of stage1
  */
 public class Board1 extends Board{
@@ -45,8 +48,8 @@ public class Board1 extends Board{
 					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 				}
 				if (i == 0 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(1,
-							Door.LinkTo.GO_NEXT_ROOM));
+					this.squares[i][j] = new BoardSquare(new Door(1,1,2
+							));
 				}
 				if (i == 7 && j == 3) {
 					this.squares[i][j] = new BoardSquare(new Rattata(10, 10));

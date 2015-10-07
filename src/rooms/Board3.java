@@ -10,7 +10,10 @@ import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;
 import game.objects.Tree;
-
+/**
+ * @author Sushant Balajee
+ * @author Prashant Bhikhu
+ */
 
 public class Board3 extends Board{
 	private static final long serialVersionUID = -3601832062619945416L;
@@ -46,9 +49,7 @@ public class Board3 extends Board{
 				if(i == 6 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 				}
-				if(i == 0 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(1,Door.LinkTo.GO_NEXT_ROOM));
-				}
+				
 				if(i == 7 && j == 3) {
 					this.squares[i][j] = new BoardSquare(new Rattata(10,10));
 				}

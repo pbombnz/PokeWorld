@@ -5,12 +5,13 @@ import javax.swing.ImageIcon;
 public class Door implements GameObject{
 
 	private int id;
-	public static enum LinkTo {GO_LAST_ROOM,GO_NEXT_ROOM};//for finding this door is link to last room or next room
-	public LinkTo linkTo;
+	public int linkTo;
+	public int linkFrom;
 	
-	public Door(int id,LinkTo linkTo){
+	public Door(int id,int linkFrom,int linkTo){
 		this.id = id;
 		this.linkTo = linkTo;
+		this.linkFrom = linkFrom;
 	}
 	@Override
 	public ImageIcon getSpriteImage() {
