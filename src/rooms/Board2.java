@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import game.BoardSquare;
 import game.objects.Door;
+import game.objects.Fence;
 import game.objects.Plant;
 import game.objects.Rattata;
 import game.objects.GoodPotion;
@@ -36,7 +37,10 @@ public class Board2 extends Board {
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
 				
-				if(j == 0 || j == 9 || i == 0 || i == 9 || i == 1 && j == 7 || i == 1 && j == 8
+				if(j == 0 && i > 1 || j == 9 && i > 1){
+						this.squares[i][j] = new BoardSquare(new Fence());
+				}
+				if(i == 1 && j == 7 || i == 1 && j == 8
 						|| i == 2 && j == 7 || i == 2 && j == 8){
 						this.squares[i][j] = new BoardSquare(new Plant());
 				}
@@ -64,7 +68,7 @@ public class Board2 extends Board {
 				if (i == 8 && j == 8) {
 					this.squares[i][j] = new BoardSquare(new Door(2,2,3));
 				}
-				if (i == 8 && j == 0 || i == 7 && j == 7|| i == 2 && j == 4) {
+				if (i == 8 && j == 0 || i == 7 && j == 7|| i == 2 && j == 4 || i == 0 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new Tree());
 				}
 			}

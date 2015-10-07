@@ -21,7 +21,6 @@ public class BoardSquare implements Serializable {
 	public static Image getTileImage() {
 		return terrainTileSprite.getImage();
 	}
-
 	public GameObject getGameObjectOnSquare() {
 		return gameObjectOnSquare;
 	}
