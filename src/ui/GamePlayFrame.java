@@ -414,14 +414,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				loc.moveNorth();
 			} else {
 				clientPlayer.setDirection(Player.Direction.BACK_LEFT);
+				loc.moveNorth();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_S
 				|| e.getKeyCode() == KeyEvent.VK_DOWN) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-				loc.moveSouth();
+				loc.moveSouth();//oo
 			} else {
 				clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
+				loc.moveSouth();//oo
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_A
 				|| e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -430,6 +432,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				loc.moveWest();
 			} else {
 				clientPlayer.setDirection(Player.Direction.FACE_LEFT);
+				loc.moveWest();//oo
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_D
 				|| e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -438,6 +441,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				loc.moveEast();
 			} else {
 				clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
+				loc.moveEast();//oo
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
