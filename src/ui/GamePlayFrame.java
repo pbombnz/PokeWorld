@@ -447,15 +447,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							.getGameObjectOnSquare() != null) {
 						if (bs[nextLoc.getX()][nextLoc.getY()]
 								.getGameObjectOnSquare() instanceof Tree) {
+							System.out.println(nextLoc.getX()+","+nextLoc.getY());
+							System.out.println(previouX0+","+previouY0);
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY() ]
 									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), (int) previouX0,
-									(int) previouY0, null);
+									.getImage(), (int) previouX0-20,
+									(int) previouY0-150, null);
 						} else {
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), (int) previouX0,
-									(int) previouY1, 50, 50, null);
+									(int) previouY1-20, 50, 50, null);
 						}
 					}
 				}
