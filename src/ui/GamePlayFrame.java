@@ -348,6 +348,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			double previouY0 = viewHight;
 			double previouX1 = midOfView + squareWidth / 2;//the line in the bot of the frame
 			double previouY1 = viewHight;
+			int checkLocationX = clientPlayer.getLocation().getX();
+			int checkLocationY = clientPlayer.getLocation().getY();
 
 			for (int i = 0; i < numSquaresFace + 1; i++) {
 				//draw face square
@@ -371,6 +373,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				g.fillPolygon(xPoint, yPoint, 4);
 				g.setColor(Color.BLACK);
 				g.drawPolygon(xPoint, yPoint, 4);
+				
+				//print the object on this location
+				Location nextLoc= nextSquareLocation(clientPlayer);
+				
 
 				//draw left squares
 				for (int j = 0; j < numSquaresLeft; j++) {
@@ -436,9 +442,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			g.setColor(Color.black);
 
 			//print character
-			Image characterImage = clientPlayer.getSpriteBasedOnDirection(firstViewDirection).getImage();
-			g.drawImage(characterImage,midOfView,500+shakeOffset, null);
-			
+			Image characterImage = clientPlayer.getSpriteBasedOnDirection(
+					firstViewDirection).getImage();
+			g.drawImage(characterImage, midOfView, 500 + shakeOffset, null);
+
 			g.fillRect(startX - 10, 0, 20, FRAME_HEIGHT);
 			g.fillRect(FULL_FRAME_WIDTH - 20, 0, 20, FRAME_HEIGHT);
 			///=============================================
@@ -587,6 +594,20 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 
 		}
+	}
+	
+	public Location nextSquareLocation(Player player){
+		Direction dir = player.getDirection();
+		if(dir==Direction.BACK_LEFT){
+			return new Location(player.getLocation().getRoom(),player.getLocation().getX(),player.getLocation().getY()-1);
+		}else if(dir==Direction.BACK_RIGHT){
+			return new Location(player.getLocation().getRoom(),player.getLocation().getX()+1,player.getLocation().getY());
+		}else if(dir==Direction.FACE_LEFT){
+			return new Location(player.getLocation().getRoom(),player.getLocation().getX()-1,player.getLocation().getY());
+		}else if(dir==Direction.FACE_RIGHT){
+			return new Location(player.getLocation().getRoom(),player.getLocation().getX(),player.getLocation().getY()+1);
+		}
+		return null;
 	}
 
 	@Override
@@ -901,10 +922,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					public void run() {
 						timer.cancel();
 						//here is the methods run after timer here 
-						//////////////////////////////////
+						///=======================================
 						panel.remove(attackLabel);
 						fight();
-						//////////////////////////////////
+						//========================================
 					}
 				};
 				timer.schedule(tt, 2000);
