@@ -264,7 +264,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
-			int xPos = FRAME_WIDTH / 5;
+			int xPos = FRAME_WIDTH / 15;
 
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
@@ -557,9 +557,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				if (items instanceof Key) {
 					if (((Door) go).id() == items.id()) {
 						//this is where the next room needs to be alex 
+						System.out.println("code works");
 						Door theDoor = (Door) go;
 						if (theDoor.linkTo == Door.LinkTo.GO_NEXT_ROOM) {
 							GameLauncher.ROOMINDEX++;
+							System.out.println("in next room");
+							//GameLauncher.ROOMINDEX++;
 						} else if (theDoor.linkTo == Door.LinkTo.GO_LAST_ROOM) {
 							GameLauncher.ROOMINDEX--;
 						}
@@ -623,6 +626,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			public void actionPerformed(ActionEvent e) {
 				//fight giflabel 
 				panel.add(attackLabel);
+				attackLabel.setLocation(565,-50);
 				//add a timer 
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
@@ -705,6 +709,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//if the player dies, it will show a gif and a message dialog
 		if (clientPlayer.isDead()) {
 			panel.add(dieLabel);
+			dieLabel.setLocation(560,-50);
 			JOptionPane.showMessageDialog(null, " You Died ");
 			System.exit(0);
 		} else if (((Monster) go).isDead()) {
