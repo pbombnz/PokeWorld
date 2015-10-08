@@ -12,12 +12,25 @@ public interface Monster extends GameObject{
 	
 	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
 	
+	/**
+	 * @return name of the enemy
+	 */
 	public String getName();
+	/**
+	 * @return attack points of the enemy
+	 */
 	public int attack();
+	
+	/**
+	 * @return health of the enemy
+	 */
 	public int getHealth();
 	/**
 	 * @param change, the amount of damage dealt to the enemy by the player
 	 */
 	public void setHealth(int change);
-	public boolean isDead();//check whether the monster is dead
+	/**
+	 * @return if the monster is dead
+	 */
+	public boolean isDead();
 }

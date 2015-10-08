@@ -34,6 +34,9 @@ public class Door implements GameObject{
 		return GameObject.DOOR;
 	}
 
+	/**
+	 * @return the id of the door
+	 */
 	public int id(){
 		return id;
 	}

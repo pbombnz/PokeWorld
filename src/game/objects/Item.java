@@ -17,5 +17,8 @@ public interface Item extends GameObject {
 	
 	public void useItem(Player player);
 	public boolean isUsable();
+	/**
+	 * @return id of the item, used for the Key
+	 */
 	public int id();
 }
