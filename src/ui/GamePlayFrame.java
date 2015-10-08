@@ -52,6 +52,9 @@ import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
 
+/**
+ * @author Wang Zhen
+ */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
 		ActionListener {
@@ -420,10 +423,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					g.drawPolygon(xPointLeft, yPointLeft, 4);
 				}
 
-				//draw right squares
-				for (int j = 0; j < numSquaresLeft; j++) {
-
-				}
+				//				g.drawImage(new ImageIcon("src/firstviewgrass.png").getImage(),xPoint[0],yPoint[0] , xPoint[1], yPoint[1], xPoint[2], yPoint[2], xPoint[3],yPoint[3],null);
+				//				g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
+				//				System.out.println(xPoint[0]+","+yPoint[0]);
 
 				//updata previou
 				previouX0 = nowStartX;
@@ -447,9 +449,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							.getGameObjectOnSquare() != null) {
 						if (bs[nextLoc.getX()][nextLoc.getY()]
 								.getGameObjectOnSquare() instanceof Tree) {
-							System.out.println(nextLoc.getX() + ","
-									+ nextLoc.getY());
-							System.out.println(previouX0 + "," + previouY0);
+							//							System.out.println(nextLoc.getX() + ","
+							//									+ nextLoc.getY());
+							//							System.out.println(previouX0 + "," + previouY0);
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), (int) previouX0 - 20,
@@ -463,6 +465,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 				}
 			}
+
 			//print edge 
 			g.setColor(Color.black);
 
