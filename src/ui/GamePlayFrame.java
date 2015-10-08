@@ -259,7 +259,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					.equals("Charmander")) {
 				dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
 				attackLabel = new JLabel(new ImageIcon(
-						"src/Charmander_attack_level3.gif"));
+						"src/Charmander_attack_lvl3.gif"));
 				levelUpLabel_2 = new JLabel(new ImageIcon(
 						"src/Charmander_upto_level2.gif"));
 				levelUpLabel_3 = new JLabel(new ImageIcon(
