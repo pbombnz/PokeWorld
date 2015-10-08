@@ -4,12 +4,19 @@ import game.Player;
 
 import javax.swing.ImageIcon;
 
+/**
+ * An item that can be picked up and is used straight away
+ * Picking up this item will increase the players level by 1
+ * 
+ *@author Sushant Balajee
+ *@author Donald Tang
+ */
+
 public class RareCandy implements Item {
 
-	int currLevel;
+	private static final long serialVersionUID = 5655585108741040609L;
 	
-	public RareCandy(){
-	}
+	int currLevel;//current level of the player character
 
 	@Override
 	public String getName() {
@@ -41,7 +48,6 @@ public class RareCandy implements Item {
 
 	@Override
 	public int id() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 }

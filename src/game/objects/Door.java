@@ -2,23 +2,38 @@ package game.objects;
 
 import javax.swing.ImageIcon;
 
-public class Door implements GameObject{
+/**
+ * This class represents the Door object in the game, the player must 
+ * have a key which has a matching ID to that of the door they are trying to open
+ * 
+ * 
+ *@author Sushant Balajee
+ *@author Donald Tang
+ */
 
+public class Door implements GameObject{
+	
+	private static final long serialVersionUID = -3108639527814191048L;
 	private int id;
 	public int linkTo;
 	public int linkFrom;
-	
+
+	/**
+	 * @param id, ID of the door
+	 * @param linkFrom, The room this door goes to
+	 * @param linkTo, The room this door is from
+	 */
 	public Door(int id,int linkFrom,int linkTo){
 		this.id = id;
 		this.linkTo = linkTo;
 		this.linkFrom = linkFrom;
 	}
+
 	@Override
 	public ImageIcon getSpriteImage() {
-		// TODO Auto-generated method stub
 		return GameObject.DOOR;
 	}
-	
+
 	public int id(){
 		return id;
 	}
