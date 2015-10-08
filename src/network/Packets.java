@@ -6,7 +6,7 @@ import game.Player;
 /**
 * These classes represent the different types of packets that can
 * be sent across the network. Each packet represents a type of
-* data being transferred from Client <--> Server.
+* data being transferred from Clients to and from the Server.
 *
 * @author Prashant Bhikhu
 *
@@ -17,6 +17,12 @@ public class Packets {
 	 *
 	 * A packet containing the new player with the avatar and set name is
 	 * sent to the server to be added the global game object within the server.
+	 * 
+	 * NOTE: Issues will occur when reading the Avatar object of the Player.
+	 * This is because for some reason, when passing an ImageIcon object
+	 * over the network, it adds the prefix "file:" which causes all ImageIcon
+	 * Images to be unuseable. 
+	 * 
 	 */
 	public static class NewPlayer {
 		Player player;
@@ -34,7 +40,7 @@ public class Packets {
 	/**
 	 * USED: Server -> Client
 	 * 
-	 * A packet that sends over the game object from the server to
+	 * A packet that sends over the Game object from the server to
 	 * a client when the client has already initialized a connection
 	 * and chosen the player name and avatar.
 	 *
@@ -47,21 +53,24 @@ public class Packets {
 	/**
 	 * USED: Client -> Server, then Server -> All Clients 
 	 * 
-	 * A packet that sends both ways, initially from client to server,
-	 * then the server passes it to the all clients. Used when there is
-	 * any change in variables for a player (including move).
+	 * A packet used when there is any change in variables for a player
+	 * (including move).
+	 * 
+	 * NOTE: Issues will occur when reading the Avatar object of the Player.
+	 * This is because for some reason, when passing an ImageIcon object
+	 * over the network, it adds the prefix "file:" which causes all ImageIcon
+	 * Images to be unuseable. 
 	 *
 	 */
-	public static class PlayerUpdate {
-		Player player;
+	public static class PlayerMove {
+		int id;
+		Location newLocation;
 	}
 	
 	/**
 	 * USED: Client -> Server, then Server -> All Clients 
 	 * 
-	 * A packet that sends both ways, initially from client to server,
-	 * then the server passes it to the all clients. Used when there is
-	 * a player sends a message for other players to view.
+	 * A packet used when there is  a player sends a message for other players to view.
 	 *
 	 */
 	public static class PlayerMessage {
@@ -78,6 +87,6 @@ public class Packets {
 	 *
 	 */
 	public static class PlayerQuit {
-		int connectionID;
+		int id;
 	}
 }

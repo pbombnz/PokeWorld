@@ -29,7 +29,7 @@ public class GameServer extends Listener {
 	private int port; // The TCP port the server is listening to
 	private Game game; // The global game world object that is given to all clients
 	private ServerFrame serverFrame; // The frame in which console messages are written in to
-	private Server server; // The actual server handling incoming/outcoming packets
+	private Server server; // The actual server handling incoming/outgoing packets
 	
 	/**
 	 * Create a new GameServer object
@@ -168,10 +168,14 @@ public class GameServer extends Listener {
 			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 			server.sendToTCP(connection.getID(), newGame);
 		}		
-		else if(object instanceof PlayerUpdate) {
+		else if(object instanceof PlayerMove) {
 			serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
 			serverFrame.writeToConsole("[Server][Sent] Sent Recieved UpdatePlayer Packet to all other clients.");
-			PlayerUpdate packet = ((PlayerUpdate) object);
+			PlayerMove packet = ((PlayerMove) object);
+			
+			Player player = game.getPlayerByID(packet.id);
+			player.setLocation(packet.newLocation);
+			
 			server.sendToAllExceptTCP(connection.getID(), packet);
 		}
 	}

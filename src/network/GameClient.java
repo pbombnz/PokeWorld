@@ -85,11 +85,11 @@ public class GameClient extends Listener {
 			// GET CLIENT PLAYER BY CONNECTION ID
 			// SET CLIENT PLAYER
 		}
-		else if(object instanceof PlayerUpdate) {
-			PlayerUpdate packet = ((PlayerUpdate) object);
+		else if(object instanceof PlayerMove) {
+			PlayerMove packet = ((PlayerMove) object);
 			for(Player connectedPlayer: game.getPlayers()) {
-				if(connectedPlayer.getId() == packet.player.getId()) {
-					connectedPlayer.setLocation( packet.player.getLocation());
+				if(connectedPlayer.getId() == packet.id) {
+					connectedPlayer.setLocation( packet.newLocation);
 				}
 			}
 			//	GAME.GET(PLAYER) BY ID, UPDATE CLIENT GAME

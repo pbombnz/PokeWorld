@@ -17,11 +17,17 @@ import rooms.Board;
 import rooms.Room1;
 
 /**
- * This class is used to register classes that will be
- * sent over the network with both the server and client.
+ * This class is used to register classes for the server
+ * and client so they serialise these objects then send
+ * them over the network, where they can be deserialised.
  *
- * This must be done before any further communication occurs,
- * AND MUST BE DONE IN THE SAME ORDER ON BOTH CLIENT AND SERVER!
+ * This must be done on both the client and server, before any 
+ * network communication occurs. It is very important that the 
+ * exact same classes are registered on both the client and server,
+ * and that they are registered in the exact same order. 
+ * 
+ * Because of this, typically the code that registers classes is placed 
+ * in a method on a class available to both the client and server
  *
  * @author Prashant Bhikhu
  */
@@ -29,7 +35,12 @@ public class Network {
 	public static final int DEFAULT_SERVER_PORT_TCP = 8777; // Used for Game Server Communication
 	public static final int DEFAULT_SERVER_PORT_UDP = 8778; // Used for Game Server Discovery
 	
+	/**
+	 * 
+	 * @param host The socket object (which can either be a Kyro Client or Server)
+	 */
 	public static void register(Object host) {
+		// Cast the object to a Kyro object to allow for class object registration
 		Kryo kyro;
 		if (host instanceof Server) {
 			kyro = ((Server) host).getKryo();
@@ -39,10 +50,14 @@ public class Network {
 			kyro = ((Client) host).getKryo();
 		}
 		
+		// Register all classes that are possibly going to be used when sending and recieving objects
+		
+		// Primitive Object Registration
 		kyro.register(byte[].class);
 		kyro.register(int.class);
 		kyro.register(boolean.class);
 		
+		// General Object Registration
 		kyro.register(String.class);
 		kyro.register(List.class);
 		kyro.register(ArrayList.class);
@@ -53,12 +68,14 @@ public class Network {
 		kyro.register(Image.class);
 		kyro.register(ImageIcon.class);
 		
+		// Network Packet Registration
 		kyro.register(Packets.NewPlayer.class);
-		kyro.register(Packets.PlayerUpdate.class);
+		kyro.register(Packets.PlayerMove.class);
 		kyro.register(Packets.PlayerQuit.class);
 		kyro.register(Packets.NewGame.class);
 		kyro.register(Packets.PlayerMessage.class);
 		
+		// Game Related Objects Registration
 		kyro.register(Game.class);
 		kyro.register(Location.class);
 		kyro.register(Player.class);
@@ -69,6 +86,7 @@ public class Network {
 		kyro.register(BoardSquare.class);
 		kyro.register(BoardSquare[][].class);
 		
+		// Game Objects Registration
 		kyro.register(GameObject.class);
 		kyro.register(Item.class);
 		kyro.register(Weapon.class);
@@ -81,6 +99,5 @@ public class Network {
 		kyro.register(Key.class);
 		kyro.register(Machete.class);
 		kyro.register(Weapon.class);		
-		kyro.register(Weapon.class);
 	}
 }
