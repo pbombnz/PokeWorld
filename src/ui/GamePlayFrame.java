@@ -113,7 +113,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private int turnOffset = 750;
 	private int turnCounter = 0;
 	private Direction firstViewDirection = Direction.BACK_LEFT;
-	protected JLabel lvlupLabel;
+	protected JLabel lvlupLabel_2;
+	protected JLabel lvlupLabel_3;
 
 	///==================================
 
@@ -184,38 +185,113 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//load labels of die and attack and levelup
 		JLabel dieLabel = null;
 		JLabel attackLabel = null;
-		JLabel levelUpLabel =null;
+		JLabel levelUpLabel_2 = null;
+		JLabel levelUpLabel_3 = null;
 
 		//print head picture
-		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
-			dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
-			attackLabel = new JLabel(new ImageIcon("src/Bulbasaur_attack.gif"));
-			levelUpLabel = new JLabel(new ImageIcon("src/xhl_lvlup.gif"));
-		} else if (clientPlayer.getAvatar().getAvatarName()
-				.equals("Charmander")) {
-			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
-			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
-			levelUpLabel = new JLabel(new ImageIcon("src/xhl_lvlup.gif"));
-		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
-			dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
-			attackLabel = new JLabel(new ImageIcon("src/Squirtle_attack.gif"));
-			levelUpLabel = new JLabel(new ImageIcon("src/xhl_lvlup.gif"));
+		if (clientPlayer.getPlayerLevel() == 1) {
+			if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
+				dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Bulbasaur_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			} else if (clientPlayer.getAvatar().getAvatarName()
+					.equals("Charmander")) {
+				dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Charmander_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			} else if (clientPlayer.getAvatar().getAvatarName()
+					.equals("Squirtle")) {
+				dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Squirtle_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			}
+		} else if (clientPlayer.getPlayerLevel() == 2) {
+			if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
+				dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Bulbasaur_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			} else if (clientPlayer.getAvatar().getAvatarName()
+					.equals("Charmander")) {
+				dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Charmander_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			} else if (clientPlayer.getAvatar().getAvatarName()
+					.equals("Squirtle")) {
+				dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Squirtle_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			}
+		} else {
+			if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
+				dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Bulbasaur_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			} else if (clientPlayer.getAvatar().getAvatarName()
+					.equals("Charmander")) {
+				dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Charmander_attack_level3.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			} else if (clientPlayer.getAvatar().getAvatarName()
+					.equals("Squirtle")) {
+				dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
+				attackLabel = new JLabel(new ImageIcon(
+						"src/Squirtle_attack.gif"));
+				levelUpLabel_2 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level2.gif"));
+				levelUpLabel_3 = new JLabel(new ImageIcon(
+						"src/Charmander_upto_level3.gif"));
+			}
 		}
 
-		int diexPo = 250;
-		int dieyPo = 0;
+		int diexPo = 400;
+		int dieyPo = 100;
 		int dieOrAttackLabelSize = 300;
 
 		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
 				dieOrAttackLabelSize);
 		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
 				dieOrAttackLabelSize);
-		levelUpLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
+		levelUpLabel_2.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
+				dieOrAttackLabelSize);
+		levelUpLabel_3.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
 				dieOrAttackLabelSize);
 
 		this.dieLabel = dieLabel;
 		this.attackLabel = attackLabel;
-		this.lvlupLabel=levelUpLabel;
+		this.lvlupLabel_2 = levelUpLabel_2;
+		this.lvlupLabel_3 = levelUpLabel_3;
 	}
 
 	public void printInformation(Player player) {
@@ -830,21 +906,38 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		if (go instanceof RareCandy) {
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
 					+ ((RareCandy) go).level());
-			////
-			panel.add(lvlupLabel);
-			final Timer timer = new Timer();
-			TimerTask tt = new TimerTask() {
-				@Override
-				public void run() {
-					timer.cancel();
-					//here is the methods run after timer here 
-					///=======================================
-						panel.remove(lvlupLabel);
-					//========================================
-				}
-			};
-			timer.schedule(tt, 2500);
-
+			//=================================================
+			//draw gif here
+			if (clientPlayer.getPlayerLevel() == 2) {
+				panel.add(lvlupLabel_2);
+				final Timer timer = new Timer();
+				TimerTask tt = new TimerTask() {
+					@Override
+					public void run() {
+						timer.cancel();
+						//here is the methods run after timer here 
+						///=======================================
+						panel.remove(lvlupLabel_2);
+						//========================================
+					}
+				};
+				timer.schedule(tt, 2500);
+			} else if (clientPlayer.getPlayerLevel() == 3) {
+				panel.add(lvlupLabel_3);
+				final Timer timer = new Timer();
+				TimerTask tt = new TimerTask() {
+					@Override
+					public void run() {
+						timer.cancel();
+						//here is the methods run after timer here 
+						///=======================================
+						panel.remove(lvlupLabel_3);
+						//========================================
+					}
+				};
+				timer.schedule(tt, 5000);
+			}
+			//================================================
 			clientPlayer.setAttack(clientPlayer.getAttack()
 					* clientPlayer.getPlayerLevel());
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
