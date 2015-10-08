@@ -49,9 +49,6 @@ public class Board4 extends Board{
 				if(i == 9 && j == 0) {
 					this.squares[i][j] = new BoardSquare(new Door(3,4,3));
 				}
-				if(i == 0 || i == 9 || j == 0 || j == 9){
-					this.squares[i][j] = new BoardSquare(new Door(3,4,3));
-				}
 				if(i == 5 && j == 5)
 					this.squares[i][j] = new BoardSquare(new Mewtwo(100,100));
 			}
