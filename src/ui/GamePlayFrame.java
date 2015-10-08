@@ -936,7 +936,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						//========================================
 					}
 				};
-				timer.schedule(tt, 5000);
+				timer.schedule(tt, 4300);
 			}
 			//================================================
 			clientPlayer.setAttack(clientPlayer.getAttack()
