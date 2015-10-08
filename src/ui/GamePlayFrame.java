@@ -524,7 +524,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 				Game ga = gameClient.getGame();
-				Room r = ga.rooms.get(GameLauncher.ROOMINDEX);
+				Room r = ga.getRooms().get(GameLauncher.ROOMINDEX);
 				BoardSquare[][] bs = r.board.getSquares();
 
 				//check whether next square is out of board
@@ -646,7 +646,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 					//print object of game
 					Game ga = gameClient.getGame();
-					Room r = ga.rooms.get(GameLauncher.ROOMINDEX);
+					Room r = ga.getRooms().get(GameLauncher.ROOMINDEX);
 					BoardSquare[][] bs = r.board.getSquares();
 
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
@@ -802,7 +802,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
 			//change the board(change the location of objects)
-			Board oldBoard = gameClient.getGame().rooms
+			Board oldBoard = gameClient.getGame().getRooms()
 					.get(GameLauncher.ROOMINDEX).board;
 			Board newBoard = new EmptyBoard();
 
@@ -810,12 +810,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[gameClient
-							.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+							.getGame().getRooms().get(GameLauncher.ROOMINDEX).board
 							.getHeight()
 							- (j + offset)][i];
 				}
 			}
-			gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board = newBoard;
+			gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
 
 			//change the locations of player 
 			Location newloc = new Location();
@@ -823,7 +823,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 
-			newloc.setX(gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+			newloc.setX(gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board
 					.getHeight() - (clientPlayer.getLocation().getY() + offset));
 
 			newloc.setY(clientPlayer.getLocation().getX());
@@ -834,18 +834,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//turn the gui to right side
 			//change the board(change the locations of object)
 			Board newBoard = new EmptyBoard();
-			Board oldBoard = gameClient.getGame().rooms
+			Board oldBoard = gameClient.getGame().getRooms()
 					.get(GameLauncher.ROOMINDEX).board;
 			for (int i = 0; i < oldBoard.getWidth(); i++) {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][gameClient
-							.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+							.getGame().getRooms().get(GameLauncher.ROOMINDEX).board
 							.getWidth()
 							- (i + offset)];
 				}
 			}
-			gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board = newBoard;
+			gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
 
 			//change the locations of player 
 			Location newloc = new Location();
@@ -855,7 +855,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			newloc.setX(clientPlayer.getLocation().getY());
 
-			newloc.setY(gameClient.getGame().rooms.get(GameLauncher.ROOMINDEX).board
+			newloc.setY(gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board
 					.getWidth() - (clientPlayer.getLocation().getX() + offset));
 
 			clientPlayer.setLocation(newloc);
@@ -953,7 +953,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					if (((Door) go).id() == items.id()) {
 
 						Door theDoor = (Door) go;
-						Room nowRoom = gameClient.getGame().rooms
+						Room nowRoom = gameClient.getGame().getRooms()
 								.get(GameLauncher.ROOMINDEX);
 
 						if (nowRoom.level == theDoor.linkFrom) {
@@ -962,14 +962,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							//2. i change the location of player
 							GameLauncher.ROOMINDEX = theDoor.linkTo - 1;
 							clientPlayer.getLocation().setRoom(
-									gameClient.getGame().rooms
+									gameClient.getGame().getRooms()
 											.get(GameLauncher.ROOMINDEX));
 
 						} else if (nowRoom.level == theDoor.linkFrom + 1) {
 							System.out.println("this door goes to level 1");
 							GameLauncher.ROOMINDEX = theDoor.linkTo - 2;
 							clientPlayer.getLocation().setRoom(
-									gameClient.getGame().rooms
+									gameClient.getGame().getRooms()
 											.get(GameLauncher.ROOMINDEX));
 
 						}

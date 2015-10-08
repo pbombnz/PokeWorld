@@ -21,26 +21,55 @@ import game.avatar.Avatar;
 import ui.GamePlayFrame;
 
 /**
- *@author Prashant Bhikhu
+ * The Class represents the model of the state of the game at any time, this represents the
+ * rooms on which the game is played depending on the player's location. The Game contains
+ * all the locations and items (via nested objects) that make up the world.
+ *
+ * @author Prashant Bhikhu
+ *
  */
 public class Game {
 
 	//public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
 
-	public ArrayList<Player> players2;
-	public ArrayList<Room> rooms;
+	private ArrayList<Player> players;
+	private ArrayList<Room> rooms;
 
+	/**
+	 * no-args constructer (Needed for Kyro Serialisation)
+	 * 
+	 * Default Constructor. Creates the Game with no players or rooms.
+	 * Only used when creating test maps.
+	 * 
+	 */
 	public Game() {
-		players2 = new ArrayList<Player>();
-		rooms = new ArrayList<Room>();
+		this.players = new ArrayList<Player>();
+		this.rooms = new ArrayList<Room>();
 	}
 
+	/**
+	 * Creates the Game using preloaded maps and players. Useful for
+	 * networking when reading from a Game object byte array.
+	 * 
+	 * @param players The players that are connected to the game
+	 * @param rooms The rooms that are connected to the game
+	 */
+	public Game(ArrayList<Player> players, ArrayList<Room> rooms) {
+		this.players = players;
+		this.rooms = rooms;
+	}
+
+	/**
+	 * Converts this Game to a byte array to send over network
+	 *
+	 * @return a byteArray
+	 */
 	public byte[] toByteArray() {
 		byte[] bytes = null;
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(this.players2);
+			oos.writeObject(this.players);
 			oos.writeObject(this.rooms);
 			oos.flush();
 			oos.close();
@@ -54,8 +83,7 @@ public class Game {
 	}
 
 	/**
-	 * Creates a new Game (typically an updates version from server) from a
-	 * byte array
+	 * Creates a new Game object (typically an updates version from server) from a byte array.
 	 *
 	 * @param bytes
 	 * @return
@@ -66,9 +94,9 @@ public class Game {
 		try {
 			ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 			ObjectInputStream ois = new ObjectInputStream(bis);
-			newGame = new Game();
-			newGame.players2 = (ArrayList<Player>) ois.readObject();
-			newGame.rooms = (ArrayList<Room>) ois.readObject();
+			newGame = new Game(
+					(ArrayList<Player>) ois.readObject(),
+					(ArrayList<Room>) ois.readObject());
 		} catch (StreamCorruptedException e) {
 			return null;
 		} catch (IOException e) {
@@ -96,7 +124,7 @@ public class Game {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((players2 == null) ? 0 : players2.hashCode());
+				+ ((players == null) ? 0 : players.hashCode());
 		result = prime * result + ((rooms == null) ? 0 : rooms.hashCode());
 		return result;
 	}
@@ -110,10 +138,10 @@ public class Game {
 		if (getClass() != obj.getClass())
 			return false;
 		Game other = (Game) obj;
-		if (players2 == null) {
-			if (other.players2 != null)
+		if (players == null) {
+			if (other.players != null)
 				return false;
-		} else if (!players2.equals(other.players2))
+		} else if (!players.equals(other.players))
 			return false;
 		if (rooms == null) {
 			if (other.rooms != null)
@@ -123,10 +151,39 @@ public class Game {
 		return true;
 	}
 
-	public ArrayList<Player> getPlayers() {
-		return players2;
+	/**
+	 * Attempt to match any connected player's id with the given id
+	 * 
+	 * @param id The id number of the player you want to get
+	 * @return if the ID is valid, return the player with the given id, otherwise return null 
+	 */
+	public Player getPlayerByID(int id) {
+		// Only check a player's id if the given id is valid
+		if(id < 1) {
+			return null;
+		}
+		
+		// Attempt to match any player's id with the given id
+		for(Player player: getPlayers()) {
+			if(player.getId() == id) {
+				// return the player with the given id when found
+				return player; 
+			}
+		}
+		// return null if the id wasn't found
+		return null;
 	}
 
+	/**
+	 * @return The players connected to the Game
+	 */
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
+	/**
+	 * @return The rooms connected to the Game
+	 */
 	public List<Room> getRooms() {
 		return rooms;
 	}
