@@ -434,7 +434,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				nowDrawLine = nowDrawLine - squareHeigh
 						* Math.pow(scaleY, i + 1);
 				//print the object on this location
-				Location nextLoc = nextSquareLocation(clientPlayer,i);
+				Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 				Game ga = gameClient.getGame();
 				Room r = ga.rooms.get(GameLauncher.ROOMINDEX);
@@ -447,17 +447,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							.getGameObjectOnSquare() != null) {
 						if (bs[nextLoc.getX()][nextLoc.getY()]
 								.getGameObjectOnSquare() instanceof Tree) {
-							System.out.println(nextLoc.getX()+","+nextLoc.getY());
-							System.out.println(previouX0+","+previouY0);
-							g.drawImage(bs[nextLoc.getX()][nextLoc.getY() ]
+							System.out.println(nextLoc.getX() + ","
+									+ nextLoc.getY());
+							System.out.println(previouX0 + "," + previouY0);
+							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), (int) previouX0-20,
-									(int) previouY0-150, null);
+									.getImage(), (int) previouX0 - 20,
+									(int) previouY0 - 150, null);
 						} else {
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), (int) previouX0,
-									(int) previouY1-20, 50, 50, null);
+									(int) previouY1 - 20, 50, 50, null);
 						}
 					}
 				}
@@ -521,28 +522,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 					for (Player connectedPlayer : gameClient.getGame()
 							.getPlayers()) {
-						/*if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.ABORTED) {
-							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: ABORTED");
-						} else if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.COMPLETE) {
-							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: COMPLETED");
-						}
-						else if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.ERRORED)
-						{
-							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: ERRORED");
-						}
-						else if(connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus() == MediaTracker.LOADING)
-						{
-							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: LOADING");
-						}else {
-							System.out.println("PlayerID: "+connectedPlayer.getId()+"  Load Status: "+connectedPlayer.getSpriteBasedOnDirection().getImageLoadStatus());							
-						}*/
-
-						//						System.out.println("PlayerID: "
-						//								+ connectedPlayer.getId()
-						//								+ "  Image: "
-						//								+ connectedPlayer.getSpriteBasedOnDirection()
-						//										.getImage());
-
 						if (connectedPlayer != clientPlayer) {
 							if (connectedPlayer.getLocation().getX() == cellX
 									&& connectedPlayer.getLocation().getY() == cellY) {
@@ -555,16 +534,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							}
 						}
 					}
-					//System.out.println(clientPlayer
-					//		.getSpriteBasedOnDirection().getImage());
-
-					//Location clientPlayerLoc = clientPlayer.getLocation();	
-					//print player
-					//					System.out.println("PlayerID: "
-					//							+ clientPlayer.getId()
-					//							+ "  Image: "
-					//							+ clientPlayer.getSpriteBasedOnDirection()
-					//									.getImage());
 
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
@@ -620,7 +589,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
-	public Location nextSquareLocation(Player player,int steps) {
+	public Location nextSquareLocation(Player player, int steps) {
 		Direction dir = player.getDirection();
 		if (dir == Direction.BACK_LEFT) {
 			return new Location(player.getLocation().getRoom(), player
