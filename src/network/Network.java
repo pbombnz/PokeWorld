@@ -89,15 +89,8 @@ public class Network {
 		// Game Objects Registration
 		kyro.register(GameObject.class);
 		kyro.register(Item.class);
-		kyro.register(Weapon.class);
 		kyro.register(BadPotion.class);
-		kyro.register(Chest.class);
-		kyro.register(Dagger.class);
-		kyro.register(Enemies.class);
-		kyro.register(GiantSword.class);
 		kyro.register(GoodPotion.class);
 		kyro.register(Key.class);
-		kyro.register(Machete.class);
-		kyro.register(Weapon.class);		
 	}
 }
