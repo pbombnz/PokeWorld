@@ -13,6 +13,15 @@ import com.esotericsoftware.kryonet.*;
 
 import network.Packets.*;
 
+/**
+ * This class handles the Client Connection of the game and passes interactions 
+ * to the server. The Client will have a local copy of the Game object and constantly
+ * be updated from the server from other client interactions and update the local
+ * copy of the Game object.
+ * 
+ * @author Prashant Bhikhu
+ *
+ */
 public class GameClient extends Listener {
 	private Game game;
 	private Client client;
@@ -55,7 +64,7 @@ public class GameClient extends Listener {
 	}
 	
 	/**
-	 * Returns the list of servers that the client can join
+	 * Returns the list of servers that the client can join. May not be needed
 	 * 
 	 * @return
 	 */
