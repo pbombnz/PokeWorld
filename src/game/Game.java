@@ -16,6 +16,7 @@ import rooms.Room;
 import rooms.Room1;
 import rooms.Room2;
 import rooms.Room3;
+import rooms.Room4;
 import game.Player;
 import game.avatar.Avatar;
 import ui.GamePlayFrame;
@@ -115,6 +116,7 @@ public class Game {
 		game.rooms.add(new Room1());
 		game.rooms.add(new Room2());
 		game.rooms.add(new Room3());
+		game.rooms.add(new Room4());
 		return game;
 
 	}

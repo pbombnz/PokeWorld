@@ -22,7 +22,7 @@ public class Mewtwo implements Monster{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "Rhydon";
+		return "Mewtwo";
 	}
 
 	@Override
