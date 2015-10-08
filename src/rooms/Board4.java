@@ -6,6 +6,7 @@ import java.util.Arrays;
 import game.BoardSquare;
 import game.objects.Door;
 import game.objects.Fence;
+import game.objects.Mewtwo;
 import game.objects.Rattata;
 import game.objects.GoodPotion;
 import game.objects.Key;
@@ -17,11 +18,17 @@ import game.objects.Tree;
  * @author Prashant Bhikhu
  */
 
-public class Board3 extends Board{
-	private static final long serialVersionUID = -3601832062619945416L;
+public class Board4 extends Board{
+	
 
 
-	public Board3(int width, int height)
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3548642428541350776L;
+
+
+	public Board4(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
@@ -29,7 +36,7 @@ public class Board3 extends Board{
 
 	}
 
-	public Board3()
+	public Board4()
 	{ 
 		this.width = 10;
 		this.height = 10;
@@ -39,34 +46,20 @@ public class Board3 extends Board{
 			for(int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
 
-				if(i == 9 && j == 9 || i == 1 && j == 0  || i == 1 && j == 9) {
-					this.squares[i][j] = new BoardSquare(new Tree());
-				}
-				if(i == 0 && j == 9) {
-					this.squares[i][j] = new BoardSquare(new Key(3));
-				}
-				if(i == 0 && j == 0 || i == 4 && j == 5) {
-					this.squares[i][j] = new BoardSquare(new Key(100));
-				}
-				if(i == 7 && j == 4) {
-					this.squares[i][j] = new BoardSquare(new GoodPotion(100));
-				}
 				if(i == 9 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(3,3,4));
+					this.squares[i][j] = new BoardSquare(new Door(3,4,3));
 				}
-				if (i == 8 && j == 8) {
-					this.squares[i][j] = new BoardSquare(new Door(2,3,2));
+				if(i == 0 || i == 9 || j == 0 || j == 9){
+					this.squares[i][j] = new BoardSquare(new Door(3,4,3));
 				}
-				if(i == 2 && j == 5) {
-					this.squares[i][j] = new BoardSquare(new Rhydon(50,50));
-				}
-				if(i == 6 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Rhydon(60,60));
-				}
-				if(i == 4 && j == 9) {
-					this.squares[i][j] = new BoardSquare(new Rhydon(70,70));
-				}
+				if(i == 5 && j == 5)
+					this.squares[i][j] = new BoardSquare(new Mewtwo(100,100));
 			}
+		}
+		
+		for(int i = 0; i < 10; i = i + 2){
+			for(int j = 0; j < 10; j += 2)
+			this.squares[i][j] = new BoardSquare(new Tree());
 		}
 	}
 
@@ -100,7 +93,7 @@ public class Board3 extends Board{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Board3 other = (Board3) obj;
+		Board4 other = (Board4) obj;
 		if (height != other.height)
 			return false;
 		if (!Arrays.deepEquals(squares, other.squares))

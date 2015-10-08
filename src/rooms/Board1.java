@@ -30,50 +30,49 @@ public class Board1 extends Board{
 		this.width = 10;
 		this.height = 10;
 		this.squares = new BoardSquare[height][width];
-		
+
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
+				
+								if (i == 3 && j == 0) {
+									this.squares[i][j] = new BoardSquare(new RareCandy());
+								}
+								if (i == 1 && j == 4 || i == 7 && j == 0|| i == 9 && j == 9) {
+									this.squares[i][j] = new BoardSquare(new Tree());
+								}
+								if (i == 7 && j == 5) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}
+								if (i == 2 && j == 9) {
+									this.squares[i][j] = new BoardSquare(new GoodPotion(50));
+								}
+								if (i == 0 && j == 0) {
+									this.squares[i][j] = new BoardSquare(new Door(1,1,4));
+								}
+								if (i == 8 && j == 1) {
+									this.squares[i][j] = new BoardSquare(new Rattata(10, 10));
+								}
+								if (i == 1 && j == 2) {
+									this.squares[i][j] = new BoardSquare(new Rattata(5, 5));
+								}
+								if (i == 4 && j == 6) {
+									this.squares[i][j] = new BoardSquare(new Rattata(15, 15));
+								}
+								if (i == 9&& j == 7 || i == 8 && j == 7|| i == 7 && j ==7
+										&& i == 9 && j == 8 || i == 8 && j == 8|| i == 7 && j ==6
+										&& i == 8 && j == 9 || i == 7 && j == 9||
+										i == 9 && j ==0 || i == 9 && j == 1 || i == 8 && j == 0
+										|| i == 1 && j ==5 || i == 1 && j == 6 || i == 1 && j == 7|| i == 0 && j ==7
+										|| i == 0 && j == 6 || i == 7 && j == 7 || i == 7 && j == 8|| i == 9 && j ==8) {
+									this.squares[i][j] = new BoardSquare(new Plant());
+								}
+								
 
-				if (i == 3 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new RareCandy());
-				}
-				if (i == 1 && j == 4 || i == 7 && j == 0|| i == 9 && j == 9) {
-					this.squares[i][j] = new BoardSquare(new Tree());
-				}
-				if (i == 7 && j == 5) {
-					this.squares[i][j] = new BoardSquare(new Key(1));
-				}
-				if (i == 2 && j == 9) {
-					this.squares[i][j] = new BoardSquare(new GoodPotion(50));
-				}
-				if (i == 0 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(1,1,2));
-				}
-				if (i == 8 && j == 1) {
-					this.squares[i][j] = new BoardSquare(new Rattata(10, 10));
-				}
-				if (i == 1 && j == 2) {
-					this.squares[i][j] = new BoardSquare(new Rattata(5, 5));
-				}
-				if (i == 4 && j == 6) {
-					this.squares[i][j] = new BoardSquare(new Rattata(15, 15));
-				}
-				if (i == 9&& j == 7 || i == 8 && j == 7|| i == 7 && j ==7
-						&& i == 9 && j == 8 || i == 8 && j == 8|| i == 7 && j ==6
-						&& i == 8 && j == 9 || i == 7 && j == 9||
-						i == 9 && j ==0 || i == 9 && j == 1 || i == 8 && j == 0
-						|| i == 1 && j ==5 || i == 1 && j == 6 || i == 1 && j == 7|| i == 0 && j ==7
-						|| i == 0 && j == 6 || i == 7 && j == 7 || i == 7 && j == 8|| i == 9 && j ==8) {
-					this.squares[i][j] = new BoardSquare(new Plant());
-				}
-				
-				
 
 			}
 		}
-
 	}
 
 	public BoardSquare[][] getSquares() {
