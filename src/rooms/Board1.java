@@ -39,6 +39,9 @@ public class Board1 extends Board{
 								if (i == 3 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
+								if (i == 2 && j == 0) {
+									this.squares[i][j] = new BoardSquare(new RareCandy());
+								}
 								if (i == 1 && j == 4 || i == 7 && j == 0|| i == 9 && j == 9) {
 									this.squares[i][j] = new BoardSquare(new Tree());
 								}

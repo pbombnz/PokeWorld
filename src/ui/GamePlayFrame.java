@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import com.sun.image.codec.jpeg.TruncatedFileException;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 
 import rooms.Board;
 import rooms.Board1;
@@ -1029,6 +1030,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		att.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				///update label
+				loadLabels();
 				//fight giflabel 
 				panel.add(attackLabel);
 				//add a timer 
