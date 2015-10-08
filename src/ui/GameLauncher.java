@@ -7,7 +7,8 @@ import java.awt.Frame;
  */
 public class GameLauncher {
 	public static int ROOMINDEX = 0;
+	Frame gameFrame;
 	public GameLauncher() {
-		Frame gameFrame = new GamePlayFrame();
+		gameFrame = new GamePlayFrame();
 	}
 }
