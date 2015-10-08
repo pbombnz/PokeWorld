@@ -1,9 +1,11 @@
 package ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Panel;
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,9 +55,6 @@ import game.objects.Monster;
 import game.objects.RareCandy;
 import game.objects.Tree;
 
-/**
- * @author Wang Zhen
- */
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
 		ActionListener {
@@ -114,6 +113,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private int turnOffset = 750;
 	private int turnCounter = 0;
 	private Direction firstViewDirection = Direction.BACK_LEFT;
+	protected JLabel lvlupLabel;
 
 	///==================================
 
@@ -181,21 +181,25 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		this.bgHeadViewLabel = bgHeadViewLabel;
 		this.headPictureLabel = headPictureLabel;
 
-		//load labels of die and attack
+		//load labels of die and attack and levelup
 		JLabel dieLabel = null;
 		JLabel attackLabel = null;
+		JLabel levelUpLabel =null;
 
 		//print head picture
 		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
 			dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Bulbasaur_attack.gif"));
+			levelUpLabel = new JLabel(new ImageIcon("src/xhl_lvlup.gif"));
 		} else if (clientPlayer.getAvatar().getAvatarName()
 				.equals("Charmander")) {
 			dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Charmander_attack.gif"));
+			levelUpLabel = new JLabel(new ImageIcon("src/xhl_lvlup.gif"));
 		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
 			dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
 			attackLabel = new JLabel(new ImageIcon("src/Squirtle_attack.gif"));
+			levelUpLabel = new JLabel(new ImageIcon("src/xhl_lvlup.gif"));
 		}
 
 		int diexPo = 250;
@@ -206,9 +210,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				dieOrAttackLabelSize);
 		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
 				dieOrAttackLabelSize);
+		levelUpLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
+				dieOrAttackLabelSize);
 
 		this.dieLabel = dieLabel;
 		this.attackLabel = attackLabel;
+		this.lvlupLabel=levelUpLabel;
 	}
 
 	public void printInformation(Player player) {
@@ -516,7 +523,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
-							
+
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
@@ -823,6 +830,20 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		if (go instanceof RareCandy) {
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
 					+ ((RareCandy) go).level());
+			////
+			panel.add(lvlupLabel);
+			final Timer timer = new Timer();
+			TimerTask tt = new TimerTask() {
+				@Override
+				public void run() {
+					timer.cancel();
+					//here is the methods run after timer here 
+					///=======================================
+						panel.remove(lvlupLabel);
+					//========================================
+				}
+			};
+			timer.schedule(tt, 2500);
 
 			clientPlayer.setAttack(clientPlayer.getAttack()
 					* clientPlayer.getPlayerLevel());
@@ -900,7 +921,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	/**
 	 *@author Sushant Balajee
 	 *@author Donald Tang
-	 *@contributer Wang Zhen(add Timer)
+	 *@contributer Wang Zhen(add Timer and gif)
 	 */
 	public void fightDialog() {
 
