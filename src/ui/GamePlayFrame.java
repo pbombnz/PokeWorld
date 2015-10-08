@@ -655,6 +655,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		// don't fire an event on backspace or delete
 		Location loc = clientPlayer.getLocation();
 		//for third view control
+		GameObject gg = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.getGameObjectOnSquare();
 		if (e.getKeyCode() == KeyEvent.VK_W) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
@@ -789,7 +791,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			//change the locations of player 
 			Location newloc = new Location();
-
 			newloc.setRoom(clientPlayer.getLocation().getRoom());
 
 			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
