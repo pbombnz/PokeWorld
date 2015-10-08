@@ -1,4 +1,6 @@
-package game.objects;
+package game.objects.monster;
+
+import game.objects.GameObject;
 
 /**
  * An interface that is implemented by all the enemies in the game

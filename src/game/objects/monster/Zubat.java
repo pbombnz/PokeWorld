@@ -1,32 +1,34 @@
-package game.objects;
+package game.objects.monster;
+
+import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
 
 /**
- * Represents a Rhydon enemy, The second hardest enemy in the game
+ * Represents a Zubat enemy, the second weakest enemy in the game
  * 
  *@author Sushant Balajee
  *@author Donald Tang
  */
 
-public class Rhydon implements Monster{
+public class Zubat implements Monster{
 
 	private static final long serialVersionUID = 6696995125055330253L;
-	
-	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
-	
+
+	public static enum Direction {FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
+
 	public int health;
 	public int attack;
 	public Direction direction = Direction.FACE_RIGHT;
-	
-	public Rhydon(int attack, int health){
+
+	public Zubat(int attack, int health){
 		this.attack = attack;
 		this.health = health;
 	}
-	
+
 	@Override
 	public String getName() {
-		return "Rhydon";
+		return "Zubat";
 	}
 
 	@Override
@@ -38,7 +40,7 @@ public class Rhydon implements Monster{
 	public int getHealth() {
 		return health;
 	}
-	
+
 	public void setHealth(int change){
 		health = change;
 		if(health < 0){
@@ -49,10 +51,10 @@ public class Rhydon implements Monster{
 	public boolean isDead(){
 		return health <= 0;
 	}
-	
+
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.RHYDON;
+		return GameObject.ZUBAT;
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;

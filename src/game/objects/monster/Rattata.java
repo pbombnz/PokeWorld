@@ -1,4 +1,6 @@
-package game.objects;
+package game.objects.monster;
+
+import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
 

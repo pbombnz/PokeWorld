@@ -6,7 +6,7 @@ import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.Plant;
 import game.objects.RareCandy;
-import game.objects.Rattata;
+import game.objects.monster.*;
 import game.objects.Tree;
 
 import java.util.Arrays;
