@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import game.BoardSquare;
 import game.objects.Door;
-import game.objects.Rattata;
+import game.objects.monster.*;
 import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;

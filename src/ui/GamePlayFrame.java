@@ -52,7 +52,7 @@ import game.objects.GameObject;
 import game.objects.GoodPotion;
 import game.objects.Item;
 import game.objects.Key;
-import game.objects.Monster;
+import game.objects.monster.*;
 import game.objects.RareCandy;
 import game.objects.Tree;
 

@@ -7,13 +7,11 @@ import game.BoardSquare;
 import game.objects.Door;
 import game.objects.Fence;
 import game.objects.Plant;
-import game.objects.Rattata;
+import game.objects.monster.*;
 import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;
-import game.objects.Rhydon;
 import game.objects.Tree;
-import game.objects.Zubat;
 /**
  * @author Sushant Balajee
  * @author Prashant Bhikhu
