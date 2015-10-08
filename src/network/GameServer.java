@@ -17,7 +17,7 @@ import com.esotericsoftware.minlog.Log;
 
 /**
  * This class handles the Server Connection of the game and the interactions 
- * of incoming and outcoming packets. The Server will have a global master 
+ * of incoming and outgoing packets. The Server will have a global master 
  * copy of the game world and pass the whole game or specific objects of the game
  * (such as players) to all clients when the game world needs to be updated 
  * globally.
