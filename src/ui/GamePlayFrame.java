@@ -57,8 +57,7 @@ import game.objects.RareCandy;
 import game.objects.Tree;
 
 @SuppressWarnings("serial")
-public class GamePlayFrame extends JFrame implements KeyListener,
-ActionListener {
+public class GamePlayFrame extends JFrame implements KeyListener, ActionListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
