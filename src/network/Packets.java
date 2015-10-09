@@ -55,11 +55,6 @@ public class Packets {
 	 * 
 	 * A packet used when there is any change in variables for a player
 	 * (including move).
-	 * 
-	 * NOTE: Issues will occur when reading the Avatar object of the Player.
-	 * This is because for some reason, when passing an ImageIcon object
-	 * over the network, it adds the prefix "file:" which causes all ImageIcon
-	 * Images to be unuseable. 
 	 *
 	 */
 	public static class PlayerMove {
