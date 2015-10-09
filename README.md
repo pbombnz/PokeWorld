@@ -3,13 +3,15 @@
 ## Team Members and Repsonsibilites
 * Prashant Bhikhu - Networking / 'All Rounder'
 * Alex (Zhen) Wang - Graphical User Interface and Extras
-* Donald Tang (Team Leader) - Game Logic and Objects / Game Sprite Making
+* Donald Tang (Team Leader) - Game Logic and Objects, Game Sprite Making, JUnit Testing
 * Sushant Balajee - Game Logic and Objects
 * Priyanka Bhula  - Game Saving and Loading (via JSON)
 
+## Note For Assignment Marker
+Due to our Eclispe Git glitches, we discovered a problem where commits from Sushant and Alex weren't associated with their GitHub accounts but infact an unknown account and someone else's git account respectively. Therefore on commit log inspection, any commits made by an unknown account "sushantbalajee" (account is not linked to a profile) are indeed sushant's commitment and commits made by "raltu" are infact Alex. 
+
 ## Unknown Repsonsiblities
 * ? - Documentation (Class Diagram and CSC Cards)
-* ? - JUnit Testing
 
 ## How to Execute
 1. Launch Executable By Running the Main Method in the Main Class in the Main Package.
