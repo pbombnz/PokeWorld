@@ -17,8 +17,7 @@ import game.Location;
 import game.Player;
 import game.Player.Direction;
 import game.avatar.Avatar;
-import game.objects.Item;
-import game.objects.Key;
+import game.objects.interactiveObjects.*;
 
 
 public class JsonToGame {

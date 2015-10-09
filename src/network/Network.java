@@ -16,6 +16,8 @@ import javax.swing.ImageIcon;
 import rooms.Board;
 import rooms.Room1;
 
+import game.objects.interactiveObjects.*;
+
 /**
  * This class is used to register classes for the server
  * and client so they serialise these objects then send

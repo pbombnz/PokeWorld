@@ -1,6 +1,7 @@
-package game.objects;
+package game.objects.interactiveObjects;
 
 import game.Player;
+import game.objects.GameObject;
 
 /**
  * An interface used by objects in the game 

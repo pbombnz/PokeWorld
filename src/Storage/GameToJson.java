@@ -12,7 +12,7 @@ import game.Location;
 import game.Player;
 import game.Player.Direction;
 import game.avatar.Avatar;
-import game.objects.Item;
+import game.objects.interactiveObjects.*;
 
 /*
  * a class that saves the player's current state to a json file

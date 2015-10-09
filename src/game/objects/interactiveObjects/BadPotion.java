@@ -1,4 +1,4 @@
-package game.objects;
+package game.objects.interactiveObjects;
 
 import game.Player;
 

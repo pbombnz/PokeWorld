@@ -4,12 +4,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import game.BoardSquare;
-import game.objects.Door;
+import game.objects.interactiveObjects.*;
 import game.objects.scene.*;
 import game.objects.monster.*;
-import game.objects.GoodPotion;
-import game.objects.Key;
-import game.objects.RareCandy;
 /**
  * @author Sushant Balajee
  * @author Prashant Bhikhu
