@@ -34,14 +34,17 @@ public class Player implements Serializable {
 	private int playerLevel = 1;
 
 	/**
-	 * No-Args Constructor for Networking Serialisation 
+	 * No-Args Constructor for Networking Serialisation (DO NOT USE)
 	 */
 	public Player() {
 		this.name = null;
 	}
 	
-	public Player(String name) {
+	public Player(int id, String name, Avatar avatar) {
+		this.id = id;
 		this.name = name;
+		this.avatar = avatar;
+		
 		this.attack = ATTACK;
 		this.health = HEALTH;
 	}
