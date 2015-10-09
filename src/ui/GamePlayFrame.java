@@ -82,6 +82,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
+	public boolean hasLoadedLabels = false;
+	
 	public JLabel headPictureLabel = null;
 	public JLabel bgHeadViewLabel = null;
 	public JLabel dieLabel = null;
@@ -366,7 +368,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			//draw welcome picture
 			if (frameState == FRAME_STATE.CREATED_FRAME) {
 				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
-						0, WELCOME_FRAME_WIDTH, FRAME_HEIGHT, null);
+						0, FULL_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
 
@@ -400,6 +402,14 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			}
 
 			Player clientPlayer = gameClient.getClientPlayer();
+
+			if(!hasLoadedLabels) {
+				//add all jlabel after picking character
+				loadLabels();
+				panel.add(headPictureLabel);
+				panel.add(bgHeadViewLabel);
+				hasLoadedLabels = true;
+			}
 			
 			int numSquaresFace = 0;
 			int numSquaresLeft = 0;
