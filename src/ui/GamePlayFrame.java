@@ -364,9 +364,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			super.paintComponent(g); // Clears panel
 
 			//draw welcome picture
-			if (frameState == FRAME_STATE.CREATED_FRAME/*gameClient == null || gameClient.getGame() == null*/) {
-				g.drawImage(new ImageIcon(
-						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
+			if (frameState == FRAME_STATE.CREATED_FRAME) {
+				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
 						0, WELCOME_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
@@ -1189,12 +1188,6 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				//loadLabels();
 				//panel.add(headPictureLabel);
 				//panel.add(bgHeadViewLabel);
-
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				this.repaint();
 				addKeyListener(this);
 			} else if (menuItem.getText().equals("Exit")) {

@@ -116,7 +116,7 @@ public class GameClient extends Listener {
 			PlayerMove packet = ((PlayerMove) object);
 			for(Player connectedPlayer: game.getPlayers()) {
 				if(connectedPlayer.getId() == packet.id) {
-					connectedPlayer.setLocation( packet.newLocation);
+					connectedPlayer.setLocation(packet.newLocation);
 				}
 			}
 			//	GAME.GET(PLAYER) BY ID, UPDATE CLIENT GAME
