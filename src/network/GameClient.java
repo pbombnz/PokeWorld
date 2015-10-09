@@ -103,11 +103,7 @@ public class GameClient extends Listener {
 	 * @return
 	 */
 	public List<InetAddress> getServerList() {
-		List<InetAddress> x = client.discoverHosts(Network.DEFAULT_SERVER_PORT_UDP, 2000);
-		for(InetAddress ind: x) {
-			System.out.println(ind.toString());
-		}
-		return x;
+		return client.discoverHosts(Network.DEFAULT_SERVER_PORT_UDP, 2000);
 	}
 	
 	@Override
