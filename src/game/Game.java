@@ -30,14 +30,11 @@ import ui.GamePlayFrame;
  *
  */
 public class Game {
-
-	//public static final List<Avatar> allAvatars = Avatar.getAllAvatars();
-
 	private ArrayList<Player> players;
 	private ArrayList<Room> rooms;
 
 	/**
-	 * no-args constructer (Needed for Kyro Serialisation)
+	 * no-args constructor (Needed for Kyro Serialisation)
 	 * 
 	 * Default Constructor. Creates the Game with no players or rooms.
 	 * Only used when creating test maps.
@@ -49,7 +46,7 @@ public class Game {
 	}
 
 	/**
-	 * Creates the Game using preloaded maps and players. Useful for
+	 * Creates the Game using pre-loaded maps and players. Useful for
 	 * networking when reading from a Game object byte array.
 	 * 
 	 * @param players The players that are connected to the game
@@ -188,6 +185,21 @@ public class Game {
 	 */
 	public List<Room> getRooms() {
 		return rooms;
+	}
+	
+	/**
+	 * Returns the Room associated with the specified name.
+	 * 
+	 * @param name The name that is attached to the room
+	 * @return Returns the Room associated with the specified name, if no room has that name, null is returned.
+	 */
+	public Room getRoomByName(String name) {
+		for(Room room: getRooms()) {
+			if(room.getName().equalsIgnoreCase(name)) {
+				return room;
+			}
+		}
+		return null;
 	}
 
 }
