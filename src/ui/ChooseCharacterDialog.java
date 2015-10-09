@@ -17,9 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * @author Wang Zhen
- * @contributer Prashant Bhikhu
  * 
+ * @author Wang Zhen 
+ * @contributer Prashant Bhikhu
  */
 @SuppressWarnings("serial")
 public class ChooseCharacterDialog extends JDialog implements ActionListener {
