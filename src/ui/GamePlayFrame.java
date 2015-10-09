@@ -72,7 +72,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
 
-	private GameClient gameClient;
+	private GameClient gameClient = new GameClient(this);
 	private Player clientPlayer;
 
 	public int jumpOffset = 0;
@@ -1133,7 +1133,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				new ServerFrame();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
 				try {
-					gameClient = new GameClient(this);
+					gameClient.connect("localhost");
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(this,
 							"Game Client was unable to initalise.\n"
