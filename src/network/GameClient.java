@@ -5,6 +5,7 @@ import game.Player;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.List;
 
 import ui.GamePlayFrame;
@@ -27,21 +28,28 @@ public class GameClient extends Listener {
 	private Client client;
 	private GamePlayFrame clientFrame;
 	
-	
-	public GameClient(GamePlayFrame clientFrame) throws IOException {
+	/**
+	 * Create a new GameServer object
+	 * 
+	 * @param serverFrame The frame in which console messages are written in to
+	 * @throws IOException Thrown when Client cannot connect to a server
+	 */
+	public GameClient(GamePlayFrame clientFrame) {
 		this.clientFrame = clientFrame;
 		
 	    client = new Client(20480, 20480);
 	    Network.register(client);
-
+	    
 	    client.addListener(this);
 	    client.start();
+	}
+	
+	public void connect(String host) throws IOException {
 	    try {
-			client.connect(5000, "localhost", Network.DEFAULT_SERVER_PORT_TCP, Network.DEFAULT_SERVER_PORT_UDP);
+			client.connect(5000, host, Network.DEFAULT_SERVER_PORT_TCP, Network.DEFAULT_SERVER_PORT_UDP);
 		} catch (IOException e) {
 			throw new IOException(e);
 		}
-	    //client.sendTCP("hi");
 	}
 
 	public Game getGame() {
@@ -69,7 +77,11 @@ public class GameClient extends Listener {
 	 * @return
 	 */
 	public List<InetAddress> getServerList() {
-		return client.discoverHosts(Network.DEFAULT_SERVER_PORT_UDP, 5000);
+		List<InetAddress> x = client.discoverHosts(Network.DEFAULT_SERVER_PORT_UDP, 5000);
+		for(InetAddress ind: x) {
+			System.out.println(ind.toString());
+		}
+		return x;
 	}
 	
 	@Override
