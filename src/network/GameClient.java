@@ -30,7 +30,7 @@ import network.Packets.*;
 public class GameClient extends Listener {
 	private Game game; // The local copy of the game (reducing Large network packet transfers)
 	private Client client; // The actual client connection used to connect to the server
-	
+	private GameClientListener gameClientListener;
 	// Used to get responses from the server when the client is awaiting for server feedback
 	private Stack<Object> recievedServerReponses = new Stack<Object>();
 
@@ -95,7 +95,15 @@ public class GameClient extends Listener {
 		client.sendTCP(packet);
 	}
 	
-	
+	public void sendUpdatedLocationAndDirectionToServer() {
+		PlayerUpdateLocationAndDirection packet = new PlayerUpdateLocationAndDirection();
+		Player clientPlayer = getClientPlayer();
+		packet.id = clientPlayer.getId();
+		packet.newDirection = clientPlayer.getDirection();
+		packet.newLocation = clientPlayer.getLocation();
+		
+		client.sendTCP(packet);
+	}
 	
 	/**
 	 * Returns the list of servers that the client can join. May not be needed
@@ -112,14 +120,14 @@ public class GameClient extends Listener {
 		if(object instanceof NewGame) {
 			handleNewGamePacket((NewGame) object);
 		}
-		else if(object instanceof PlayerMove) {
-			PlayerMove packet = ((PlayerMove) object);
+		else if(object instanceof PlayerUpdateLocationAndDirection) {
+			PlayerUpdateLocationAndDirection packet = ((PlayerUpdateLocationAndDirection) object);
 			for(Player connectedPlayer: game.getPlayers()) {
 				if(connectedPlayer.getId() == packet.id) {
 					connectedPlayer.setLocation(packet.newLocation);
+					connectedPlayer.setDirection(packet.newDirection);
 				}
 			}
-			//	GAME.GET(PLAYER) BY ID, UPDATE CLIENT GAME
 		}
 		
 		else if(object instanceof ValidateNewPlayerUsername_Response) {
@@ -157,6 +165,20 @@ public class GameClient extends Listener {
 	
 	public Stack<Object> getRecievedServerReponses() {
 		return recievedServerReponses;
+	}
+
+	public void updateClient() {
+		if (gameClientListener != null) {
+			gameClientListener.onGameClientUpdated();
+		}
+	}	
+	
+	public GameClientListener getGameClientListener() {
+		return gameClientListener;
+	}
+
+	public void setGameClientListener(GameClientListener gameClientListener) {
+		this.gameClientListener = gameClientListener;
 	}
 }
 

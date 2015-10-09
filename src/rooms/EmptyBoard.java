@@ -9,7 +9,7 @@ import game.objects.scene.*;
 
 /**
  *@author Wang Zhen
- *this Board is for clone. it is used when the whole panel change direction
+ *this Board is for clone. it is used when the whole panel change newDirection
  */
 public class EmptyBoard extends Board{
 

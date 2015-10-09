@@ -33,7 +33,7 @@ public class JsonToGame {
 			String name = (String) jo.get("name");
 			Integer attack = ((Long) jo.get("attack")).intValue();
 			Avatar avatar = (Avatar) gson.fromJson((String) jo.get("avatar"), Avatar.class);
-			Direction dir = (Direction) jo.get("direction");
+			Direction dir = (Direction) jo.get("newDirection");
 			int health = (int) jo.get("health");
 			List<String> items = (List<String>) jo.get("items");
 			Location loc = (Location) gson.fromJson((String) jo.get("location"), Location.class);

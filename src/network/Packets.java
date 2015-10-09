@@ -2,6 +2,7 @@ package network;
 
 import game.Location;
 import game.Player;
+import game.Player.Direction;
 
 /**
 * These classes represent the different types of packets that can
@@ -56,10 +57,21 @@ public class Packets {
 	 * (including move).
 	 *
 	 */
-	public static class PlayerMove {
+	public static class PlayerUpdateLocationAndDirection {
 		int id;
 		Location newLocation;
+		Direction newDirection;
 	}
+
+	public static class PlayerUpdateAttack {
+		int id;
+		int attack;
+	}
+	
+	public static class PlayerUpdateEvolutionLevel {
+		int id;
+		int evolutionLevel;
+	}	
 	
 	/**
 	 * USED: Client -> Server, then Server -> All Clients 

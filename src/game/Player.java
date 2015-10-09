@@ -292,7 +292,7 @@ public class Player implements Serializable {
 				+ ", health=" + health + ", attack=" + attack
 				+ ", evolutionLevel=" + evolutionLevel + ", maxItems="
 				+ maxItems + ", inventory=" + inventory + ", location="
-				+ location + ", direction=" + direction + ", playerLevel="
+				+ location + ", newDirection=" + direction + ", playerLevel="
 				+ playerLevel + "]";
 	}
 

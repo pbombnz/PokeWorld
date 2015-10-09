@@ -171,13 +171,14 @@ public class GameServer extends Listener {
 			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 			server.sendToTCP(connection.getID(), newGame);
 		}		
-		else if(object instanceof PlayerMove) {
+		else if(object instanceof PlayerUpdateLocationAndDirection) {
 			serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
 			serverFrame.writeToConsole("[Server][Sent] Sent Recieved UpdatePlayer Packet to all other clients.");
-			PlayerMove packet = ((PlayerMove) object);
+			PlayerUpdateLocationAndDirection packet = ((PlayerUpdateLocationAndDirection) object);
 			
 			Player player = game.getPlayerByID(packet.id);
 			player.setLocation(packet.newLocation);
+			player.setDirection(packet.newDirection);
 			
 			server.sendToAllExceptTCP(connection.getID(), packet);
 		}

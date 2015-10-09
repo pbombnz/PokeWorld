@@ -42,6 +42,7 @@ import rooms.EmptyBoard;
 import rooms.Room;
 import rooms.Room1;
 import network.GameClient;
+import network.GameClientListener;
 import game.BoardSquare;
 import game.Game;
 import game.Location;
@@ -55,7 +56,7 @@ import game.objects.monster.*;
 
 
 @SuppressWarnings("serial")
-public class GamePlayFrame extends JFrame implements KeyListener, ActionListener {
+public class GamePlayFrame extends JFrame implements KeyListener, ActionListener, GameClientListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -118,6 +119,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	///==================================
 
 	public GamePlayFrame() {
+		gameClient.setGameClientListener(this);
 
 		//initialises game frame
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);
@@ -807,7 +809,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			turnCounter += 15;
 			firstViewDirection = Direction.BACK_RIGHT;
 		}
-		// these are for changing game direction
+		// these are for changing game newDirection
 		else if (e.getKeyCode() == KeyEvent.VK_E) {
 			//turn the GUI to the left side
 			//change the board(change the location of objects)
@@ -980,6 +982,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				}
 			}
 		}
+		
+		gameClient.sendUpdatedLocationAndDirectionToServer();
 		repaint();
 	}
 
@@ -1204,6 +1208,11 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				System.exit(0);
 			}
 		}
+	}
+
+	@Override
+	public void onGameClientUpdated() {
+		repaint();	
 	}
 }
 

@@ -13,9 +13,7 @@ import java.util.*;
 
 import javax.swing.ImageIcon;
 
-import rooms.Board;
-import rooms.Room1;
-
+import rooms.*;
 import game.objects.interactiveObjects.*;
 
 /**
@@ -74,7 +72,9 @@ public class Network {
 		kyro.register(Packets.ValidateNewPlayerUsername.class);
 		kyro.register(Packets.ValidateNewPlayerUsername_Response.class);
 		kyro.register(Packets.NewPlayer.class);
-		kyro.register(Packets.PlayerMove.class);
+		kyro.register(Packets.PlayerUpdateLocationAndDirection.class);
+		kyro.register(Packets.PlayerUpdateAttack.class);
+		kyro.register(Packets.PlayerUpdateEvolutionLevel.class);
 		kyro.register(Packets.PlayerQuit.class);
 		kyro.register(Packets.NewGame.class);
 		kyro.register(Packets.PlayerMessage.class);
@@ -83,18 +83,47 @@ public class Network {
 		kyro.register(Game.class);
 		kyro.register(Location.class);
 		kyro.register(Player.class);
-		kyro.register(game.Player.Direction.class);
+		kyro.register(Player.Direction.class);
 		kyro.register(Avatar.class);
+		
+		kyro.register(Room.class);
 		kyro.register(Room1.class);
+		kyro.register(Room2.class);
+		kyro.register(Room3.class);
+		kyro.register(Room4.class);
+		
+		kyro.register(EmptyBoard.class);
 		kyro.register(Board.class);
+		kyro.register(Board1.class);
+		kyro.register(Board2.class);
+		kyro.register(Board3.class);
+		kyro.register(Board4.class);
+		
+		
 		kyro.register(BoardSquare.class);
+		kyro.register(BoardSquare[].class);
 		kyro.register(BoardSquare[][].class);
 		
+		
+		
 		// Game Objects Registration
-		kyro.register(GameObject.class);
-		kyro.register(Item.class);
-		kyro.register(BadPotion.class);
-		kyro.register(GoodPotion.class);
-		kyro.register(Key.class);
+		kyro.register(game.objects.GameObject.class);
+		
+		kyro.register(game.objects.interactiveObjects.Item.class);
+		kyro.register(game.objects.interactiveObjects.BadPotion.class);
+		kyro.register(game.objects.interactiveObjects.GoodPotion.class);
+		kyro.register(game.objects.interactiveObjects.Key.class);
+		kyro.register(game.objects.interactiveObjects.Door.class);
+		kyro.register(game.objects.interactiveObjects.RareCandy.class);
+		
+		kyro.register(game.objects.monster.Mewtwo.class);
+		kyro.register(game.objects.monster.Monster.class);
+		kyro.register(game.objects.monster.Rattata.class);
+		kyro.register(game.objects.monster.Rhydon.class);
+		kyro.register(game.objects.monster.Zubat.class);
+		
+		kyro.register(game.objects.scene.Plant.class);
+		kyro.register(game.objects.scene.Fence.class);
+		kyro.register(game.objects.scene.Tree.class);
 	}
 }

@@ -42,7 +42,7 @@ public class GameToJson {
 		jsonobj.put("name", name);
 		jsonobj.put("attack",attack);
 		jsonobj.put("avatar", avatar);
-		jsonobj.put("direction",dir);
+		jsonobj.put("newDirection",dir);
 		jsonobj.put("health", health);
 		jsonobj.put("items", items);
 		jsonobj.put("locX",locX);
