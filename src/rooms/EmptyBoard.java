@@ -8,7 +8,7 @@ import game.objects.GoodPotion;
 import game.objects.Key;
 import game.objects.RareCandy;
 import game.objects.monster.*;
-import game.objects.Tree;
+import game.objects.scene.*;
 
 /**
  *@author Wang Zhen
