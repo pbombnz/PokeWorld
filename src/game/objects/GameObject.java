@@ -18,7 +18,7 @@ public interface GameObject extends Serializable {
 	
 	public static ImageIcon TREE = new ImageIcon("./sprites/tiles/tree.png");
 
-	public static ImageIcon PLANT = new ImageIcon("./sprites/tiles/flow.png");
+	public static ImageIcon PLANT = new ImageIcon("./sprites/tiles/flowers/faceleft.png");
 	
 	public static ImageIcon FENCE_LEFT = new ImageIcon("./sprites/tiles/FenceLeft1.png");
 	

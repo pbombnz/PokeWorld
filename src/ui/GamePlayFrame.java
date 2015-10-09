@@ -52,6 +52,7 @@ import game.objects.GameObject;
 import game.objects.GoodPotion;
 import game.objects.Item;
 import game.objects.Key;
+import game.objects.Plant;
 import game.objects.monster.*;
 import game.objects.RareCandy;
 import game.objects.Tree;
@@ -531,16 +532,14 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 						&& nextLoc.getY() != -1 && nextLoc.getY() != 10) {
 					if (bs[nextLoc.getX()][nextLoc.getY()]
 							.getGameObjectOnSquare() != null) {
+						
 						if (bs[nextLoc.getX()][nextLoc.getY()]
 								.getGameObjectOnSquare() instanceof Tree) {
-							//							System.out.println(nextLoc.getX() + ","
-							//									+ nextLoc.getY());
-							//							System.out.println(previouX0 + "," + previouY0);
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), (int) previouX0 - 20,
 									(int) previouY0 - 150, null);
-						} else {
+						}else{
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), (int) previouX0,
