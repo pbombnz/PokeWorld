@@ -65,8 +65,7 @@ public class Tests {
 
 	@Test
 	public void testAvatar1() throws IOException {
-		Player p = new Player("Donald");
-		p.setAvatar(new Avatar());
+		Player p = new Player(-1, "Donald", new Avatar());
 		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
 		p.setAvatar(list.get(0));
 		assertTrue(p.getAvatar().getName().equals("Bulbasaur"));
@@ -74,8 +73,7 @@ public class Tests {
 
 	@Test
 	public void testAvatar2() throws IOException {
-		Player p = new Player("Donald");
-		p.setAvatar(new Avatar());
+		Player p = new Player(-1, "Donald", new Avatar());
 		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
 		p.setAvatar(list.get(1));
 		assertTrue(p.getAvatar().getName().equals("Charmander"));
@@ -83,8 +81,7 @@ public class Tests {
 
 	@Test
 	public void testAvatar3() throws IOException {
-		Player p = new Player("Donald");
-		p.setAvatar(new Avatar());
+		Player p = new Player(-1, "Donald", new Avatar());
 		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
 		p.setAvatar(list.get(2));
 		assertTrue(p.getAvatar().getName().equals("Squirtle"));
