@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import rooms.Board;
 import rooms.Room;
-import ui.GameLauncher;
 import ui.ServerFrame;
 import game.Game;
 import game.Location;
@@ -27,7 +26,7 @@ import com.esotericsoftware.minlog.Log;
  *
  */
 public class GameServer extends Listener {
-	private int port; // The TCP port the server is listening to
+	private final int port = Network.DEFAULT_SERVER_PORT_TCP; // The TCP port the server is listening to
 	private Game game; // The global game world object that is given to all clients
 	private ServerFrame serverFrame; // The frame in which console messages are written in to
 	private Server server; // The actual server handling incoming/outgoing packets
@@ -38,9 +37,8 @@ public class GameServer extends Listener {
 	 * @param serverFrame The frame in which console messages are written in to
 	 * @throws IOException Thrown when Server cannot be bound to any port
 	 */
-	public GameServer(final ServerFrame serverFrame) throws IOException {
+	public GameServer(ServerFrame serverFrame) throws IOException {
 		this.game = Game.createTestMap(); // Creates the game object
-		this.port = Network.DEFAULT_SERVER_PORT_TCP; // Assign the default port used for the server
 		this.serverFrame = serverFrame;	
 	
 		// Create the server object and turn off debug unless its actually needed
@@ -54,34 +52,23 @@ public class GameServer extends Listener {
 		serverFrame.writeToConsole("[Server][Start] Registered Server for Packet Serialisation.");
 		
 		// Register the server so we can pass serialized objects in packets
-		Network.register(server);
+		Network.register(this.server);
 		// Set the listener to this class so we can handle incoming packets
-		server.addListener(this);
+		this.server.addListener(this);
 		
 		// Attempt to bound server to the TCP (and UDP Discovery port)
-		while(true) {
-			serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...");
-			try {
-				server.bind(this.port, Network.DEFAULT_SERVER_PORT_UDP); 
-				break;
-			} catch(IOException e) {
-				// Attempt to bound server to the TCP (and UDP Discovery port) failed
-				serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...FAILED!");
-				// on failure, try the next incremented port to bound to
-				this.port++;
-				// Make sure the new port is within the standard port range, otherwise if 
-				// exceeded 65535, then reset to lowest legal port number, 1
-				if(this.port > 65535) {
-					this.port = 1;
-				} else if (this.port == Network.DEFAULT_SERVER_PORT_TCP) {
-					// in the case we loop through all TCP port but didnt find a port to bound, then we produce an error
-					throw new IOException("All Ports for the server are blocked or the Discovery Port is unusable on this device.");
-				}
-			}
-			serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...SUCCESS!");
+		serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...");
+		try {
+			this.server.bind(this.port, Network.DEFAULT_SERVER_PORT_UDP); 
+		} catch(IOException e) {
+			// Attempt to bound server to the TCP (and UDP Discovery port) failed
+			serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...FAILED!");
+			this.server.stop();
+			this.game = null;
 		}
+		serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...SUCCESS!");
 		// Start the server after a port is bound
-		server.start(); 
+		this.server.start(); 
 	}
 	
 	@Override

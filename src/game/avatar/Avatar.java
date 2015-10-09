@@ -9,10 +9,50 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+/**
+ * This class manages all the sprites of a particular avatar. Although
+ * previously it did every sprite for a particular avatar, thanks to the 
+ * continued addition of sprites of other team members, NOT all sprites
+ * can be accessible here (mainly the GIFs).
+ * 
+ * This Class dynamically searches for the avatar therefore it requires all avatars 
+ * to be in the "./sprites/avatars/". The name of sub-directories within the avatar 
+ * folder are the avatars and the name of the avatar is collected from the folder name
+ * Within an avatar sprite folder there are nested sub-directories indicating
+ * the next "evolution" of a sprite.
+ * 
+ * @author Prashant Bhikhu
+ *
+ */
 public class Avatar implements Serializable {
-	private static final long serialVersionUID = 3217955654737927285L;
+	private static final long serialVersionUID = 3217955654737927285L; // Generated Serial UID
+	
+	private static File avatarPath = new File("./sprites/avatars/"); // The file path that locates the avatar sprites
 
-	private static File avatarPath = new File("./sprites/avatars/");
+	// Although redunant due to 'evolution1_name', it is keep in the code for compatibility
+	private final String avatarName;
+
+	// First Evolution Sprites
+	private final String evolution1_name;
+	private final ImageIcon evolution1_faceleft;
+	private final ImageIcon evolution1_faceright;
+	private final ImageIcon evolution1_backleft;
+	private final ImageIcon evolution1_backright;
+	private final ImageIcon normal; // The Sprite which is the used as the display picture of the avatar
+
+	// Second Evolution Sprites
+	private final String evolution2_name;
+	private final ImageIcon evolution2_faceleft;
+	private final ImageIcon evolution2_faceright;
+	private final ImageIcon evolution2_backleft;
+	private final ImageIcon evolution2_backright;
+
+	// Third Evolution Sprites
+	private final String evolution3_name;
+	private final ImageIcon evolution3_faceleft;
+	private final ImageIcon evolution3_faceright;
+	private final ImageIcon evolution3_backleft;
+	private final ImageIcon evolution3_backright;
 
 	public static List<Avatar> getAllAvatars() throws IOException
 	{
@@ -83,33 +123,8 @@ public class Avatar implements Serializable {
 		return avatars;
 
 	}
-
-
-	private final String avatarName;
-
-	// Intital Evolution Sprites
-	private final String evolution1_name;
-	private final ImageIcon evolution1_faceleft;
-	private final ImageIcon evolution1_faceright;
-	private final ImageIcon evolution1_backleft;
-	private final ImageIcon evolution1_backright;
-	private final ImageIcon normal;
-
-	// Second Evolution Sprites
-	private final String evolution2_name;
-	private final ImageIcon evolution2_faceleft;
-	private final ImageIcon evolution2_faceright;
-	private final ImageIcon evolution2_backleft;
-	private final ImageIcon evolution2_backright;
-
-	// Third Evolution Sprites
-	private final String evolution3_name;
-	private final ImageIcon evolution3_faceleft;
-	private final ImageIcon evolution3_faceright;
-	private final ImageIcon evolution3_backleft;
-	private final ImageIcon evolution3_backright;
-
-
+	
+	
 	public Avatar(String avatarName, ImageIcon evolution1_faceleft,
 			ImageIcon evolution1_faceright, ImageIcon evolution1_backleft,
 			ImageIcon evolution1_backright, ImageIcon normal, 
@@ -143,7 +158,7 @@ public class Avatar implements Serializable {
 	}
 
 	/**
-	 * No-args Constructor for Network Serialization (DO NOT USE)
+	 * No-args Constructor (Used for Kyro Serialization)
 	 */
 	public Avatar() {
 
@@ -169,9 +184,25 @@ public class Avatar implements Serializable {
 		this.evolution3_backright = null;
 	}	
 
+	
+	
 	public String getName() {
 		return avatarName;
 	}
+	
+	public String getEvolution3_name() {
+		return evolution3_name;
+	}
+
+
+	public String getEvolution2_name() {
+		return evolution2_name;
+	}
+
+
+	public String getEvolution1_name() {
+		return evolution1_name;
+	}	
 
 	public ImageIcon getNormal() {
 		return normal;
@@ -229,6 +260,7 @@ public class Avatar implements Serializable {
 		return evolution3_backright;
 	}	
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -255,12 +287,20 @@ public class Avatar implements Serializable {
 		return true;
 	}
 
+	/**
+	 * Main Method used for debugging. On Execution, if an IOException is produced
+	 * it indicates that the file structure is wrong therefore you need to fix it
+	 * before you run the game, otherwise if no error is produced, the file structure
+	 * is fine.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			Avatar.getAllAvatars();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
+
 }
