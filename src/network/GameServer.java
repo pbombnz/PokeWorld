@@ -8,6 +8,7 @@ import ui.ServerFrame;
 import game.Game;
 import game.Location;
 import game.Player;
+import network.Packets.ValidateNewPlayerUsername;
 import network.Packets.*;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -83,8 +84,21 @@ public class GameServer extends Listener {
 	@Override
 	public void received (Connection connection, Object object) {
 		//serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
-		
-		if (object instanceof NewPlayer) {
+		if (object instanceof ValidateNewPlayerUsername) {
+			ValidateNewPlayerUsername packet = (ValidateNewPlayerUsername) object;
+			ValidateNewPlayerUsername_Response packet_send = new ValidateNewPlayerUsername_Response();
+			
+			for(Player connectedPlayer : game.getPlayers()) {
+				if(connectedPlayer.getName().equalsIgnoreCase(packet.name)){
+					packet_send.valid = false;
+					connection.sendTCP(packet_send);
+					return;
+				}
+			}
+			packet_send.valid = true;
+			connection.sendTCP(packet_send);
+		}
+		else if (object instanceof NewPlayer) {
 			// Get the NewPlayer Packet
 			NewPlayer np = (NewPlayer) object;
 			

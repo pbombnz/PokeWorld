@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -72,8 +73,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
 
-	private GameClient gameClient = new GameClient(this);
-	private Player clientPlayer;
+	private GameClient gameClient = new GameClient();
 
 	public int jumpOffset = 0;
 	public int shakeOffset = 0;//the player will keep shake when they are standing in one place
@@ -156,6 +156,9 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	}
 
 	public void loadLabels() {
+		// Get Client Player from Client Connection
+		Player clientPlayer = gameClient.getClientPlayer();
+		
 		//load labels of player information
 		//create background label
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
@@ -397,6 +400,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				turnOffset -= changeOffset;
 			}
 
+			Player clientPlayer = gameClient.getClientPlayer();
+			
 			int numSquaresFace = 0;
 			int numSquaresLeft = 0;
 			int numSquaresRight = 0;
@@ -704,6 +709,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		Player clientPlayer = gameClient.getClientPlayer();
 		// don't fire an event on backspace or delete
 		Location loc = clientPlayer.getLocation();
 		//for third view control
@@ -1006,7 +1012,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	 *@contributer Wang Zhen(add Timer and gif)
 	 */
 	public void fightDialog() {
-
+		Player clientPlayer = gameClient.getClientPlayer();
 		final Location loc = clientPlayer.getLocation();
 
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
@@ -1085,7 +1091,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	 * @author Donald Tang
 	 */
 	public void fight() {
-
+		Player clientPlayer = gameClient.getClientPlayer();
 		final Location loc = clientPlayer.getLocation();
 
 		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
@@ -1132,8 +1138,13 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			if (menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
+				List<InetAddress> serverAddressList = gameClient.getServerList();
+				InetAddress serverAddress = ServerSelectDialog.Chooser(this, serverAddressList);
+				if(serverAddress == null) {
+					return;
+				}
 				try {
-					gameClient.connect("localhost");
+					gameClient.connect(serverAddress);
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(this,
 							"Game Client was unable to initalise.\n"
@@ -1147,36 +1158,37 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				}
 
 				// At this point in code, client is connected to server successfully.
-				// Now we need to let the user enter a username and pick a character
-				String clientUsername = null;
-				while (clientUsername == null) {
-					clientUsername = JOptionPane.showInputDialog(this,
-							"Input your Username?");
-					if (clientUsername != null && clientUsername.length() < 3) {
-						clientUsername = null;
+				// Now we need to let the user enter a username (and validate that it
+				// isn't already taken by another user) and pick a character
+				String playerUsername = null;
+				
+				while (playerUsername == null) {
+					playerUsername = JOptionPane.showInputDialog(this, "Input your Username?");
+					
+					if (playerUsername == null || playerUsername.length() < 1) {
+						playerUsername = null;
+						JOptionPane.showMessageDialog(this, "You need to enter a user name!", "ERROR", JOptionPane.ERROR_MESSAGE);
+						continue;
 					}
-					if (clientUsername == null) {
-						JOptionPane.showMessageDialog(this,
-								"You need to enter a user name that"
-										+ " is at least 3 characters long.",
-										"ERROR", JOptionPane.ERROR_MESSAGE);
+					
+					if(!gameClient.isNewPlayerUsernameValid(playerUsername)) {
+						JOptionPane.showMessageDialog(this, "Username Already in use. Please enter another one!", "ERROR", JOptionPane.ERROR_MESSAGE);						
+						playerUsername = null;
+						continue;
 					}
 				}
 
-				Avatar clientAvatar = ChooseCharacterDialog.Chooser(this);
+				Avatar playerAvatar = ChooseCharacterDialog.Chooser(this);
 
-				// Created a player for the client
-				clientPlayer = new Player(clientUsername);
-				clientPlayer.setAvatar(clientAvatar);
-
-				gameClient.joinServer(clientPlayer);
+				// Created a player for the client and send it the server to be passed to other clients
+				gameClient.createPlayer(playerUsername, playerAvatar);
 
 				// redraw the board
 				frameState = FRAME_STATE.GAME_START;
 				//add all jlabel after picking character
-				loadLabels();
-				panel.add(headPictureLabel);
-				panel.add(bgHeadViewLabel);
+				//loadLabels();
+				//panel.add(headPictureLabel);
+				//panel.add(bgHeadViewLabel);
 
 				try {
 					Thread.sleep(1000);
@@ -1189,14 +1201,6 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				System.exit(0);
 			}
 		}
-	}
-
-	public void setClientPlayer(Player player) {
-		this.clientPlayer = player;
-	}
-
-	public Player getClientPlayer() {
-		return clientPlayer;
 	}
 }
 

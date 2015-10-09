@@ -71,6 +71,8 @@ public class Network {
 		kyro.register(ImageIcon.class);
 		
 		// Network Packet Registration
+		kyro.register(Packets.ValidateNewPlayerUsername.class);
+		kyro.register(Packets.ValidateNewPlayerUsername_Response.class);
 		kyro.register(Packets.NewPlayer.class);
 		kyro.register(Packets.PlayerMove.class);
 		kyro.register(Packets.PlayerQuit.class);

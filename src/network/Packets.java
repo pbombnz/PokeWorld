@@ -12,6 +12,14 @@ import game.Player;
 *
 */
 public class Packets {
+	public static class ValidateNewPlayerUsername {
+		String name;
+	}
+	public static class ValidateNewPlayerUsername_Response {
+		boolean valid;
+	}
+	
+	
 	/**
 	 * USED: Client -> Server
 	 *
@@ -26,15 +34,6 @@ public class Packets {
 	 */
 	public static class NewPlayer {
 		Player player;
-	}
-	
-	/** 
-	 * USED: Server -> Client
-	 * 
-	 * Sends an empty packet to the client to understand that the name is already
-	 * in use (or invalid is some other way that conflicts within the server).
-	 */
-	public static class NewPlayer_Error_NameAlreadyInUse {
 	}
 
 	/**
