@@ -8,10 +8,16 @@ import game.objects.GameObject;
 import rooms.Board1;
 import rooms.Board2;
 import rooms.Board3;
+import ui.GameLauncher;
+import ui.GamePlayFrame;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
-import java.awt.List;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -19,7 +25,8 @@ import java.util.ArrayList;
  * @author Donald Tang
  */
 public class Tests {
-
+	private Robot bot;
+	private GameLauncher g;
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testBoard1() {
 		Board1 board = new Board1();
@@ -81,5 +88,63 @@ public class Tests {
 		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
 		p.setAvatar(list.get(2));
 		assertTrue(p.getAvatar().getName().equals("Squirtle"));
+	}
+
+	@Test
+	public void testCharacterSelect() throws IOException, AWTException {
+		createGame();
+		bot.mouseMove(200, 200);
+		bot.delay(1000);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		bot.keyPress(KeyEvent.VK_S);
+		bot.keyRelease(KeyEvent.VK_S);
+		bot.delay(100);
+		bot.keyPress(KeyEvent.VK_S);
+		bot.keyRelease(KeyEvent.VK_S);
+		bot.delay(100);
+		
+		
+	}
+
+	public void createGame() throws AWTException {
+		this.g = new GameLauncher();
+		this.bot = new Robot();
+		bot.delay(1000);
+		bot.mouseMove(10, 40);
+		bot.delay(1000);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		bot.mouseMove(10, 50);
+		bot.delay(1000);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		bot.delay(1000);
+		bot.mouseMove(1000, 40);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		bot.delay(1000);
+		bot.mouseMove(10, 40);
+		bot.delay(1000);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		bot.mouseMove(10, 80);
+		bot.delay(1000);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		bot.delay(1000);
+		bot.keyPress(KeyEvent.VK_H);
+		bot.delay(500);
+		bot.keyPress(KeyEvent.VK_H);
+		bot.delay(500);
+		bot.keyPress(KeyEvent.VK_H);
+		bot.delay(500);
+		bot.keyPress(KeyEvent.VK_H);
+		bot.keyPress(KeyEvent.VK_ENTER);
+		bot.delay(500);
+		bot.mouseMove(500, 200);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		bot.delay(5000);
 	}
 }
