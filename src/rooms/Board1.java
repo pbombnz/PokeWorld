@@ -1,13 +1,9 @@
 package rooms;
 
 import game.BoardSquare;
-import game.objects.Door;
-import game.objects.GoodPotion;
-import game.objects.Key;
-import game.objects.Plant;
-import game.objects.RareCandy;
+import game.objects.interactiveObjects.*;
+import game.objects.scene.*;
 import game.objects.monster.*;
-import game.objects.Tree;
 
 import java.util.Arrays;
 /**

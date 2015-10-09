@@ -1,4 +1,6 @@
-package game.objects;
+package game.objects.scene;
+
+import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
 

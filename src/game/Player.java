@@ -1,7 +1,7 @@
 package game;
 
 import game.avatar.Avatar;
-import game.objects.Item;
+import game.objects.interactiveObjects.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
