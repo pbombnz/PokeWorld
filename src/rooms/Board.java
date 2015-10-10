@@ -14,11 +14,16 @@ import game.objects.scene.*;
 
 public abstract class Board implements Serializable {
 	protected static final long serialVersionUID = -3601832062619945416L;
+	
 	protected int width;
 	protected int height;
-
 	public BoardSquare[][] squares;
 
+	/** no-args Constructor **/
+	public Board() {
+		super();
+	}
+	
 	public abstract BoardSquare[][] getSquares();
 
 	public abstract int getWidth() ;

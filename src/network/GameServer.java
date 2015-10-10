@@ -8,7 +8,6 @@ import ui.ServerFrame;
 import game.Game;
 import game.Location;
 import game.Player;
-import network.Packets.ValidateNewPlayerUsername;
 import network.Packets.*;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -43,8 +42,8 @@ public class GameServer extends Listener {
 		this.serverFrame = serverFrame;	
 	
 		// Create the server object and turn off debug unless its actually needed
-		this.server = new Server(20480, 20480);
-		Log.set(Log.LEVEL_NONE);
+		this.server = new Server(Network.DEAFAULT_BUFFER_SIZE, Network.DEAFAULT_BUFFER_SIZE);
+		Log.set(Log.LEVEL_DEBUG);
 	
 		// Write messages to notify the user what is happened so far
 		serverFrame.writeToConsole("[Server][Start] Intialized.");
@@ -83,7 +82,9 @@ public class GameServer extends Listener {
 
 	@Override
 	public void received (Connection connection, Object object) {
-		//serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
+		serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
+		System.out.println(object);
+		
 		if (object instanceof ValidateNewPlayerUsername) {
 			ValidateNewPlayerUsername packet = (ValidateNewPlayerUsername) object;
 			ValidateNewPlayerUsername_Response packet_send = new ValidateNewPlayerUsername_Response();
@@ -99,6 +100,7 @@ public class GameServer extends Listener {
 			connection.sendTCP(packet_send);
 		}
 		else if (object instanceof NewPlayer) {
+			System.out.println("Got the new player!");
 			// Get the NewPlayer Packet
 			NewPlayer np = (NewPlayer) object;
 			

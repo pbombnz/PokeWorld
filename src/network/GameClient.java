@@ -14,6 +14,7 @@ import java.util.Stack;
 import ui.GamePlayFrame;
 
 import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.minlog.Log;
 
 import network.Packets.NewGame;
 import network.Packets.ValidateNewPlayerUsername_Response;
@@ -43,9 +44,8 @@ public class GameClient extends Listener {
 	 */
 	public GameClient() {
 		
-	    client = new Client(20480, 20480);
+	    client = new Client(Network.DEAFAULT_BUFFER_SIZE, Network.DEAFAULT_BUFFER_SIZE);
 	    Network.register(client);
-	    
 	    client.addListener(this);
 	    client.start();
 	}
@@ -147,12 +147,14 @@ public class GameClient extends Listener {
 		}
 		
 		for(Player connectedPlayer: game.getPlayers()) {
+
 			for(Avatar avatar: avatars) {
-				if(avatar.getAvatarName().equals(connectedPlayer.getAvatar().getAvatarName())) {
+				if(avatar.getName().equals(connectedPlayer.getAvatar().getName())) {
 					connectedPlayer.setAvatar(avatar);
 				}
 			}
 		}
+		gameClientListener.onGameClientUpdated();
 	}
 	
 	public Player getClientPlayer() {

@@ -18,6 +18,10 @@ public class Key implements Item {
 	private static final long serialVersionUID = 3007881710387627871L;
 
 	private int id;//ID of key used to check which door it can open
+
+	public Key(){
+	}
+
 	
 	/**
 	 * @param id, assigned an ID to open only one door of mathcing ID

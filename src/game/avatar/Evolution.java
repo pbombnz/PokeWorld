@@ -1,8 +1,12 @@
 package game.avatar;
 
+import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
-public class Evolution {
+public class Evolution implements Serializable {
+	private static final long serialVersionUID = -4465642051843622394L;
+	
 	private final String name;
 	private final ImageIcon displayPictureGIF;
 	private final ImageIcon faceLeft;
@@ -13,6 +17,18 @@ public class Evolution {
 	private final ImageIcon dieGIF;
 	private final ImageIcon evolvingGIF;
 
+	public Evolution() {
+		this.name = null;
+		this.displayPictureGIF = null;
+		this.faceLeft = null;
+		this.faceRight = null;
+		this.backLeft = null;
+		this.backRight = null;
+		this.attackGIF = null;
+		this.dieGIF = null;
+		this.evolvingGIF = null;	
+	}
+	
 	public Evolution(String name, ImageIcon displayPictureGIF,
 			ImageIcon faceLeft, ImageIcon faceRight, ImageIcon backLeft,
 			ImageIcon backRight, ImageIcon attackGIF, ImageIcon dieGIF, ImageIcon evolvingGIF) {

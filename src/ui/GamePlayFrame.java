@@ -49,6 +49,7 @@ import game.Location;
 import game.Player;
 import game.Direction;
 import game.avatar.Avatar;
+import game.avatar.Evolution;
 import game.objects.interactiveObjects.*;
 import game.objects.GameObject;
 import game.objects.scene.*;
@@ -168,14 +169,18 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
 		//load head picture
 		JLabel headPictureLabel = null;
-		if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
+		/*ALEX's OLD CODE
+		 * if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
 			headPictureLabel = new JLabel(new ImageIcon("src/Bulbasaur.gif"));
-		} else if (clientPlayer.getAvatar().getAvatarName()
-				.equals("Charmander")) {
+		} else if (clientPlayer.getAvatar().getAvatarName().equals("Charmander")) {
 			headPictureLabel = new JLabel(new ImageIcon("src/Charmander.gif"));
 		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
 			headPictureLabel = new JLabel(new ImageIcon("src/Squirtle.gif"));
-		}
+		}*/
+		// PRASHANT's CODE
+		ImageIcon headPicture = clientPlayer.getAvatar().getCurrentEvolution(clientPlayer.getPlayerLevel()).getDisplayPictureGIF();
+		headPictureLabel = new JLabel(headPicture);
+		
 		int xPo = 10;
 		int yPo = 10;
 		int touxiangSize = 130;
@@ -192,8 +197,18 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		JLabel levelUpLabel_2 = null;
 		JLabel levelUpLabel_3 = null;
 
-		//print head picture
-		if (clientPlayer.getPlayerLevel() == 1) {
+		//print head picture <- Bad Comment
+		// Proper Comment: Sets all Labels with Sprites of the clients player.
+		Evolution clientPlayerCurrentEvolution = clientPlayer.getAvatar().getCurrentEvolution(clientPlayer.getPlayerLevel());
+		Evolution clientPlayerNextEvolution = clientPlayer.getAvatar().getNextEvolution(clientPlayer.getPlayerLevel());
+
+		dieLabel = new JLabel(clientPlayerCurrentEvolution.getDieGIF());
+		attackLabel = new JLabel(clientPlayerCurrentEvolution.getAttackGIF());
+		levelUpLabel_2 = new JLabel(clientPlayerCurrentEvolution.getEvolvingGIF());
+		levelUpLabel_3 = new JLabel(clientPlayerNextEvolution.getEvolvingGIF());
+		
+		
+		/*if (clientPlayer.getPlayerLevel() == 1) {
 			if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
 				dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
 				attackLabel = new JLabel(new ImageIcon(
@@ -277,7 +292,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				levelUpLabel_3 = new JLabel(new ImageIcon(
 						"src/Charmander_upto_level3.gif"));
 			}
-		}
+		}*/
 
 		int diexPo = 400;
 		int dieyPo = 100;
@@ -368,7 +383,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			super.paintComponent(g); // Clears panel
 
 			//draw welcome picture
-			if (frameState == FRAME_STATE.CREATED_FRAME) {
+			if (frameState == FRAME_STATE.CREATED_FRAME || frameState == FRAME_STATE.GAME_CONNECTING) {
 				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
 						0, FULL_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
@@ -1197,7 +1212,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				gameClient.createPlayer(playerUsername, playerAvatar);
 
 				// redraw the board
-				frameState = FRAME_STATE.GAME_START;
+				//frameState = FRAME_STATE.GAME_START;
 				//add all jlabel after picking character
 				//loadLabels();
 				//panel.add(headPictureLabel);
@@ -1212,6 +1227,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 	@Override
 	public void onGameClientUpdated() {
+		frameState = FRAME_STATE.GAME_START;
 		repaint();	
 	}
 }

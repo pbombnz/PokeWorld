@@ -15,6 +15,10 @@ public class BoardSquare implements Serializable {
 	
 	private GameObject gameObjectOnSquare;
 	
+	public BoardSquare() {
+		
+	}
+	
 	public BoardSquare(GameObject gameObjectOnSquare) {
 		this.gameObjectOnSquare = gameObjectOnSquare;
 	}

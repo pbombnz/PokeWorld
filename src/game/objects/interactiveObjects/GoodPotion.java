@@ -10,6 +10,10 @@ public class GoodPotion implements Item {
 	
 	private final int healthHealAmount;
 	
+	public GoodPotion(){
+		this.healthHealAmount = -1;
+	}
+	
 	public GoodPotion(int healthHealAmount){
 		this.healthHealAmount = healthHealAmount;
 	}

@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 
 import game.*;
 import game.avatar.Avatar;
+import game.avatar.Evolution;
 import game.objects.*;
 
 import java.awt.Image;
@@ -34,7 +35,7 @@ import game.objects.interactiveObjects.*;
 public class Network {
 	public static final int DEFAULT_SERVER_PORT_TCP = 8777; // Used for Game Server Communication
 	public static final int DEFAULT_SERVER_PORT_UDP = 8778; // Used for Game Server Discovery
-	
+	public static final int DEAFAULT_BUFFER_SIZE = 65535;
 	/**
 	 * 
 	 * @param host The socket object (which can either be a Kyro Client or Server)
@@ -69,40 +70,41 @@ public class Network {
 		kyro.register(ImageIcon.class);
 		
 		// Network Packet Registration
-		kyro.register(Packets.ValidateNewPlayerUsername.class);
-		kyro.register(Packets.ValidateNewPlayerUsername_Response.class);
-		kyro.register(Packets.NewPlayer.class);
-		kyro.register(Packets.PlayerUpdateLocationAndDirection.class);
-		kyro.register(Packets.PlayerUpdateAttack.class);
-		kyro.register(Packets.PlayerUpdateEvolutionLevel.class);
-		kyro.register(Packets.PlayerQuit.class);
-		kyro.register(Packets.NewGame.class);
-		kyro.register(Packets.PlayerMessage.class);
+		kyro.register(network.Packets.ValidateNewPlayerUsername.class);
+		kyro.register(network.Packets.ValidateNewPlayerUsername_Response.class);
+		kyro.register(network.Packets.NewPlayer.class);
+		kyro.register(network.Packets.PlayerUpdateLocationAndDirection.class);
+		kyro.register(network.Packets.PlayerUpdateAttack.class);
+		kyro.register(network.Packets.PlayerUpdateEvolutionLevel.class);
+		kyro.register(network.Packets.PlayerQuit.class);
+		kyro.register(network.Packets.NewGame.class);
+		kyro.register(network.Packets.PlayerMessage.class);
 		
 		// Game Related Objects Registration
-		kyro.register(Game.class);
-		kyro.register(Location.class);
-		kyro.register(Player.class);
-		kyro.register(Direction.class);
-		kyro.register(Avatar.class);
+		kyro.register(game.Game.class);
+		kyro.register(game.Location.class);
+		kyro.register(game.Player.class);
+		kyro.register(game.Direction.class);
+		kyro.register(game.avatar.Avatar.class);
+		kyro.register(game.avatar.Evolution.class);
 		
-		kyro.register(Room.class);
-		kyro.register(Room1.class);
-		kyro.register(Room2.class);
-		kyro.register(Room3.class);
-		kyro.register(Room4.class);
+		kyro.register(rooms.Room.class);
+		kyro.register(rooms.Room1.class);
+		kyro.register(rooms.Room2.class);
+		kyro.register(rooms.Room3.class);
+		kyro.register(rooms.Room4.class);
 		
-		kyro.register(EmptyBoard.class);
-		kyro.register(Board.class);
-		kyro.register(Board1.class);
-		kyro.register(Board2.class);
-		kyro.register(Board3.class);
-		kyro.register(Board4.class);
+		kyro.register(rooms.EmptyBoard.class);
+		kyro.register(rooms.Board.class);
+		kyro.register(rooms.Board1.class);
+		kyro.register(rooms.Board2.class);
+		kyro.register(rooms.Board3.class);
+		kyro.register(rooms.Board4.class);
 		
 		
-		kyro.register(BoardSquare.class);
-		kyro.register(BoardSquare[].class);
-		kyro.register(BoardSquare[][].class);
+		kyro.register(game.BoardSquare.class);
+		kyro.register(game.BoardSquare[].class);
+		kyro.register(game.BoardSquare[][].class);
 		
 		
 		

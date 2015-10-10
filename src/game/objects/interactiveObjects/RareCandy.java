@@ -19,6 +19,10 @@ public class RareCandy implements Item {
 	
 	int currLevel;//current level of the player character
 
+	public RareCandy() {
+		
+	}
+	
 	@Override
 	public String getName() {
 		return "Rare Candy";

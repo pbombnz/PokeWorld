@@ -3,7 +3,6 @@ package game.avatar;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -226,6 +225,13 @@ public class Avatar implements Serializable {
 		return evolutions.get(playerEvolutionLevel-1);
 	}
 	
+	public Evolution getNextEvolution(int playerEvolutionLevel) {
+		if(playerEvolutionLevel < 1 || playerEvolutionLevel > 3) {
+			throw new IllegalArgumentException("The Evolution Level of a Player must be between 1-3.");
+		}
+		return evolutions.get(playerEvolutionLevel);
+	}
+	
 	/**
 	 * Main Method used for debugging. On Execution, if an IOException is produced
 	 * it indicates that the file structure is wrong therefore you need to fix it
@@ -240,6 +246,10 @@ public class Avatar implements Serializable {
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public ImageIcon getDisplayPic() {
+		return displayPic;
 	}
 
 }

@@ -20,6 +20,9 @@ public class Door implements GameObject{
 	public int linkTo;
 	public int linkFrom;
 
+	public Door(){
+	}
+	
 	/**
 	 * @param id, ID of the door
 	 * @param linkFrom, The room this door goes to

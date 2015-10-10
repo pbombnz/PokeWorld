@@ -25,7 +25,7 @@ public class Packets {
 	 * USED: Client -> Server
 	 *
 	 * A packet containing the new player with the avatar and set name is
-	 * sent to the server to be added the global game object within the server.
+	 * sent to the server to5 be added the global game object within the server.
 	 * 
 	 * NOTE: Issues will occur when reading the Avatar object of the Player.
 	 * This is because for some reason, when passing an ImageIcon object

@@ -8,6 +8,10 @@ public class BadPotion implements Item{
 	private static final long serialVersionUID = 9081977774417525283L;
 	
 	private final int healthDamageAmount;
+
+	public BadPotion(){
+		this.healthDamageAmount = -1;
+	}
 	
 	public BadPotion(int healthDamageAmount){
 		this.healthDamageAmount = healthDamageAmount;

@@ -10,21 +10,20 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 public class Player implements Serializable {
-	private static final long serialVersionUID = -4998808498802462674L;
-
-	public static final int HEALTH =  10;
+	private static final long serialVersionUID = -3023304431184848781L;
+	
+	public static final int HEALTH = 10;
 	public static final int ATTACK = 10;
 
 	private Avatar avatar;
 	
-	private int id;
+	private final int id;
 	private final String name;
 	
 	private int health;
 	private int attack;
-	private int evolutionLevel = 1;
 
-	private final int maxItems = 6;
+	private static final int maxItems = 6;
 	private List<Item> inventory = new ArrayList<Item>();
 
 	private Location location;
@@ -35,6 +34,7 @@ public class Player implements Serializable {
 	 * No-Args Constructor for Networking Serialisation (DO NOT USE)
 	 */
 	public Player() {
+		this.id = -1;
 		this.name = null;
 	}
 	
@@ -116,111 +116,50 @@ public class Player implements Serializable {
 	public void setPlayerLevel(int change){
 		this.playerLevel = change;
 	}	
-	
-	public int getEvolutionLevel() {
-		return evolutionLevel;
-	}
-
-	public void setEvolutionLevel(int evolutionLevel) {
-		this.evolutionLevel = evolutionLevel;
-	}
-	
 
 	public ImageIcon getSpriteBasedOnDirection() {
 		if(avatar != null) {
-			switch(playerLevel) {
-			case 1:
-				switch(direction) {
-				case FACE_LEFT:
-					return avatar.getEvolution1_faceleft();
-				case FACE_RIGHT:
-					return avatar.getEvolution1_faceright();
-				case BACK_LEFT:
-					return avatar.getEvolution1_backleft();
-				case BACK_RIGHT:
-					return avatar.getEvolution1_backright();
-				}
-			case 2:
-				switch(direction) {
-				case FACE_LEFT:
-					return avatar.getEvolution2_faceleft();
-				case FACE_RIGHT:
-					return avatar.getEvolution2_faceright();
-				case BACK_LEFT:
-					return avatar.getEvolution2_backleft();
-				case BACK_RIGHT:
-					return avatar.getEvolution2_backright();
-				}
-			case 3:
-				switch(direction) {
-				case FACE_LEFT:
-					return avatar.getEvolution3_faceleft();
-				case FACE_RIGHT:
-					return avatar.getEvolution3_faceright();
-				case BACK_LEFT:
-					return avatar.getEvolution3_backleft();
-				case BACK_RIGHT:
-					return avatar.getEvolution3_backright();
-				}
+			switch(direction) {
+			case FACE_LEFT:
+				return avatar.getCurrentEvolution(playerLevel).getFaceLeft();
+			case FACE_RIGHT:
+				return avatar.getCurrentEvolution(playerLevel).getFaceRight();
+			case BACK_LEFT:
+				return avatar.getCurrentEvolution(playerLevel).getBackLeft();
+			case BACK_RIGHT:
+				return avatar.getCurrentEvolution(playerLevel).getBackRight();
 			}
 		}
-		throw new RuntimeException("no way to get avatar");
-		//return null;
+		throw new RuntimeException("The Avatar of the Player has not been set yet.");
 	}
 	
-	public ImageIcon getSpriteBasedOnDirection(Direction direction) {
+	public ImageIcon getSpriteBasedOnDirection(Direction fpsDirection) {
 		if(avatar != null) {
-			switch(playerLevel) {
-			case 1:
-				switch(direction) {
-				case FACE_LEFT:
-					return avatar.getEvolution1_faceleft();
-				case FACE_RIGHT:
-					return avatar.getEvolution1_faceright();
-				case BACK_LEFT:
-					return avatar.getEvolution1_backleft();
-				case BACK_RIGHT:
-					return avatar.getEvolution1_backright();
-				}
-			case 2:
-				switch(direction) {
-				case FACE_LEFT:
-					return avatar.getEvolution2_faceleft();
-				case FACE_RIGHT:
-					return avatar.getEvolution2_faceright();
-				case BACK_LEFT:
-					return avatar.getEvolution2_backleft();
-				case BACK_RIGHT:
-					return avatar.getEvolution2_backright();
-				}
-			case 3:
-				switch(direction) {
-				case FACE_LEFT:
-					return avatar.getEvolution3_faceleft();
-				case FACE_RIGHT:
-					return avatar.getEvolution3_faceright();
-				case BACK_LEFT:
-					return avatar.getEvolution3_backleft();
-				case BACK_RIGHT:
-					return avatar.getEvolution3_backright();
-				}
+			switch(fpsDirection) {
+			case FACE_LEFT:
+				return avatar.getCurrentEvolution(playerLevel).getFaceLeft();
+			case FACE_RIGHT:
+				return avatar.getCurrentEvolution(playerLevel).getFaceRight();
+			case BACK_LEFT:
+				return avatar.getCurrentEvolution(playerLevel).getBackLeft();
+			case BACK_RIGHT:
+				return avatar.getCurrentEvolution(playerLevel).getBackRight();
 			}
 		}
-		throw new RuntimeException("no way to get avatar");
-		//return null;
+		throw new RuntimeException("The Avatar of the Player has not been set yet.");
 	}
 
-
+	public int getId() {
+		return id;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + attack;
-		result = prime * result + ((avatar == null) ? 0 : avatar.hashCode());
 		result = prime * result
 				+ ((direction == null) ? 0 : direction.hashCode());
-		result = prime * result + evolutionLevel;
 		result = prime * result + health;
 		result = prime * result + id;
 		result = prime * result
@@ -243,14 +182,7 @@ public class Player implements Serializable {
 		Player other = (Player) obj;
 		if (attack != other.attack)
 			return false;
-		if (avatar == null) {
-			if (other.avatar != null)
-				return false;
-		} else if (!avatar.equals(other.avatar))
-			return false;
 		if (direction != other.direction)
-			return false;
-		if (evolutionLevel != other.evolutionLevel)
 			return false;
 		if (health != other.health)
 			return false;
@@ -275,24 +207,4 @@ public class Player implements Serializable {
 			return false;
 		return true;
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	@Override
-	public String toString() {
-		return "Player [avatar=" + avatar + ", id=" + id + ", name=" + name
-				+ ", health=" + health + ", attack=" + attack
-				+ ", evolutionLevel=" + evolutionLevel + ", maxItems="
-				+ maxItems + ", inventory=" + inventory + ", location="
-				+ location + ", newDirection=" + direction + ", playerLevel="
-				+ playerLevel + "]";
-	}
-
-	
 }
