@@ -15,7 +15,7 @@ import org.json.simple.parser.ParseException;
 
 import game.Location;
 import game.Player;
-import game.Player.Direction;
+import game.Direction;
 import game.avatar.Avatar;
 import game.objects.interactiveObjects.*;
 

@@ -2,6 +2,7 @@ package network;
 
 import game.Game;
 import game.Player;
+import game.Direction;
 import game.avatar.Avatar;
 
 import java.io.IOException;

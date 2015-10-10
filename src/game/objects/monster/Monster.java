@@ -11,9 +11,6 @@ import game.objects.GameObject;
  */
 
 public interface Monster extends GameObject{
-	
-	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
-	
 	/**
 	 * @return name of the enemy
 	 */

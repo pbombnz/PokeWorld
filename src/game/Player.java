@@ -12,8 +12,6 @@ import javax.swing.ImageIcon;
 public class Player implements Serializable {
 	private static final long serialVersionUID = -4998808498802462674L;
 
-	public static enum Direction { FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
-	
 	public static final int HEALTH =  10;
 	public static final int ATTACK = 10;
 

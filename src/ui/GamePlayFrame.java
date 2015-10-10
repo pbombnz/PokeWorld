@@ -47,7 +47,7 @@ import game.BoardSquare;
 import game.Game;
 import game.Location;
 import game.Player;
-import game.Player.Direction;
+import game.Direction;
 import game.avatar.Avatar;
 import game.objects.interactiveObjects.*;
 import game.objects.GameObject;
@@ -731,7 +731,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				loc.moveNorth();
 			} else {
-				clientPlayer.setDirection(Player.Direction.BACK_LEFT);
+				clientPlayer.setDirection(Direction.BACK_LEFT);
 				loc.moveNorth();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_S) {
@@ -739,7 +739,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				loc.moveSouth();//oo
 			} else {
-				clientPlayer.setDirection(Player.Direction.FACE_RIGHT);
+				clientPlayer.setDirection(Direction.FACE_RIGHT);
 				loc.moveSouth();//oo
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
@@ -747,7 +747,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
 				loc.moveWest();
 			} else {
-				clientPlayer.setDirection(Player.Direction.FACE_LEFT);
+				clientPlayer.setDirection(Direction.FACE_LEFT);
 				loc.moveWest();//oo
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
@@ -755,7 +755,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 				loc.moveEast();
 			} else {
-				clientPlayer.setDirection(Player.Direction.BACK_RIGHT);
+				clientPlayer.setDirection(Direction.BACK_RIGHT);
 				loc.moveEast();//oo
 			}
 		}

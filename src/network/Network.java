@@ -83,7 +83,7 @@ public class Network {
 		kyro.register(Game.class);
 		kyro.register(Location.class);
 		kyro.register(Player.class);
-		kyro.register(Player.Direction.class);
+		kyro.register(Direction.class);
 		kyro.register(Avatar.class);
 		
 		kyro.register(Room.class);

@@ -10,7 +10,7 @@ import org.json.simple.*;
 
 import game.Location;
 import game.Player;
-import game.Player.Direction;
+import game.Direction;
 import game.avatar.Avatar;
 import game.objects.interactiveObjects.*;
 

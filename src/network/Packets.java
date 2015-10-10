@@ -2,7 +2,7 @@ package network;
 
 import game.Location;
 import game.Player;
-import game.Player.Direction;
+import game.Direction;
 
 /**
 * These classes represent the different types of packets that can

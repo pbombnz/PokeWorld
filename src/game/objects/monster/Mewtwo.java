@@ -1,5 +1,6 @@
 package game.objects.monster;
 
+import game.Direction;
 import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
@@ -14,9 +15,7 @@ import javax.swing.ImageIcon;
 public class Mewtwo implements Monster{
 
 	private static final long serialVersionUID = 6696995125055330253L;
-	
-	public static enum Direction {FACE_LEFT, FACE_RIGHT, BACK_LEFT, BACK_RIGHT};
-	
+
 	public int health;
 	public int attack;
 	public Direction direction = Direction.FACE_RIGHT;
