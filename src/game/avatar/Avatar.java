@@ -1,6 +1,7 @@
 package game.avatar;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,69 +32,76 @@ public class Avatar implements Serializable {
 
 	// Although redunant due to 'evolution1_name', it is keep in the code for compatibility
 	private final String avatarName;
+	private final ImageIcon displayPic;
+	private List<Evolution> evolutions = new ArrayList<Evolution>();
 
-	// First Evolution Sprites
-	private final String evolution1_name;
-	private final ImageIcon evolution1_faceleft;
-	private final ImageIcon evolution1_faceright;
-	private final ImageIcon evolution1_backleft;
-	private final ImageIcon evolution1_backright;
-	private final ImageIcon normal; // The Sprite which is the used as the display picture of the avatar
 
-	// Second Evolution Sprites
-	private final String evolution2_name;
-	private final ImageIcon evolution2_faceleft;
-	private final ImageIcon evolution2_faceright;
-	private final ImageIcon evolution2_backleft;
-	private final ImageIcon evolution2_backright;
-
-	// Third Evolution Sprites
-	private final String evolution3_name;
-	private final ImageIcon evolution3_faceleft;
-	private final ImageIcon evolution3_faceright;
-	private final ImageIcon evolution3_backleft;
-	private final ImageIcon evolution3_backright;
-
-	public static List<Avatar> getAllAvatars() throws IOException
+	public static List<Avatar> getAllAvatars() throws FileNotFoundException
 	{
 		List<Avatar> avatars;
 
 		if(avatarPath.exists() && avatarPath.isDirectory()) {
 			avatars = new ArrayList<Avatar>();
 		} else {
-			throw new RuntimeException("Game Files Corrupted. The Avatar folder in sprites does not exist or is not readable.");
+			throw new FileNotFoundException("Sprite Avatar Folder Does not exist or cannot be found.");
 		}
 
 		File[] fList = avatarPath.listFiles();
 
 		for (File file : fList) {
-			if (file.isDirectory()) {
+			if (file.isDirectory()) {	
+				File[] directories = null;
+				
+				//System.out.println(checkImagesExist(file.getAbsolutePath(), 1));
+				if(!checkImagesExist(file.getAbsolutePath(), 1)) {
+					throw new FileNotFoundException("Sprite Avatar Folder, in \""+file.getAbsolutePath()+"\"  are not Structured Correctly.");
+				}
+				
+				
 				String avatarName = file.getName();
-				String evoluton1_name = file.getName();
-				ImageIcon evolution1_faceleft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
-				ImageIcon evolution1_faceright = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
-				ImageIcon evolution1_backleft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
-				ImageIcon evolution1_backright = new ImageIcon(file.getAbsolutePath() + "/backright.png");
-				ImageIcon normal = new ImageIcon(file.getAbsolutePath() + "/normal.png");
+				ImageIcon displayPic  = new ImageIcon(file.getAbsolutePath() + "/dp.png");				
+				
+				String name = file.getName();
+				ImageIcon displayPicGIF  = new ImageIcon(file.getAbsolutePath() + "/dp.gif");
+				ImageIcon faceLeft = new ImageIcon(file.getAbsolutePath() + "/faceleft.png");
+				ImageIcon faceRight = new ImageIcon(file.getAbsolutePath() + "/faceright.png");
+				ImageIcon backLeft = new ImageIcon(file.getAbsolutePath() + "/backleft.png");
+				ImageIcon backRight = new ImageIcon(file.getAbsolutePath() + "/backright.png");
+				ImageIcon attackGIF = new ImageIcon(file.getAbsolutePath() + "/attack.gif");
+				ImageIcon dieGIF = new ImageIcon(file.getAbsolutePath() + "/die.gif");
+				ImageIcon evolvingGIF = new ImageIcon(file.getAbsolutePath() + "/evolve.gif");
 
-				File[] directories = new File(file.getAbsolutePath()).listFiles(new FilenameFilter() {
+				
+				Evolution firstEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF, evolvingGIF);
+				
+				
+				directories = new File(file.getAbsolutePath()).listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File current, String name) {
 						return new File(current, name).isDirectory();
 					}
 				});
-
+				
 				if(directories.length != 1) {
-					throw new IOException("Second Evolution for \""+avatarName+"\" Sprite doesn't Exist");
+					throw new FileNotFoundException("Second Evolution for \""+avatarName+"\" Sprite doesn't Exist");
+				}
+				
+				if(!checkImagesExist(directories[0].getAbsolutePath(), 2)) {
+					throw new FileNotFoundException("Sprite Avatar Folder, in \""+directories[0].getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 
-				String evolution2_name = directories[0].getName();
-				ImageIcon evolution2_faceleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "faceleft.png");
-				ImageIcon evolution2_faceright = new ImageIcon(directories[0].getAbsolutePath()+ File.separator + "faceright.png");
-				ImageIcon evolution2_backleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backleft.png");
-				ImageIcon evolution2_backright = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backright.png");
-
-				//directories = new File(directories[0].getAbsolutePath()).listFiles(File::isDirectory);
+				name = directories[0].getName();
+				displayPicGIF  = new ImageIcon(directories[0].getAbsolutePath() + "/dp.gif");
+				faceLeft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
+				faceRight = new ImageIcon(directories[0].getAbsolutePath() + "/faceright.png");
+				backLeft = new ImageIcon(directories[0].getAbsolutePath() + "/backleft.png");
+				backRight = new ImageIcon(directories[0].getAbsolutePath() + "/backright.png");
+				attackGIF = new ImageIcon(directories[0].getAbsolutePath() + "/attack.gif");
+				dieGIF = new ImageIcon(directories[0].getAbsolutePath() + "/die.gif");
+				evolvingGIF = new ImageIcon(directories[0].getAbsolutePath() + "/evolve.gif");				
+				
+				Evolution secondEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF, evolvingGIF);
+						
 				directories = new File(directories[0].getAbsolutePath()).listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File current, String name) {
@@ -101,87 +109,82 @@ public class Avatar implements Serializable {
 					}
 				});	 
 				if(directories.length != 1) {
-					throw new IOException("Third Evolution for \""+avatarName+"\" Sprite doesn't Exist");
+					throw new FileNotFoundException("Third Evolution for \""+avatarName+"\" Sprite doesn't Exist");
+				}
+				
+				if(!checkImagesExist(directories[0].getAbsolutePath(), 3)) {
+					throw new FileNotFoundException("Sprite Avatar Folder, in \""+directories[0].getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 
-				String evolution3_name = directories[0].getName();
-				ImageIcon evolution3_faceleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "faceleft.png");
-				ImageIcon evolution3_faceright = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "faceright.png");
-				ImageIcon evolution3_backleft = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backleft.png");
-				ImageIcon evolution3_backright = new ImageIcon(directories[0].getAbsolutePath() + File.separator + "backright.png");
-
-				Avatar avatar = new Avatar(avatarName, evolution1_faceleft,
-						evolution1_faceright, evolution1_backleft,
-						evolution1_backright, normal,
-						evolution2_name, evolution2_faceleft, evolution2_faceright,
-						evolution2_backleft, evolution2_backright,
-						evolution3_name, evolution3_faceleft, evolution3_faceright,
-						evolution3_backleft, evolution3_backright);		
-				avatars.add(avatar);
+				name = directories[0].getName();
+				displayPicGIF  = new ImageIcon(directories[0].getAbsolutePath() + "/dp.gif");
+				faceLeft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
+				faceRight = new ImageIcon(directories[0].getAbsolutePath() + "/faceright.png");
+				backLeft = new ImageIcon(directories[0].getAbsolutePath() + "/backleft.png");
+				backRight = new ImageIcon(directories[0].getAbsolutePath() + "/backright.png");
+				attackGIF = new ImageIcon(directories[0].getAbsolutePath() + "/attack.gif");
+				dieGIF = new ImageIcon(directories[0].getAbsolutePath() + "/die.gif");				
+				
+				Evolution thirdEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF);
+				
+				
+				avatars.add(new Avatar(avatarName, displayPic, firstEvolution, secondEvolution, thirdEvolution));
 			}
 		}
 		return avatars;
 
 	}
 	
+	private static boolean checkImagesExist(String directory, int evolutionLevel) {
+		if(evolutionLevel == 1) {
+			return new File(directory + "/dp.png").exists() 
+				   && new File(directory + "/dp.gif").exists() 
+				   && new File(directory + "/faceleft.png").exists() 
+				   && new File(directory + "/faceright.png").exists()
+				   && new File(directory + "/backleft.png").exists()
+				   && new File(directory + "/backright.png").exists()
+				   && new File(directory + "/attack.gif").exists()
+				   && new File(directory + "/die.gif").exists()
+				   && new File(directory + "/evolve.gif").exists();
+		}
+		else if(evolutionLevel == 2) {
+			return new File(directory + "/dp.gif").exists() &&
+				   new File(directory + "/faceleft.png").exists() &&
+				   new File(directory + "/faceright.png").exists() &&
+				   new File(directory + "/backleft.png").exists() &&
+				   new File(directory + "/backright.png").exists() && 
+				   new File(directory + "/attack.gif").exists() &&
+				   new File(directory + "/die.gif").exists() &&
+				   new File(directory + "/evolve.gif").exists();
+		} else if (evolutionLevel == 3) {
+			return new File(directory + "/dp.gif").exists() &&
+				   new File(directory + "/faceleft.png").exists() &&
+				   new File(directory + "/faceright.png").exists() &&
+				   new File(directory + "/backleft.png").exists() &&
+				   new File(directory + "/backright.png").exists() && 
+				   new File(directory + "/attack.gif").exists() &&
+				   new File(directory + "/die.gif").exists();			
+		} else {
+			return false;
+		}
+	}
 	
-	public Avatar(String avatarName, ImageIcon evolution1_faceleft,
-			ImageIcon evolution1_faceright, ImageIcon evolution1_backleft,
-			ImageIcon evolution1_backright, ImageIcon normal, 
-			String evolution2_name,
-			ImageIcon evolution2_faceleft, ImageIcon evolution2_faceright,
-			ImageIcon evolution2_backleft, ImageIcon evolution2_backright,
-			String evolution3_name,
-			ImageIcon evolution3_faceleft, ImageIcon evolution3_faceright,
-			ImageIcon evolution3_backleft, ImageIcon evolution3_backright) {
-
+	public Avatar(String avatarName, ImageIcon displayPic,
+			Evolution firstEvolution, Evolution secondEvolution, Evolution thirdEvolution) {
 		this.avatarName = avatarName;
-		this.evolution1_name = avatarName;
-		this.evolution1_faceleft = evolution1_faceleft;
-		this.evolution1_faceright = evolution1_faceright;
-		this.evolution1_backleft = evolution1_backleft;
-		this.evolution1_backright = evolution1_backright;
-
-		this.normal = normal;
-
-		this.evolution2_name = evolution2_name;
-		this.evolution2_faceleft = evolution2_faceleft;
-		this.evolution2_faceright = evolution2_faceright;
-		this.evolution2_backleft = evolution2_backleft;
-		this.evolution2_backright = evolution2_backright;
-
-		this.evolution3_name = evolution3_name;
-		this.evolution3_faceleft = evolution3_faceleft;
-		this.evolution3_faceright = evolution3_faceright;
-		this.evolution3_backleft = evolution3_backleft;
-		this.evolution3_backright = evolution3_backright;
+		this.displayPic = displayPic;
+		
+		this.evolutions.add(firstEvolution);
+		this.evolutions.add(secondEvolution);
+		this.evolutions.add(thirdEvolution);
 	}
 
 	/**
 	 * No-args Constructor (Used for Kyro Serialization)
 	 */
 	public Avatar() {
-
 		this.avatarName = null;
-		this.evolution1_name = null;
-		this.evolution1_faceleft = null;
-		this.evolution1_faceright = null;
-		this.evolution1_backleft = null;
-		this.evolution1_backright = null;
-
-		this.normal = null;
-
-		this.evolution2_name = null;
-		this.evolution2_faceleft = null;
-		this.evolution2_faceright = null;
-		this.evolution2_backleft = null;
-		this.evolution2_backright = null;
-
-		this.evolution3_name = null;
-		this.evolution3_faceleft = null;
-		this.evolution3_faceright = null;
-		this.evolution3_backleft = null;
-		this.evolution3_backright = null;
+		this.displayPic = null;
 	}	
 
 	
@@ -189,77 +192,6 @@ public class Avatar implements Serializable {
 	public String getName() {
 		return avatarName;
 	}
-	
-	public String getEvolution3_name() {
-		return evolution3_name;
-	}
-
-
-	public String getEvolution2_name() {
-		return evolution2_name;
-	}
-
-
-	public String getEvolution1_name() {
-		return evolution1_name;
-	}	
-
-	public ImageIcon getNormal() {
-		return normal;
-	}
-
-	public String getAvatarName() {
-		return avatarName;
-	}
-
-	public ImageIcon getEvolution1_faceleft() {
-		return evolution1_faceleft;
-	}
-
-	public ImageIcon getEvolution1_faceright() {
-		return evolution1_faceright;
-	}
-
-	public ImageIcon getEvolution1_backleft() {
-		return evolution1_backleft;
-	}
-
-	public ImageIcon getEvolution1_backright() {
-		return evolution1_backright;
-	}
-
-	public ImageIcon getEvolution2_faceleft() {
-		return evolution2_faceleft;
-	}
-
-	public ImageIcon getEvolution2_faceright() {
-		return evolution2_faceright;
-	}
-
-	public ImageIcon getEvolution2_backleft() {
-		return evolution2_backleft;
-	}
-
-	public ImageIcon getEvolution2_backright() {
-		return evolution2_backright;
-	}
-
-	public ImageIcon getEvolution3_faceleft() {
-		return evolution3_faceleft;
-	}
-
-	public ImageIcon getEvolution3_faceright() {
-		return evolution3_faceright;
-	}
-
-	public ImageIcon getEvolution3_backleft() {
-		return evolution3_backleft;
-	}
-
-	public ImageIcon getEvolution3_backright() {
-		return evolution3_backright;
-	}	
-
 
 	@Override
 	public int hashCode() {
@@ -287,6 +219,13 @@ public class Avatar implements Serializable {
 		return true;
 	}
 
+	public Evolution getCurrentEvolution(int playerEvolutionLevel) {
+		if(playerEvolutionLevel < 1 || playerEvolutionLevel > 3) {
+			throw new IllegalArgumentException("The Evolution Level of a Player must be between 1-3.");
+		}
+		return evolutions.get(playerEvolutionLevel-1);
+	}
+	
 	/**
 	 * Main Method used for debugging. On Execution, if an IOException is produced
 	 * it indicates that the file structure is wrong therefore you need to fix it
@@ -298,7 +237,7 @@ public class Avatar implements Serializable {
 	public static void main(String[] args) {
 		try {
 			Avatar.getAllAvatars();
-		} catch (IOException e) {
+		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 	}
