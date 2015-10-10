@@ -35,13 +35,14 @@ import game.objects.interactiveObjects.*;
 public class Network {
 	public static final int DEFAULT_SERVER_PORT_TCP = 8777; // Used for Game Server Communication
 	public static final int DEFAULT_SERVER_PORT_UDP = 8778; // Used for Game Server Discovery
-	public static final int DEAFAULT_BUFFER_SIZE = 65535;
+	public static final int DEFAULT_BUFFER_SIZE = 16384; // Sets the buffer size of both clients and server.
+	public static final int DEFAULT_DISCOVERY_TIMEOUT = 2000; // Sets the timeout for GameServer discovery (in milliseconds).
 	/**
 	 * 
 	 * @param host The socket object (which can either be a Kyro Client or Server)
 	 */
 	public static void register(Object host) {
-		// Cast the object to a Kyro object to allow for class object registration
+		// Cast the host (regardless if client or server) to a Kyro object to allow for class object registration
 		Kryo kyro;
 		if (host instanceof Server) {
 			kyro = ((Server) host).getKryo();
@@ -106,8 +107,7 @@ public class Network {
 		kyro.register(game.BoardSquare[].class);
 		kyro.register(game.BoardSquare[][].class);
 		
-		
-		
+
 		// Game Objects Registration
 		kyro.register(game.objects.GameObject.class);
 		

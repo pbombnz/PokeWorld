@@ -998,7 +998,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			}
 		}
 		
-		gameClient.sendUpdatedLocationAndDirectionToServer();
+		gameClient.sendPlayerMoveUpdateToServer();
 		repaint();
 	}
 
@@ -1199,7 +1199,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 						continue;
 					}
 					
-					if(!gameClient.isNewPlayerUsernameValid(playerUsername)) {
+					if(!gameClient.isUsernameAlreadyTaken(playerUsername)) {
 						JOptionPane.showMessageDialog(this, "Username Already in use. Please enter another one!", "ERROR", JOptionPane.ERROR_MESSAGE);						
 						playerUsername = null;
 						continue;
@@ -1209,7 +1209,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				Avatar playerAvatar = ChooseCharacterDialog.Chooser(this);
 
 				// Created a player for the client and send it the server to be passed to other clients
-				gameClient.createPlayer(playerUsername, playerAvatar);
+				gameClient.sendNewPlayerToServer(playerUsername, playerAvatar);
 
 				// redraw the board
 				//frameState = FRAME_STATE.GAME_START;
