@@ -3,6 +3,7 @@ package network;
 import game.Location;
 import game.Player;
 import game.Direction;
+import game.objects.interactiveObjects.Item;
 
 /**
 * These classes represent the different types of packets that can
@@ -20,6 +21,8 @@ public class Packets {
 		boolean valid;
 	}
 	
+	public static class ServerQuit {
+	}	
 	
 	/**
 	 * USED: Client -> Server
@@ -33,7 +36,7 @@ public class Packets {
 	 * Images to be unuseable. 
 	 * 
 	 */
-	public static class NewPlayer {
+	public static class ClientNewPlayer {
 		Player player;
 	}
 
@@ -46,7 +49,7 @@ public class Packets {
 	 * and chosen the player name and avatar.
 	 *
 	 */
-	public static class NewGame {
+	public static class ClientNewGame {
 		byte[] gameByteArray;
 	}
 	
@@ -66,12 +69,29 @@ public class Packets {
 
 	public static class PlayerUpdateAttack {
 		int id;
-		int attack;
+		int newAttack;
+	}
+
+	public static class PlayerUpdateHealth {
+		int id;
+		int newAttack;
 	}
 	
-	public static class PlayerUpdateEvolutionLevel {
+	public static class PlayerPickUpItem {
 		int id;
-		int evolutionLevel;
+		Item item;
+		Location location;
+	}
+	
+	public static class PlayerDropItem {
+		int id;
+		Item item;
+		Location location;
+	}
+	
+	public static class PlayerUpdatePlayerLevel {
+		int id;
+		int newPlayerLevel;
 	}	
 	
 	/**
@@ -80,7 +100,7 @@ public class Packets {
 	 * A packet used when there is  a player sends a message for other players to view.
 	 *
 	 */
-	public static class PlayerMessage {
+	public static class ClientMessage {
 		String playerName;
 		String message;
 	}	
@@ -93,7 +113,7 @@ public class Packets {
 	 * any change in variables for a player (including move).
 	 *
 	 */
-	public static class PlayerQuit {
+	public static class ClientQuit {
 		int id;
 	}
 }

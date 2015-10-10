@@ -2,23 +2,16 @@ package network;
 
 import game.Game;
 import game.Player;
-import game.Direction;
 import game.avatar.Avatar;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import ui.GamePlayFrame;
-
 import com.esotericsoftware.kryonet.*;
-import com.esotericsoftware.minlog.Log;
 
-import network.Packets.NewGame;
-import network.Packets.ValidateNewPlayerUsername_Response;
 import network.Packets.*;
 
 /**
@@ -65,14 +58,26 @@ public class GameClient extends Listener {
 	}
 
 	/**
+	 * Checks if the GameClient is connected
+	 */
+	public boolean isConnected() {
+	    return client.isConnected();
+	}	
+	
+	/**
 	 * Disconnect the socket connection (but only if its currently connected).
 	 */
 	public void disconnect() {
 	    if(client.isConnected()) {
+	    	ClientQuit packet = new ClientQuit();
+	    	packet.id = getClientPlayer().getId();
+	    	client.sendTCP(packet);
 	    	client.close();
+	    	game = null;
 	    }
 	}
 
+	
 	/**
 	 * @return the list of GameServer servers that the client can join (on whole LAN network)
 	 */
@@ -84,12 +89,22 @@ public class GameClient extends Listener {
 	public void received (Connection connection, Object object) {
 		// Determine which the packet is received from the server and deal with them separately
 
-		if(object instanceof NewGame) {
-			handleNewGamePacket((NewGame) object);
+		if(object instanceof ClientNewGame) {
+			handleNewGamePacket((ClientNewGame) object);
 		}
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
 			PlayerUpdateLocationAndDirection packet = ((PlayerUpdateLocationAndDirection) object);
 			handlePlayerUpdateLocationAndDirection(packet);
+		}
+		
+		else if (object instanceof ClientQuit) {
+			ClientQuit packet = (ClientQuit) object;
+			game.getPlayers().remove(game.getPlayerByID(packet.id));
+			gameClientListener.onGameClientUpdated();
+		}	
+		
+		else if(object instanceof ServerQuit) {
+			this.disconnect();
 		}
 		
 		else if(object instanceof ValidateNewPlayerUsername_Response) {
@@ -143,7 +158,7 @@ public class GameClient extends Listener {
 		Player player = new Player(client.getID(), playerUsername, playerAvatar);
 		
 		// Assemble the newly created player in a packet
-		NewPlayer packet = new NewPlayer();
+		ClientNewPlayer packet = new ClientNewPlayer();
 		packet.player = player;
 		
 		// Finally send packet to server
@@ -166,12 +181,12 @@ public class GameClient extends Listener {
 	}
 
 	/**
-	 * Handles the NewGame packet, which will set the game or update the game of the client. 
+	 * Handles the ClientNewGame packet, which will set the game or update the game of the client. 
 	 * This is sent when a new player joins generally.
 	 * 
 	 * @param packet
 	 */
-	private void handleNewGamePacket(NewGame packet) {
+	private void handleNewGamePacket(ClientNewGame packet) {
 		byte[] gameBytes = packet.gameByteArray; // Disassemble the newGame packet and retrieve the btye array of the game
 		game = Game.fromByteArray(gameBytes); // convert the btye array into an actual Game object that is usable
 		

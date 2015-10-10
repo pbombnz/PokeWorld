@@ -112,8 +112,8 @@ public class ServerFrame extends JFrame implements ActionListener {
 		} else if(menuItem == disconnect) {
 			connect.setEnabled(true);
 			disconnect.setEnabled(false);
-			savePlayer.setEnabled(true);
-			loadPlayer.setEnabled(true);	
+			savePlayer.setEnabled(false);
+			loadPlayer.setEnabled(false);	
 			gameServer.disconnect();
 			gameServer = null;
 		} else if(menuItem == exit) {
@@ -129,6 +129,8 @@ public class ServerFrame extends JFrame implements ActionListener {
 				return;
 			} else {
 				//LOAD GAME (For Pri)
+				//Check file is legit
+				//if legit, disconnect all client from current game, 
 			}
 		}
 	

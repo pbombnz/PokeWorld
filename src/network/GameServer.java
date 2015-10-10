@@ -100,11 +100,17 @@ public class GameServer extends Listener {
 			packet_send.valid = true;
 			connection.sendTCP(packet_send);
 		}
-		else if (object instanceof NewPlayer) {
-			// Get the NewPlayer Packet
-			NewPlayer packet = (NewPlayer) object;
+		else if (object instanceof ClientNewPlayer) {
+			// Get the ClientNewPlayer Packet
+			ClientNewPlayer packet = (ClientNewPlayer) object;
 			handleNewPlayer(connection, packet);
+		}	
+		else if (object instanceof ClientQuit) {
+			ClientQuit packet = (ClientQuit) object;
+			game.getPlayers().remove(game.getPlayerByID(packet.id));
+			server.sendToAllExceptTCP(packet.id, packet);
 		}		
+		
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
 			serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
 			serverFrame.writeToConsole("[Server][Sent] Sent Recieved UpdatePlayer Packet to all other clients.");
@@ -126,7 +132,8 @@ public class GameServer extends Listener {
 	public void disconnect() {
 		// Ask the user if the want to save (MAYBE FEATURE)
 		
-		// Send a packet to each client that the game is going to end.
+		// Tell all connected clients that the server is turning off
+		server.sendToAllTCP(new ServerQuit());
 		serverFrame.writeToConsole("[Server][Request] User requested to stop server. Disconnecting clients...");
 		// Stop the server
 		server.stop();
@@ -143,7 +150,7 @@ public class GameServer extends Listener {
 	// Handler Methods - Handles Incoming Packets in seperate Methods
 	// ================================================================
 	
-	public void handleNewPlayer(Connection connection, NewPlayer packet) {
+	public void handleNewPlayer(Connection connection, ClientNewPlayer packet) {
 		//Once all client validation is done, we need to create the location for the player
 		
 		// From top-right to top-left and going all the way, we find a location to put the player on the board
@@ -193,7 +200,7 @@ public class GameServer extends Listener {
 
 		// Send game world object to client so they can load the game, as well as the final
 		// version of the client player (so their client player can actually be drawn)
-		NewGame newGame = new NewGame();
+		ClientNewGame newGame = new ClientNewGame();
 		newGame.gameByteArray = game.toByteArray();
 		
 		// Send packet to client

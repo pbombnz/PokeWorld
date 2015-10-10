@@ -4,18 +4,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 
-import game.*;
-import game.avatar.Avatar;
-import game.avatar.Evolution;
-import game.objects.*;
-
+import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.util.*;
-
-import javax.swing.ImageIcon;
-
-import rooms.*;
-import game.objects.interactiveObjects.*;
 
 /**
  * This class is used to register classes for the server
@@ -73,13 +64,24 @@ public class Network {
 		// Network Packet Registration
 		kyro.register(network.Packets.ValidateNewPlayerUsername.class);
 		kyro.register(network.Packets.ValidateNewPlayerUsername_Response.class);
-		kyro.register(network.Packets.NewPlayer.class);
+		
 		kyro.register(network.Packets.PlayerUpdateLocationAndDirection.class);
+		kyro.register(network.Packets.PlayerUpdatePlayerLevel.class);
+		kyro.register(network.Packets.PlayerUpdateHealth.class);
 		kyro.register(network.Packets.PlayerUpdateAttack.class);
-		kyro.register(network.Packets.PlayerUpdateEvolutionLevel.class);
-		kyro.register(network.Packets.PlayerQuit.class);
-		kyro.register(network.Packets.NewGame.class);
-		kyro.register(network.Packets.PlayerMessage.class);
+		kyro.register(network.Packets.PlayerPickUpItem.class);
+		kyro.register(network.Packets.PlayerDropItem.class);
+		kyro.register(network.Packets.PlayerUpdateAttack.class);
+		kyro.register(network.Packets.PlayerUpdatePlayerLevel.class);
+		
+		kyro.register(network.Packets.ClientNewPlayer.class);
+		kyro.register(network.Packets.ClientNewGame.class);
+		kyro.register(network.Packets.ClientMessage.class);
+		kyro.register(network.Packets.ClientQuit.class);
+		
+		kyro.register(network.Packets.ServerQuit.class);
+
+		
 		
 		// Game Related Objects Registration
 		kyro.register(game.Game.class);

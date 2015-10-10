@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ import game.objects.monster.*;
 
 
 @SuppressWarnings("serial")
-public class GamePlayFrame extends JFrame implements KeyListener, ActionListener, GameClientListener {
+public class GamePlayFrame extends JFrame implements KeyListener, ActionListener, WindowListener, GameClientListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -124,7 +126,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 		//initialises game frame
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(this);
 		setResizable(false);
 
 		panel = new GamePanel();
@@ -388,6 +391,13 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 						0, FULL_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
+			
+			if(gameClient.getGame() == null && !gameClient.isConnected()) {
+				super.paintComponent(g);
+				frameState = FRAME_STATE.CREATED_FRAME;
+				this.repaint();
+				return;
+			}
 
 			////================================================================
 			//1st view
@@ -417,7 +427,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				turnCounter++;
 				turnOffset -= changeOffset;
 			}
-
+			
 			Player clientPlayer = gameClient.getClientPlayer();
 
 			if(!hasLoadedLabels) {
@@ -1229,6 +1239,38 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	public void onGameClientUpdated() {
 		frameState = FRAME_STATE.GAME_START;
 		repaint();	
+	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		gameClient.disconnect();
+		System.exit(0);
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {	
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {		
 	}
 }
 
