@@ -19,6 +19,9 @@ public class Rattata implements Monster{
 	public int health;
 	public int attack;
 	public Direction direction = Direction.FACE_RIGHT;
+
+	public Rattata(){
+	}	
 	
 	public Rattata(int attack, int health){
 		this.attack = attack;

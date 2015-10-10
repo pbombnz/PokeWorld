@@ -20,6 +20,9 @@ public class Zubat implements Monster{
 	public int attack;
 	public Direction direction = Direction.FACE_RIGHT;
 
+	public Zubat(){
+	}
+	
 	public Zubat(int attack, int health){
 		this.attack = attack;
 		this.health = health;

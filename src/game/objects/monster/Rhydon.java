@@ -19,6 +19,9 @@ public class Rhydon implements Monster{
 	public int health;
 	public int attack;
 	public Direction direction = Direction.FACE_RIGHT;
+
+	public Rhydon(){
+	}
 	
 	public Rhydon(int attack, int health){
 		this.attack = attack;

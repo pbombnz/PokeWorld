@@ -16,6 +16,9 @@ public class Tree implements GameObject {
 
 	private static final long serialVersionUID = 4087421334363366222L;
 
+	public Tree(){
+	}	
+	
 	@Override
 	public ImageIcon getSpriteImage() {
 		return GameObject.TREE;

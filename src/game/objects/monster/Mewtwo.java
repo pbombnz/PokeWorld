@@ -19,6 +19,9 @@ public class Mewtwo implements Monster{
 	public int health;
 	public int attack;
 	public Direction direction = Direction.FACE_RIGHT;
+
+	public Mewtwo(){
+	}
 	
 	public Mewtwo(int attack, int health){
 		this.attack = attack;
