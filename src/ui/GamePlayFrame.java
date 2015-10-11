@@ -1197,88 +1197,88 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 		});
 		dropBox.add(cancel);
-//		//if there is 1 item in bag
-//		if (clientPlayer.getInventory().size() > 0) {
-//			JButton inventory1 = new JButton();
-//			inventory1.setIcon(clientPlayer.getInventory().get(0)
-//					.getSpriteImage());
-//			inventory1.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					dropIventory(0);
-//					dropBox.dispose();
-//				}
-//			});
-//		}
-//		//if there are 2 items in bag
-//		if (clientPlayer.getInventory().size() > 0) {
-//			JButton inventory2 = new JButton();
-//			inventory2.setIcon(clientPlayer.getInventory().get(1)
-//					.getSpriteImage());
-//			inventory2.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					dropIventory(1);
-//					dropBox.dispose();
-//				}
-//			});
-//		}
-//		//if there are 3 items in bag
-//		if (clientPlayer.getInventory().size() > 0) {
-//			JButton inventory3 = new JButton();
-//			inventory3.setIcon(clientPlayer.getInventory().get(2)
-//					.getSpriteImage());
-//			inventory3.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					dropIventory(2);
-//					dropBox.dispose();
-//				}
-//			});
-//		}
-//		//if there are 4 items in bag
-//		if (clientPlayer.getInventory().size() > 0) {
-//			JButton inventory4 = new JButton();
-//			inventory4.setIcon(clientPlayer.getInventory().get(3)
-//					.getSpriteImage());
-//			inventory4.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					dropIventory(3);
-//					dropBox.dispose();
-//				}
-//			});
-//		}
-//		//if there are 5 items in bag
-//		if (clientPlayer.getInventory().size() > 0) {
-//			JButton inventory5 = new JButton();
-//			inventory5.setIcon(clientPlayer.getInventory().get(4)
-//					.getSpriteImage());
-//			inventory5.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					dropIventory(4);
-//					dropBox.dispose();
-//				}
-//			});
-//		}
-//		//if there are 6 items in bag
-//		if (clientPlayer.getInventory().size() > 0) {
-//			JButton inventory6 = new JButton();
-//			inventory6.setIcon(clientPlayer.getInventory().get(5)
-//					.getSpriteImage());
-//			inventory6.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					dropIventory(5);
-//					dropBox.dispose();
-//				}
-//			});
-//		}
+		//if there is 1 item in bag
+		if (clientPlayer.getInventory().size() > 0) {
+			JButton inventory1 = new JButton();
+			inventory1.setIcon(clientPlayer.getInventory().get(0)
+					.getSpriteImage());
+			inventory1.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dropIventory(0);
+					dropBox.dispose();
+				}
+			});
+		}
+		//if there are 2 items in bag
+		if (clientPlayer.getInventory().size() > 0) {
+			JButton inventory2 = new JButton();
+			inventory2.setIcon(clientPlayer.getInventory().get(1)
+					.getSpriteImage());
+			inventory2.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dropIventory(1);
+					dropBox.dispose();
+				}
+			});
+		}
+		//if there are 3 items in bag
+		if (clientPlayer.getInventory().size() > 0) {
+			JButton inventory3 = new JButton();
+			inventory3.setIcon(clientPlayer.getInventory().get(2)
+					.getSpriteImage());
+			inventory3.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dropIventory(2);
+					dropBox.dispose();
+				}
+			});
+		}
+		//if there are 4 items in bag
+		if (clientPlayer.getInventory().size() > 0) {
+			JButton inventory4 = new JButton();
+			inventory4.setIcon(clientPlayer.getInventory().get(3)
+					.getSpriteImage());
+			inventory4.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dropIventory(3);
+					dropBox.dispose();
+				}
+			});
+		}
+		//if there are 5 items in bag
+		if (clientPlayer.getInventory().size() > 0) {
+			JButton inventory5 = new JButton();
+			inventory5.setIcon(clientPlayer.getInventory().get(4)
+					.getSpriteImage());
+			inventory5.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dropIventory(4);
+					dropBox.dispose();
+				}
+			});
+		}
+		//if there are 6 items in bag
+		if (clientPlayer.getInventory().size() > 0) {
+			JButton inventory6 = new JButton();
+			inventory6.setIcon(clientPlayer.getInventory().get(5)
+					.getSpriteImage());
+			inventory6.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dropIventory(5);
+					dropBox.dispose();
+				}
+			});
+		}
 
 		
 		dropBox.setVisible(true);
-		
+		requestFocus();
 	}
 	
 	/**
