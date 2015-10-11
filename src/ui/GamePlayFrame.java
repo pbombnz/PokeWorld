@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -38,7 +39,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-
 import com.sun.image.codec.jpeg.TruncatedFileException;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 
@@ -129,7 +129,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	//add explored time
 	private String startTime = null;
 	public JLabel timeLabel = new JLabel();
-	public List<JLabel> itemLabels = new ArrayList<JLabel>();
+	public List<JLabel> itemJLabels = new ArrayList<JLabel>();
 
 	public GamePlayFrame() {
 		gameClient.setGameClientListener(this);
@@ -685,23 +685,37 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			printInformation(clientPlayer);
 
 			//print players'inventory
-			printInventory(clientPlayer);
+			printInventory(clientPlayer, g);
 		}
 	}
 
-	public void printInventory(Player player) {
+	public void printInventory(Player player, Graphics g) {
+
 		int itemSize = 40;
 		int itemX = -itemSize;
 		int itemY = 350;
+		//print item bag 1st
+		int bagX = -itemSize;
+		int bagY = 350;
+		for (int index = 1; index < 7; index++) {
+			if (index == 4) {
+				bagX = 0;
+				bagY += itemSize;
+			} else {
+				bagX += itemSize;
+			}
+			g.drawRect(bagX, bagY, itemSize, itemSize);
+		}
 		//remove previou lables
-		for (JLabel jl : itemLabels) {
+		for (JLabel jl : itemJLabels) {
 			panel.remove(jl);
 		}
 		//for each item in item bag
 		int itemNumber = 0;
 		for (Item item : player.getInventory()) {
-			JLabel label = new JLabel(player.getInventory().get(itemNumber)
-					.getSpriteImage());
+			JLabel jlabel = new JLabel(player.getInventory().get(itemNumber).getSpriteImage());
+//			jbutton.setIcon(player.getInventory().get(itemNumber)
+//					.getSpriteImage());
 			if (itemNumber == 3) {
 				itemX = 0;
 				itemY += itemSize;
@@ -712,12 +726,42 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 			int xPo = itemX;
 			int yPo = itemY;
-			label.setBounds(xPo, yPo, itemSize, itemSize);
-			itemLabels.add(label);
-			panel.add(label);
+			jlabel.setBounds(xPo, yPo, itemSize, itemSize);
+			itemJLabels.add(jlabel);
+			panel.add(jlabel);
+//			ActionListener al = new DropActionListener(player, item,itemJLables,jlabel);
+//			jlabel.addActionListener(al);
 		}
 		repaint();
 	}
+
+//	//------------------------------------------------------------------------------------------------
+//	/**
+//	 * when the button is pressed , the player will drop the corresponding item
+//	 */
+//	class DropActionListener implements ActionListener {
+//		private Player player;
+//		private Item item;
+//		private List<JButton> itemJButtons;
+//		private JButton jbutton;
+//
+//		public DropActionListener(Player player, Item item, List<JButton> itemJButtons, JButton jbutton) {
+//			super();
+//			this.player = player;
+//			this.item = item;
+//			this.itemJButtons =itemJButtons;
+//			this.jbutton=jbutton;
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			player.getInventory().remove(item);
+//			itemJButtons.remove(jbutton);
+//		}
+//
+//	}
+//
+//	//-------------------------------------------------------------------------------------------------
 
 	public Location nextSquareLocation(Player player, int steps) {
 		Direction dir = player.getDirection();
