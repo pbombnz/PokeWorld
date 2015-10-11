@@ -3,6 +3,7 @@ package ui;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -198,6 +199,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	public void dropIventory(int index) {
 		Player clientPlayer = gameClient.getClientPlayer();
+		Location loc = clientPlayer.getLocation();
+		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.setGameObjectOnSquare(clientPlayer.getInventory().get(index));
 		clientPlayer.getInventory().remove(index);
 	}
 
@@ -1050,18 +1054,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[loc.getY()][loc
 				.getX()].getGameObjectOnSquare();
 
+		//pick up
 		//check whether the item bag is full
 		if (clientPlayer.getInventory().size() < clientPlayer.getMaxItems()) {
 			//If you find a key, adds it to the inventory and removes from the board
 			if (ObjectOfLoc instanceof Key) {
-				//			System.out.println(loc.getRoom());
 				clientPlayer.addToInventory(((Key) ObjectOfLoc));
 				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 						.setGameObjectOnSquare(null);
 			}
 			//If you find a goodPotion, increases your health and removes it from the board
 			if (ObjectOfLoc instanceof GoodPotion) {
-				//			System.out.println("is this working");
 				clientPlayer.setHealth(clientPlayer.getHealth()
 						+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
 				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
@@ -1182,14 +1185,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		dropBox.setTitle("Which item do you want to drop?");
 		dropBox.setBackground(Color.GRAY);
 		dropBox.setLayout(null);
-		dropBox.setLocation(600, 300);
-		dropBox.setSize(200, 170);
+		dropBox.setBounds(100, 100, 400, 300);
 		dropBox.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		//add cancel button
 		JButton cancel = new JButton();
 		cancel.setText("Cancel");
-		cancel.setLocation(10, 90);
-		cancel.setSize(cancel.getPreferredSize());
+		cancel.setBounds(170,200,100,40);
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1202,6 +1203,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			JButton inventory1 = new JButton();
 			inventory1.setIcon(clientPlayer.getInventory().get(0)
 					.getSpriteImage());
+			inventory1.setBounds(0,0,100,100);
+			dropBox.add(inventory1);
 			inventory1.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -1211,10 +1214,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			});
 		}
 		//if there are 2 items in bag
-		if (clientPlayer.getInventory().size() > 0) {
+		if (clientPlayer.getInventory().size() > 1) {
 			JButton inventory2 = new JButton();
 			inventory2.setIcon(clientPlayer.getInventory().get(1)
 					.getSpriteImage());
+			inventory2.setBounds(150,0,100,100);
+			dropBox.add(inventory2);
 			inventory2.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -1224,10 +1229,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			});
 		}
 		//if there are 3 items in bag
-		if (clientPlayer.getInventory().size() > 0) {
+		if (clientPlayer.getInventory().size() > 2) {
 			JButton inventory3 = new JButton();
 			inventory3.setIcon(clientPlayer.getInventory().get(2)
 					.getSpriteImage());
+			inventory3.setBounds(300,0,100,100);
+			dropBox.add(inventory3);
 			inventory3.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -1237,10 +1244,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			});
 		}
 		//if there are 4 items in bag
-		if (clientPlayer.getInventory().size() > 0) {
+		if (clientPlayer.getInventory().size() > 3) {
 			JButton inventory4 = new JButton();
 			inventory4.setIcon(clientPlayer.getInventory().get(3)
 					.getSpriteImage());
+			inventory4.setBounds(0,100,100,100);
+			dropBox.add(inventory4);
 			inventory4.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -1250,10 +1259,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			});
 		}
 		//if there are 5 items in bag
-		if (clientPlayer.getInventory().size() > 0) {
+		if (clientPlayer.getInventory().size() > 4) {
 			JButton inventory5 = new JButton();
 			inventory5.setIcon(clientPlayer.getInventory().get(4)
 					.getSpriteImage());
+			inventory5.setBounds(150,100,100,100);
+			dropBox.add(inventory5);
 			inventory5.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -1263,10 +1274,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			});
 		}
 		//if there are 6 items in bag
-		if (clientPlayer.getInventory().size() > 0) {
+		if (clientPlayer.getInventory().size() > 5) {
 			JButton inventory6 = new JButton();
 			inventory6.setIcon(clientPlayer.getInventory().get(5)
 					.getSpriteImage());
+			inventory6.setBounds(300,100,100,100);
+			dropBox.add(inventory6);
 			inventory6.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
