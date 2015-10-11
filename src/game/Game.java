@@ -149,6 +149,13 @@ public class Game {
 			return false;
 		return true;
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "Game [players=" + players + ", rooms=" + rooms + "]";
+	}
 
 	/**
 	 * Attempt to match any connected player's id with the given id
