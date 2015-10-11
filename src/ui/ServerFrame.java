@@ -1,5 +1,6 @@
 package ui;
 
+import game.Game;
 import game.Player;
 
 import java.awt.event.ActionEvent;
@@ -40,6 +41,9 @@ public class ServerFrame extends JFrame implements ActionListener {
 	JMenuItem savePlayer = new JMenuItem("Save Game World");
 	JMenuItem loadPlayer = new JMenuItem("Load Game World");
 	
+	JMenu clearServerLogMenu = new JMenu("Clear Server Log...");
+	JMenuItem clearServerLog = new JMenuItem("Clear");
+	
 	private JTextArea console = new JTextArea();
 	private JScrollPane consoleScrollPane;
 	
@@ -62,12 +66,17 @@ public class ServerFrame extends JFrame implements ActionListener {
 
 		SaveLoadMenu.add(savePlayer);
 		SaveLoadMenu.add(loadPlayer);
+		
+		menuBar.add(clearServerLogMenu);
+		
+		clearServerLogMenu.add(clearServerLog);
 				
 		connect.addActionListener(this);
 		disconnect.addActionListener(this);
 		exit.addActionListener(this);
 		savePlayer.addActionListener(this);
 		loadPlayer.addActionListener(this);
+		clearServerLog.addActionListener(this);
 		
 		// Sets the Console properties so that it cannot be editted (only for display), and auto scrolls
 		console.setEditable(false);
@@ -120,19 +129,26 @@ public class ServerFrame extends JFrame implements ActionListener {
 			gameServer.disconnect();
 			System.exit(0);
 		} else if (menuItem == savePlayer) {
-			//SAVE GAME (For Pri)
+			GameToJson.saveGame(this, gameServer.getGame());
 		} else if (menuItem == loadPlayer) {
-			if(gameServer == null)
+			if(gameServer == null) {
 				JOptionPane.showMessageDialog(this,
 						"Need to load game first", "ERROR",
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			} else {
-				//LOAD GAME (For Pri)
-				//Check file is legit
+				// Load Game from file
+				Game loadedGame = JsonToGame.loadGame(this);
+				// if the load is null, then the user canceled the load operation, do do anything.
+				if(loadedGame == null) {
+					return;
+				}
 				//if legit, disconnect all client from current game, 
 			}
+		} else if (menuItem == clearServerLog) {
+			console.setText("");
 		}
+	}
 	
 	
 	public void writeToConsole(String message) {

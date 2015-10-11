@@ -207,4 +207,18 @@ public class GameServer extends Listener {
 		serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 		server.sendToAllTCP(newGame);
 	}
+	
+	/**
+	 * @return The global copy of the game (Used when saving game to file)
+	 */
+	public Game getGame() {
+		return game;
+	}
+	
+	/**
+	 * @return The global copy of the game (Used when loading game from file)
+	 */
+	public void setGame(Game game) {
+		this.game = game;
+	}
 }

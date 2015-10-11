@@ -1,22 +1,10 @@
 package Storage;
 
 import java.awt.FileDialog;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-
-
-
-import java.util.Scanner;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ContainerFactory;
@@ -24,39 +12,46 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.esotericsoftware.jsonbeans.Json;
+import com.esotericsoftware.jsonbeans.JsonException;
 import com.esotericsoftware.jsonbeans.OutputType;
 
 import game.Game;
-import game.Location;
-import game.Player;
-import game.avatar.Avatar;
-import game.objects.interactiveObjects.*;
 
 
 public class JsonToGame {
 	
 	//PRASHANT LOADING 
 	public static Game loadGame(JFrame parentFrame) {
-	    Json json = new Json();
-	    json.setOutputType(OutputType.json);
-	    
-	    FileDialog fDialog = new FileDialog(parentFrame, "Load Game as file..", FileDialog.LOAD);
+		// Creates the saving File Dialog and sets the appropriate 
+	    FileDialog fDialog = new FileDialog(parentFrame, "Save Server Game as file..", FileDialog.LOAD);
         fDialog.setDirectory(".");
         fDialog.setFile("game.json");
         fDialog.setVisible(true);
+        
+        // Once the fDialog is closed, we check  if the user actually picked a file or canceled the load operation
         if(fDialog.getFile() == null) {
-        	return null;
+        	return null; // User canceled load operation, so we no longer need to proceed.
         }
+        
+        // Get the path of the selected save file as a string
         String path = fDialog.getDirectory() + fDialog.getFile();
 
-		Game g = json.fromJson(Game.class, new File(path));
-		System.out.println(g.toString());
-		return g;
+		// Set JSON Read configurations	
+	    Json json = new Json();
+	    json.setOutputType(OutputType.json);
+	    // Read the Game from JSON file
+	    Game loadedGame = null;
+	    try {
+	    	loadedGame = json.fromJson(Game.class, new File(path));
+	    } catch(JsonException e) {
+	    	// Show error to user if one appears (Usually occurs when user tries to make the server load a non-compatible file)
+			JOptionPane.showMessageDialog(parentFrame, "You can only load Game JSON files only.", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return null;
+	    }
+		System.out.println(loadedGame.toString());
+		return loadedGame;
 	}	
 	
-	public static void main(String[] args) {
-		loadGame(null);
-	}
 	/*@SuppressWarnings("unchecked")
 	public static Player loadPlayer(){
 		Player p = new Player();

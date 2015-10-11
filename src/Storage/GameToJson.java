@@ -1,17 +1,15 @@
 package Storage;
 
-import java.util.List;
 import java.awt.FileDialog;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 
-import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.json.simple.*;
+
+import ui.ServerFrame;
 
 import com.esotericsoftware.jsonbeans.Json;
 import com.esotericsoftware.jsonbeans.OutputType;
@@ -33,40 +31,51 @@ import game.objects.interactiveObjects.*;
 public class GameToJson {
 
 	//PRASHANT SAVING 
-	public static void saveGame(JFrame parentFrame, Game game) {
-	    Json json = new Json();
-	    json.setOutputType(OutputType.json);
-	    //String text = json.prettyPrint(game);// json.toJson(game);
-	    //System.out.println(text);
-	    
-	    FileDialog fDialog = new FileDialog(parentFrame, "Save Game as file..", FileDialog.SAVE);
+	public static void saveGame(ServerFrame parentFrame, Game game) {
+		// Creates the saving File Dialog and sets the appropriate 
+	    FileDialog fDialog = new FileDialog(parentFrame, "Save Server Game as file..", FileDialog.SAVE);
         fDialog.setDirectory(".");
         fDialog.setFile("game.json");
         fDialog.setVisible(true);
+        
+        // Once the fDialog is closed, we check  if the user actually picked a file or canceled the save operation
         if(fDialog.getFile() == null) {
-        	return;
+        	return; // User canceled save operation, so we no longer need to proceed.
         }
+        
+        // Get the path of the selected save file as a string
         String path = fDialog.getDirectory() + fDialog.getFile();
-        System.out.println(path);
-        File f = new File(path);
+        
+        //Attempt the create the file at that specified path
+        FileWriter fileWriter;
         try {
-			f.createNewFile();
+        	fileWriter = new FileWriter(path, false);
 		} catch (IOException e) {
+			// Failure to create file
+			 parentFrame.writeToConsole("[Server][Save] Saving game Failed.");
+			JOptionPane.showMessageDialog(parentFrame, "Cannot Save at this location. Make sure you have correct write permissions.", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
         
-        try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-			bw.write(json.toJson(game));
-			bw.close();
+        // Write Game (as JSON) to the file
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+			
+		// Set JSON write configurations	
+	    Json json = new Json();
+	    json.setOutputType(OutputType.json);
+	    try {
+	    	// Finally write the JSON to the file
+			bufferedWriter.write(json.toJson(game));
+			bufferedWriter.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Failure to write file
+			parentFrame.writeToConsole("[Server][Save] Saving game Failed.");
+			JOptionPane.showMessageDialog(parentFrame, "Cannot write at this location. Make sure you have the correct write permissions.", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
+	    parentFrame.writeToConsole("[Server][Save] Saved game Sucessfully. ("+path+")");
 	}
-	
-	public static void main(String[] args) {
-		saveGame(null, Game.createTestMap());
-	}
+
 	
 	/*
 	//@SuppressWarnings("unchecked")

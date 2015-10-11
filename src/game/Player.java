@@ -32,7 +32,7 @@ public class Player implements Serializable {
 	private int playerLevel = 1;
 
 	/**
-	 * No-Args Constructor for Networking Serialisation (DO NOT USE)
+	 * No-Args Constructor for Networking Serialization (DO NOT USE)
 	 */
 	public Player() {
 		this.id = -1;
