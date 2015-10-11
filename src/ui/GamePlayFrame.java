@@ -195,8 +195,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		});
 	}
 
-	
-
 	public void dropIventory(int index) {
 		Player clientPlayer = gameClient.getClientPlayer();
 		Location loc = clientPlayer.getLocation();
@@ -1190,7 +1188,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//add cancel button
 		JButton cancel = new JButton();
 		cancel.setText("Cancel");
-		cancel.setBounds(170,200,100,40);
+		cancel.setBounds(170, 200, 100, 40);
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1203,7 +1201,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			JButton inventory1 = new JButton();
 			inventory1.setIcon(clientPlayer.getInventory().get(0)
 					.getSpriteImage());
-			inventory1.setBounds(0,0,100,100);
+			inventory1.setBounds(0, 0, 100, 100);
 			dropBox.add(inventory1);
 			inventory1.addActionListener(new ActionListener() {
 				@Override
@@ -1218,7 +1216,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			JButton inventory2 = new JButton();
 			inventory2.setIcon(clientPlayer.getInventory().get(1)
 					.getSpriteImage());
-			inventory2.setBounds(150,0,100,100);
+			inventory2.setBounds(150, 0, 100, 100);
 			dropBox.add(inventory2);
 			inventory2.addActionListener(new ActionListener() {
 				@Override
@@ -1233,7 +1231,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			JButton inventory3 = new JButton();
 			inventory3.setIcon(clientPlayer.getInventory().get(2)
 					.getSpriteImage());
-			inventory3.setBounds(300,0,100,100);
+			inventory3.setBounds(300, 0, 100, 100);
 			dropBox.add(inventory3);
 			inventory3.addActionListener(new ActionListener() {
 				@Override
@@ -1248,7 +1246,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			JButton inventory4 = new JButton();
 			inventory4.setIcon(clientPlayer.getInventory().get(3)
 					.getSpriteImage());
-			inventory4.setBounds(0,100,100,100);
+			inventory4.setBounds(0, 100, 100, 100);
 			dropBox.add(inventory4);
 			inventory4.addActionListener(new ActionListener() {
 				@Override
@@ -1263,7 +1261,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			JButton inventory5 = new JButton();
 			inventory5.setIcon(clientPlayer.getInventory().get(4)
 					.getSpriteImage());
-			inventory5.setBounds(150,100,100,100);
+			inventory5.setBounds(150, 100, 100, 100);
 			dropBox.add(inventory5);
 			inventory5.addActionListener(new ActionListener() {
 				@Override
@@ -1278,7 +1276,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			JButton inventory6 = new JButton();
 			inventory6.setIcon(clientPlayer.getInventory().get(5)
 					.getSpriteImage());
-			inventory6.setBounds(300,100,100,100);
+			inventory6.setBounds(300, 100, 100, 100);
 			dropBox.add(inventory6);
 			inventory6.addActionListener(new ActionListener() {
 				@Override
@@ -1289,11 +1287,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			});
 		}
 
-		
 		dropBox.setVisible(true);
 		requestFocus();
 	}
-	
+
 	/**
 	 *@author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
