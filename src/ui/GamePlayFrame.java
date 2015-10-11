@@ -937,15 +937,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			return false;
 		}
 		if (sq[y][x].getGameObjectOnSquare() instanceof MagicCircle) {
-			System.out.println("aa");
-			player.setLocation(((MagicCircle) sq[y][x].getGameObjectOnSquare())
-					.getTeleportLocation());
-			System.out
-					.println(((MagicCircle) (sq[y][x].getGameObjectOnSquare()))
-							.getTeleportLocation().getX()
-							+ ","
-							+ ((MagicCircle) (sq[y][x].getGameObjectOnSquare()))
-									.getTeleportLocation().getY());
+			MagicCircle mc =(MagicCircle) (sq[y][x].getGameObjectOnSquare());
+			player.setLocation(new Location(player.getLocation().getRoom(),mc.getTeleportX(),mc.getTeleportY()));
 			return false;
 		}
 		return true;
