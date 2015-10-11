@@ -9,6 +9,13 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+/* 
+ * @author Sushant Balajee, Donald Tang 
+ *
+ * This class represents the player of the game, it holds 
+ * all key information about the player, their inventory, stats etc.
+ * All player stats are initialised here
+ */
 public class Player implements Serializable {
 	private static final long serialVersionUID = -3023304431184848781L;
 	
@@ -39,6 +46,11 @@ public class Player implements Serializable {
 		this.name = null;
 	}
 	
+	/**
+	 * @param id, players id
+	 * @param name, players name
+	 * @param avatar, players avatar character
+	 */
 	public Player(int id, String name, Avatar avatar) {
 		this.id = id;
 		this.name = name;
@@ -52,6 +64,9 @@ public class Player implements Serializable {
 		return health;
 	}
 
+	/**
+	 * @param change, amount of health changed by
+	 */
 	public void setHealth(int change){
 		health = change;
 		if(health < 0){
@@ -67,6 +82,9 @@ public class Player implements Serializable {
 		return attack;
 	}
 
+	/**
+	 * @param change, amount of attack changed by
+	 */
 	public void setAttack(int change){
 		this.attack = change;
 	}
@@ -75,6 +93,10 @@ public class Player implements Serializable {
 		return inventory;
 	}
 
+	/**
+	 * @param item, the item being added to the inventory
+	 * @return
+	 */
 	public boolean addToInventory(Item item){
 		if (item == null){
 			return false;
@@ -86,6 +108,9 @@ public class Player implements Serializable {
 		return avatar;
 	}
 
+	/**
+	 * @param avatar, the character chosen by the player to represent them
+	 */
 	public void setAvatar(Avatar avatar) {
 		this.avatar = avatar;
 	}
@@ -118,6 +143,9 @@ public class Player implements Serializable {
 		return playerLevel;
 	}
 	
+	/**
+	 * @param change, the level of the player character
+	 */
 	public void setPlayerLevel(int change){
 		this.playerLevel = change;
 	}	
@@ -126,6 +154,9 @@ public class Player implements Serializable {
 		return maxItems;
 	}
 
+	/**
+	 * @param maxItems, 6 items max held by the inventory
+	 */
 	public void setMaxItems(int maxItems) {
 		this.maxItems = maxItems;
 	}
