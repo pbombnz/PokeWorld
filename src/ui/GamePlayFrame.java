@@ -809,13 +809,24 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			//character will turn 1st if the character is not facing that side
 			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-				loc.moveEast();
+				//check whrther can move 
+				if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
+					loc.moveEast();
+				}
 			} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
-				loc.moveNorth();
+				//check whrther can move 
+				if (canMove(loc.getX(), loc.getY() - 1, clientPlayer)) {
+					loc.moveNorth();
+				}
 			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
-				loc.moveWest();
+				//check whrther can move 
+				if (canMove(loc.getX() - 1, loc.getY(), clientPlayer)) {
+					loc.moveWest();
+				}
 			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-				loc.moveSouth();
+				if (canMove(loc.getX(), loc.getY() + 1, clientPlayer)) {
+					loc.moveSouth();
+				}
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			//character will turn 1st if the character is not facing that side
@@ -1151,12 +1162,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	 */
 	public void fight(Location mosterLocation) {
 		Player clientPlayer = gameClient.getClientPlayer();
-//		Location loc = clientPlayer.getLocation();
+		//		Location loc = clientPlayer.getLocation();
 
-		GameObject go = mosterLocation.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation
-				.getX()].getGameObjectOnSquare();
+		GameObject go = mosterLocation.getRoom().board.getSquares()[mosterLocation
+				.getY()][mosterLocation.getX()].getGameObjectOnSquare();
 
-		 int damage = ((Monster) go).attack();
+		int damage = ((Monster) go).attack();
 
 		//Monster attacks first
 		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
@@ -1180,10 +1191,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
 
 			//removes the monster from the board
-			mosterLocation.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation.getX()]
-					.setGameObjectOnSquare(null);
+			mosterLocation.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation
+					.getX()].setGameObjectOnSquare(null);
 		} else {
-			JOptionPane.showMessageDialog(null, "Monster is still alive, but now he only has "+ ((Monster) go).getHealth() +"health");
+			JOptionPane.showMessageDialog(null,
+					"Monster is still alive, but now he only has "
+							+ ((Monster) go).getHealth() + "health");
 		}
 	}
 
