@@ -36,8 +36,11 @@ public class Board1 extends Board{
 								if (i == 3 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
-								if (i == 8 && j ==3 ) {
-									this.squares[i][j] = new BoardSquare(new MagicCircle(new Location(room,4,6)));
+								if (i == 9 && j ==6 ) {
+									this.squares[i][j] = new BoardSquare(new MagicCircle(new Location(room,5,9)));
+								}
+								if (i == 5 && j ==9 ) {
+									this.squares[i][j] = new BoardSquare(new MagicCircle(new Location(room,9,6)));
 								}
 								if (i == 2 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());

@@ -697,7 +697,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX - 60, tileY - 170, null);
-						} else {
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof MagicCircle) {
+							g.drawImage(bs[cellY][cellX]
+									.getGameObjectOnSquare().getSpriteImage()
+									.getImage(),tileX, tileY,20,20, null);
+						}
+						else {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY
@@ -845,6 +850,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				|| sq[y][x].getGameObjectOnSquare() instanceof Rhydon
 				|| sq[y][x].getGameObjectOnSquare() instanceof Zubat) {
 			fightDialog(new Location(player.getLocation().getRoom(), x, y));
+			return false;
+		}
+		if (sq[y][x].getGameObjectOnSquare() instanceof MagicCircle) {
+			System.out.println("aa");
+			player.setLocation(((MagicCircle) sq[y][x].getGameObjectOnSquare())
+					.getTeleportLocation());
+			System.out
+					.println(((MagicCircle) (sq[y][x].getGameObjectOnSquare()))
+							.getTeleportLocation().getX()
+							+ ","
+							+ ((MagicCircle) (sq[y][x].getGameObjectOnSquare()))
+	.getTeleportLocation().getY());
 			return false;
 		}
 		return true;
@@ -1008,8 +1025,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) 
-							turnMonsterImageLeft((Monster) bs[cellY][cellX].getGameObjectOnSquare());
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster)
+							turnMonsterImageLeft((Monster) bs[cellY][cellX]
+									.getGameObjectOnSquare());
 					}
 				}
 			}
@@ -1048,8 +1066,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) 
-							turnMonsterImageRight((Monster) bs[cellY][cellX].getGameObjectOnSquare());
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster)
+							turnMonsterImageRight((Monster) bs[cellY][cellX]
+									.getGameObjectOnSquare());
 					}
 				}
 			}

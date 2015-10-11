@@ -15,15 +15,23 @@ import javax.swing.ImageIcon;
 public class MagicCircle implements GameObject {
 
 	private static final long serialVersionUID = 4087421334363366222L;
-	public Location teleportLocation;
+	public final Location teleportLocation;
 
 	public MagicCircle(Location location){
 		this.teleportLocation = location;
 	}	
 	
+	public Location getTeleportLocation() {
+		return teleportLocation;
+	}
+
+//	public void setTeleportLocation(Location teleportLocation) {
+//		this.teleportLocation = teleportLocation;
+//	}
+
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.TREE;
+		return GameObject.MAGICCIRCLE;
 	}
 
 }
