@@ -39,6 +39,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+
+import com.esotericsoftware.kryonet.Client;
 import com.sun.image.codec.jpeg.TruncatedFileException;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 
@@ -101,6 +103,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public JPanel panel;
 	public JLabel characterLabel;
 	private JDialog fightBox;
+	private JDialog dropBox;
+	//add explored time
+	private String startTime = null;
+	public JLabel timeLabel = new JLabel();
+	public List<JLabel> itemJLabels = new ArrayList<JLabel>();
+	public JButton dropButton = new JButton();
+	public boolean buttonsAdded = false;
+	private GamePlayFrame frame = this;
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -126,10 +136,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	protected JLabel lvlupLabel_3;
 
 	///==================================
-	//add explored time
-	private String startTime = null;
-	public JLabel timeLabel = new JLabel();
-	public List<JLabel> itemJLabels = new ArrayList<JLabel>();
 
 	public GamePlayFrame() {
 		gameClient.setGameClientListener(this);
@@ -173,6 +179,26 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		frameState = GamePlayFrame.FRAME_STATE.CREATED_FRAME;
 		//set start time
 		startTime = getCurrentTime();
+
+	}
+
+	public void addButtons() {
+		//Add button
+		dropButton.setText("Drop");
+		dropButton.setBounds(0, 300, 100, 40);
+		panel.add(dropButton);
+		dropButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				dropDialog();
+			}
+		});
+	}
+
+	
+
+	public void dropIventory(int index) {
+		Player clientPlayer = gameClient.getClientPlayer();
+		clientPlayer.getInventory().remove(index);
 	}
 
 	/**
@@ -319,7 +345,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		JLabel timeLabel = new JLabel();
 		timeLabel.setText(getTimeText(runningTime));
-		timeLabel.setLocation(10, 300);
+		timeLabel.setLocation(10, 260);
 		timeLabel.setSize(400, 20);
 		timeLabel.setFont(new Font("Dialog", 1, 15));
 		timeLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -686,6 +712,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			//print players'inventory
 			printInventory(clientPlayer, g);
+
+			//add buttons on frame
+			if (buttonsAdded == false) {
+				addButtons();
+				buttonsAdded = true;
+			}
 		}
 	}
 
@@ -713,9 +745,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//for each item in item bag
 		int itemNumber = 0;
 		for (Item item : player.getInventory()) {
-			JLabel jlabel = new JLabel(player.getInventory().get(itemNumber).getSpriteImage());
-//			jbutton.setIcon(player.getInventory().get(itemNumber)
-//					.getSpriteImage());
+			JLabel jlabel = new JLabel(player.getInventory().get(itemNumber)
+					.getSpriteImage());
+			//			jbutton.setIcon(player.getInventory().get(itemNumber)
+			//					.getSpriteImage());
 			if (itemNumber == 3) {
 				itemX = 0;
 				itemY += itemSize;
@@ -729,39 +762,39 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			jlabel.setBounds(xPo, yPo, itemSize, itemSize);
 			itemJLabels.add(jlabel);
 			panel.add(jlabel);
-//			ActionListener al = new DropActionListener(player, item,itemJLables,jlabel);
-//			jlabel.addActionListener(al);
+			//			ActionListener al = new DropActionListener(player, item,itemJLables,jlabel);
+			//			jlabel.addActionListener(al);
 		}
 		repaint();
 	}
 
-//	//------------------------------------------------------------------------------------------------
-//	/**
-//	 * when the button is pressed , the player will drop the corresponding item
-//	 */
-//	class DropActionListener implements ActionListener {
-//		private Player player;
-//		private Item item;
-//		private List<JButton> itemJButtons;
-//		private JButton jbutton;
-//
-//		public DropActionListener(Player player, Item item, List<JButton> itemJButtons, JButton jbutton) {
-//			super();
-//			this.player = player;
-//			this.item = item;
-//			this.itemJButtons =itemJButtons;
-//			this.jbutton=jbutton;
-//		}
-//
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			player.getInventory().remove(item);
-//			itemJButtons.remove(jbutton);
-//		}
-//
-//	}
-//
-//	//-------------------------------------------------------------------------------------------------
+	//	//------------------------------------------------------------------------------------------------
+	//	/**
+	//	 * when the button is pressed , the player will drop the corresponding item
+	//	 */
+	//	class DropActionListener implements ActionListener {
+	//		private Player player;
+	//		private Item item;
+	//		private List<JButton> itemJButtons;
+	//		private JButton jbutton;
+	//
+	//		public DropActionListener(Player player, Item item, List<JButton> itemJButtons, JButton jbutton) {
+	//			super();
+	//			this.player = player;
+	//			this.item = item;
+	//			this.itemJButtons =itemJButtons;
+	//			this.jbutton=jbutton;
+	//		}
+	//
+	//		@Override
+	//		public void actionPerformed(ActionEvent e) {
+	//			player.getInventory().remove(item);
+	//			itemJButtons.remove(jbutton);
+	//		}
+	//
+	//	}
+	//
+	//	//-------------------------------------------------------------------------------------------------
 
 	public Location nextSquareLocation(Player player, int steps) {
 		Direction dir = player.getDirection();
@@ -1143,6 +1176,111 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
+	public void dropDialog() {
+		Player clientPlayer = gameClient.getClientPlayer();
+		dropBox = new JDialog();
+		dropBox.setTitle("Which item do you want to drop?");
+		dropBox.setBackground(Color.GRAY);
+		dropBox.setLayout(null);
+		dropBox.setLocation(600, 300);
+		dropBox.setSize(200, 170);
+		dropBox.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		//add cancel button
+		JButton cancel = new JButton();
+		cancel.setText("Cancel");
+		cancel.setLocation(10, 90);
+		cancel.setSize(cancel.getPreferredSize());
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dropBox.dispose();
+			}
+		});
+		dropBox.add(cancel);
+//		//if there is 1 item in bag
+//		if (clientPlayer.getInventory().size() > 0) {
+//			JButton inventory1 = new JButton();
+//			inventory1.setIcon(clientPlayer.getInventory().get(0)
+//					.getSpriteImage());
+//			inventory1.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					dropIventory(0);
+//					dropBox.dispose();
+//				}
+//			});
+//		}
+//		//if there are 2 items in bag
+//		if (clientPlayer.getInventory().size() > 0) {
+//			JButton inventory2 = new JButton();
+//			inventory2.setIcon(clientPlayer.getInventory().get(1)
+//					.getSpriteImage());
+//			inventory2.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					dropIventory(1);
+//					dropBox.dispose();
+//				}
+//			});
+//		}
+//		//if there are 3 items in bag
+//		if (clientPlayer.getInventory().size() > 0) {
+//			JButton inventory3 = new JButton();
+//			inventory3.setIcon(clientPlayer.getInventory().get(2)
+//					.getSpriteImage());
+//			inventory3.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					dropIventory(2);
+//					dropBox.dispose();
+//				}
+//			});
+//		}
+//		//if there are 4 items in bag
+//		if (clientPlayer.getInventory().size() > 0) {
+//			JButton inventory4 = new JButton();
+//			inventory4.setIcon(clientPlayer.getInventory().get(3)
+//					.getSpriteImage());
+//			inventory4.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					dropIventory(3);
+//					dropBox.dispose();
+//				}
+//			});
+//		}
+//		//if there are 5 items in bag
+//		if (clientPlayer.getInventory().size() > 0) {
+//			JButton inventory5 = new JButton();
+//			inventory5.setIcon(clientPlayer.getInventory().get(4)
+//					.getSpriteImage());
+//			inventory5.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					dropIventory(4);
+//					dropBox.dispose();
+//				}
+//			});
+//		}
+//		//if there are 6 items in bag
+//		if (clientPlayer.getInventory().size() > 0) {
+//			JButton inventory6 = new JButton();
+//			inventory6.setIcon(clientPlayer.getInventory().get(5)
+//					.getSpriteImage());
+//			inventory6.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					dropIventory(5);
+//					dropBox.dispose();
+//				}
+//			});
+//		}
+
+		
+		dropBox.setVisible(true);
+		
+	}
+	
 	/**
 	 *@author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
