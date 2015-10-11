@@ -113,6 +113,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public JButton dropButton = new JButton();
 	public boolean buttonsAdded = false;
 	private GamePlayFrame frame = this;
+	public int jumpTimeCounter = 0;
+	private boolean isJumping = false;
+	public boolean isRainning = false;
+	public JButton rainyButton= new JButton();
+	public JButton sunnyButton= new JButton();
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -136,6 +141,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private Direction firstViewDirection = Direction.BACK_LEFT;
 	protected JLabel lvlupLabel_2;
 	protected JLabel lvlupLabel_3;
+	
 
 	///==================================
 
@@ -192,6 +198,23 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		dropButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				dropDialog();
+			}
+		});
+		//add rainy and sunny button
+		rainyButton.setText("Rainy");
+		rainyButton.setBounds(450, 10, 100, 30);
+		panel.add(rainyButton);
+		rainyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				isRainning =true;
+			}
+		});
+		sunnyButton.setText("Sunny");
+		sunnyButton.setBounds(450, 40, 100, 30);
+		panel.add(sunnyButton);
+		sunnyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				isRainning =false;
 			}
 		});
 	}
@@ -390,6 +413,19 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
+			// jumpTimeCounter run
+			if (isJumping) {
+				jumpTimeCounter++;
+				if (jumpTimeCounter > 20) {
+					if (jumpOffset == 0) {
+						jumpOffset = -20;
+						jumpOffsetFirstView = -50;
+					} else {
+						jumpOffset = 0;
+						jumpOffsetFirstView = 0;
+					}
+				}
+			}
 
 			//draw welcome picture
 			if (frameState == FRAME_STATE.CREATED_FRAME
@@ -425,6 +461,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
 					startX + 2 - turnOffset, startY + 2 - jumpOffsetFirstView
 							- 60, null);
+
 			int changeOffset = 50;
 			if (turnCounter > 0) {
 				//turn right
@@ -727,12 +764,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				buttonsAdded = true;
 			}
 			//draw small map
-			int mapStartX= 600;
+			int mapStartX = 600;
 			int mapNowX = mapStartX;
 			int mapStartY = 10;
 			int mapSquareSize = 10;
 			for (int cellY = 0; cellY < 10; cellY++) {
-				for (int cellX = 0; cellX <10; cellX++) {
+				for (int cellX = 0; cellX < 10; cellX++) {
 					if (gameClient.getClientPlayer().getLocation().getX() == cellX
 							&& gameClient.getClientPlayer().getLocation()
 									.getY() == cellY) {
@@ -809,6 +846,31 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				mapNowX = mapStartX;
 				mapStartY += mapSquareSize;
 			}
+			//add raining weather
+			if (isRainning) {
+				int rainStartX = 200;
+				int rainStartY = -50;
+				int rainEndX = 700;
+				int rainEndY = 500;
+				int nextX = rainStartX;
+				int nextY = rainStartY;
+				int number = 0;
+				while (number < 50) {
+					nextX = (int) (Math.random() * 400 + rainStartX);
+					nextY = (int) (Math.random() * 100 + rainStartY);
+					int width = (int) (Math.random() * 100 + 20);//from 0 to 40
+					int height = 3 * width;
+					if (nextY + height > rainEndY) {
+						height = rainEndY - nextY;
+						width = height / 3;
+					}
+					g.setColor(Color.WHITE);
+					g.drawLine(nextX, nextY, nextX + width, nextY + height);
+					//					nextX = nextX+width;
+					//					nextY = nextY+height;
+					number++;
+				}
+			}
 		}
 	}
 
@@ -859,34 +921,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		repaint();
 	}
 
-	//	//------------------------------------------------------------------------------------------------
-	//	/**
-	//	 * when the button is pressed , the player will drop the corresponding item
-	//	 */
-	//	class DropActionListener implements ActionListener {
-	//		private Player player;
-	//		private Item item;
-	//		private List<JButton> itemJButtons;
-	//		private JButton jbutton;
-	//
-	//		public DropActionListener(Player player, Item item, List<JButton> itemJButtons, JButton jbutton) {
-	//			super();
-	//			this.player = player;
-	//			this.item = item;
-	//			this.itemJButtons =itemJButtons;
-	//			this.jbutton=jbutton;
-	//		}
-	//
-	//		@Override
-	//		public void actionPerformed(ActionEvent e) {
-	//			player.getInventory().remove(item);
-	//			itemJButtons.remove(jbutton);
-	//		}
-	//
-	//	}
-	//
-	//	//-------------------------------------------------------------------------------------------------
-
 	public Location nextSquareLocation(Player player, int steps) {
 		Direction dir = player.getDirection();
 		if (dir == Direction.BACK_LEFT) {
@@ -912,8 +946,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_J) {
-			jumpOffset = -20;
-			jumpOffsetFirstView = -50;
+			isJumping = true;
+			//			jumpOffset = -20;
+			//			jumpOffsetFirstView = -50;
 		}
 	}
 
@@ -937,8 +972,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			return false;
 		}
 		if (sq[y][x].getGameObjectOnSquare() instanceof MagicCircle) {
-			MagicCircle mc =(MagicCircle) (sq[y][x].getGameObjectOnSquare());
-			player.setLocation(new Location(player.getLocation().getRoom(),mc.getTeleportX(),mc.getTeleportY()));
+			MagicCircle mc = (MagicCircle) (sq[y][x].getGameObjectOnSquare());
+			player.setLocation(new Location(player.getLocation().getRoom(), mc
+					.getTeleportX(), mc.getTeleportY()));
 			return false;
 		}
 		return true;
@@ -1153,8 +1189,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		//allows player to jump on the spot
 		else if (e.getKeyCode() == KeyEvent.VK_J) {
-			jumpOffset = 0;
-			jumpOffsetFirstView = 0;
+			isJumping = false;
+			//			jumpOffset = 0;
+			//			jumpOffsetFirstView = 0;
 		}
 		if (loc.getY() < 0) {
 			loc.moveSouth();

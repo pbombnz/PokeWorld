@@ -23,7 +23,7 @@ public class Board1 extends Board{
 
 	}
 
-	public Board1(Room room) {
+	public Board1() {
 		this.width = 10;
 		this.height = 10;
 		this.squares = new BoardSquare[height][width];
@@ -36,12 +36,12 @@ public class Board1 extends Board{
 								if (i == 3 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
-								if (i == 9 && j ==6 ) {
-									this.squares[i][j] = new BoardSquare(new MagicCircle(5,9));
-								}
-								if (i == 5 && j ==9 ) {
-									this.squares[i][j] = new BoardSquare(new MagicCircle(9,6));
-								}
+//								if (i == 9 && j ==6 ) {
+//									this.squares[i][j] = new BoardSquare(new MagicCircle(5,9));
+//								}
+//								if (i == 5 && j ==9 ) {
+//									this.squares[i][j] = new BoardSquare(new MagicCircle(9,6));
+//								}
 								if (i == 2 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
