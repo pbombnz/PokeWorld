@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.scene.Scene;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -326,7 +328,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		repaint();
 	}
 
-	private String getTimeText(long runningTime){
+	private String getTimeText(long runningTime) {
 		runningTime = runningTime / 1000;//trasfter ms to s
 		long second = (runningTime % 60);
 		runningTime -= second;
@@ -335,18 +337,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		runningTime -= minute;
 		runningTime = runningTime / 60;//trasfter m to hour
 		long hours = (runningTime % 60);
-		if(second >=10&&minute>=10){
-		return ("Time: " + hours + ":"
-				+ minute + ":" + second);
-		}else if(second <10&&minute>=10){
-			return ("Time: " + hours + ":"
-					+ minute + ":0" + second);
-		}else if(second >=10&&minute<10){
-			return ("Time: " + hours + ":0"
-					+ minute + ":" + second);
-		}else{
-			return ("Time: " + hours + ":0"
-					+ minute + ":0" + second);
+		if (second >= 10 && minute >= 10) {
+			return ("Time: " + hours + ":" + minute + ":" + second);
+		} else if (second < 10 && minute >= 10) {
+			return ("Time: " + hours + ":" + minute + ":0" + second);
+		} else if (second >= 10 && minute < 10) {
+			return ("Time: " + hours + ":0" + minute + ":" + second);
+		} else {
+			return ("Time: " + hours + ":0" + minute + ":0" + second);
 		}
 	}
 
@@ -639,6 +637,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						}
 					}
 
+					//shake the player when he dont move
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
@@ -723,6 +722,22 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
+	/**
+	 * check whether the place can be move into
+	 */
+	private boolean canMove(int x, int y, Player player) {
+		BoardSquare[][] sq = player.getLocation().getRoom().board.getSquares();
+		if(x>9||x<0||y<0||y>9){
+			return false;
+		}
+		//change here if add new kinds of Monster
+		if (sq[x][y].getGameObjectOnSquare() instanceof Tree||sq[x][y].getGameObjectOnSquare() instanceof Mewtwo||sq[x][y].getGameObjectOnSquare() instanceof Rattata||sq[x][y].getGameObjectOnSquare() instanceof Rhydon||sq[x][y].getGameObjectOnSquare() instanceof Zubat) {
+			System.out.println("saa
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		Player clientPlayer = gameClient.getClientPlayer();
@@ -732,36 +747,56 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		GameObject gg = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.getGameObjectOnSquare();
 		if (e.getKeyCode() == KeyEvent.VK_W) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
-				loc.moveNorth();
+			//check whrther can move 
+			if (canMove(loc.getX(), loc.getY() - 1, clientPlayer)) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+					loc.moveNorth();
+				} else {
+					clientPlayer.setDirection(Direction.BACK_LEFT);
+					loc.moveNorth();
+				}
 			} else {
 				clientPlayer.setDirection(Direction.BACK_LEFT);
-				loc.moveNorth();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_S) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-				loc.moveSouth();//oo
+			//check whrther can move 
+			if (canMove(loc.getX(), loc.getY() + 1, clientPlayer)) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+					loc.moveSouth();//oo
+				} else {
+					clientPlayer.setDirection(Direction.FACE_RIGHT);
+					loc.moveSouth();//oo
+				}
 			} else {
 				clientPlayer.setDirection(Direction.FACE_RIGHT);
-				loc.moveSouth();//oo
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
-				loc.moveWest();
+			//check whrther can move 
+			if (canMove(loc.getX() - 1, loc.getY(), clientPlayer)) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+					loc.moveWest();
+				} else {
+					clientPlayer.setDirection(Direction.FACE_LEFT);
+					loc.moveWest();//oo
+				}
 			} else {
 				clientPlayer.setDirection(Direction.FACE_LEFT);
-				loc.moveWest();//oo
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-				loc.moveEast();
+			//check whrther can move 
+			if (canMove(loc.getX()+1, loc.getY(), clientPlayer)) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+					loc.moveEast();
+				} else {
+					clientPlayer.setDirection(Direction.BACK_RIGHT);
+					loc.moveEast();//oo
+				}
 			} else {
 				clientPlayer.setDirection(Direction.BACK_RIGHT);
-				loc.moveEast();//oo
 			}
 		}
 		//these are for 1st person view contrl
@@ -897,7 +932,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		//If you find a key, adds it to the inventory and removes from the board
 		if (go instanceof Key) {
-			System.out.println(loc.getRoom());
+//			System.out.println(loc.getRoom());
 			clientPlayer.addToInventory(((Key) go));
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
@@ -1023,9 +1058,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	/**
-	 *@author Sushant Balajee
-	 *@author Donald Tang
-	 *@contributer Wang Zhen(add Timer and gif)
+	 *@author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
 	public void fightDialog() {
 		Player clientPlayer = gameClient.getClientPlayer();
@@ -1103,8 +1136,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	/**
-	 * @author Sushant Balajee
-	 * @author Donald Tang
+	 * @author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
 	public void fight() {
 		Player clientPlayer = gameClient.getClientPlayer();
