@@ -15,6 +15,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -57,9 +61,9 @@ import game.objects.GameObject;
 import game.objects.scene.*;
 import game.objects.monster.*;
 
-
 @SuppressWarnings("serial")
-public class GamePlayFrame extends JFrame implements KeyListener, ActionListener, WindowListener, GameClientListener {
+public class GamePlayFrame extends JFrame implements KeyListener,
+		ActionListener, WindowListener, GameClientListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -87,7 +91,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
 
 	public boolean hasLoadedLabels = false;
-	
+
 	public JLabel headPictureLabel = null;
 	public JLabel bgHeadViewLabel = null;
 	public JLabel dieLabel = null;
@@ -120,12 +124,13 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	protected JLabel lvlupLabel_3;
 
 	///==================================
-	//these are for system seting
-//	privategameStartTime = 0;
+	//add explored time
+	private String startTime = null;
+	public JLabel timeLabel = new JLabel();
 
 	public GamePlayFrame() {
 		gameClient.setGameClientListener(this);
-//		system.ge
+		//		system.ge
 
 		//initialises game frame
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);
@@ -163,30 +168,36 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		setVisible(true);
 
 		frameState = GamePlayFrame.FRAME_STATE.CREATED_FRAME;
+		//set start time
+		startTime = getCurrentTime();
+	}
 
+	/**
+	 * get currrent time String
+	 * @return
+	 */
+	public String getCurrentTime() {
+		Date date = new Date(System.currentTimeMillis());
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = format.format(date);
+		return time;
 	}
 
 	public void loadLabels() {
 		// Get Client Player from Client Connection
 		Player clientPlayer = gameClient.getClientPlayer();
-		
+
 		//load labels of player information
 		//create background label
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
 		//load head picture
 		JLabel headPictureLabel = null;
-		/*ALEX's OLD CODE
-		 * if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
-			headPictureLabel = new JLabel(new ImageIcon("src/Bulbasaur.gif"));
-		} else if (clientPlayer.getAvatar().getAvatarName().equals("Charmander")) {
-			headPictureLabel = new JLabel(new ImageIcon("src/Charmander.gif"));
-		} else if (clientPlayer.getAvatar().getAvatarName().equals("Squirtle")) {
-			headPictureLabel = new JLabel(new ImageIcon("src/Squirtle.gif"));
-		}*/
-		// PRASHANT's CODE
-		ImageIcon headPicture = clientPlayer.getAvatar().getCurrentEvolution(clientPlayer.getPlayerLevel()).getDisplayPictureGIF();
+
+		ImageIcon headPicture = clientPlayer.getAvatar()
+				.getCurrentEvolution(clientPlayer.getPlayerLevel())
+				.getDisplayPictureGIF();
 		headPictureLabel = new JLabel(headPicture);
-		
+
 		int xPo = 10;
 		int yPo = 10;
 		int touxiangSize = 130;
@@ -205,100 +216,16 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 		//print head picture <- Bad Comment
 		// Proper Comment: Sets all Labels with Sprites of the clients player.
-		Evolution clientPlayerCurrentEvolution = clientPlayer.getAvatar().getCurrentEvolution(clientPlayer.getPlayerLevel());
-		Evolution clientPlayerNextEvolution = clientPlayer.getAvatar().getNextEvolution(clientPlayer.getPlayerLevel());
+		Evolution clientPlayerCurrentEvolution = clientPlayer.getAvatar()
+				.getCurrentEvolution(clientPlayer.getPlayerLevel());
+		Evolution clientPlayerNextEvolution = clientPlayer.getAvatar()
+				.getNextEvolution(clientPlayer.getPlayerLevel());
 
 		dieLabel = new JLabel(clientPlayerCurrentEvolution.getDieGIF());
 		attackLabel = new JLabel(clientPlayerCurrentEvolution.getAttackGIF());
-		levelUpLabel_2 = new JLabel(clientPlayerCurrentEvolution.getEvolvingGIF());
+		levelUpLabel_2 = new JLabel(
+				clientPlayerCurrentEvolution.getEvolvingGIF());
 		levelUpLabel_3 = new JLabel(clientPlayerNextEvolution.getEvolvingGIF());
-		
-		
-		/*if (clientPlayer.getPlayerLevel() == 1) {
-			if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
-				dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Bulbasaur_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			} else if (clientPlayer.getAvatar().getAvatarName()
-					.equals("Charmander")) {
-				dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Charmander_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			} else if (clientPlayer.getAvatar().getAvatarName()
-					.equals("Squirtle")) {
-				dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Squirtle_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			}
-		} else if (clientPlayer.getPlayerLevel() == 2) {
-			if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
-				dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Bulbasaur_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			} else if (clientPlayer.getAvatar().getAvatarName()
-					.equals("Charmander")) {
-				dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Charmander_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			} else if (clientPlayer.getAvatar().getAvatarName()
-					.equals("Squirtle")) {
-				dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Squirtle_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			}
-		} else {
-			if (clientPlayer.getAvatar().getAvatarName().equals("Bulbasaur")) {
-				dieLabel = new JLabel(new ImageIcon("src/Bulbasaur_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Bulbasaur_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			} else if (clientPlayer.getAvatar().getAvatarName()
-					.equals("Charmander")) {
-				dieLabel = new JLabel(new ImageIcon("src/Charmander_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Charmander_attack_lvl3.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			} else if (clientPlayer.getAvatar().getAvatarName()
-					.equals("Squirtle")) {
-				dieLabel = new JLabel(new ImageIcon("src/Squirtle_die.gif"));
-				attackLabel = new JLabel(new ImageIcon(
-						"src/Squirtle_attack.gif"));
-				levelUpLabel_2 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level2.gif"));
-				levelUpLabel_3 = new JLabel(new ImageIcon(
-						"src/Charmander_upto_level3.gif"));
-			}
-		}*/
 
 		int diexPo = 400;
 		int dieyPo = 100;
@@ -317,6 +244,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		this.attackLabel = attackLabel;
 		this.lvlupLabel_2 = levelUpLabel_2;
 		this.lvlupLabel_3 = levelUpLabel_3;
+
 	}
 
 	public void printInformation(Player player) {
@@ -373,7 +301,53 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		infoLabels.add(attack);
 		infoLabels.add(level);
 
+		//set time label; 
+		//initialization
+		panel.remove(timeLabel);
+		//set format
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//get how long game rinning
+		long runningTime = 0;
+		try {
+			runningTime = sdf.parse(getCurrentTime()).getTime()
+					- sdf.parse(startTime).getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		JLabel timeLabel = new JLabel();
+		timeLabel.setText(getTimeText(runningTime));
+		timeLabel.setLocation(10, 300);
+		timeLabel.setSize(400, 20);
+		timeLabel.setFont(new Font("Dialog", 1, 15));
+		timeLabel.setHorizontalAlignment(JLabel.LEFT);
+		this.timeLabel = timeLabel;
+		panel.add(this.timeLabel);
+
 		repaint();
+	}
+
+	private String getTimeText(long runningTime){
+		runningTime = runningTime / 1000;//trasfter ms to s
+		long second = (runningTime % 60);
+		runningTime -= second;
+		runningTime = runningTime / 60;//trasfter s to m
+		long minute = (runningTime % 60);
+		runningTime -= minute;
+		runningTime = runningTime / 60;//trasfter m to hour
+		long hours = (runningTime % 60);
+		if(second >=10&&minute>=10){
+		return ("Time: " + hours + ":"
+				+ minute + ":" + second);
+		}else if(second <10&&minute>=10){
+			return ("Time: " + hours + ":"
+					+ minute + ":0" + second);
+		}else if(second >=10&&minute<10){
+			return ("Time: " + hours + ":0"
+					+ minute + ":" + second);
+		}else{
+			return ("Time: " + hours + ":0"
+					+ minute + ":0" + second);
+		}
 	}
 
 	private void changeShakeLimit() {
@@ -384,18 +358,21 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 		}
 	}
 
+	//------------------------------------------------------------------------------------------------
 	class GamePanel extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g); // Clears panel
 
 			//draw welcome picture
-			if (frameState == FRAME_STATE.CREATED_FRAME || frameState == FRAME_STATE.GAME_CONNECTING) {
-				g.drawImage(new ImageIcon("./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
+			if (frameState == FRAME_STATE.CREATED_FRAME
+					|| frameState == FRAME_STATE.GAME_CONNECTING) {
+				g.drawImage(new ImageIcon(
+						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
 						0, FULL_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
-			
-			if(gameClient.getGame() == null && !gameClient.isConnected()) {
+
+			if (gameClient.getGame() == null && !gameClient.isConnected()) {
 				super.paintComponent(g);
 				frameState = FRAME_STATE.CREATED_FRAME;
 				this.repaint();
@@ -419,7 +396,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
 					startX + 2 - turnOffset, startY + 2 - jumpOffsetFirstView
-					- 60, null);
+							- 60, null);
 			int changeOffset = 50;
 			if (turnCounter > 0) {
 				//turn right
@@ -430,17 +407,17 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				turnCounter++;
 				turnOffset -= changeOffset;
 			}
-			
+
 			Player clientPlayer = gameClient.getClientPlayer();
 
-			if(!hasLoadedLabels) {
+			if (!hasLoadedLabels) {
 				//add all jlabel after picking character
 				loadLabels();
 				panel.add(headPictureLabel);
 				panel.add(bgHeadViewLabel);
 				hasLoadedLabels = true;
 			}
-			
+
 			int numSquaresFace = 0;
 			int numSquaresLeft = 0;
 			int numSquaresRight = 0;
@@ -572,14 +549,14 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 						&& nextLoc.getY() != -1 && nextLoc.getY() != 10) {
 					if (bs[nextLoc.getX()][nextLoc.getY()]
 							.getGameObjectOnSquare() != null) {
-						
+
 						if (bs[nextLoc.getX()][nextLoc.getY()]
 								.getGameObjectOnSquare() instanceof Tree) {
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), (int) previouX0 - 20,
 									(int) previouY0 - 150, null);
-						}else{
+						} else {
 							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), (int) previouX0,
@@ -603,7 +580,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 			/// Draw background picture
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
-			.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
 			///print compass
 			g.drawImage(
@@ -620,8 +597,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
 					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-					.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
-					null);
+							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
+							null);
 
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
@@ -634,16 +611,16 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
 
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
 					}
 
@@ -654,10 +631,10 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 									&& connectedPlayer.getLocation().getY() == cellY) {
 								g.drawImage(
 										connectedPlayer
-										.getSpriteBasedOnDirection()
-										.getImage(), tileX
-										+ (TILE_WIDTH / 5), tileY
-										- (TILE_HEIGHT / 3), null);
+												.getSpriteBasedOnDirection()
+												.getImage(), tileX
+												+ (TILE_WIDTH / 5), tileY
+												- (TILE_HEIGHT / 3), null);
 							}
 						}
 					}
@@ -670,15 +647,15 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
 					}
 
@@ -848,8 +825,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[oldBoard
-					                                          .getHeight()
-					                                          - (j + offset)][i];
+							.getHeight() - (j + offset)][i];
 				}
 			}
 			//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
@@ -860,8 +836,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 
-			newloc.setX(oldBoard
-					.getHeight() - (clientPlayer.getLocation().getY() + offset));
+			newloc.setX(oldBoard.getHeight()
+					- (clientPlayer.getLocation().getY() + offset));
 
 			newloc.setY(clientPlayer.getLocation().getX());
 			clientPlayer.setLocation(newloc);
@@ -876,8 +852,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][oldBoard
-					                                             .getWidth()
-					                                             - (i + offset)];
+							.getWidth() - (i + offset)];
 				}
 			}
 			clientPlayer.getLocation().getRoom().board = newBoard;
@@ -891,8 +866,8 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 			newloc.setX(clientPlayer.getLocation().getY());
 
-			newloc.setY(oldBoard
-					.getWidth() - (clientPlayer.getLocation().getX() + offset));
+			newloc.setY(oldBoard.getWidth()
+					- (clientPlayer.getLocation().getX() + offset));
 
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
@@ -1010,7 +985,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				}
 			}
 		}
-		
+
 		gameClient.sendPlayerMoveUpdateToServer();
 		repaint();
 	}
@@ -1179,9 +1154,11 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 			if (menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
-				List<InetAddress> serverAddressList = gameClient.getServerList();
-				InetAddress serverAddress = ServerSelectDialog.Chooser(this, serverAddressList);
-				if(serverAddress == null) {
+				List<InetAddress> serverAddressList = gameClient
+						.getServerList();
+				InetAddress serverAddress = ServerSelectDialog.Chooser(this,
+						serverAddressList);
+				if (serverAddress == null) {
 					return;
 				}
 				try {
@@ -1192,7 +1169,7 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 									+ " Make sure that you have created and\n"
 									+ " connected and the server and the\n"
 									+ "ports are unblocked.", "ERROR",
-									JOptionPane.ERROR_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 
 					frameState = FRAME_STATE.CREATED_FRAME;
 					return;
@@ -1202,18 +1179,25 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 				// Now we need to let the user enter a username (and validate that it
 				// isn't already taken by another user) and pick a character
 				String playerUsername = null;
-				
+
 				while (playerUsername == null) {
-					playerUsername = JOptionPane.showInputDialog(this, "Input your Username?");
-					
+					playerUsername = JOptionPane.showInputDialog(this,
+							"Input your Username?");
+
 					if (playerUsername == null || playerUsername.length() < 1) {
 						playerUsername = null;
-						JOptionPane.showMessageDialog(this, "You need to enter a user name!", "ERROR", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(this,
+								"You need to enter a user name!", "ERROR",
+								JOptionPane.ERROR_MESSAGE);
 						continue;
 					}
-					
-					if(!gameClient.isUsernameAlreadyTaken(playerUsername)) {
-						JOptionPane.showMessageDialog(this, "Username Already in use. Please enter another one!", "ERROR", JOptionPane.ERROR_MESSAGE);						
+
+					if (!gameClient.isUsernameAlreadyTaken(playerUsername)) {
+						JOptionPane
+								.showMessageDialog(
+										this,
+										"Username Already in use. Please enter another one!",
+										"ERROR", JOptionPane.ERROR_MESSAGE);
 						playerUsername = null;
 						continue;
 					}
@@ -1241,12 +1225,12 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	@Override
 	public void onGameClientUpdated() {
 		frameState = FRAME_STATE.GAME_START;
-		repaint();	
+		repaint();
 	}
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		
+
 	}
 
 	@Override
@@ -1261,19 +1245,19 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		
+
 	}
 
 	@Override
-	public void windowDeiconified(WindowEvent arg0) {		
+	public void windowDeiconified(WindowEvent arg0) {
 	}
 
 	@Override
-	public void windowIconified(WindowEvent arg0) {	
+	public void windowIconified(WindowEvent arg0) {
 	}
 
 	@Override
-	public void windowOpened(WindowEvent arg0) {		
+	public void windowOpened(WindowEvent arg0) {
 	}
 }
 
