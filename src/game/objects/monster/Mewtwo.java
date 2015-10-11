@@ -18,10 +18,10 @@ public class Mewtwo extends Monster{
 
 	public int health;
 	public int attack;
+	public Direction direction = Direction.FACE_RIGHT;
 
 	public Mewtwo(){
 		spriteImage =GameObject.MEWTWO;
-		direction = Direction.FACE_RIGHT;
 	}
 	
 	public Mewtwo(int attack, int health){
@@ -69,7 +69,6 @@ public class Mewtwo extends Monster{
 
 	@Override
 	public Direction getDirection() {
-		// TODO Auto-generated method stub
 		return direction;
 	}
 }

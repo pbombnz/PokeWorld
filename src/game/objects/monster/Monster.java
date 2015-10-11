@@ -14,34 +14,36 @@ import game.objects.GameObject;
  *@author Wang Zhen
  */
 
-public abstract class Monster implements GameObject{
-	public ImageIcon spriteImage ;
-	public Direction direction;
-	
+public abstract class Monster implements GameObject {
+	public ImageIcon spriteImage;
+
 	/**
 	 * @return name of the enemy
 	 */
 	public abstract String getName();
+
 	/**
 	 * @return attack points of the enemy
 	 */
 	public abstract int attack();
-	
+
 	/**
 	 * @return health of the enemy
 	 */
 	public abstract int getHealth();
+
 	/**
 	 * @param change, the amount of damage dealt to the enemy by the player
 	 */
 	public abstract void setHealth(int change);
+
 	/**
 	 * @return if the monster is dead
 	 */
 	public abstract boolean isDead();
-	
+
 	public abstract Direction getDirection();
-	
+
 	public abstract void setDirection(Direction direction);
-	
+
 }

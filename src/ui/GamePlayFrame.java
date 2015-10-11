@@ -115,12 +115,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public List<JLabel> itemJLabels = new ArrayList<JLabel>();
 	public JButton dropButton = new JButton();
 	public boolean buttonsAdded = false;
-	private GamePlayFrame frame = this;
 	public int jumpTimeCounter = 0;
 	private boolean isJumping = false;
 	public boolean isRainning = false;
 	public JButton rainyButton = new JButton();
 	public JButton sunnyButton = new JButton();
+	private long lastMovedtime = 0;//the time that monster  moved in last wonder around unit 
+	private boolean moved = false;
+	//	public int monsterWalkAroundTimer = 0;//when the timer get timer limit, the monster will move
+	//	public final int MOSTER_WALK_TIMER_LIMIT = 10000;
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -660,6 +663,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			int yPos = FRAME_HEIGHT / 2;
 			int xPos = 110;
 
+			//caculate time 1st for adding "wander around"
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			long runningTime = 0;
+			try {
+				runningTime = sdf.parse(getCurrentTime()).getTime()
+						- sdf.parse(startTime).getTime();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					int tileX = xPos + (cellX * TILE_WIDTH / 2);
@@ -734,7 +747,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					Game ga = gameClient.getGame();
 					Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
 					BoardSquare[][] bs = r.board.getSquares();
-
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
 							g.drawImage(bs[cellY][cellX]
@@ -744,6 +756,30 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY, 20, 20, null);
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Rattata) {
+							g.drawImage(bs[cellY][cellX]
+									.getGameObjectOnSquare().getSpriteImage()
+									.getImage(), tileX, tileY
+									- (TILE_HEIGHT / 2), 50, 50, null);
+
+							//add "wander around"----------------------------------
+
+							int passSecond = (int) (runningTime / 1000);
+							//every unit second,monster move around
+							int unitSecond = 2;
+
+							System.out.println(runningTime + ","
+									+ lastMovedtime);
+							if (runningTime != lastMovedtime) {
+								if (passSecond % unitSecond == 0) {
+									Monster monster = (Monster) bs[cellY][cellX]
+											.getGameObjectOnSquare();
+									turnMonsterImageRight(monster);
+									moved = true;
+								}
+							}
+							//update lastMovedtime after print all monster in object list
+							//-----------------------------------------------------
 						} else {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
@@ -756,6 +792,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				xPos += TILE_WIDTH / 2;
 			}
 
+			if (moved) {
+				lastMovedtime = runningTime;
+			}
 			//printInformation of player
 			printInformation(clientPlayer);
 
@@ -872,6 +911,28 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					g.drawLine(nextX, nextY, nextX + width, nextY + height);
 					//					nextX = nextX+width;
 					//					nextY = nextY+height;
+					number++;
+				}
+			}
+			//add rain for 1st view
+			if (isRainning) {
+				int rainStartX = 900;
+				int rainStartY = -50;
+				int rainEndY = 600;
+				int nextX = rainStartX;
+				int nextY = rainStartY;
+				int number = 0;
+				while (number < 50) {
+					nextX = (int) (Math.random() * 500 + rainStartX);//get rain from rainStartX to rainStartX+500
+					nextY = (int) (Math.random() * 100 + rainStartY);
+					int width = (int) (Math.random() * 100 + 20);//from 0 to 40
+					int height = 3 * width;
+					if (nextY + height > rainEndY) {
+						height = rainEndY - nextY;
+						width = height / 3;
+					}
+					g.setColor(Color.WHITE);
+					g.drawLine(nextX, nextY, nextX + width, nextY + height);
 					number++;
 				}
 			}
@@ -1310,29 +1371,29 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	 * @param player
 	 */
 	public void turnPlayerImageLeft(Player player) {
-		if (player.getDirection().equals(Direction.FACE_LEFT)) {
+		if (player.getDirection() == Direction.FACE_LEFT) {
 			player.setDirection(Direction.BACK_LEFT);
-		} else if (player.getDirection().equals(Direction.BACK_LEFT)) {
+		} else if (player.getDirection() == Direction.BACK_LEFT) {
 			player.setDirection(Direction.BACK_RIGHT);
-		} else if (player.getDirection().equals(Direction.BACK_RIGHT)) {
+		} else if (player.getDirection() == Direction.BACK_RIGHT) {
 			player.setDirection(Direction.FACE_RIGHT);
-		} else if (player.getDirection().equals(Direction.FACE_RIGHT)) {
+		} else if (player.getDirection() == Direction.FACE_RIGHT) {
 			player.setDirection(Direction.FACE_LEFT);
 		}
 	}
 
 	/**
-	 * let the player image turn left
+	 * let the monster image turn left
 	 * @param monster
 	 */
 	public void turnMonsterImageLeft(Monster monster) {
-		if (monster.getDirection().equals(Direction.FACE_LEFT)) {
+		if (monster.getDirection() == Direction.FACE_LEFT) {
 			monster.setDirection(Direction.BACK_LEFT);
-		} else if (monster.getDirection().equals(Direction.BACK_LEFT)) {
+		} else if (monster.getDirection() == Direction.BACK_LEFT) {
 			monster.setDirection(Direction.BACK_RIGHT);
-		} else if (monster.getDirection().equals(Direction.BACK_RIGHT)) {
+		} else if (monster.getDirection() == Direction.BACK_RIGHT) {
 			monster.setDirection(Direction.FACE_RIGHT);
-		} else if (monster.getDirection().equals(Direction.FACE_RIGHT)) {
+		} else if (monster.getDirection() == Direction.FACE_RIGHT) {
 			monster.setDirection(Direction.FACE_LEFT);
 		}
 	}

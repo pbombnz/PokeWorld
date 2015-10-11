@@ -14,19 +14,19 @@ import sun.java2d.pipe.SpanClipRenderer;
  *@author Donald Tang
  */
 
-public class Zubat extends Monster{
+public class Zubat extends Monster {
 
 	private static final long serialVersionUID = 6696995125055330253L;
 
 	public int health;
 	public int attack;
+	public Direction direction = Direction.FACE_RIGHT;
 
-	public Zubat(){
-		spriteImage =GameObject.ZUBAT;
-		direction = Direction.FACE_RIGHT;
+	public Zubat() {
+		spriteImage = GameObject.ZUBAT;
 	}
-	
-	public Zubat(int attack, int health){
+
+	public Zubat(int attack, int health) {
 		this.attack = attack;
 		this.health = health;
 	}
@@ -46,14 +46,14 @@ public class Zubat extends Monster{
 		return health;
 	}
 
-	public void setHealth(int change){
+	public void setHealth(int change) {
 		health = change;
-		if(health < 0){
+		if (health < 0) {
 			health = 0;
 		}
 	}
 
-	public boolean isDead(){
+	public boolean isDead() {
 		return health <= 0;
 	}
 
@@ -61,6 +61,7 @@ public class Zubat extends Monster{
 	public ImageIcon getSpriteImage() {
 		return spriteImage;
 	}
+
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}

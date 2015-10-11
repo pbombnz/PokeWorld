@@ -18,10 +18,10 @@ public class Rhydon extends Monster{
 
 	public int health;
 	public int attack;
+	public Direction direction = Direction.FACE_RIGHT;
 
 	public Rhydon(){
 		spriteImage=GameObject.RHYDON;
-		direction = Direction.FACE_RIGHT;
 	}
 	
 	public Rhydon(int attack, int health){
