@@ -52,6 +52,7 @@ import rooms.Board3;
 import rooms.EmptyBoard;
 import rooms.Room;
 import rooms.Room1;
+import sun.net.www.content.text.plain;
 import network.GameClient;
 import network.GameClientListener;
 import game.BoardSquare;
@@ -666,6 +667,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						}
 					}
 
+					//draw player
 					//shake the player when he dont move
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
@@ -700,9 +702,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof MagicCircle) {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(),tileX, tileY,20,20, null);
-						}
-						else {
+									.getImage(), tileX, tileY, 20, 20, null);
+						} else {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY
@@ -724,6 +725,89 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			if (buttonsAdded == false) {
 				addButtons();
 				buttonsAdded = true;
+			}
+			//draw small map
+			int mapStartX= 600;
+			int mapNowX = mapStartX;
+			int mapStartY = 10;
+			int mapSquareSize = 10;
+			for (int cellY = 0; cellY < 10; cellY++) {
+				for (int cellX = 0; cellX <10; cellX++) {
+					if (gameClient.getClientPlayer().getLocation().getX() == cellX
+							&& gameClient.getClientPlayer().getLocation()
+									.getY() == cellY) {
+						g.setColor(Color.red);
+						g.fillRect(mapNowX, mapStartY, mapSquareSize,
+								mapSquareSize);
+						g.setColor(Color.black);
+						g.drawRect(mapNowX, mapStartY, mapSquareSize,
+								mapSquareSize);
+					} else {
+						Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
+						BoardSquare[][] bs = r.board.getSquares();
+						if (bs[cellY][cellX].getGameObjectOnSquare() == null) {
+							g.setColor(Color.GREEN.darker());
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
+							g.setColor(Color.black);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
+							g.setColor(Color.PINK);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
+							g.setColor(Color.blue);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof MagicCircle) {
+							g.setColor(Color.CYAN);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Key) {
+							g.setColor(Color.ORANGE);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof RareCandy) {
+							g.setColor(Color.blue);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						} else {
+							g.setColor(Color.LIGHT_GRAY);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						}
+					}
+
+					mapNowX += mapSquareSize;
+				}
+				mapNowX = mapStartX;
+				mapStartY += mapSquareSize;
 			}
 		}
 	}
@@ -861,7 +945,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							.getTeleportLocation().getX()
 							+ ","
 							+ ((MagicCircle) (sq[y][x].getGameObjectOnSquare()))
-	.getTeleportLocation().getY());
+									.getTeleportLocation().getY());
 			return false;
 		}
 		return true;
