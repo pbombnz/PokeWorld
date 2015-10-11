@@ -1108,34 +1108,38 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 		});
 
-		att.setLocation(10, 70);
+		att.setLocation(10, 90);
 		att.setSize(att.getPreferredSize());
-		run.setLocation(90, 70);
+		run.setLocation(90, 90);
 		run.setSize(run.getPreferredSize());
 
 		JLabel type = new JLabel("Monster Type: " + ((Monster) go).getName());
 		JLabel attack = new JLabel("Monster Attack: " + ((Monster) go).attack());
 		JLabel health = new JLabel("Monster Health: "
 				+ ((Monster) go).getHealth());
+		JLabel message = new JLabel("Fighting one round?");
 
 		type.setLocation(10, 10);
 		attack.setLocation(10, 30);
 		health.setLocation(10, 50);
+		message.setLocation(10, 70);
 
 		type.setSize(type.getPreferredSize());
 		attack.setSize(type.getPreferredSize());
 		health.setSize(type.getPreferredSize());
+		message.setSize(type.getPreferredSize());
 
 		fightBox = new JDialog();
 		fightBox.setTitle("An enemy!");
 		fightBox.setBackground(Color.GRAY);
 		fightBox.setLayout(null);
-		fightBox.setLocation(600, 400);
-		fightBox.setSize(200, 150);
+		fightBox.setLocation(600, 300);
+		fightBox.setSize(200, 170);
 
 		fightBox.add(type);
 		fightBox.add(attack);
 		fightBox.add(health);
+		fightBox.add(message);
 		fightBox.add(att);
 		fightBox.add(run);
 		fightBox.setVisible(true);
@@ -1178,6 +1182,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//removes the monster from the board
 			mosterLocation.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation.getX()]
 					.setGameObjectOnSquare(null);
+		} else {
+			JOptionPane.showMessageDialog(null, "Monster is still alive, but now he only has "+ ((Monster) go).getHealth() +"health");
 		}
 	}
 
