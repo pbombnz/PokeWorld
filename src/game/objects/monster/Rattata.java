@@ -20,6 +20,7 @@ public class Rattata extends Monster{
 	public int health;
 	public int attack;
 	public Direction direction = Direction.FACE_RIGHT;
+	
 	public Rattata(){
 		spriteImage =GameObject.RATTATA;
 	}	

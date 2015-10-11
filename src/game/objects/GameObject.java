@@ -46,11 +46,20 @@ public interface GameObject extends Serializable {
 	public static ImageIcon RATTATAFL = new ImageIcon("./sprites/monster/Rattata/faceleft.png");
 	public static ImageIcon RATTATAFR = new ImageIcon("./sprites/monster/Rattata/faceright.png");
 	
-	public static ImageIcon RHYDON = new ImageIcon("./sprites/monster/Rhydon/faceleft.png");
+	public static ImageIcon RHYDONFL = new ImageIcon("./sprites/monster/Rhydon/faceleft.png");
+	public static ImageIcon RHYDONBR = new ImageIcon("./sprites/monster/Rhydon/backright.png");
+	public static ImageIcon RHYDONBL = new ImageIcon("./sprites/monster/Rhydon/backleft.png");
+	public static ImageIcon RHYDONFR = new ImageIcon("./sprites/monster/Rhydon/frontright.png");
+	
+	public static ImageIcon ZUBATFL = new ImageIcon("./sprites/monster/Zubat/faceleft.png");
+	public static ImageIcon ZUBATBR = new ImageIcon("./sprites/monster/Zubat/backright.png");
+	public static ImageIcon ZUBATBL = new ImageIcon("./sprites/monster/Zubat/backleft.png");
+	public static ImageIcon ZUBATFR = new ImageIcon("./sprites/monster/Zubat/faceright.png");
 
-	public static ImageIcon ZUBAT = new ImageIcon("./sprites/monster/Zubat/faceleft.png");
-
-	public static ImageIcon MEWTWO = new ImageIcon("./sprites/monster/Mewtwo/faceleft.png");
+	public static ImageIcon MEWTWOFL = new ImageIcon("./sprites/monster/Mewtwo/faceleft.png");
+	public static ImageIcon MEWTWOBR = new ImageIcon("./sprites/monster/Mewtwo/backright.png");
+	public static ImageIcon MEWTWOBL = new ImageIcon("./sprites/monster/Mewtwo/backleft.png");
+	public static ImageIcon MEWTWOFR = new ImageIcon("./sprites/monster/Mewtwo/faceright.png");
 
 
 	public ImageIcon getSpriteImage();
