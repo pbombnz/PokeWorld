@@ -120,9 +120,12 @@ public class GamePlayFrame extends JFrame implements KeyListener, ActionListener
 	protected JLabel lvlupLabel_3;
 
 	///==================================
+	//these are for system seting
+//	privategameStartTime = 0;
 
 	public GamePlayFrame() {
 		gameClient.setGameClientListener(this);
+//		system.ge
 
 		//initialises game frame
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);

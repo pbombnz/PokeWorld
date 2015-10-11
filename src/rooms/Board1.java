@@ -44,6 +44,22 @@ public class Board1 extends Board{
 								if (i == 7 && j == 5) {
 									this.squares[i][j] = new BoardSquare(new Key(1));
 								}
+								if (i == 7 && j == 4) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}
+								if (i == 7 && j == 3) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}
+								if (i == 7 && j == 2) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}if (i == 7 && j == 1) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}if (i == 7 && j == 0) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}if (i == 6 && j == 0) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}
+								
 								if (i == 2 && j == 9) {
 									this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 								}
