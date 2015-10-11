@@ -727,12 +727,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	 */
 	private boolean canMove(int x, int y, Player player) {
 		BoardSquare[][] sq = player.getLocation().getRoom().board.getSquares();
-		if(x>9||x<0||y<0||y>9){
+		if (x > 9 || x < 0 || y < 0 || y > 9) {
+			return false;
+		}
+		if (sq[y][x].getGameObjectOnSquare() instanceof Tree) {
 			return false;
 		}
 		//change here if add new kinds of Monster
-		if (sq[x][y].getGameObjectOnSquare() instanceof Tree||sq[x][y].getGameObjectOnSquare() instanceof Mewtwo||sq[x][y].getGameObjectOnSquare() instanceof Rattata||sq[x][y].getGameObjectOnSquare() instanceof Rhydon||sq[x][y].getGameObjectOnSquare() instanceof Zubat) {
-			System.out.println("saa
+		if (sq[y][x].getGameObjectOnSquare() instanceof Mewtwo
+				|| sq[y][x].getGameObjectOnSquare() instanceof Rattata
+				|| sq[y][x].getGameObjectOnSquare() instanceof Rhydon
+				|| sq[y][x].getGameObjectOnSquare() instanceof Zubat) {
+			fightDialog(new Location(player.getLocation().getRoom(), x, y));
 			return false;
 		}
 		return true;
@@ -787,7 +793,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
 			//check whrther can move 
-			if (canMove(loc.getX()+1, loc.getY(), clientPlayer)) {
+			if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
 				//character will turn 1st if the character is not facing that side
 				if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 					loc.moveEast();
@@ -932,7 +938,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		//If you find a key, adds it to the inventory and removes from the board
 		if (go instanceof Key) {
-//			System.out.println(loc.getRoom());
+			//			System.out.println(loc.getRoom());
 			clientPlayer.addToInventory(((Key) go));
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
@@ -945,10 +951,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 					.setGameObjectOnSquare(null);
 		}
-		//If you encounter a monster, fight prompt appears
-		if (go instanceof Monster) {
-			fightDialog();
-		}
+
+		//		//If you encounter a monster, fight prompt appears
+		//		if (go instanceof Monster) {
+		//			fightDialog();
+		//		}
 		//If you find a RareCandy, increases your level and removes it from the board
 		if (go instanceof RareCandy) {
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
@@ -1060,12 +1067,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	/**
 	 *@author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
-	public void fightDialog() {
+	public void fightDialog(final Location mosterLocation) {
 		Player clientPlayer = gameClient.getClientPlayer();
 		final Location loc = clientPlayer.getLocation();
 
-		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-				.getGameObjectOnSquare();
+		GameObject go = loc.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation
+				.getX()].getGameObjectOnSquare();
 
 		JButton att = new JButton("Attack");
 		JButton run = new JButton("Run Away");
@@ -1087,7 +1094,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						//here is the methods run after timer here 
 						///=======================================
 						panel.remove(attackLabel);
-						fight();
+						fight(mosterLocation);
 						//========================================
 					}
 				};
@@ -1138,14 +1145,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	/**
 	 * @author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
-	public void fight() {
+	public void fight(Location mosterLocation) {
 		Player clientPlayer = gameClient.getClientPlayer();
-		final Location loc = clientPlayer.getLocation();
+//		Location loc = clientPlayer.getLocation();
 
-		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-				.getGameObjectOnSquare();
+		GameObject go = mosterLocation.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation
+				.getX()].getGameObjectOnSquare();
 
-		final int damage = ((Monster) go).attack();
+		 int damage = ((Monster) go).attack();
 
 		//Monster attacks first
 		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
@@ -1169,7 +1176,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			clientPlayer.setAttack(clientPlayer.getAttack() + damage);
 
 			//removes the monster from the board
-			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+			mosterLocation.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation.getX()]
 					.setGameObjectOnSquare(null);
 		}
 	}
