@@ -1,5 +1,6 @@
 package game.objects.scene;
 
+import game.Direction;
 import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
@@ -12,16 +13,37 @@ import javax.swing.ImageIcon;
  *@author Donald Tang
  */
 
-public class Plant implements GameObject {
+public class Plant extends SceneObjects {
 
 	private static final long serialVersionUID = 4087421334363366222L;
-
+	public Direction direction = Direction.FACE_RIGHT;
+	
 	public Plant(){
 	}		
 	
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.PLANT;
+		if(direction==Direction.BACK_LEFT){
+			return GameObject.PLANTBL;
+		}else if(direction==Direction.BACK_RIGHT){
+			return GameObject.PLANTBR;
+		}else if(direction==Direction.FACE_LEFT){
+			return GameObject.PLANTFL;
+		}else {
+			return GameObject.PLANTFR;
+		}
 	}
+
+	@Override
+	public Direction getDirection() {
+		return direction;
+	}
+
+	@Override
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
+	
+	
 
 }

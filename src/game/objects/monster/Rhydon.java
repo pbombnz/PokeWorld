@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  *@author Donald Tang
  */
 
-public class Rhydon implements Monster{
+public class Rhydon extends Monster{
 
 	private static final long serialVersionUID = 6696995125055330253L;
 
@@ -21,6 +21,7 @@ public class Rhydon implements Monster{
 	public Direction direction = Direction.FACE_RIGHT;
 
 	public Rhydon(){
+		spriteImage=GameObject.RHYDONFL;
 	}
 	
 	public Rhydon(int attack, int health){
@@ -56,9 +57,23 @@ public class Rhydon implements Monster{
 	
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.RHYDON;
+		if(direction==Direction.BACK_LEFT){
+			return GameObject.RHYDONBL;
+		}else if(direction==Direction.BACK_RIGHT){
+			return GameObject.RHYDONBR;
+		}else if(direction==Direction.FACE_LEFT){
+			return GameObject.RHYDONFL;
+		}else {
+			return GameObject.RHYDONFR;
+		}
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	@Override
+	public Direction getDirection() {
+		// TODO Auto-generated method stub
+		return direction;
 	}
 }

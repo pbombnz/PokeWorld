@@ -1,6 +1,7 @@
 package rooms;
 
 import game.BoardSquare;
+import game.Location;
 import game.objects.interactiveObjects.*;
 import game.objects.scene.*;
 import game.objects.monster.*;
@@ -35,6 +36,12 @@ public class Board1 extends Board{
 								if (i == 3 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
+//								if (i == 9 && j ==6 ) {
+//									this.squares[i][j] = new BoardSquare(new MagicCircle(5,9));
+//								}
+//								if (i == 5 && j ==9 ) {
+//									this.squares[i][j] = new BoardSquare(new MagicCircle(9,6));
+//								}
 								if (i == 2 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
@@ -51,7 +58,7 @@ public class Board1 extends Board{
 									this.squares[i][j] = new BoardSquare(new Key(1));
 								}
 								if (i == 7 && j == 2) {
-									this.squares[i][j] = new BoardSquare(new Key(1));
+									this.squares[i][j] = new BoardSquare(new Fence());
 								}if (i == 7 && j == 1) {
 									this.squares[i][j] = new BoardSquare(new Key(1));
 								}if (i == 7 && j == 0) {

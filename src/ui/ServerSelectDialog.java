@@ -33,7 +33,7 @@ public class ServerSelectDialog extends JDialog implements ActionListener {
 	private List<InetAddress> serverAddresses;
 	private InetAddress selectedAddress;
 	
-	JComboBox<String> serversComboBox;
+	JComboBox serversComboBox;
 	JButton okayButton;
 
 	public ServerSelectDialog(JFrame parentFrame, List<InetAddress> serverAddresses) {
@@ -56,7 +56,7 @@ public class ServerSelectDialog extends JDialog implements ActionListener {
 			stringAddress[i] = serverAddresses.get(i).toString();
 		}
 		
-		serversComboBox = new JComboBox<String>(stringAddress);
+		serversComboBox = new JComboBox(stringAddress);
 		okayButton = new JButton("Connect");
 		okayButton.addActionListener(this);
 		

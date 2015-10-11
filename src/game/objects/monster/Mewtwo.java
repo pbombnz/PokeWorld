@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  *@author Donald Tang
  */
 
-public class Mewtwo implements Monster{
+public class Mewtwo extends Monster{
 
 	private static final long serialVersionUID = 6696995125055330253L;
 
@@ -21,13 +21,14 @@ public class Mewtwo implements Monster{
 	public Direction direction = Direction.FACE_RIGHT;
 
 	public Mewtwo(){
+		spriteImage =GameObject.MEWTWOFL;
 	}
-	
+
 	public Mewtwo(int attack, int health){
 		this.attack = attack;
 		this.health = health;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Mewtwo";
@@ -42,7 +43,7 @@ public class Mewtwo implements Monster{
 	public int getHealth() {
 		return health;
 	}
-	
+
 	public void setHealth(int change){
 		health = change;
 		if(health < 0){
@@ -53,12 +54,27 @@ public class Mewtwo implements Monster{
 	public boolean isDead(){
 		return health <= 0;
 	}
-	
+
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.MEWTWO;
+		if(direction==Direction.BACK_LEFT){
+			return GameObject.MEWTWOBL;
+		}else if(direction==Direction.BACK_RIGHT){
+			return GameObject.MEWTWOBR;
+		}else if(direction==Direction.FACE_LEFT){
+			return GameObject.MEWTWOFL;
+		}else {
+			return GameObject.MEWTWOFR;
+		}
 	}
+
+	@Override
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	@Override
+	public Direction getDirection() {
+		return direction;
 	}
 }
