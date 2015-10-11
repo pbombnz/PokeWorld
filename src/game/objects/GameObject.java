@@ -16,9 +16,9 @@ public interface GameObject extends Serializable {
 	
 	//Game detailing
 	
-	public static ImageIcon TREE = new ImageIcon("./sprites/tiles/magiccircle.jpg");
+	public static ImageIcon TREE = new ImageIcon("./sprites/tiles/tree.png");
 	
-	public static ImageIcon MAGICCIRCLE = new ImageIcon("./sprites/tiles/tree.png");
+	public static ImageIcon MAGICCIRCLE = new ImageIcon("./sprites/tiles/magiccircle.png");
 
 	public static ImageIcon PLANT = new ImageIcon("./sprites/tiles/flowers/faceleft.png");
 	
@@ -37,9 +37,13 @@ public interface GameObject extends Serializable {
 	public static ImageIcon ITEM_RARECANDY = new ImageIcon("./sprites/items/rarecandy.png");
 
 	//Game enemies
-	
+	//change here for print 4 direction
 	public static ImageIcon RATTATA = new ImageIcon("./sprites/monster/Rattata/backright.png");
-
+	public static ImageIcon RATTATABR = new ImageIcon("./sprites/monster/Rattata/backright.png");
+	public static ImageIcon RATTATABL = new ImageIcon("./sprites/monster/Rattata/backleft.png");
+	public static ImageIcon RATTATAFL = new ImageIcon("./sprites/monster/Rattata/faceleft.png");
+	public static ImageIcon RATTATAFR = new ImageIcon("./sprites/monster/Rattata/faceright.png");
+	
 	public static ImageIcon RHYDON = new ImageIcon("./sprites/monster/Rhydon/faceleft.png");
 
 	public static ImageIcon ZUBAT = new ImageIcon("./sprites/monster/Zubat/faceleft.png");

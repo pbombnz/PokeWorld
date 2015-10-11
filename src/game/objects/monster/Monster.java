@@ -1,5 +1,8 @@
 package game.objects.monster;
 
+import javax.swing.ImageIcon;
+
+import game.Direction;
 import game.objects.GameObject;
 
 /**
@@ -8,28 +11,36 @@ import game.objects.GameObject;
  * 
  *@author Sushant Balajee
  *@author Donald Tang
+ *@author Wang Zhen
  */
 
-public interface Monster extends GameObject{
+public abstract class Monster implements GameObject{
+	public ImageIcon spriteImage ;
+	
 	/**
 	 * @return name of the enemy
 	 */
-	public String getName();
+	public abstract String getName();
 	/**
 	 * @return attack points of the enemy
 	 */
-	public int attack();
+	public abstract int attack();
 	
 	/**
 	 * @return health of the enemy
 	 */
-	public int getHealth();
+	public abstract int getHealth();
 	/**
 	 * @param change, the amount of damage dealt to the enemy by the player
 	 */
-	public void setHealth(int change);
+	public abstract void setHealth(int change);
 	/**
 	 * @return if the monster is dead
 	 */
-	public boolean isDead();
+	public abstract boolean isDead();
+	
+	public abstract Direction getDirection();
+	
+	public abstract void setDirection(Direction direction);
+	
 }

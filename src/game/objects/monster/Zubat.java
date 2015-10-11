@@ -5,6 +5,8 @@ import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
 
+import sun.java2d.pipe.SpanClipRenderer;
+
 /**
  * Represents a Zubat enemy, the second weakest enemy in the game
  * 
@@ -12,7 +14,7 @@ import javax.swing.ImageIcon;
  *@author Donald Tang
  */
 
-public class Zubat implements Monster{
+public class Zubat extends Monster{
 
 	private static final long serialVersionUID = 6696995125055330253L;
 
@@ -21,6 +23,7 @@ public class Zubat implements Monster{
 	public Direction direction = Direction.FACE_RIGHT;
 
 	public Zubat(){
+		spriteImage =GameObject.ZUBAT;
 	}
 	
 	public Zubat(int attack, int health){
@@ -56,9 +59,15 @@ public class Zubat implements Monster{
 
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.ZUBAT;
+		return spriteImage;
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	@Override
+	public Direction getDirection() {
+		// TODO Auto-generated method stub
+		return direction;
 	}
 }

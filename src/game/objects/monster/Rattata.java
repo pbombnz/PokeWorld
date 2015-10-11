@@ -10,9 +10,10 @@ import javax.swing.ImageIcon;
  * 
  *@author Sushant Balajee
  *@author Donald Tang
+ *
  */
 
-public class Rattata implements Monster{
+public class Rattata extends Monster{
 
 	private static final long serialVersionUID = 6696995125055330253L;
 
@@ -21,6 +22,7 @@ public class Rattata implements Monster{
 	public Direction direction = Direction.FACE_RIGHT;
 
 	public Rattata(){
+		spriteImage =GameObject.RATTATA;
 	}	
 	
 	public Rattata(int attack, int health){
@@ -56,9 +58,24 @@ public class Rattata implements Monster{
 	
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.RATTATA;
+		//change here for print 4 direction
+		if(direction==Direction.BACK_LEFT){
+			return GameObject.RATTATABL;
+		}else if(direction==Direction.BACK_RIGHT){
+			return GameObject.RATTATABR;
+		}else if(direction==Direction.FACE_LEFT){
+			return GameObject.RATTATAFL;
+		}else {
+			return GameObject.RATTATAFR;
+		}
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	@Override
+	public Direction getDirection() {
+		// TODO Auto-generated method stub
+		return direction;
 	}
 }

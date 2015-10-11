@@ -1,6 +1,7 @@
 package rooms;
 
 import game.BoardSquare;
+import game.Location;
 import game.objects.interactiveObjects.*;
 import game.objects.scene.*;
 import game.objects.monster.*;
@@ -22,7 +23,7 @@ public class Board1 extends Board{
 
 	}
 
-	public Board1() {
+	public Board1(Room room) {
 		this.width = 10;
 		this.height = 10;
 		this.squares = new BoardSquare[height][width];
@@ -34,6 +35,9 @@ public class Board1 extends Board{
 				
 								if (i == 3 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
+								}
+								if (i == 8 && j ==3 ) {
+									this.squares[i][j] = new BoardSquare(new MagicCircle(new Location(room,4,6)));
 								}
 								if (i == 2 && j == 0) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());

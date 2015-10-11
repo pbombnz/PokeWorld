@@ -986,6 +986,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							.getHeight() - (j + offset)][i];
 				}
 			}
+			clientPlayer.getLocation().getRoom().board = newBoard;
 			//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
 
 			//change the locations of player 
@@ -1001,6 +1002,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
 			turnPlayerImageLeft(clientPlayer);
+			//let monster turn
+			Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
+			BoardSquare[][] bs = r.board.getSquares();
+			for (int cellY = 0; cellY < 10; cellY++) {
+				for (int cellX = 9; cellX >= 0; cellX--) {
+					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) 
+							turnMonsterImageLeft((Monster) bs[cellY][cellX].getGameObjectOnSquare());
+					}
+				}
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
 			//turn the gui to right side
 			//change the board(change the locations of object)
@@ -1030,6 +1042,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
 			turnPlayerImageRight(clientPlayer);
+			//let monster turn
+			Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
+			BoardSquare[][] bs = r.board.getSquares();
+			for (int cellY = 0; cellY < 10; cellY++) {
+				for (int cellX = 9; cellX >= 0; cellX--) {
+					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) 
+							turnMonsterImageRight((Monster) bs[cellY][cellX].getGameObjectOnSquare());
+					}
+				}
+			}
 
 		}
 		//allows player to jump on the spot
@@ -1162,6 +1185,22 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	/**
+	 * let the player image turn left
+	 * @param monster
+	 */
+	public void turnMonsterImageLeft(Monster monster) {
+		if (monster.getDirection().equals(Direction.FACE_LEFT)) {
+			monster.setDirection(Direction.BACK_LEFT);
+		} else if (monster.getDirection().equals(Direction.BACK_LEFT)) {
+			monster.setDirection(Direction.BACK_RIGHT);
+		} else if (monster.getDirection().equals(Direction.BACK_RIGHT)) {
+			monster.setDirection(Direction.FACE_RIGHT);
+		} else if (monster.getDirection().equals(Direction.FACE_RIGHT)) {
+			monster.setDirection(Direction.FACE_LEFT);
+		}
+	}
+
+	/**
 	 * let the player image turn right
 	 * @param player
 	 */
@@ -1174,6 +1213,22 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			player.setDirection(Direction.BACK_LEFT);
 		} else if (player.getDirection() == Direction.BACK_LEFT) {
 			player.setDirection(Direction.FACE_LEFT);
+		}
+	}
+
+	/**
+	 * let the monster image turn right
+	 * @param monster
+	 */
+	public void turnMonsterImageRight(Monster monster) {
+		if (monster.getDirection() == Direction.FACE_LEFT) {
+			monster.setDirection(Direction.FACE_RIGHT);
+		} else if (monster.getDirection() == Direction.FACE_RIGHT) {
+			monster.setDirection(Direction.BACK_RIGHT);
+		} else if (monster.getDirection() == Direction.BACK_RIGHT) {
+			monster.setDirection(Direction.BACK_LEFT);
+		} else if (monster.getDirection() == Direction.BACK_LEFT) {
+			monster.setDirection(Direction.FACE_LEFT);
 		}
 	}
 
