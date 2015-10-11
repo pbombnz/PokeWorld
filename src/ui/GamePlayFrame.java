@@ -129,6 +129,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	//add explored time
 	private String startTime = null;
 	public JLabel timeLabel = new JLabel();
+	public List<JLabel> itemLabels = new ArrayList<JLabel>();
 
 	public GamePlayFrame() {
 		gameClient.setGameClientListener(this);
@@ -684,12 +685,38 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			printInformation(clientPlayer);
 
 			//print players'inventory
-			for (int i = 0; i < clientPlayer.getInventory().size(); i++) {
-				g.drawImage(clientPlayer.getInventory().get(i).getSpriteImage()
-						.getImage(), 40, 400 + (i * 50), 40, 40, null);
-			}
-
+			printInventory(clientPlayer);
 		}
+	}
+
+	public void printInventory(Player player) {
+		int itemSize = 40;
+		int itemX = -itemSize;
+		int itemY = 350;
+		//remove previou lables
+		for (JLabel jl : itemLabels) {
+			panel.remove(jl);
+		}
+		//for each item in item bag
+		int itemNumber = 0;
+		for (Item item : player.getInventory()) {
+			JLabel label = new JLabel(player.getInventory().get(itemNumber)
+					.getSpriteImage());
+			if (itemNumber == 3) {
+				itemX = 0;
+				itemY += itemSize;
+				itemNumber++;
+			} else {
+				itemX += itemSize;
+				itemNumber++;
+			}
+			int xPo = itemX;
+			int yPo = itemY;
+			label.setBounds(xPo, yPo, itemSize, itemSize);
+			itemLabels.add(label);
+			panel.add(label);
+		}
+		repaint();
 	}
 
 	public Location nextSquareLocation(Player player, int steps) {
@@ -943,34 +970,31 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 
 		//check to take items
+		GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[loc.getY()][loc
+				.getX()].getGameObjectOnSquare();
 
-		GameObject go = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-				.getGameObjectOnSquare();
-
-		//If you find a key, adds it to the inventory and removes from the board
-		if (go instanceof Key) {
-			//			System.out.println(loc.getRoom());
-			clientPlayer.addToInventory(((Key) go));
-			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-					.setGameObjectOnSquare(null);
+		//check whether the item bag is full
+		if (clientPlayer.getInventory().size() < clientPlayer.getMaxItems()) {
+			//If you find a key, adds it to the inventory and removes from the board
+			if (ObjectOfLoc instanceof Key) {
+				//			System.out.println(loc.getRoom());
+				clientPlayer.addToInventory(((Key) ObjectOfLoc));
+				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+						.setGameObjectOnSquare(null);
+			}
+			//If you find a goodPotion, increases your health and removes it from the board
+			if (ObjectOfLoc instanceof GoodPotion) {
+				//			System.out.println("is this working");
+				clientPlayer.setHealth(clientPlayer.getHealth()
+						+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
+				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+						.setGameObjectOnSquare(null);
+			}
 		}
-		//If you find a goodPotion, increases your health and removes it from the board
-		if (go instanceof GoodPotion) {
-			//			System.out.println("is this working");
-			clientPlayer.setHealth(clientPlayer.getHealth()
-					+ ((GoodPotion) go).getHealthHealAmount());
-			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-					.setGameObjectOnSquare(null);
-		}
-
-		//		//If you encounter a monster, fight prompt appears
-		//		if (go instanceof Monster) {
-		//			fightDialog();
-		//		}
 		//If you find a RareCandy, increases your level and removes it from the board
-		if (go instanceof RareCandy) {
+		if (ObjectOfLoc instanceof RareCandy) {
 			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
-					+ ((RareCandy) go).level());
+					+ ((RareCandy) ObjectOfLoc).level());
 			//=================================================
 			//draw gif here
 			if (clientPlayer.getPlayerLevel() == 2) {
@@ -1011,7 +1035,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//If you find a Door, checks your inventory for a Key
 		//If you have a Key, compares the Key ID and Door ID for a match
 		//If they match, allows you to enter a different room
-		if (go instanceof Door) {
+		if (ObjectOfLoc instanceof Door) {
 			for (Item items : clientPlayer.getInventory()) {
 				if (items instanceof Key) {
 					/*if (((Door) go).id() == items.id()) {
@@ -1082,8 +1106,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		Player clientPlayer = gameClient.getClientPlayer();
 		final Location loc = clientPlayer.getLocation();
 
-		GameObject go = loc.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation
-				.getX()].getGameObjectOnSquare();
+		GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[mosterLocation
+				.getY()][mosterLocation.getX()].getGameObjectOnSquare();
 
 		JButton att = new JButton("Attack");
 		JButton run = new JButton("Run Away");
@@ -1124,10 +1148,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		run.setLocation(90, 90);
 		run.setSize(run.getPreferredSize());
 
-		JLabel type = new JLabel("Monster Type: " + ((Monster) go).getName());
-		JLabel attack = new JLabel("Monster Attack: " + ((Monster) go).attack());
+		JLabel type = new JLabel("Monster Type: "
+				+ ((Monster) ObjectOfLoc).getName());
+		JLabel attack = new JLabel("Monster Attack: "
+				+ ((Monster) ObjectOfLoc).attack());
 		JLabel health = new JLabel("Monster Health: "
-				+ ((Monster) go).getHealth());
+				+ ((Monster) ObjectOfLoc).getHealth());
 		JLabel message = new JLabel("Fighting one round?");
 
 		type.setLocation(10, 10);
@@ -1164,15 +1190,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		Player clientPlayer = gameClient.getClientPlayer();
 		//		Location loc = clientPlayer.getLocation();
 
-		GameObject go = mosterLocation.getRoom().board.getSquares()[mosterLocation
+		GameObject ObjectOfLoc = mosterLocation.getRoom().board.getSquares()[mosterLocation
 				.getY()][mosterLocation.getX()].getGameObjectOnSquare();
 
-		int damage = ((Monster) go).attack();
+		int damage = ((Monster) ObjectOfLoc).attack();
 
 		//Monster attacks first
 		clientPlayer.setHealth(clientPlayer.getHealth() - damage);
 		//Player attacks second
-		((Monster) go).setHealth(((Monster) go).getHealth()
+		((Monster) ObjectOfLoc).setHealth(((Monster) ObjectOfLoc).getHealth()
 				- clientPlayer.getAttack());
 
 		fightBox.dispose();
@@ -1182,7 +1208,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			panel.add(dieLabel);
 			JOptionPane.showMessageDialog(null, " You Died ");
 			System.exit(0);
-		} else if (((Monster) go).isDead()) {
+		} else if (((Monster) ObjectOfLoc).isDead()) {
 			JOptionPane.showMessageDialog(null, " You Won! \n" + " You lost "
 					+ damage + " health \n" + " You gained " + damage
 					+ " attack");
@@ -1196,7 +1222,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		} else {
 			JOptionPane.showMessageDialog(null,
 					"Monster is still alive, but now he only has "
-							+ ((Monster) go).getHealth() + "health");
+							+ ((Monster) ObjectOfLoc).getHealth() + "health");
 		}
 	}
 

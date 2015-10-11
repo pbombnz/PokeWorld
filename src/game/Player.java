@@ -23,11 +23,12 @@ public class Player implements Serializable {
 	private int health;
 	private int attack;
 
-	private static final int maxItems = 6;
+	private int maxItems = 6;
 	private List<Item> inventory = new ArrayList<Item>();
 
 	private Location location;
 	private Direction direction = Direction.FACE_RIGHT;
+
 	private int playerLevel = 1;
 
 	/**
@@ -101,6 +102,10 @@ public class Player implements Serializable {
 		return name;
 	}
 
+	public void setInventory(List<Item> inventory) {
+		this.inventory = inventory;
+	}
+
 	public Location getLocation() {
 		return location;
 	}
@@ -116,6 +121,14 @@ public class Player implements Serializable {
 	public void setPlayerLevel(int change){
 		this.playerLevel = change;
 	}	
+
+	public int getMaxItems() {
+		return maxItems;
+	}
+
+	public void setMaxItems(int maxItems) {
+		this.maxItems = maxItems;
+	}
 
 	public ImageIcon getSpriteBasedOnDirection() {
 		if(avatar != null) {
