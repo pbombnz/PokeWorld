@@ -5,12 +5,12 @@
 * Alex (Zhen) Wang - Graphical User Interface and Extras
 * Donald Tang (Team Leader) - Game Logic and Objects, Game Sprite Making, JUnit Testing
 * Sushant Balajee - Game Logic and Objects
-* Priyanka Bhula  - Game Saving and Loading (via JSON)
+* Priyanka Bhula  - Game Saving and Loading
 
 ## Note For Assignment Marker (Justifications)
-Due to our Eclispe Git glitches, we discovered a problem where commits from Sushant and Alex weren't associated with their GitHub accounts but infact an unknown account and someone else's git account respectively. Therefore on commit log inspection, any commits made by an unknown account "sushantbalajee" (account is not linked to a profile) are indeed sushant's commitsand commits made by "raltu" are infact Alex.
+Due to our Eclipse Git glitches, we discovered a problem where commits from Sushant and Alex weren't associated with their GitHub accounts but in fact an unknown account and someone else's git account respectively. Therefore on commit log inspection, any commits made by an unknown account "sushantbalajee" (account is not linked to a profile) are indeed sushant's commitsand commits made by "raltu" are in fact Alex.
 
-This is because when commiting, it uses the email address in the commit to determine who commited. Sushant and Alex's Eclipse settings automatically changed their email address respectively; Sushant: "sushant@<insert local ip here>" and Alex: "Alex@Alex.pc". In the case of Sushant, all the commits he did before we fixed are seen as seperate users (there are about 5 Sushants in the Git!) and Oddly alex's eclipse assigned email address was actually valid so it shows the username linked to that email address 'raltu' but infact that was all of Alex's commits.
+This is because when committing, it uses the email address in the commit to determine who committed. Sushant and Alex's Eclipse settings automatically changed their email address respectively; Sushant: "sushant@LOCAL_IP_ADDRESS" and Alex: "Alex@Alex.pc". In the case of Sushant, all the commits he did before we fixed are seen as seperate users (there are about 5 Sushant's in the Git!) and Oddly alex's eclipse assigned email address was actually valid so it shows the username linked to that email address 'raltu' but infact that was all of Alex's commits.
 
 ## Unknown Responsibilities
 * ? - Documentation (Class Diagram and CSC Cards)
