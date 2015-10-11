@@ -199,6 +199,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	public void dropIventory(int index) {
 		Player clientPlayer = gameClient.getClientPlayer();
+		Location loc = clientPlayer.getLocation();
+		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+				.setGameObjectOnSquare(clientPlayer.getInventory().get(index));
 		clientPlayer.getInventory().remove(index);
 	}
 
@@ -1051,18 +1054,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[loc.getY()][loc
 				.getX()].getGameObjectOnSquare();
 
+		//pick up
 		//check whether the item bag is full
 		if (clientPlayer.getInventory().size() < clientPlayer.getMaxItems()) {
 			//If you find a key, adds it to the inventory and removes from the board
 			if (ObjectOfLoc instanceof Key) {
-				//			System.out.println(loc.getRoom());
 				clientPlayer.addToInventory(((Key) ObjectOfLoc));
 				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 						.setGameObjectOnSquare(null);
 			}
 			//If you find a goodPotion, increases your health and removes it from the board
 			if (ObjectOfLoc instanceof GoodPotion) {
-				//			System.out.println("is this working");
 				clientPlayer.setHealth(clientPlayer.getHealth()
 						+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
 				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
