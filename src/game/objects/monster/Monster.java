@@ -16,6 +16,7 @@ import game.objects.GameObject;
 
 public abstract class Monster implements GameObject {
 	public ImageIcon spriteImage;
+//	public boolean changed =false;//monster's location already be changed in one turn in wander around
 
 	/**
 	 * @return name of the enemy
