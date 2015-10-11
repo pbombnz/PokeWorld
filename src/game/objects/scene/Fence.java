@@ -28,9 +28,9 @@ public class Fence extends SceneObjects{
 		}else if(direction==Direction.BACK_RIGHT){
 			return GameObject.FENCER;
 		}else if(direction==Direction.FACE_LEFT){
-			return GameObject.FENCEL;
-		}else {
 			return GameObject.FENCER;
+		}else {
+			return GameObject.FENCEL;
 		}
 	}
 

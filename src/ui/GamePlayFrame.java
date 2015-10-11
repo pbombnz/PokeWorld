@@ -92,6 +92,7 @@ ActionListener, WindowListener, GameClientListener {
 	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
 
 	private GameClient gameClient = new GameClient();
+	private Rotate rotate = new Rotate();
 
 	public int jumpOffset = 0;
 	public int shakeOffset = 0;//the player will keep shake when they are standing in one place
@@ -1205,7 +1206,7 @@ ActionListener, WindowListener, GameClientListener {
 			newloc.setY(clientPlayer.getLocation().getX());
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
-			turnPlayerImageLeft(clientPlayer);
+			rotate.turnPlayerImageLeft(clientPlayer);
 			//let monster turn
 			Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
 			BoardSquare[][] bs = r.board.getSquares();
@@ -1213,15 +1214,15 @@ ActionListener, WindowListener, GameClientListener {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster){
-							turnMonsterImageLeft((Monster) bs[cellY][cellX]
+							rotate.turnMonsterImageLeft((Monster) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant){
-							turnPlantImageLeft((Plant) bs[cellY][cellX]
+							rotate.turnPlantImageLeft((Plant) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
 						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence){
-							turnFenceImageLeft((Fence) bs[cellY][cellX]
+							rotate.turnFenceImageLeft((Fence) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
 					}
@@ -1255,16 +1256,25 @@ ActionListener, WindowListener, GameClientListener {
 
 			clientPlayer.setLocation(newloc);
 			//let the player image turn left 
-			turnPlayerImageRight(clientPlayer);
+			rotate.turnPlayerImageRight(clientPlayer);
 			//let monster turn
 			Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
 			BoardSquare[][] bs = r.board.getSquares();
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster)
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster){
 							turnMonsterImageRight((Monster) bs[cellY][cellX]
 									.getGameObjectOnSquare());
+						}
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant){
+							rotate.turnPlantImageRight((Plant) bs[cellY][cellX]
+									.getGameObjectOnSquare());
+						}
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence){
+							rotate.turnFenceImageRight((Fence) bs[cellY][cellX]
+									.getGameObjectOnSquare());
+						}
 					}
 				}
 			}
@@ -1384,78 +1394,6 @@ ActionListener, WindowListener, GameClientListener {
 		repaint();
 	}
 
-	/**
-	 * let the player image turn left
-	 * @param player
-	 */
-	public void turnPlayerImageLeft(Player player) {
-		if (player.getDirection() == Direction.FACE_LEFT) {
-			player.setDirection(Direction.BACK_LEFT);
-		} else if (player.getDirection() == Direction.BACK_LEFT) {
-			player.setDirection(Direction.BACK_RIGHT);
-		} else if (player.getDirection() == Direction.BACK_RIGHT) {
-			player.setDirection(Direction.FACE_RIGHT);
-		} else if (player.getDirection() == Direction.FACE_RIGHT) {
-			player.setDirection(Direction.FACE_LEFT);
-		}
-	}
-
-	/**
-	 * let the monster image turn left
-	 * @param monster
-	 */
-	public void turnMonsterImageLeft(Monster monster) {
-		if (monster.getDirection() == Direction.FACE_LEFT) {
-			monster.setDirection(Direction.BACK_LEFT);
-		} else if (monster.getDirection() == Direction.BACK_LEFT) {
-			monster.setDirection(Direction.BACK_RIGHT);
-		} else if (monster.getDirection() == Direction.BACK_RIGHT) {
-			monster.setDirection(Direction.FACE_RIGHT);
-		} else if (monster.getDirection() == Direction.FACE_RIGHT) {
-			monster.setDirection(Direction.FACE_LEFT);
-		}
-	}
-	
-	
-	public void turnPlantImageLeft(Plant plant) {
-		if (plant.getDirection() == Direction.FACE_LEFT) {
-			plant.setDirection(Direction.BACK_LEFT);
-		} else if (plant.getDirection() == Direction.BACK_LEFT) {
-			plant.setDirection(Direction.BACK_RIGHT);
-		} else if (plant.getDirection() == Direction.BACK_RIGHT) {
-			plant.setDirection(Direction.FACE_RIGHT);
-		} else if (plant.getDirection() == Direction.FACE_RIGHT) {
-			plant.setDirection(Direction.FACE_LEFT);
-		}
-	}
-	
-	public void turnFenceImageLeft(Fence fence) {
-		if (fence.getDirection() == Direction.FACE_LEFT) {
-			fence.setDirection(Direction.BACK_LEFT);
-		} else if (fence.getDirection() == Direction.BACK_LEFT) {
-			fence.setDirection(Direction.BACK_RIGHT);
-		} else if (fence.getDirection() == Direction.BACK_RIGHT) {
-			fence.setDirection(Direction.FACE_RIGHT);
-		} else if (fence.getDirection() == Direction.FACE_RIGHT) {
-			fence.setDirection(Direction.FACE_LEFT);
-		}
-	}
-
-	/**
-	 * let the player image turn right
-	 * @param player
-	 */
-	public void turnPlayerImageRight(Player player) {
-		if (player.getDirection() == Direction.FACE_LEFT) {
-			player.setDirection(Direction.FACE_RIGHT);
-		} else if (player.getDirection() == Direction.FACE_RIGHT) {
-			player.setDirection(Direction.BACK_RIGHT);
-		} else if (player.getDirection() == Direction.BACK_RIGHT) {
-			player.setDirection(Direction.BACK_LEFT);
-		} else if (player.getDirection() == Direction.BACK_LEFT) {
-			player.setDirection(Direction.FACE_LEFT);
-		}
-	}
 
 	//	/**
 	//	 * let the monster go through
