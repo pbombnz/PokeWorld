@@ -20,11 +20,13 @@ public interface GameObject extends Serializable {
 	
 	public static ImageIcon MAGICCIRCLE = new ImageIcon("./sprites/tiles/magiccircle.png");
 
-	public static ImageIcon PLANT = new ImageIcon("./sprites/tiles/flowers/faceleft.png");
+	public static ImageIcon PLANTFL = new ImageIcon("./sprites/tiles/flowers/faceleft.png");
+	public static ImageIcon PLANTBR = new ImageIcon("./sprites/tiles/flowers/backright.png");
+	public static ImageIcon PLANTBL = new ImageIcon("./sprites/tiles/flowers/backleft.png");
+	public static ImageIcon PLANTFR = new ImageIcon("./sprites/tiles/flowers/faceright.png");
 	
-	public static ImageIcon FENCE_LEFT = new ImageIcon("./sprites/tiles/FenceLeft1.png");
-	
-	public static ImageIcon FENCE_RIGHT = new ImageIcon("./sprites/tiles/FenceRight1.png");
+	public static ImageIcon FENCEL = new ImageIcon("./sprites/tiles/FenceLeft1.png");
+	public static ImageIcon FENCER = new ImageIcon("./sprites/tiles/FenceRight1.png");
 
 	//Game Objects player can iteract with
 

@@ -1,5 +1,6 @@
 package game.objects.scene;
 
+import game.Direction;
 import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
@@ -12,16 +13,35 @@ import javax.swing.ImageIcon;
  *@author Donald Tang
  */
 
-public class Fence implements GameObject {
+public class Fence extends SceneObjects{
 
 	private static final long serialVersionUID = -5093601402600649692L;
-
+	public Direction direction = Direction.FACE_RIGHT;
+	
 	public Fence(){
 	}	
 	
 	@Override
 	public ImageIcon getSpriteImage() {
-		return GameObject.FENCE_RIGHT;
+		if(direction==Direction.BACK_LEFT){
+			return GameObject.FENCEL;
+		}else if(direction==Direction.BACK_RIGHT){
+			return GameObject.FENCER;
+		}else if(direction==Direction.FACE_LEFT){
+			return GameObject.FENCEL;
+		}else {
+			return GameObject.FENCER;
+		}
+	}
+
+	@Override
+	public Direction getDirection() {
+		return direction;
+	}
+
+	@Override
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 
 }
