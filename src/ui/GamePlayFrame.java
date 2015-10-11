@@ -1,5 +1,8 @@
 package ui;
 
+/**
+ * @author Wang Zhen
+ */
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
@@ -116,8 +119,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public int jumpTimeCounter = 0;
 	private boolean isJumping = false;
 	public boolean isRainning = false;
-	public JButton rainyButton= new JButton();
-	public JButton sunnyButton= new JButton();
+	public JButton rainyButton = new JButton();
+	public JButton sunnyButton = new JButton();
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -141,7 +144,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private Direction firstViewDirection = Direction.BACK_LEFT;
 	protected JLabel lvlupLabel_2;
 	protected JLabel lvlupLabel_3;
-	
 
 	///==================================
 
@@ -206,7 +208,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		panel.add(rainyButton);
 		rainyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				isRainning =true;
+				isRainning = true;
+				requestFocus();
 			}
 		});
 		sunnyButton.setText("Sunny");
@@ -214,7 +217,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		panel.add(sunnyButton);
 		sunnyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				isRainning =false;
+				isRainning = false;
+				requestFocus();
 			}
 		});
 	}

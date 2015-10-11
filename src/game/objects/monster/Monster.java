@@ -16,6 +16,7 @@ import game.objects.GameObject;
 
 public abstract class Monster implements GameObject{
 	public ImageIcon spriteImage ;
+	public Direction direction;
 	
 	/**
 	 * @return name of the enemy

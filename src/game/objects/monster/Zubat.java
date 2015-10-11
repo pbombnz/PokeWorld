@@ -20,10 +20,10 @@ public class Zubat extends Monster{
 
 	public int health;
 	public int attack;
-	public Direction direction = Direction.FACE_RIGHT;
 
 	public Zubat(){
 		spriteImage =GameObject.ZUBAT;
+		direction = Direction.FACE_RIGHT;
 	}
 	
 	public Zubat(int attack, int health){
