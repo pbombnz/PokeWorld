@@ -15,7 +15,6 @@ import org.json.simple.parser.ParseException;
 
 import game.Location;
 import game.Player;
-import game.Direction;
 import game.avatar.Avatar;
 import game.objects.interactiveObjects.*;
 
@@ -23,45 +22,23 @@ import game.objects.interactiveObjects.*;
 public class JsonToGame {
 	@SuppressWarnings("unchecked")
 	public static Player loadPlayer(){
-		return null;
-		///JSONParser jp = new JSONParser();
-		/*try{
-			Object o = new JSONParser().parse(new FileReader(new File("./playerSave.json")));
+		Player p = new Player();
+		JSONParser jp = new JSONParser();
+		try{
+			Object o = jp.parse(new FileReader("./playerSave.json"));
 			JSONObject jo = (JSONObject) o;
 			
-			
 			String name = (String) jo.get("name");
-			Integer attack = ((Long) jo.get("attack")).intValue();
-			Avatar avatar = (Avatar) gson.fromJson((String) jo.get("avatar"), Avatar.class);
-			Direction dir = (Direction) jo.get("newDirection");
-			int health = (int) jo.get("health");
-			List<String> items = (List<String>) jo.get("items");
-			Location loc = (Location) gson.fromJson((String) jo.get("location"), Location.class);
-		
-			Player p = new Player(name);
-			p.setAttack(attack);
-			p.setAvatar(avatar);
-			p.setDirection(dir);
-			p.setHealth(health);
-			for(String item: items) {
-				if(item.equals("Key")) {
-					p.addToInventory(new Key());
-				}
-			}
-			p.setLocation(loc);
-			return p;
+			System.out.println(name);
 		}
 		catch (FileNotFoundException e){
 			e.printStackTrace();
-		}
-		catch(IOException e){
+		} catch (IOException e){
+			e.printStackTrace();
+		} catch (ParseException e){
 			e.printStackTrace();
 		}
-		catch (ParseException e){
-			e.printStackTrace();
-		}
-		return null;
-	*/
+		return p;
 	}
 	
 }
