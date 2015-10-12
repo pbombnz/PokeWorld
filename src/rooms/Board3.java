@@ -47,7 +47,7 @@ public class Board3 extends Board{
 					this.squares[i][j] = new BoardSquare(new GoodPotion(100));
 				}
 				if(i == 9 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(3,3));
+					this.squares[i][j] = new BoardSquare(new Door(1,1));
 				}
 				if (i == 8 && j == 8) {
 					this.squares[i][j] = new BoardSquare(new Door(2,3));
