@@ -47,10 +47,10 @@ public class Board3 extends Board{
 					this.squares[i][j] = new BoardSquare(new GoodPotion(100));
 				}
 				if(i == 9 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(3,3,4));
+					this.squares[i][j] = new BoardSquare(new Door(3,3));
 				}
 				if (i == 8 && j == 8) {
-					this.squares[i][j] = new BoardSquare(new Door(2,3,2));
+					this.squares[i][j] = new BoardSquare(new Door(2,3));
 				}
 				if(i == 2 && j == 5) {
 					this.squares[i][j] = new BoardSquare(new Rhydon(50,50));

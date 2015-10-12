@@ -38,7 +38,7 @@ public class Board2 extends Board {
 						this.squares[i][j] = new BoardSquare(new Plant());
 				}
 				if (i == 0 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(1,2,1));
+					this.squares[i][j] = new BoardSquare(new Door(1,2));
 				}
 				if (i == 3 && j == 6) {
 					this.squares[i][j] = new BoardSquare(new Zubat(20, 20));
@@ -59,7 +59,7 @@ public class Board2 extends Board {
 					this.squares[i][j] = new BoardSquare(new RareCandy());
 				}
 				if (i == 8 && j == 8) {
-					this.squares[i][j] = new BoardSquare(new Door(2,2,3));
+					this.squares[i][j] = new BoardSquare(new Door(2,2));
 				}
 				if (i == 8 && j == 0 || i == 7 && j == 7|| i == 2 && j == 4 || i == 0 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new Tree());

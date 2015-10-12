@@ -1365,12 +1365,15 @@ ActionListener, WindowListener, GameClientListener {
 		if (ObjectOfLoc instanceof Door) {
 			for (Item items : clientPlayer.getInventory()) {
 				if (items instanceof Key) {
-					/*if (((Door) go).id() == items.id()) {
+					if (((Door) ObjectOfLoc).id() == items.id()) {
 
-						Door theDoor = (Door) go;
-						Room nowRoom = clientPlayer.getLocation().getRoom();
+						Door theDoor = (Door) ObjectOfLoc;
+						clientPlayer.setLocation(new Location(gameClient.getGame().getRooms().get(theDoor.getNextRoom()), 9,0));
+						clientPlayer.setDirection(Direction.FACE_LEFT);
+						
+						//Room nowRoom = clientPlayer.getLocation().getRoom();
 
-						if (nowRoom.level == theDoor.linkFrom) {
+						/*if (nowRoom.level == theDoor.linkFrom) {
 							//for change room 
 							//1. i change change board
 							//2. i change the location of player
@@ -1384,8 +1387,8 @@ ActionListener, WindowListener, GameClientListener {
 									gameClient.getGame().getRooms()
 									.get(GameLauncher.ROOMINDEX));
 
-						}
-					}*/
+						}*/
+					}
 				}
 			}
 		}
