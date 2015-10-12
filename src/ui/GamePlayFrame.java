@@ -912,15 +912,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), drawStartX, drawStartY, width,
 									height, null);
-							//these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
+							/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
+							*/
 							//							int height = yPoint[0] - yPoint[3];
 							//							int width = height;
-							//							int midPointX = xPoint[0]+(xPoint[1]-xPoint[0])/2;
-							//							int drawStartX = midPointX-width/2;
+							//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
+							//									/ 2;
+							//							int drawStartX = midPointX - width / 2;
 							//							int drawStartY = yPoint[3];
 							//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
 							//									.getGameObjectOnSquare().getSpriteImage()
-							//									.getImage(), drawStartX,drawStartY,width,height, null);
+							//								.getImage(), drawStartX,drawStartY,width,height, null);
 							//----------------------------------------------------------------------------------
 						}
 					}
@@ -935,7 +937,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//print character
 			Image characterImage = clientPlayer.getSpriteBasedOnDirection(
 					firstViewDirection).getImage();
-			g.drawImage(characterImage, midOfView, CHARACTER_BASED_Y_IN_FIRST_VIIEW + shakeOffset,
+			g.drawImage(characterImage, midOfView,
+					CHARACTER_BASED_Y_IN_FIRST_VIIEW + shakeOffset,
 					CHARACTER_SIZE_IN_FIRST_VIIEW,
 					CHARACTER_SIZE_IN_FIRST_VIIEW, null);
 
