@@ -11,6 +11,8 @@ import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import ui.ServerFrame;
+
 import com.esotericsoftware.jsonbeans.Json;
 import com.esotericsoftware.jsonbeans.JsonException;
 import com.esotericsoftware.jsonbeans.OutputType;
@@ -21,9 +23,9 @@ import game.Game;
 public class JsonToGame {
 	
 	//PRASHANT LOADING 
-	public static Game loadGame(JFrame parentFrame) {
+	public static Game loadGame(ServerFrame parentFrame) {
 		// Creates the saving File Dialog and sets the appropriate 
-	    FileDialog fDialog = new FileDialog(parentFrame, "Save Server Game as file..", FileDialog.LOAD);
+	    FileDialog fDialog = new FileDialog(parentFrame, "Load Server Game as file..", FileDialog.LOAD);
         fDialog.setDirectory(".");
         fDialog.setFile("game.json");
         fDialog.setVisible(true);
@@ -45,9 +47,11 @@ public class JsonToGame {
 	    	loadedGame = json.fromJson(Game.class, new File(path));
 	    } catch(JsonException e) {
 	    	// Show error to user if one appears (Usually occurs when user tries to make the server load a non-compatible file)
-			JOptionPane.showMessageDialog(parentFrame, "You can only load Game JSON files only.", "ERROR", JOptionPane.ERROR_MESSAGE);
+	    	parentFrame.writeToConsole("[Server][Load] Loading game failed. ("+path+")");
+	    	JOptionPane.showMessageDialog(parentFrame, "You can only load Game JSON files only.", "ERROR", JOptionPane.ERROR_MESSAGE);
 			return null;
 	    }
+	    parentFrame.writeToConsole("[Server][Load] Saved game Sucessfully. ("+path+")");
 		System.out.println(loadedGame.toString());
 		return loadedGame;
 	}	

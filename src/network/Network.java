@@ -74,13 +74,16 @@ public class Network {
 		kyro.register(network.Packets.PlayerUpdateAttack.class);
 		kyro.register(network.Packets.PlayerUpdatePlayerLevel.class);
 		
+		kyro.register(network.Packets.ClientOnChoosePlayer.class);
+		kyro.register(network.Packets.ClientOnChoosePlayer_Response.class);
 		kyro.register(network.Packets.ClientNewPlayer.class);
+		kyro.register(network.Packets.ClientDeletePlayer.class);
 		kyro.register(network.Packets.ClientNewGame.class);
 		kyro.register(network.Packets.ClientMessage.class);
 		kyro.register(network.Packets.ClientQuit.class);
 		
 		kyro.register(network.Packets.ServerQuit.class);
-
+		kyro.register(network.Packets.ServerRestart_LoadedGameFromFile.class);
 		
 		
 		// Game Related Objects Registration
