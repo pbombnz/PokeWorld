@@ -493,10 +493,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				turnOffset = 0;
 			}
 
-			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
-					startX + 2 - turnOffset, startY + 2 - jumpOffsetFirstView
-							- 60, null);
-
+			if (isDay) {
+				g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
+						startX + 2 - turnOffset, startY + 2
+								- jumpOffsetFirstView - 60, null);
+			} else {
+				g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
+						startX + 2 - turnOffset, startY + 2
+								- jumpOffsetFirstView - 60, null);
+			}
 			int changeOffset = 50;
 			if (turnCounter > 0) {
 				//turn right
@@ -679,8 +684,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			///=============================================
 
 			/// Draw background picture
-			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
-					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+			if (isDay) {
+				g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
+						.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+			} else {
+				g.drawImage(new ImageIcon(
+						"./sprites/backgrounds/darkgame_bg.jpg").getImage(), 0,
+						0, FRAME_WIDTH, FRAME_HEIGHT, null);
+			}
 
 			///print compass
 			g.drawImage(
@@ -994,7 +1005,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public boolean isInSightRange(Player player, int y, int x) {
 		Location loc = player.getLocation();
 		if (x < (loc.getX() + sightRange) && x > (loc.getX() - sightRange)
-				&& y < (loc.getY() + sightRange)&& y > (loc.getY() - sightRange)) {
+				&& y < (loc.getY() + sightRange)
+				&& y > (loc.getY() - sightRange)) {
 			return true;
 		} else {
 			return false;
