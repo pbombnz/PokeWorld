@@ -613,25 +613,27 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 				//draw right squares
 				for (int j = 0; j < numSquaresRight; j++) {
-					int[] xPointLeft = new int[4];
-					int[] yPointLeft = new int[4];
+					int[] xPointRight = new int[4];
+					int[] yPointRight = new int[4];
 					//draw Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
-					xPointLeft[0] = (int) (previouX0 + j * previouWidthOfSquare);
-					yPointLeft[0] = (int) (previouY0 - jumpOffsetFirstView);
-					xPointLeft[1] = (int) (previouX1 + j * previouWidthOfSquare);
-					yPointLeft[1] = (int) (previouY1 - jumpOffsetFirstView);
-					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare + j
+					xPointRight[0] = (int) (previouX0 + j
+							* previouWidthOfSquare);
+					yPointRight[0] = (int) (previouY0 - jumpOffsetFirstView);
+					xPointRight[1] = (int) (previouX1 + j
+							* previouWidthOfSquare);
+					yPointRight[1] = (int) (previouY1 - jumpOffsetFirstView);
+					xPointRight[2] = (int) (nowStartX + nowWidthOfSquare + j
 							* nowWidthOfSquare);
-					yPointLeft[2] = (int) (nowDrawLine - squareHeigh
+					yPointRight[2] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
-					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
+					xPointRight[3] = (int) (nowStartX + j * nowWidthOfSquare);
+					yPointRight[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 					g.setColor(Color.green.darker());
-					g.fillPolygon(xPointLeft, yPointLeft, 4);
+					g.fillPolygon(xPointRight, yPointRight, 4);
 					g.setColor(Color.BLACK);
-					g.drawPolygon(xPointLeft, yPointLeft, 4);
+					g.drawPolygon(xPointRight, yPointRight, 4);
 				}
 
 				//				g.drawImage(new ImageIcon("src/firstviewgrass.png").getImage(),xPoint[0],yPoint[0] , xPoint[1], yPoint[1], xPoint[2], yPoint[2], xPoint[3],yPoint[3],null);
@@ -759,8 +761,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					int[] xPointLeft = storageLeft.xPoint;
 					int[] yPointLeft = storageLeft.yPoint;
 
-					//=====================================================================================
-					//print the object left on this location====================================================
+					//print the object left this location====================================================
 					Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 					Game ga = gameClient.getGame();
@@ -783,35 +784,66 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					//check whether next square is out of board
 					if (locX != -1 && locX != 10 && locY != -1 && locY != 10) {
 						if (bs[locY][locX].getGameObjectOnSquare() != null) {
-
-							if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
-								int width = (xPoint[1] - xPoint[0])
-										* TREE_SCALE_FIRST_VIEW;
-								int height = width;
-								int midPointX = xPointLeft[0]
-										+ (xPointLeft[1] - xPointLeft[0]) / 2;
-								int drawStartX = midPointX - width / 2;
-								int drawStartY = yPointLeft[0] - (height);
-								g.drawImage(bs[locY][locX]
-										.getGameObjectOnSquare()
-										.getSpriteImage().getImage(),
-										drawStartX, drawStartY, width, height,
-										null);
+							if (isDay) {
+								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+									int width = (xPoint[1] - xPoint[0])
+											* TREE_SCALE_FIRST_VIEW;
+									int height = width;
+									int midPointX = xPointLeft[0]
+											+ (xPointLeft[1] - xPointLeft[0])
+											/ 2;
+									int drawStartX = midPointX - width / 2;
+									int drawStartY = yPointLeft[0] - (height);
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								} else {
+									int height = (xPointLeft[2] - xPointLeft[3]);
+									int width = height;
+									int drawStartX = xPointLeft[3];
+									int drawStartY = yPointLeft[0]
+											- ((xPointLeft[2] - xPointLeft[3]));
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								}
 							} else {
-								int height = (xPointLeft[2] - xPointLeft[3]);
-								int width = height;
-								int drawStartX = xPointLeft[3];
-								int drawStartY = yPointLeft[0]
-										- ((xPointLeft[2] - xPointLeft[3]));
-								g.drawImage(bs[locY][locX]
-										.getGameObjectOnSquare()
-										.getSpriteImage().getImage(),
-										drawStartX, drawStartY, width, height,
-										null);
+								if (isInSightRange(clientPlayer, locY, locX)) {
+									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+										int width = (xPoint[1] - xPoint[0])
+												* TREE_SCALE_FIRST_VIEW;
+										int height = width;
+										int midPointX = xPointLeft[0]
+												+ (xPointLeft[1] - xPointLeft[0])
+												/ 2;
+										int drawStartX = midPointX - width / 2;
+										int drawStartY = yPointLeft[0]
+												- (height);
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									} else {
+										int height = (xPointLeft[2] - xPointLeft[3]);
+										int width = height;
+										int drawStartX = xPointLeft[3];
+										int drawStartY = yPointLeft[0]
+												- ((xPointLeft[2] - xPointLeft[3]));
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									}
+								}
 							}
 						}
 					}
-					//===============================================================================
 				}
 
 				//draw right squares
@@ -820,7 +852,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							.get(j);
 					int[] xPointRight = storageRight.xPoint;
 					int[] yPointRight = storageRight.yPoint;
-					//=====================================================================================
 					//print the object left on this location====================================================
 					Location nextLoc = nextSquareLocation(clientPlayer, i);
 
@@ -844,38 +875,68 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					//check whether next square is out of board
 					if (locX != -1 && locX != 10 && locY != -1 && locY != 10) {
 						if (bs[locY][locX].getGameObjectOnSquare() != null) {
-
-							if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
-								int width = (xPoint[1] - xPoint[0])
-										* TREE_SCALE_FIRST_VIEW;
-								int height = width;
-								int midPointX = xPointRight[0]
-										+ (xPointRight[1] - xPointRight[0]) / 2;
-								int drawStartX = midPointX - width / 2;
-								int drawStartY = yPointRight[0] - (height);
-								g.drawImage(bs[locY][locX]
-										.getGameObjectOnSquare()
-										.getSpriteImage().getImage(),
-										drawStartX, drawStartY, width, height,
-										null);
+							if (isDay) {
+								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+									int width = (xPoint[1] - xPoint[0])
+											* TREE_SCALE_FIRST_VIEW;
+									int height = width;
+									int midPointX = xPointRight[0]
+											+ (xPointRight[1] - xPointRight[0])
+											/ 2;
+									int drawStartX = midPointX - width / 2;
+									int drawStartY = yPointRight[0] - (height);
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								} else {
+									int height = (xPointRight[2] - xPointRight[3]);
+									int width = height;
+									int drawStartX = xPointRight[3];
+									int drawStartY = yPointRight[0]
+											- ((xPointRight[2] - xPointRight[3]));
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								}
 							} else {
-								int height = (xPointRight[2] - xPointRight[3]);
-								int width = height;
-								int drawStartX = xPointRight[3];
-								int drawStartY = yPointRight[0]
-										- ((xPointRight[2] - xPointRight[3]));
-								g.drawImage(bs[locY][locX]
-										.getGameObjectOnSquare()
-										.getSpriteImage().getImage(),
-										drawStartX, drawStartY, width, height,
-										null);
+								if (isInSightRange(clientPlayer, locY, locX)) {
+									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+										int width = (xPoint[1] - xPoint[0])
+												* TREE_SCALE_FIRST_VIEW;
+										int height = width;
+										int midPointX = xPointRight[0]
+												+ (xPointRight[1] - xPointRight[0])
+												/ 2;
+										int drawStartX = midPointX - width / 2;
+										int drawStartY = yPointRight[0]
+												- (height);
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									} else {
+										int height = (xPointRight[2] - xPointRight[3]);
+										int width = height;
+										int drawStartX = xPointRight[3];
+										int drawStartY = yPointRight[0]
+												- ((xPointRight[2] - xPointRight[3]));
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									}
+								}
 							}
 						}
 					}
-					//===============================================================================
 				}
 
-				//=====================================================================================
 				//print the object on this location====================================================
 				Location nextLoc = nextSquareLocation(clientPlayer, i);
 
@@ -888,48 +949,93 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						&& nextLoc.getY() != -1 && nextLoc.getY() != 10) {
 					if (bs[nextLoc.getY()][nextLoc.getX()]
 							.getGameObjectOnSquare() != null) {
-
-						if (bs[nextLoc.getY()][nextLoc.getX()]
-								.getGameObjectOnSquare() instanceof Tree) {
-							int width = (xPoint[1] - xPoint[0])
-									* TREE_SCALE_FIRST_VIEW;
-							int height = width;
-							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
-									/ 2;
-							int drawStartX = midPointX - width / 2;
-							int drawStartY = yPoint[0] - (height);
-							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), drawStartX, drawStartY, width,
-									height, null);
+						if (isDay) {
+							if (bs[nextLoc.getY()][nextLoc.getX()]
+									.getGameObjectOnSquare() instanceof Tree) {
+								int width = (xPoint[1] - xPoint[0])
+										* TREE_SCALE_FIRST_VIEW;
+								int height = width;
+								int midPointX = xPoint[0]
+										+ (xPoint[1] - xPoint[0]) / 2;
+								int drawStartX = midPointX - width / 2;
+								int drawStartY = yPoint[0] - (height);
+								g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(),
+										drawStartX, drawStartY, width, height,
+										null);
+							} else {
+								int height = (xPoint[2] - xPoint[3]);
+								int width = height;
+								int drawStartX = xPoint[3];
+								int drawStartY = yPoint[0]
+										- ((xPoint[2] - xPoint[3]));
+								g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(),
+										drawStartX, drawStartY, width, height,
+										null);
+								/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
+								*/
+								//							int height = yPoint[0] - yPoint[3];
+								//							int width = height;
+								//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
+								//									/ 2;
+								//							int drawStartX = midPointX - width / 2;
+								//							int drawStartY = yPoint[3];
+								//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+								//									.getGameObjectOnSquare().getSpriteImage()
+								//								.getImage(), drawStartX,drawStartY,width,height, null);
+								//----------------------------------------------------------------------------------
+							}
 						} else {
-							int height = (xPoint[2] - xPoint[3]);
-							int width = height;
-							int drawStartX = xPoint[3];
-							int drawStartY = yPoint[0]
-									- ((xPoint[2] - xPoint[3]));
-							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), drawStartX, drawStartY, width,
-									height, null);
-							/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
-							*/
-							//							int height = yPoint[0] - yPoint[3];
-							//							int width = height;
-							//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
-							//									/ 2;
-							//							int drawStartX = midPointX - width / 2;
-							//							int drawStartY = yPoint[3];
-							//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
-							//									.getGameObjectOnSquare().getSpriteImage()
-							//								.getImage(), drawStartX,drawStartY,width,height, null);
-							//----------------------------------------------------------------------------------
+							if (isInSightRange(clientPlayer, nextLoc.getY(),
+									nextLoc.getX())) {
+								if (bs[nextLoc.getY()][nextLoc.getX()]
+										.getGameObjectOnSquare() instanceof Tree) {
+									int width = (xPoint[1] - xPoint[0])
+											* TREE_SCALE_FIRST_VIEW;
+									int height = width;
+									int midPointX = xPoint[0]
+											+ (xPoint[1] - xPoint[0]) / 2;
+									int drawStartX = midPointX - width / 2;
+									int drawStartY = yPoint[0] - (height);
+									g.drawImage(
+											bs[nextLoc.getY()][nextLoc.getX()]
+													.getGameObjectOnSquare()
+													.getSpriteImage()
+													.getImage(), drawStartX,
+											drawStartY, width, height, null);
+								} else {
+									int height = (xPoint[2] - xPoint[3]);
+									int width = height;
+									int drawStartX = xPoint[3];
+									int drawStartY = yPoint[0]
+											- ((xPoint[2] - xPoint[3]));
+									g.drawImage(
+											bs[nextLoc.getY()][nextLoc.getX()]
+													.getGameObjectOnSquare()
+													.getSpriteImage()
+													.getImage(), drawStartX,
+											drawStartY, width, height, null);
+									/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
+									*/
+									//							int height = yPoint[0] - yPoint[3];
+									//							int width = height;
+									//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
+									//									/ 2;
+									//							int drawStartX = midPointX - width / 2;
+									//							int drawStartY = yPoint[3];
+									//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+									//									.getGameObjectOnSquare().getSpriteImage()
+									//								.getImage(), drawStartX,drawStartY,width,height, null);
+									//----------------------------------------------------------------------------------
+								}
+							}
 						}
 					}
 				}
-				//===============================================================================
 			}
-			////////////////////////////////////////////////////
 
 			//print edge 
 			g.setColor(Color.black);
