@@ -106,13 +106,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public boolean isRainning = false;
 	public JButton rainyButton = new JButton();
 	public JButton sunnyButton = new JButton();
+	public JButton dayButton = new JButton();
+	public JButton nightButton = new JButton();
 	private long lastMovedtime = 0;//the time that monster  moved in last wonder around unit 
 	private boolean moved = false;
 	private List<Monster> monstersChanged = new ArrayList<Monster>();//monster's location already be changed in one turn in wander around
 	private boolean isFighting = false;//stop key control and monster moving when the player is level uping
 	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
-	//	public int monsterWalkAroundTimer = 0;//when the timer get timer limit, the monster will move
-	//	public final int MOSTER_WALK_TIMER_LIMIT = 10000;
+	protected boolean isDay = true;
+	private final int sightRange = 3;
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -215,6 +217,27 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		sunnyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				isRainning = false;
+				requestFocus();
+			}
+		});
+		//add day and night button
+		dayButton.setText("Day");
+		dayButton.setToolTipText("Press this button to change to day");
+		dayButton.setBounds(350, 10, 100, 30);
+		panel.add(dayButton);
+		dayButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				isDay = true;
+				requestFocus();
+			}
+		});
+		nightButton.setText("Night");
+		nightButton.setToolTipText("Press this button to change to night");
+		nightButton.setBounds(350, 40, 100, 30);
+		panel.add(nightButton);
+		nightButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				isDay = false;
 				requestFocus();
 			}
 		});
@@ -679,9 +702,21 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					int tileX = xPos + (cellX * TILE_WIDTH / 2);
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
-					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
-							null);
+					if (isDay) {
+						g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
+								.getImage(), tileX, tileY, TILE_WIDTH,
+								TILE_HEIGHT, null);
+					} else {
+						if (isInSightRange(clientPlayer, tileY, tileX)) {
+							g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
+							.getImage(), tileX, tileY, TILE_WIDTH,
+							TILE_HEIGHT, null);
+						} else {
+							g.drawImage(new ImageIcon("./sprites/tiles/darkgrass.png")
+							.getImage(), tileX, tileY, TILE_WIDTH,
+							TILE_HEIGHT, null);
+						}
+					}
 
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
@@ -947,6 +982,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					number++;
 				}
 			}
+		}
+	}
+
+	public boolean isInSightRange(Player player, int y, int x) {
+		Location loc = player.getLocation();
+		if (x < (loc.getX() + sightRange) && x > (loc.getX() - sightRange)
+				&& y < (loc.getY() + sightRange)
+				&& y > (loc.getY() - sightRange)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -1388,7 +1434,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							Door theDoor = (Door) ObjectOfLoc;
 							clientPlayer.setLocation(new Location(gameClient
 									.getGame().getRooms()
-									.get(theDoor.getNextRoom()), theDoor.getNextRoomX(), theDoor.getNextRoomY()));
+									.get(theDoor.getNextRoom()), theDoor
+									.getNextRoomX(), theDoor.getNextRoomY()));
 							clientPlayer.setDirection(Direction.FACE_LEFT);
 
 							//Room nowRoom = clientPlayer.getLocation().getRoom();
@@ -1688,7 +1735,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		att.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			    fightBox.dispose();
+				fightBox.dispose();
 				///update label
 				loadLabels();
 				//fight giflabel 
@@ -1696,7 +1743,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				//add a timer 
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
-					
+
 					@Override
 					public void run() {
 						timer.cancel();
@@ -1776,7 +1823,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		((Monster) ObjectOfLoc).setHealth(((Monster) ObjectOfLoc).getHealth()
 				- clientPlayer.getAttack());
 
-//		fightBox.dispose();
+		//		fightBox.dispose();
 
 		//if the player dies, it will show a gif and a message dialog
 		if (clientPlayer.isDead()) {
@@ -1863,18 +1910,22 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 				}
 
-				ArrayList<Player> savedFilePlayers = gameClient.sendOnClientCharacterSelect();
+				ArrayList<Player> savedFilePlayers = gameClient
+						.sendOnClientCharacterSelect();
 				System.out.println(savedFilePlayers);
-				
-				if(!savedFilePlayers.isEmpty()) {
-					Player choosenClientPlayer = CharacterSelectDialog_LoadFile.Chooser(this, savedFilePlayers);
-					gameClient.sendLoadedPlayerToSever(playerUsername, choosenClientPlayer);
+
+				if (!savedFilePlayers.isEmpty()) {
+					Player choosenClientPlayer = CharacterSelectDialog_LoadFile
+							.Chooser(this, savedFilePlayers);
+					gameClient.sendLoadedPlayerToSever(playerUsername,
+							choosenClientPlayer);
 				} else {
-				
+
 					Avatar playerAvatar = CharacterSelectDialog.Chooser(this);
-	
+
 					// Created a player for the client and send it the server to be passed to other clients
-					gameClient.sendNewPlayerToServer(playerUsername, playerAvatar);
+					gameClient.sendNewPlayerToServer(playerUsername,
+							playerAvatar);
 				}
 				// redraw the board
 				//frameState = FRAME_STATE.GAME_RUNNING;
@@ -1933,7 +1984,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		frameState = FRAME_STATE.STANDBY;
 		repaint();
 		gameClient.disconnect();
-		new ActionEvent(new JMenuItem("Join Game (As Client)"), ActionEvent.ACTION_PERFORMED, "");
+		new ActionEvent(new JMenuItem("Join Game (As Client)"),
+				ActionEvent.ACTION_PERFORMED, "");
 	}
 }
 
