@@ -25,7 +25,7 @@ public class JsonToGame {
 	//PRASHANT LOADING 
 	public static Game loadGame(ServerFrame parentFrame) {
 		// Creates the saving File Dialog and sets the appropriate 
-	    FileDialog fDialog = new FileDialog(parentFrame, "Load Server Game as file..", FileDialog.LOAD);
+	    FileDialog fDialog = new FileDialog(parentFrame, "Load Saved Game as file..", FileDialog.LOAD);
         fDialog.setDirectory(".");
         fDialog.setFile("game.json");
         fDialog.setVisible(true);

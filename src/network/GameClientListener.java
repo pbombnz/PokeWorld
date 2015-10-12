@@ -1,5 +1,7 @@
 package network;
 
 public interface GameClientListener {
-	public void onGameClientUpdated();
+	public void onGameUpdated();
+	public void onServerRestart();
+	
 }

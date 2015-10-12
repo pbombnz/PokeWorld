@@ -110,22 +110,7 @@ public class GameServer extends Listener {
 			ClientQuit packet = (ClientQuit) object;
 			game.getPlayers().remove(game.getPlayerByID(packet.id));
 			server.sendToAllExceptTCP(packet.id, packet);
-		}
-		
-		else if (object instanceof ClientDeletePlayer) {
-			ClientDeletePlayer packet = (ClientDeletePlayer) object;
-			Player playerToDelete = null;
-			for(Player connectedPlayer : getGame().getPlayers()) {
-				if(connectedPlayer.getId() == packet.id && connectedPlayer.getName().equals(packet.name)) {
-					playerToDelete = connectedPlayer;
-					break;
-				}
-			}
-			
-			game.getPlayers().remove(playerToDelete);
-			server.sendToAllExceptTCP(connection.getID(), packet);
 		}	
-		
 		
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
 			serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
@@ -249,6 +234,9 @@ public class GameServer extends Listener {
 	 * @return The global copy of the game (Used when loading game from file)
 	 */
 	public void setGame(Game game) {
+		for(Player player : game.getPlayers()) {
+			player.setId(-1);
+		}
 		this.game = game;
 	}
 }

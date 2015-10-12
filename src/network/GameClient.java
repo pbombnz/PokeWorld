@@ -101,7 +101,7 @@ public class GameClient extends Listener {
 		else if (object instanceof ClientQuit) {
 			ClientQuit packet = (ClientQuit) object;
 			game.getPlayers().remove(game.getPlayerByID(packet.id));
-			gameClientListener.onGameClientUpdated();
+			gameClientListener.onGameUpdated();
 		}	
 		
 		else if(object instanceof ServerQuit) {
@@ -114,19 +114,6 @@ public class GameClient extends Listener {
 		
 		else if(object instanceof ClientOnChoosePlayer_Response) {
 			recievedServerReponses.add(object);
-		}
-		
-		else if (object instanceof ClientDeletePlayer) {
-			ClientDeletePlayer packet = (ClientDeletePlayer) object;
-			Player playerToDelete = null;
-			for(Player connectedPlayer : getGame().getPlayers()) {
-				if(connectedPlayer.getId() == packet.id && connectedPlayer.getName().equals(packet.name)) {
-					playerToDelete = connectedPlayer;
-					break;
-				}
-			}
-			
-			game.getPlayers().remove(playerToDelete);
 		}
 	}
 	
@@ -184,12 +171,6 @@ public class GameClient extends Listener {
 	}
 	
 	public void sendLoadedPlayerToSever(String playerUsername, Player choosenClientPlayer) {
-		ClientDeletePlayer deleteOldPlayerpacket = new ClientDeletePlayer();
-		deleteOldPlayerpacket.id = -1;
-		deleteOldPlayerpacket.name = choosenClientPlayer.getName();
-		
-		client.sendTCP(deleteOldPlayerpacket); 
-				
 		choosenClientPlayer.setName(playerUsername);
 		choosenClientPlayer.setId(client.getID());		
 		
@@ -270,7 +251,7 @@ public class GameClient extends Listener {
 				}
 			}
 		}
-		gameClientListener.onGameClientUpdated(); // Tell external class (GUI) to update due to these changes
+		gameClientListener.onGameUpdated(); // Tell external class (GUI) to update due to these changes
 	}
 	
 	/**
@@ -327,7 +308,7 @@ public class GameClient extends Listener {
 	public void updateClient() {
 		// Only send a signal to the listener if the listener actually exists.
 		if (gameClientListener != null) {
-			gameClientListener.onGameClientUpdated();
+			gameClientListener.onGameUpdated();
 		}
 	}	
 

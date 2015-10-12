@@ -22,11 +22,11 @@ import javax.swing.JPanel;
  * @contributer Prashant Bhikhu
  */
 @SuppressWarnings("serial")
-public class ChooseCharacterDialog extends JDialog implements ActionListener {
+public class CharacterSelectDialog extends JDialog implements ActionListener {
 	JPanel buttonsPanel = new JPanel();
 	Avatar choosenAvatar = null;
 
-	public ChooseCharacterDialog(JFrame parentFrame) {
+	public CharacterSelectDialog(JFrame parentFrame) {
 		super(parentFrame, "Choose your Character?");
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -85,7 +85,7 @@ public class ChooseCharacterDialog extends JDialog implements ActionListener {
 	}
 	
 	public static Avatar Chooser(JFrame parentFrame) {
-		ChooseCharacterDialog dialog = new ChooseCharacterDialog(parentFrame);
+		CharacterSelectDialog dialog = new CharacterSelectDialog(parentFrame);
 		return dialog.getChoosenAvatar();
 	}
 	

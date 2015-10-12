@@ -58,7 +58,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
-		CREATED_FRAME, DO_NOTHING, GAME_CONNECTING, GAME_START, GAME_NORMAL, GAME_ENDED_EXPECTED, GAME_ENDED_UNEXPECTED
+		STANDBY, GAME_RUNNING
 	};
 
 	// The Size of the Frame
@@ -70,7 +70,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
 
-	private FRAME_STATE frameState = FRAME_STATE.CREATED_FRAME;
+	private FRAME_STATE frameState = FRAME_STATE.STANDBY;
 
 	private GameClient gameClient = new GameClient();
 	private Rotate rotate = new Rotate();
@@ -178,7 +178,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		setJMenuBar(menuBar);
 		setVisible(true);
 
-		frameState = GamePlayFrame.FRAME_STATE.CREATED_FRAME;
+		frameState = GamePlayFrame.FRAME_STATE.STANDBY;
 		//set start time
 		startTime = getCurrentTime();
 
@@ -436,8 +436,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 
 			//draw welcome picture
-			if (frameState == FRAME_STATE.CREATED_FRAME
-					|| frameState == FRAME_STATE.GAME_CONNECTING) {
+			if (frameState == FRAME_STATE.STANDBY) {
 				g.drawImage(new ImageIcon(
 						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
 						0, FULL_FRAME_WIDTH, FRAME_HEIGHT, null);
@@ -446,7 +445,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 			if (gameClient.getGame() == null && !gameClient.isConnected()) {
 				super.paintComponent(g);
-				frameState = FRAME_STATE.CREATED_FRAME;
+				frameState = FRAME_STATE.STANDBY;
 				this.repaint();
 				return;
 			}
@@ -1831,7 +1830,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 									+ "ports are unblocked.", "ERROR",
 							JOptionPane.ERROR_MESSAGE);
 
-					frameState = FRAME_STATE.CREATED_FRAME;
+					frameState = FRAME_STATE.STANDBY;
 					return;
 				}
 
@@ -1864,19 +1863,20 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				}
 
 				ArrayList<Player> savedFilePlayers = gameClient.sendOnClientCharacterSelect();
+				System.out.println(savedFilePlayers);
 				
 				if(!savedFilePlayers.isEmpty()) {
-					Player choosenClientPlayer = CharcterSelectDialog2.Chooser(this, savedFilePlayers);
+					Player choosenClientPlayer = CharacterSelectDialog_LoadFile.Chooser(this, savedFilePlayers);
 					gameClient.sendLoadedPlayerToSever(playerUsername, choosenClientPlayer);
 				} else {
 				
-					Avatar playerAvatar = ChooseCharacterDialog.Chooser(this);
+					Avatar playerAvatar = CharacterSelectDialog.Chooser(this);
 	
 					// Created a player for the client and send it the server to be passed to other clients
 					gameClient.sendNewPlayerToServer(playerUsername, playerAvatar);
 				}
 				// redraw the board
-				//frameState = FRAME_STATE.GAME_START;
+				//frameState = FRAME_STATE.GAME_RUNNING;
 				//add all jlabel after picking character
 				//loadLabels();
 				//panel.add(headPictureLabel);
@@ -1890,8 +1890,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	@Override
-	public void onGameClientUpdated() {
-		frameState = FRAME_STATE.GAME_START;
+	public void onGameUpdated() {
+		frameState = FRAME_STATE.GAME_RUNNING;
 		repaint();
 	}
 
@@ -1925,6 +1925,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
+	}
+
+	@Override
+	public void onServerRestart() {
+		frameState = FRAME_STATE.STANDBY;
+		repaint();
+		gameClient.disconnect();
+		new ActionEvent(new JMenuItem("Join Game (As Client)"), ActionEvent.ACTION_PERFORMED, "");
 	}
 }
 

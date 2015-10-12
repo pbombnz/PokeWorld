@@ -1,5 +1,6 @@
 package ui;
 
+import game.Location;
 import game.Player;
 
 import java.awt.BorderLayout;
@@ -14,18 +15,20 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import rooms.Room1;
+
 
 /**
  * 
  * @contributer Prashant Bhikhu
  */
 @SuppressWarnings("serial")
-public class CharcterSelectDialog2 extends JDialog implements ActionListener {
+public class CharacterSelectDialog_LoadFile extends JDialog implements ActionListener {
 	private JComboBox<String> loadedPlayersComboBox = new JComboBox<String>();
 	private ArrayList<Player> loadedPlayers;
 	private Player choosenPlayer = null;
 
-	public CharcterSelectDialog2(JFrame parentFrame, ArrayList<Player> loadedPlayers) {
+	public CharacterSelectDialog_LoadFile(JFrame parentFrame, ArrayList<Player> loadedPlayers) {
 		super(parentFrame, "Choose your Character (From Load File)?");
 		this.loadedPlayers = loadedPlayers;
 		
@@ -34,21 +37,24 @@ public class CharcterSelectDialog2 extends JDialog implements ActionListener {
 		
 		setLayout(new BorderLayout());
 
-		setSize(700, 400);
+		setSize(600, 100);
 		setResizable(false);
 
 		String[] loadedPlayersComboBoxText = new String[loadedPlayers.size()];
 
 		for(int i = 0; i < loadedPlayers.size(); i++) {
 			Player player = loadedPlayers.get(i);
-			loadedPlayersComboBoxText[i] = "Player in " + player.getLocation().getRoom().getName() +"@("+player.getLocation().getX()+","+player.getLocation().getY()+") - Player Level: " + player.getPlayerLevel() + " Health: " + player.getAttack() + " Attack: "+player.getAttack();
+			String playerInfo = "Player in " + player.getLocation().getRoom().getName() +"@("+player.getLocation().getX()+","+player.getLocation().getY()+") - Player Level: " + player.getPlayerLevel() + " Health: " + player.getAttack() + " Attack: "+player.getAttack();
+			loadedPlayersComboBox.addItem(playerInfo);
 		}
-		
-		add(new JLabel("Choose an Existing Character that was loaded from a save file to play as?"), BorderLayout.PAGE_START);
-		add(loadedPlayersComboBox, BorderLayout.CENTER);
+
 		
 		JButton okayBtn = new JButton("Okay");
 		okayBtn.addActionListener(this);
+		
+		add(new JLabel("Choose an Existing Character that was loaded from a save file to play as?"), BorderLayout.PAGE_START);
+		add(loadedPlayersComboBox, BorderLayout.CENTER);
+		add(okayBtn, BorderLayout.LINE_END);
 
 		setLocationRelativeTo(parentFrame);
 		setVisible(true);
@@ -65,7 +71,7 @@ public class CharcterSelectDialog2 extends JDialog implements ActionListener {
 	}
 	
 	public static Player Chooser(JFrame parentFrame, ArrayList<Player> loadedPlayers) {
-		CharcterSelectDialog2 dialog = new CharcterSelectDialog2(parentFrame, loadedPlayers);
+		CharacterSelectDialog_LoadFile dialog = new CharacterSelectDialog_LoadFile(parentFrame, loadedPlayers);
 		return dialog.getChoosenPlayer();
 	}
 }

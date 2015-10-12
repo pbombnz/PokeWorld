@@ -1,11 +1,7 @@
 package ui;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
@@ -13,16 +9,12 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 
 /**
  * 
@@ -33,7 +25,7 @@ public class ServerSelectDialog extends JDialog implements ActionListener {
 	private List<InetAddress> serverAddresses;
 	private InetAddress selectedAddress;
 	
-	JComboBox serversComboBox;
+	JComboBox<String> serversComboBox;
 	JButton okayButton;
 
 	public ServerSelectDialog(JFrame parentFrame, List<InetAddress> serverAddresses) {
@@ -56,7 +48,7 @@ public class ServerSelectDialog extends JDialog implements ActionListener {
 			stringAddress[i] = serverAddresses.get(i).toString();
 		}
 		
-		serversComboBox = new JComboBox(stringAddress);
+		serversComboBox = new JComboBox<String>(stringAddress);
 		okayButton = new JButton("Connect");
 		okayButton.addActionListener(this);
 		
