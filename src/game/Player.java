@@ -10,8 +10,9 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 /* 
- * @author Sushant Balajee, Donald Tang 
- *
+ * @authors Sushant Balajee, Donald Tang,
+ * @contributors Prashant Bhikhu
+ * 
  * This class represents the player of the game, it holds 
  * all key information about the player, their inventory, stats etc.
  * All player stats are initialised here
@@ -56,7 +57,11 @@ public class Player implements Serializable {
 		this.attack = ATTACK;
 		this.health = HEALTH;
 	}
-
+/**
+ * 
+ * @return int, players heatlh
+ */
+	
 	public int getHealth(){
 		return health;
 	}
@@ -70,11 +75,17 @@ public class Player implements Serializable {
 			health = 0;
 		}
 	}
-
+/**
+ * 
+ * @return boolean, players life status
+ */
 	public boolean isDead(){
 		return health <= 0;
 	}
-
+/**
+ * 
+ * @return int, attack damage
+ */
 	public int getAttack(){
 		return attack;
 	}
@@ -85,7 +96,10 @@ public class Player implements Serializable {
 	public void setAttack(int change){
 		this.attack = change;
 	}
-
+/**
+ * 
+ * @return List<Item>, player inventory
+ */
 	public List<Item> getInventory(){
 		return inventory;
 	}
