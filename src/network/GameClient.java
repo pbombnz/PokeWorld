@@ -288,7 +288,6 @@ public class GameClient extends Listener {
 	public Player getClientPlayer() {
 		// Gets the client player by iterating through all connected players and find a player with the matching ID
 		for(Player connectedPlayer: game.getPlayers()) {
-			System.out.println("connectedPlayer.getId(): "+ connectedPlayer.getId()+" client.getID(): "+client.getID());
 			if(connectedPlayer.getId() == client.getID()) {
 				return connectedPlayer;
 			}
