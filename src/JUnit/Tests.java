@@ -162,7 +162,50 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
+	@Test
+	public void testPlayerLevel9() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getNextEvolution(2);
+		} catch (IllegalArgumentException e) {
+			fail("Max level is 3");
+		}
+	}
+	@Test
+	public void testPlayerLevel10() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getNextEvolution(3);
+			fail("Max level is 3");
+		} catch (IllegalArgumentException e) {
+			
+		}
+	}
+	@Test
+	public void testPlayerLevel11() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getNextEvolution(4);
+			fail("Max level is 3");
+		} catch (IllegalArgumentException e) {
+		}
+	}
+	@Test
+	public void testPlayerLevel12() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getNextEvolution(-1);
+			fail("Min level is 1");
+		} catch (IllegalArgumentException e) {
+		}
+	}
 
+	
+	
 	
 	
 	

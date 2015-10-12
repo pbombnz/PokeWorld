@@ -226,7 +226,7 @@ public class Avatar implements Serializable {
 	}
 	
 	public Evolution getNextEvolution(int playerEvolutionLevel) {
-		if(playerEvolutionLevel < 1 || playerEvolutionLevel > 3) {
+		if(playerEvolutionLevel < 1 || playerEvolutionLevel >= 3) {
 			throw new IllegalArgumentException("The Evolution Level of a Player must be between 1-3.");
 		}
 		return evolutions.get(playerEvolutionLevel);
