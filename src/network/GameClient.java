@@ -171,11 +171,14 @@ public class GameClient extends Listener {
 	}
 	
 	public void sendLoadedPlayerToSever(String playerUsername, Player choosenClientPlayer) {
-		choosenClientPlayer.setName(playerUsername);
-		choosenClientPlayer.setId(client.getID());		
+		//choosenClientPlayer.setName(playerUsername);
+		//choosenClientPlayer.setId(client.getID());		
 		
-		ClientNewPlayer packet = new ClientNewPlayer();
-		packet.player = choosenClientPlayer;
+		ClientUseExistingPlayer packet = new ClientUseExistingPlayer();
+		packet.oldId = choosenClientPlayer.getId();
+		packet.oldName = choosenClientPlayer.getName();
+		packet.newId = client.getID();
+		packet.newName = playerUsername;
 		
 		// Finally send packet to server
 		client.sendTCP(packet); 
@@ -285,6 +288,7 @@ public class GameClient extends Listener {
 	public Player getClientPlayer() {
 		// Gets the client player by iterating through all connected players and find a player with the matching ID
 		for(Player connectedPlayer: game.getPlayers()) {
+			System.out.println("connectedPlayer.getId(): "+ connectedPlayer.getId()+" client.getID(): "+client.getID());
 			if(connectedPlayer.getId() == client.getID()) {
 				return connectedPlayer;
 			}

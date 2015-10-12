@@ -97,15 +97,7 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 		JMenuItem menuItem = (JMenuItem) arg0.getSource();
 		
 		if(menuItem == connect) {
-			// Load Game Map 1 for now (NO USER SELECTION)
-			try {
-				gameServer = new GameServer(this);
-				connect.setEnabled(false);
-				disconnect.setEnabled(true);
-				savePlayer.setEnabled(true);
-			} catch (IOException e) {
-				JOptionPane.showInternalMessageDialog(this, e.getMessage(), "Server Error", JOptionPane.ERROR_MESSAGE);
-			}
+			connect();
 		} else if(menuItem == disconnect) {
 			connect.setEnabled(true);
 			disconnect.setEnabled(false);

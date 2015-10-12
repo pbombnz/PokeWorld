@@ -137,6 +137,24 @@ public class GameServer extends Listener {
 			packet.savedFilePlayers = savedFilePlayers;
 			connection.sendTCP(packet);
 		}
+		
+		else if(object instanceof ClientUseExistingPlayer) {
+			ClientUseExistingPlayer packet = ((ClientUseExistingPlayer) object);
+			
+			for(Player connectedPlayer: getGame().getPlayers()) {
+				if(connectedPlayer.getId() == packet.oldId && connectedPlayer.getName().equals(packet.oldName)) {
+					connectedPlayer.setId(packet.newId);
+					connectedPlayer.setName(packet.newName);
+				}
+			}
+			
+			ClientNewGame newGame = new ClientNewGame();
+			newGame.gameByteArray = game.toByteArray();
+			
+			// Send packet to client
+			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
+			server.sendToAllTCP(newGame);
+		}
 	}
 
 	@Override

@@ -249,6 +249,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//load head picture
 		JLabel headPictureLabel = null;
 
+		System.out.println(clientPlayer);
 		ImageIcon headPicture = clientPlayer.getAvatar()
 				.getCurrentEvolution(clientPlayer.getPlayerLevel())
 				.getDisplayPictureGIF();

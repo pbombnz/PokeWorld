@@ -16,6 +16,13 @@ import game.objects.interactiveObjects.Item;
 *
 */
 public class Packets {
+	public static class ClientUseExistingPlayer {
+		int oldId;
+		int newId;
+		String oldName;
+		String newName;
+	}
+	
 	public static class ValidateNewPlayerUsername {
 		String name;
 	}

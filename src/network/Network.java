@@ -74,6 +74,7 @@ public class Network {
 		kyro.register(network.Packets.PlayerUpdateAttack.class);
 		kyro.register(network.Packets.PlayerUpdatePlayerLevel.class);
 		
+		kyro.register(network.Packets.ClientUseExistingPlayer.class);
 		kyro.register(network.Packets.ClientOnChoosePlayer.class);
 		kyro.register(network.Packets.ClientOnChoosePlayer_Response.class);
 		kyro.register(network.Packets.ClientNewPlayer.class);
