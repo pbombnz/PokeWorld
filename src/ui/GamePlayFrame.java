@@ -126,6 +126,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public static final int CHARACTER_SIZE_IN_FIRST_VIIEW = 100;
 	public static final int TREE_SCALE_FIRST_VIEW = 4;
 	public static final int CHARACTER_BASED_Y_IN_FIRST_VIIEW = 450;
+	public static final int UNIT_SECOND = 1;//every unit second,monster move around
 	public int squareWidthView = 300;
 	public int playerXView = (FULL_FRAME_WIDTH - FRAME_WIDTH) / 2;//push player in the mid of view window
 	public int playerYView = FRAME_HEIGHT;
@@ -532,7 +533,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			int numSquaresRight = 0;
 			Location playerLoc = clientPlayer.getLocation();
 			int boardSize = 10;
-			int offset = 1;//this offset is cuz the locaion is from 0 not 1
+			int offset = 0;//this offset is cuz the locaion is from 0 not 1
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				numSquaresFace = playerLoc.getY();
 				numSquaresLeft = playerLoc.getX();
@@ -564,7 +565,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			double previouY1 = viewHight;
 			int checkLocationX = clientPlayer.getLocation().getX();
 			int checkLocationY = clientPlayer.getLocation().getY();
-
+			//#draw background Rectengel
 			for (int i = 0; i < numSquaresFace + 1; i++) {
 				//draw face square
 				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
@@ -583,7 +584,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				xPoint[3] = (int) nowStartX;
 				yPoint[3] = (int) (nowDrawLine - squareHeigh
 						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-				g.setColor(Color.green.darker());
+
+				if (!isDay) {
+					if (i > sightRange) {
+						g.setColor(Color.gray.darker().darker());
+					}else{
+						g.setColor(Color.green.darker());
+					}
+				} else {
+					g.setColor(Color.green.darker());
+				}
 				g.fillPolygon(xPoint, yPoint, 4);
 				g.setColor(Color.BLACK);
 				g.drawPolygon(xPoint, yPoint, 4);
@@ -605,7 +615,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					g.setColor(Color.green.darker());
+					if (!isDay) {
+						if (j > sightRange||i>sightRange) {
+							g.setColor(Color.gray.darker().darker());
+						}else{
+							g.setColor(Color.green.darker());
+						}
+					} else {
+						g.setColor(Color.green.darker());
+					}
 					g.fillPolygon(xPointLeft, yPointLeft, 4);
 					g.setColor(Color.BLACK);
 					g.drawPolygon(xPointLeft, yPointLeft, 4);
@@ -630,7 +648,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					xPointRight[3] = (int) (nowStartX + j * nowWidthOfSquare);
 					yPointRight[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					g.setColor(Color.green.darker());
+					if (!isDay) {
+						if (j > sightRange||i>sightRange) {
+							g.setColor(Color.gray.darker().darker());
+						}else{
+							g.setColor(Color.green.darker());
+						}
+					} else {
+						g.setColor(Color.green.darker());
+					}
 					g.fillPolygon(xPointRight, yPointRight, 4);
 					g.setColor(Color.BLACK);
 					g.drawPolygon(xPointRight, yPointRight, 4);
@@ -1193,9 +1219,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 								if (!isFighting && !isLevelUpping) {
 									int passSecond = (int) (runningTime / 1000);
 									//every unit second,monster move around
-									int unitSecond = 2;
 									if (runningTime != lastMovedtime) {
-										if (passSecond % unitSecond == 0) {
+										if (passSecond % UNIT_SECOND == 0) {
 											Monster monster = (Monster) bs[cellY][cellX]
 													.getGameObjectOnSquare();
 											if (!monstersChanged
