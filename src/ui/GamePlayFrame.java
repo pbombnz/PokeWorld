@@ -118,7 +118,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private boolean isFighting = false;//stop key control and monster moving when the player is level uping
 	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
 	protected boolean isDay = true;
-	private final int sightRange = 2;
+	private final int sightRange = 3;
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -801,50 +801,113 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
 					BoardSquare[][] bs = r.board.getSquares();
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
-							g.drawImage(bs[cellY][cellX]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), tileX - 60, tileY - 170, null);
-						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof MagicCircle) {
-							g.drawImage(bs[cellY][cellX]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), tileX, tileY, 20, 20, null);
-						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
+						if (isDay) {
+							if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
+								g.drawImage(bs[cellY][cellX]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(),
+										tileX - 60, tileY - 170, null);
+							} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof MagicCircle) {
+								g.drawImage(bs[cellY][cellX]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(), tileX,
+										tileY, 20, 20, null);
+							} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
 
-							g.drawImage(bs[cellY][cellX]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), tileX, tileY
-									- (TILE_HEIGHT / 2), 50, 50, null);
+								g.drawImage(bs[cellY][cellX]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(), tileX,
+										tileY - (TILE_HEIGHT / 2), 50, 50, null);
 
-							//add "wander around"----------------------------------
-							//the monster will stop move when the player is fighting or level uping
-							if (!isFighting && !isLevelUpping) {
-								int passSecond = (int) (runningTime / 1000);
-								//every unit second,monster move around
-								int unitSecond = 2;
-								if (runningTime != lastMovedtime) {
-									if (passSecond % unitSecond == 0) {
-										Monster monster = (Monster) bs[cellY][cellX]
-												.getGameObjectOnSquare();
-										if (!monstersChanged.contains(monster)) {
-											if (!letMonsterMove(monster, cellY,
-													cellX)) {
-												turnMonsterAroundAndMove(
-														monster, cellY, cellX);
+								//add "wander around"----------------------------------
+								//the monster will stop move when the player is fighting or level uping
+								if (!isFighting && !isLevelUpping) {
+									int passSecond = (int) (runningTime / 1000);
+									//every unit second,monster move around
+									int unitSecond = 2;
+									if (runningTime != lastMovedtime) {
+										if (passSecond % unitSecond == 0) {
+											Monster monster = (Monster) bs[cellY][cellX]
+													.getGameObjectOnSquare();
+											if (!monstersChanged
+													.contains(monster)) {
+												if (!letMonsterMove(monster,
+														cellY, cellX)) {
+													turnMonsterAroundAndMove(
+															monster, cellY,
+															cellX);
+												}
 											}
+											monstersChanged.add(monster);
+											moved = true;
 										}
-										monstersChanged.add(monster);
-										moved = true;
 									}
 								}
+								//update monstersChanged after print all monster in object list
+								//-----------------------------------------------------
+							} else {
+								g.drawImage(bs[cellY][cellX]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(), tileX,
+										tileY - (TILE_HEIGHT / 2), 50, 50, null);
 							}
-							//update monstersChanged after print all monster in object list
-							//-----------------------------------------------------
 						} else {
-							g.drawImage(bs[cellY][cellX]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), tileX, tileY
-									- (TILE_HEIGHT / 2), 50, 50, null);
+							if (isInSightRange(clientPlayer, cellY, cellX)) {
+								if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
+									g.drawImage(bs[cellY][cellX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											tileX - 60, tileY - 170, null);
+								} else if (bs[cellY][cellX]
+										.getGameObjectOnSquare() instanceof MagicCircle) {
+									g.drawImage(bs[cellY][cellX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											tileX, tileY, 20, 20, null);
+								} else if (bs[cellY][cellX]
+										.getGameObjectOnSquare() instanceof Monster) {
+
+									g.drawImage(bs[cellY][cellX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											tileX, tileY - (TILE_HEIGHT / 2),
+											50, 50, null);
+
+									//add "wander around"----------------------------------
+									//the monster will stop move when the player is fighting or level uping
+									if (!isFighting && !isLevelUpping) {
+										int passSecond = (int) (runningTime / 1000);
+										//every unit second,monster move around
+										int unitSecond = 2;
+										if (runningTime != lastMovedtime) {
+											if (passSecond % unitSecond == 0) {
+												Monster monster = (Monster) bs[cellY][cellX]
+														.getGameObjectOnSquare();
+												if (!monstersChanged
+														.contains(monster)) {
+													if (!letMonsterMove(
+															monster, cellY,
+															cellX)) {
+														turnMonsterAroundAndMove(
+																monster, cellY,
+																cellX);
+													}
+												}
+												monstersChanged.add(monster);
+												moved = true;
+											}
+										}
+									}
+									//update monstersChanged after print all monster in object list
+									//-----------------------------------------------------
+								} else {
+									g.drawImage(bs[cellY][cellX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											tileX, tileY - (TILE_HEIGHT / 2),
+											50, 50, null);
+								}
+							}
 						}
 					}
 				}
