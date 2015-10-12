@@ -1333,7 +1333,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					if (clientPlayer.getPlayerLevel() == 2) {
 						shakeOffsetZero = LVL2_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
 						panel.add(lvlupLabel_2);
-						isLevelUpping=true;//stop key control and monster moving when the player is level uping
+						isLevelUpping = true;//stop key control and monster moving when the player is level uping
 						final Timer timer = new Timer();
 						TimerTask tt = new TimerTask() {
 							@Override
@@ -1342,7 +1342,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 								//here is the methods run after timer here 
 								///=======================================
 								panel.remove(lvlupLabel_2);
-								isLevelUpping =false;//restore key control and monster moving after the player level up
+								isLevelUpping = false;//restore key control and monster moving after the player level up
 								//========================================
 							}
 						};
@@ -1359,7 +1359,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 								//here is the methods run after timer here 
 								///=======================================
 								panel.remove(lvlupLabel_3);
-								isLevelUpping =false;//restore key control and monster moving after the player level up
+								isLevelUpping = false;//restore key control and monster moving after the player level up
 								//========================================
 							}
 						};
@@ -1687,6 +1687,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		att.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+			    fightBox.dispose();
 				///update label
 				loadLabels();
 				//fight giflabel 
@@ -1694,7 +1695,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				//add a timer 
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
-
+					
 					@Override
 					public void run() {
 						timer.cancel();
@@ -1712,7 +1713,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fightBox.dispose();
-				isFighting =false;
+				isFighting = false;
 			}
 		});
 
@@ -1774,7 +1775,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		((Monster) ObjectOfLoc).setHealth(((Monster) ObjectOfLoc).getHealth()
 				- clientPlayer.getAttack());
 
-		fightBox.dispose();
+//		fightBox.dispose();
 
 		//if the player dies, it will show a gif and a message dialog
 		if (clientPlayer.isDead()) {
