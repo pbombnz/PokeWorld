@@ -6,7 +6,11 @@ import java.awt.Image;
 import java.io.Serializable;
 
 import javax.swing.ImageIcon;
-
+/**
+ * This class is how we represent a square on the board.
+ * It stores a gameObject which is encapsulated so it has getters and setters.
+ *
+ */
 public class BoardSquare implements Serializable {
 	
 	private static final long serialVersionUID = -5741277974211422063L;
