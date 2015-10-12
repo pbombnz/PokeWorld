@@ -1324,6 +1324,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 			//If you find a RareCandy, increases your level and removes it from the board
 			if (ObjectOfLoc instanceof RareCandy) {
+				//level up
 				if (clientPlayer.getPlayerLevel() == 1
 						|| clientPlayer.getPlayerLevel() == 2) {
 					clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
@@ -1348,8 +1349,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						};
 						timer.schedule(tt, 2500);
 					} else if (clientPlayer.getPlayerLevel() == 3) {
-						panel.add(lvlupLabel_3);
 						shakeOffsetZero = LVL3_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
+						panel.add(lvlupLabel_3);
 						final Timer timer = new Timer();
 						isLevelUpping = true;//stop key control and monster moving when the player is level uping
 						TimerTask tt = new TimerTask() {
