@@ -45,6 +45,7 @@ public class ChooseCharacterDialog extends JDialog implements ActionListener {
 				avatarButton.setText(avatar.getName());
 				avatarButton.setName(avatar.getName());
 				avatarButton.setIcon(avatar.getDisplayPic());
+				avatarButton.setToolTipText("Name:"+avatar.getName()+"\n");
 				avatarButton.addActionListener(this);
 				
 				buttonsPanel.add(avatarButton);

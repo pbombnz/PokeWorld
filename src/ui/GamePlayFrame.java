@@ -3,15 +3,10 @@ package ui;
 /**
  * @author Wang Zhen
  */
-import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Panel;
-import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -28,10 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-//import javafx.scene.Scene;
-
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,19 +35,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-
-import com.esotericsoftware.kryonet.Client;
-import com.sun.image.codec.jpeg.TruncatedFileException;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
-
 import rooms.Board;
-import rooms.Board1;
-import rooms.Board2;
-import rooms.Board3;
 import rooms.EmptyBoard;
 import rooms.Room;
-import rooms.Room1;
-import sun.net.www.content.text.plain;
 import network.GameClient;
 import network.GameClientListener;
 import game.BoardSquare;
@@ -73,7 +54,7 @@ import game.objects.monster.*;
 
 @SuppressWarnings("serial")
 public class GamePlayFrame extends JFrame implements KeyListener,
-ActionListener, WindowListener, GameClientListener {
+		ActionListener, WindowListener, GameClientListener {
 	// The Emum has holds states for the JFrame so we know what to draw and when
 	// for instance we draw
 	private static enum FRAME_STATE {
@@ -84,7 +65,7 @@ ActionListener, WindowListener, GameClientListener {
 	//
 	private static final int FRAME_HEIGHT = 610;
 	private static final int FULL_FRAME_WIDTH = 1400;
-	private static final int WELCOME_FRAME_WIDTH = 1000;
+	//	private static final int WELCOME_FRAME_WIDTH = 1000;
 	// The size of the tiles when they are displayed
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
@@ -202,6 +183,7 @@ ActionListener, WindowListener, GameClientListener {
 	public void addButtons() {
 		//Add button
 		dropButton.setText("Drop");
+		dropButton.setToolTipText("Press this button to drop item");
 		dropButton.setBounds(0, 300, 100, 40);
 		panel.add(dropButton);
 		dropButton.addActionListener(new ActionListener() {
@@ -211,6 +193,8 @@ ActionListener, WindowListener, GameClientListener {
 		});
 		//add rainy and sunny button
 		rainyButton.setText("Rainy");
+		rainyButton
+				.setToolTipText("Press this button to change the whether to rainny");
 		rainyButton.setBounds(450, 10, 100, 30);
 		panel.add(rainyButton);
 		rainyButton.addActionListener(new ActionListener() {
@@ -220,6 +204,8 @@ ActionListener, WindowListener, GameClientListener {
 			}
 		});
 		sunnyButton.setText("Sunny");
+		sunnyButton
+				.setToolTipText("Press this button to change the weather to sunny");
 		sunnyButton.setBounds(450, 40, 100, 30);
 		panel.add(sunnyButton);
 		sunnyButton.addActionListener(new ActionListener() {
@@ -263,6 +249,7 @@ ActionListener, WindowListener, GameClientListener {
 				.getCurrentEvolution(clientPlayer.getPlayerLevel())
 				.getDisplayPictureGIF();
 		headPictureLabel = new JLabel(headPicture);
+		headPictureLabel.setToolTipText("The head picture of character");
 
 		int xPo = 10;
 		int yPo = 10;
@@ -289,10 +276,12 @@ ActionListener, WindowListener, GameClientListener {
 		attackLabel = new JLabel(clientPlayerCurrentEvolution.getAttackGIF());
 		levelUpLabel_2 = new JLabel(
 				clientPlayerCurrentEvolution.getEvolvingGIF());
-		
-		if(clientPlayer.getPlayerLevel() != Player.MAX_PLAYER_LEVEL) {
-			Evolution clientPlayerNextEvolution = clientPlayer.getAvatar().getNextEvolution(clientPlayer.getPlayerLevel());
-			levelUpLabel_3 = new JLabel(clientPlayerNextEvolution.getEvolvingGIF());
+
+		if (clientPlayer.getPlayerLevel() != Player.MAX_PLAYER_LEVEL) {
+			Evolution clientPlayerNextEvolution = clientPlayer.getAvatar()
+					.getNextEvolution(clientPlayer.getPlayerLevel());
+			levelUpLabel_3 = new JLabel(
+					clientPlayerNextEvolution.getEvolvingGIF());
 		} else {
 			levelUpLabel_3 = new JLabel();
 		}
@@ -418,7 +407,7 @@ ActionListener, WindowListener, GameClientListener {
 
 	private void changeShakeLimit() {
 		if (shakeOffset == shakeOffsetZero) {
-			shakeOffset = shakeOffsetZero+5;
+			shakeOffset = shakeOffsetZero + 5;
 		} else {
 			shakeOffset = shakeOffsetZero;
 		}
@@ -475,7 +464,7 @@ ActionListener, WindowListener, GameClientListener {
 
 			g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
 					startX + 2 - turnOffset, startY + 2 - jumpOffsetFirstView
-					- 60, null);
+							- 60, null);
 
 			int changeOffset = 50;
 			if (turnCounter > 0) {
@@ -660,7 +649,7 @@ ActionListener, WindowListener, GameClientListener {
 
 			/// Draw background picture
 			g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
-			.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
+					.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 
 			///print compass
 			g.drawImage(
@@ -687,8 +676,8 @@ ActionListener, WindowListener, GameClientListener {
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
 
 					g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-					.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
-					null);
+							.getImage(), tileX, tileY, TILE_WIDTH, TILE_HEIGHT,
+							null);
 
 					Location clientPlayerLoc = clientPlayer.getLocation();
 
@@ -701,16 +690,16 @@ ActionListener, WindowListener, GameClientListener {
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
 
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
 					}
 
@@ -721,10 +710,10 @@ ActionListener, WindowListener, GameClientListener {
 									&& connectedPlayer.getLocation().getY() == cellY) {
 								g.drawImage(
 										connectedPlayer
-										.getSpriteBasedOnDirection()
-										.getImage(), tileX
-										+ (TILE_WIDTH / 5), tileY
-										- (TILE_HEIGHT / 3), null);
+												.getSpriteBasedOnDirection()
+												.getImage(), tileX
+												+ (TILE_WIDTH / 5), tileY
+												- (TILE_HEIGHT / 3), null);
 							}
 						}
 					}
@@ -739,15 +728,15 @@ ActionListener, WindowListener, GameClientListener {
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
-									- (TILE_HEIGHT / 3) + jumpOffset
-									+ shakeOffset, null);
+											- (TILE_HEIGHT / 3) + jumpOffset
+											+ shakeOffset, null);
 						}
 					}
 
@@ -764,7 +753,8 @@ ActionListener, WindowListener, GameClientListener {
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY, 20, 20, null);
-						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Rattata) {
+						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
+							
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY
@@ -830,7 +820,7 @@ ActionListener, WindowListener, GameClientListener {
 				for (int cellX = 0; cellX < 10; cellX++) {
 					if (gameClient.getClientPlayer().getLocation().getX() == cellX
 							&& gameClient.getClientPlayer().getLocation()
-							.getY() == cellY) {
+									.getY() == cellY) {
 						g.setColor(Color.red);
 						g.fillRect(mapNowX, mapStartY, mapSquareSize,
 								mapSquareSize);
@@ -1193,7 +1183,7 @@ ActionListener, WindowListener, GameClientListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
 					newBoard.squares[i][j] = oldBoard.squares[oldBoard
-					                                          .getHeight() - (j + offset)][i];
+							.getHeight() - (j + offset)][i];
 				}
 			}
 			clientPlayer.getLocation().getRoom().board = newBoard;
@@ -1218,15 +1208,15 @@ ActionListener, WindowListener, GameClientListener {
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster){
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
 							rotate.turnMonsterImageLeft((Monster) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant){
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
 							rotate.turnPlantImageLeft((Plant) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence){
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence) {
 							rotate.turnFenceImageLeft((Fence) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
@@ -1242,7 +1232,7 @@ ActionListener, WindowListener, GameClientListener {
 				for (int j = 0; j < oldBoard.getHeight(); j++) {
 					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 					newBoard.squares[i][j] = oldBoard.squares[j][oldBoard
-					                                             .getWidth() - (i + offset)];
+							.getWidth() - (i + offset)];
 				}
 			}
 			clientPlayer.getLocation().getRoom().board = newBoard;
@@ -1268,15 +1258,15 @@ ActionListener, WindowListener, GameClientListener {
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster){
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
 							turnMonsterImageRight((Monster) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant){
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
 							rotate.turnPlantImageRight((Plant) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence){
+						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence) {
 							rotate.turnFenceImageRight((Fence) bs[cellY][cellX]
 									.getGameObjectOnSquare());
 						}
@@ -1304,7 +1294,7 @@ ActionListener, WindowListener, GameClientListener {
 
 		//check to take items
 		GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[loc.getY()][loc
-		                                                                      .getX()].getGameObjectOnSquare();
+				.getX()].getGameObjectOnSquare();
 
 		//pick up
 		//check whether the item bag is full
@@ -1345,7 +1335,7 @@ ActionListener, WindowListener, GameClientListener {
 				timer.schedule(tt, 2500);
 			} else if (clientPlayer.getPlayerLevel() == 3) {
 				panel.add(lvlupLabel_3);
-				shakeOffsetZero =-10;//let the character print higher. cuz lvl3 picture is bigger
+				shakeOffsetZero = -10;//let the character print higher. cuz lvl3 picture is bigger
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
 					@Override
@@ -1374,9 +1364,11 @@ ActionListener, WindowListener, GameClientListener {
 					if (((Door) ObjectOfLoc).id() == items.id()) {
 
 						Door theDoor = (Door) ObjectOfLoc;
-						clientPlayer.setLocation(new Location(gameClient.getGame().getRooms().get(theDoor.getNextRoom()), 9,0));
+						clientPlayer.setLocation(new Location(gameClient
+								.getGame().getRooms()
+								.get(theDoor.getNextRoom()), 9, 0));
 						clientPlayer.setDirection(Direction.FACE_LEFT);
-						
+
 						//Room nowRoom = clientPlayer.getLocation().getRoom();
 
 						/*if (nowRoom.level == theDoor.linkFrom) {
@@ -1402,7 +1394,6 @@ ActionListener, WindowListener, GameClientListener {
 		gameClient.sendPlayerMoveUpdateToServer();
 		repaint();
 	}
-
 
 	//	/**
 	//	 * let the monster go through
@@ -1485,10 +1476,10 @@ ActionListener, WindowListener, GameClientListener {
 		if (monster.getDirection() == Direction.FACE_LEFT) {
 			if ((cellX - 1) >= 0) {
 				//if add another kind of can't moved square, please also add it here(add)
-				if (square[cellY][cellX-1].getGameObjectOnSquare() == null
-						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX-1 && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY))) {
-					square[cellY][cellX-1].setGameObjectOnSquare(monster);
+				if (square[cellY][cellX - 1].getGameObjectOnSquare() == null
+						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX - 1 && gameClient
+								.getClientPlayer().getLocation().getY() == (cellY))) {
+					square[cellY][cellX - 1].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 					return true;
 				} else {
@@ -1499,10 +1490,10 @@ ActionListener, WindowListener, GameClientListener {
 			}
 		} else if (monster.getDirection() == Direction.FACE_RIGHT) {
 			if ((cellY + 1) < 10) {
-				if (square[cellY+1 ][cellX].getGameObjectOnSquare() == null
+				if (square[cellY + 1][cellX].getGameObjectOnSquare() == null
 						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY+1))) {
-					square[cellY+1][cellX].setGameObjectOnSquare(monster);
+								.getClientPlayer().getLocation().getY() == (cellY + 1))) {
+					square[cellY + 1][cellX].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 					return true;
 				} else {
@@ -1514,9 +1505,9 @@ ActionListener, WindowListener, GameClientListener {
 		} else if (monster.getDirection() == Direction.BACK_RIGHT) {
 			if ((cellX + 1) < 10) {
 				//if add another kind of can't moved square, please also add it here(add)
-				if ((square[cellY ][cellX+1].getGameObjectOnSquare() == null)
-						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX+1 && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY ))) {
+				if ((square[cellY][cellX + 1].getGameObjectOnSquare() == null)
+						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX + 1 && gameClient
+								.getClientPlayer().getLocation().getY() == (cellY))) {
 					square[cellY + 1][cellX].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 					return true;
@@ -1529,10 +1520,10 @@ ActionListener, WindowListener, GameClientListener {
 
 		} else if (monster.getDirection() == Direction.BACK_LEFT) {
 			if ((cellY - 1) >= 0) {
-				if (square[cellY-1 ][cellX].getGameObjectOnSquare() == null
+				if (square[cellY - 1][cellX].getGameObjectOnSquare() == null
 						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY-1))) {
-					square[cellY-1][cellX].setGameObjectOnSquare(monster);
+								.getClientPlayer().getLocation().getY() == (cellY - 1))) {
+					square[cellY - 1][cellX].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 					return true;
 				} else {
@@ -1557,20 +1548,20 @@ ActionListener, WindowListener, GameClientListener {
 			monster.setDirection(Direction.BACK_RIGHT);
 			if ((cellX + 1) < 10) {
 				//if add another kind of can't moved square, please also add it here(add)
-				if ((square[cellY ][cellX+1].getGameObjectOnSquare() == null)
-						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX+1 && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY ))) {
-					square[cellY ][cellX+1].setGameObjectOnSquare(monster);
+				if ((square[cellY][cellX + 1].getGameObjectOnSquare() == null)
+						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX + 1 && gameClient
+								.getClientPlayer().getLocation().getY() == (cellY))) {
+					square[cellY][cellX + 1].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 				}
 			}
 		} else if (monster.getDirection() == Direction.FACE_RIGHT) {
 			monster.setDirection(Direction.BACK_LEFT);
-			if ((cellY- 1) >= 0) {
-				if (square[cellY-1 ][cellX].getGameObjectOnSquare() == null
+			if ((cellY - 1) >= 0) {
+				if (square[cellY - 1][cellX].getGameObjectOnSquare() == null
 						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY-1))) {
-					square[cellY-1][cellX ].setGameObjectOnSquare(monster);
+								.getClientPlayer().getLocation().getY() == (cellY - 1))) {
+					square[cellY - 1][cellX].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 				}
 			}
@@ -1578,10 +1569,10 @@ ActionListener, WindowListener, GameClientListener {
 			monster.setDirection(Direction.FACE_LEFT);
 			if ((cellX - 1) >= 0) {
 				//if add another kind of can't moved square, please also add it here(add)
-				if (square[cellY ][cellX-1].getGameObjectOnSquare() == null
-						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX-1 && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY ))) {
-					square[cellY ][cellX-1].setGameObjectOnSquare(monster);
+				if (square[cellY][cellX - 1].getGameObjectOnSquare() == null
+						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX - 1 && gameClient
+								.getClientPlayer().getLocation().getY() == (cellY))) {
+					square[cellY][cellX - 1].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 				}
 			}
@@ -1589,9 +1580,9 @@ ActionListener, WindowListener, GameClientListener {
 			monster.setDirection(Direction.FACE_RIGHT);
 			if ((cellY + 1) < 10) {
 				if (square[cellY + 1][cellX].getGameObjectOnSquare() == null
-						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX  && gameClient
-						.getClientPlayer().getLocation().getY() == (cellY+1))) {
-					square[cellY+1][cellX ].setGameObjectOnSquare(monster);
+						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
+								.getClientPlayer().getLocation().getY() == (cellY + 1))) {
+					square[cellY + 1][cellX].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 				}
 			}
@@ -1788,7 +1779,7 @@ ActionListener, WindowListener, GameClientListener {
 		final Location loc = clientPlayer.getLocation();
 
 		GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[mosterLocation
-		                                                          .getY()][mosterLocation.getX()].getGameObjectOnSquare();
+				.getY()][mosterLocation.getX()].getGameObjectOnSquare();
 
 		JButton att = new JButton("Attack");
 		JButton run = new JButton("Run Away");
@@ -1872,7 +1863,7 @@ ActionListener, WindowListener, GameClientListener {
 		//		Location loc = clientPlayer.getLocation();
 
 		GameObject ObjectOfLoc = mosterLocation.getRoom().board.getSquares()[mosterLocation
-		                                                                     .getY()][mosterLocation.getX()].getGameObjectOnSquare();
+				.getY()][mosterLocation.getX()].getGameObjectOnSquare();
 		// COMPILER ERROR - HERE BELOW. Make sure monster still on object...
 		int damage = ((Monster) ObjectOfLoc).attack();
 
@@ -1899,7 +1890,7 @@ ActionListener, WindowListener, GameClientListener {
 
 			//removes the monster from the board
 			mosterLocation.getRoom().board.getSquares()[mosterLocation.getY()][mosterLocation
-			                                                                   .getX()].setGameObjectOnSquare(null);
+					.getX()].setGameObjectOnSquare(null);
 		} else {
 			JOptionPane.showMessageDialog(null,
 					"Monster is still alive, but now he only has "
@@ -1934,7 +1925,7 @@ ActionListener, WindowListener, GameClientListener {
 									+ " Make sure that you have created and\n"
 									+ " connected and the server and the\n"
 									+ "ports are unblocked.", "ERROR",
-									JOptionPane.ERROR_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 
 					frameState = FRAME_STATE.CREATED_FRAME;
 					return;
@@ -1959,10 +1950,10 @@ ActionListener, WindowListener, GameClientListener {
 
 					if (!gameClient.isUsernameAlreadyTaken(playerUsername)) {
 						JOptionPane
-						.showMessageDialog(
-								this,
-								"Username Already in use. Please enter another one!",
-								"ERROR", JOptionPane.ERROR_MESSAGE);
+								.showMessageDialog(
+										this,
+										"Username Already in use. Please enter another one!",
+										"ERROR", JOptionPane.ERROR_MESSAGE);
 						playerUsername = null;
 						continue;
 					}
