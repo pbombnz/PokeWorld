@@ -95,7 +95,8 @@ ActionListener, WindowListener, GameClientListener {
 	private Rotate rotate = new Rotate();
 
 	public int jumpOffset = 0;
-	public int shakeOffset = 0;//the player will keep shake when they are standing in one place
+	public int shakeOffsetZero = 0;//for changing the print postion on screen(some character picture is bigger, so need to be printed higher).the smaller the value is , the higher the character print
+	public int shakeOffset = shakeOffsetZero;//the player will keep shake when they are standing in one place
 	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
 	public final int SHAKE_TIMER_LIMIT = 200;// the shakeoffset will change when it reaches the timer limit
 
@@ -416,10 +417,10 @@ ActionListener, WindowListener, GameClientListener {
 	}
 
 	private void changeShakeLimit() {
-		if (shakeOffset == 0) {
-			shakeOffset = 5;
+		if (shakeOffset == shakeOffsetZero) {
+			shakeOffset = shakeOffsetZero+5;
 		} else {
-			shakeOffset = 0;
+			shakeOffset = shakeOffsetZero;
 		}
 	}
 
@@ -1344,6 +1345,7 @@ ActionListener, WindowListener, GameClientListener {
 				timer.schedule(tt, 2500);
 			} else if (clientPlayer.getPlayerLevel() == 3) {
 				panel.add(lvlupLabel_3);
+				shakeOffsetZero =-10;//let the character print higher. cuz lvl3 picture is bigger
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
 					@Override
