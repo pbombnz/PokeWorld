@@ -109,6 +109,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private long lastMovedtime = 0;//the time that monster  moved in last wonder around unit 
 	private boolean moved = false;
 	private List<Monster> monstersChanged = new ArrayList<Monster>();//monster's location already be changed in one turn in wander around
+	private boolean isFighting = false;//stop key control and monster moving when the player is level uping
+	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
 	//	public int monsterWalkAroundTimer = 0;//when the timer get timer limit, the monster will move
 	//	public final int MOSTER_WALK_TIMER_LIMIT = 10000;
 	///================================================
@@ -763,23 +765,25 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 									- (TILE_HEIGHT / 2), 50, 50, null);
 
 							//add "wander around"----------------------------------
-
-							int passSecond = (int) (runningTime / 1000);
-							//every unit second,monster move around
-							int unitSecond = 2;
-							if (runningTime != lastMovedtime) {
-								if (passSecond % unitSecond == 0) {
-									Monster monster = (Monster) bs[cellY][cellX]
-											.getGameObjectOnSquare();
-									if (!monstersChanged.contains(monster)) {
-										if (!letMonsterMove(monster, cellY,
-												cellX)) {
-											turnMonsterAroundAndMove(monster,
-													cellY, cellX);
+							//the monster will stop move when the player is fighting or level uping
+							if (!isFighting && !isLevelUpping) {
+								int passSecond = (int) (runningTime / 1000);
+								//every unit second,monster move around
+								int unitSecond = 2;
+								if (runningTime != lastMovedtime) {
+									if (passSecond % unitSecond == 0) {
+										Monster monster = (Monster) bs[cellY][cellX]
+												.getGameObjectOnSquare();
+										if (!monstersChanged.contains(monster)) {
+											if (!letMonsterMove(monster, cellY,
+													cellX)) {
+												turnMonsterAroundAndMove(
+														monster, cellY, cellX);
+											}
 										}
+										monstersChanged.add(monster);
+										moved = true;
 									}
-									monstersChanged.add(monster);
-									moved = true;
 								}
 							}
 							//update monstersChanged after print all monster in object list
@@ -1054,354 +1058,363 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		Player clientPlayer = gameClient.getClientPlayer();
-		// don't fire an event on backspace or delete
-		Location loc = clientPlayer.getLocation();
-		//for third view control
-		GameObject gg = loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-				.getGameObjectOnSquare();
-		if (e.getKeyCode() == KeyEvent.VK_W) {
-			//check whrther can move 
-			if (canMove(loc.getX(), loc.getY() - 1, clientPlayer)) {
-				//character will turn 1st if the character is not facing that side
-				if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
-					loc.moveNorth();
-				} else {
-					clientPlayer.setDirection(Direction.BACK_LEFT);
-					loc.moveNorth();
-				}
-			} else {
-				clientPlayer.setDirection(Direction.BACK_LEFT);
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_S) {
-			//check whrther can move 
-			if (canMove(loc.getX(), loc.getY() + 1, clientPlayer)) {
-				//character will turn 1st if the character is not facing that side
-				if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-					loc.moveSouth();//oo
-				} else {
-					clientPlayer.setDirection(Direction.FACE_RIGHT);
-					loc.moveSouth();//oo
-				}
-			} else {
-				clientPlayer.setDirection(Direction.FACE_RIGHT);
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			//check whrther can move 
-			if (canMove(loc.getX() - 1, loc.getY(), clientPlayer)) {
-				//character will turn 1st if the character is not facing that side
-				if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
-					loc.moveWest();
-				} else {
-					clientPlayer.setDirection(Direction.FACE_LEFT);
-					loc.moveWest();//oo
-				}
-			} else {
-				clientPlayer.setDirection(Direction.FACE_LEFT);
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_D) {
-			//check whrther can move 
-			if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
-				//character will turn 1st if the character is not facing that side
-				if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-					loc.moveEast();
-				} else {
-					clientPlayer.setDirection(Direction.BACK_RIGHT);
-					loc.moveEast();//oo
-				}
-			} else {
-				clientPlayer.setDirection(Direction.BACK_RIGHT);
-			}
-		}
-		//these are for 1st person view contrl
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-				//check whrther can move 
-				if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
-					loc.moveEast();
-				}
-			} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+		if (!isLevelUpping && !isFighting) {
+			Player clientPlayer = gameClient.getClientPlayer();
+			// don't fire an event on backspace or delete
+			Location loc = clientPlayer.getLocation();
+			//for third view control
+			GameObject gg = loc.getRoom().board.getSquares()[loc.getY()][loc
+					.getX()].getGameObjectOnSquare();
+			if (e.getKeyCode() == KeyEvent.VK_W) {
 				//check whrther can move 
 				if (canMove(loc.getX(), loc.getY() - 1, clientPlayer)) {
-					loc.moveNorth();
+					//character will turn 1st if the character is not facing that side
+					if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+						loc.moveNorth();
+					} else {
+						clientPlayer.setDirection(Direction.BACK_LEFT);
+						loc.moveNorth();
+					}
+				} else {
+					clientPlayer.setDirection(Direction.BACK_LEFT);
 				}
-			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+			} else if (e.getKeyCode() == KeyEvent.VK_S) {
+				//check whrther can move 
+				if (canMove(loc.getX(), loc.getY() + 1, clientPlayer)) {
+					//character will turn 1st if the character is not facing that side
+					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+						loc.moveSouth();//oo
+					} else {
+						clientPlayer.setDirection(Direction.FACE_RIGHT);
+						loc.moveSouth();//oo
+					}
+				} else {
+					clientPlayer.setDirection(Direction.FACE_RIGHT);
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 				//check whrther can move 
 				if (canMove(loc.getX() - 1, loc.getY(), clientPlayer)) {
-					loc.moveWest();
-				}
-			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-				if (canMove(loc.getX(), loc.getY() + 1, clientPlayer)) {
-					loc.moveSouth();
-				}
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
-				clientPlayer.setDirection(Direction.FACE_RIGHT);
-			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-				clientPlayer.setDirection(Direction.FACE_LEFT);
-			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
-				clientPlayer.setDirection(Direction.BACK_RIGHT);
-			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-				clientPlayer.setDirection(Direction.BACK_LEFT);
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
-				clientPlayer.setDirection(Direction.FACE_LEFT);
-			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-				clientPlayer.setDirection(Direction.BACK_LEFT);
-			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
-				clientPlayer.setDirection(Direction.FACE_RIGHT);
-			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-				clientPlayer.setDirection(Direction.BACK_RIGHT);
-			}
-			firstViewDirection = Direction.BACK_LEFT;
-			turnCounter -= 15;
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			//character will turn 1st if the character is not facing that side
-			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
-				clientPlayer.setDirection(Direction.BACK_RIGHT);
-			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-				clientPlayer.setDirection(Direction.FACE_RIGHT);
-			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
-				clientPlayer.setDirection(Direction.BACK_LEFT);
-			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
-				clientPlayer.setDirection(Direction.FACE_LEFT);
-			}
-			turnCounter += 15;
-			firstViewDirection = Direction.BACK_RIGHT;
-		}
-		// these are for changing game newDirection
-		else if (e.getKeyCode() == KeyEvent.VK_E) {
-			//turn the GUI to the left side
-			//change the board(change the location of objects)
-			Board oldBoard = clientPlayer.getLocation().getRoom().getBoard();
-			Board newBoard = new EmptyBoard();
-
-			for (int i = 0; i < oldBoard.getWidth(); i++) {
-				for (int j = 0; j < oldBoard.getHeight(); j++) {
-					int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
-					newBoard.squares[i][j] = oldBoard.squares[oldBoard
-							.getHeight() - (j + offset)][i];
-				}
-			}
-			clientPlayer.getLocation().getRoom().board = newBoard;
-			//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
-
-			//change the locations of player 
-			Location newloc = new Location();
-			newloc.setRoom(clientPlayer.getLocation().getRoom());
-
-			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
-
-			newloc.setX(oldBoard.getHeight()
-					- (clientPlayer.getLocation().getY() + offset));
-
-			newloc.setY(clientPlayer.getLocation().getX());
-			clientPlayer.setLocation(newloc);
-			//let the player image turn left 
-			rotate.turnPlayerImageLeft(clientPlayer);
-			//let monster turn
-			Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
-			BoardSquare[][] bs = r.board.getSquares();
-			for (int cellY = 0; cellY < 10; cellY++) {
-				for (int cellX = 9; cellX >= 0; cellX--) {
-					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
-							rotate.turnMonsterImageLeft((Monster) bs[cellY][cellX]
-									.getGameObjectOnSquare());
-						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
-							rotate.turnPlantImageLeft((Plant) bs[cellY][cellX]
-									.getGameObjectOnSquare());
-						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence) {
-							rotate.turnFenceImageLeft((Fence) bs[cellY][cellX]
-									.getGameObjectOnSquare());
-						}
-					}
-				}
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_Q) {
-			//turn the gui to right side
-			//change the board(change the locations of object)
-			Board newBoard = new EmptyBoard();
-			Board oldBoard = clientPlayer.getLocation().getRoom().getBoard();
-			for (int i = 0; i < oldBoard.getWidth(); i++) {
-				for (int j = 0; j < oldBoard.getHeight(); j++) {
-					int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
-					newBoard.squares[i][j] = oldBoard.squares[j][oldBoard
-							.getWidth() - (i + offset)];
-				}
-			}
-			clientPlayer.getLocation().getRoom().board = newBoard;
-			//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
-
-			//change the locations of player 
-			Location newloc = new Location();
-			newloc.setRoom(clientPlayer.getLocation().getRoom());
-
-			int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
-
-			newloc.setX(clientPlayer.getLocation().getY());
-
-			newloc.setY(oldBoard.getWidth()
-					- (clientPlayer.getLocation().getX() + offset));
-
-			clientPlayer.setLocation(newloc);
-			//let the player image turn left 
-			rotate.turnPlayerImageRight(clientPlayer);
-			//let monster turn
-			Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
-			BoardSquare[][] bs = r.board.getSquares();
-			for (int cellY = 0; cellY < 10; cellY++) {
-				for (int cellX = 9; cellX >= 0; cellX--) {
-					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
-							turnMonsterImageRight((Monster) bs[cellY][cellX]
-									.getGameObjectOnSquare());
-						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
-							rotate.turnPlantImageRight((Plant) bs[cellY][cellX]
-									.getGameObjectOnSquare());
-						}
-						if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence) {
-							rotate.turnFenceImageRight((Fence) bs[cellY][cellX]
-									.getGameObjectOnSquare());
-						}
-					}
-				}
-			}
-
-		}
-		//allows player to jump on the spot
-		else if (e.getKeyCode() == KeyEvent.VK_J) {
-			isJumping = false;
-			//			jumpOffset = 0;
-			//			jumpOffsetFirstView = 0;
-		}
-		if (loc.getY() < 0) {
-			loc.moveSouth();
-		} else if (loc.getY() == loc.getRoom().board.getHeight()) {
-			loc.moveNorth();
-		}
-		if (loc.getX() < 0) {
-			loc.moveEast();
-		} else if (loc.getX() == loc.getRoom().board.getWidth()) {
-			loc.moveWest();
-		}
-
-		//check to take items
-		GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[loc.getY()][loc
-				.getX()].getGameObjectOnSquare();
-
-		//pick up
-		//check whether the item bag is full
-		if (clientPlayer.getInventory().size() < clientPlayer.getMaxItems()) {
-			//If you find a key, adds it to the inventory and removes from the board
-			if (ObjectOfLoc instanceof Key) {
-				clientPlayer.addToInventory(((Key) ObjectOfLoc));
-				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-						.setGameObjectOnSquare(null);
-			}
-			//If you find a goodPotion, increases your health and removes it from the board
-			if (ObjectOfLoc instanceof GoodPotion) {
-				clientPlayer.setHealth(clientPlayer.getHealth()
-						+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
-				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-						.setGameObjectOnSquare(null);
-			}
-		}
-		//If you find a RareCandy, increases your level and removes it from the board
-		if (ObjectOfLoc instanceof RareCandy) {
-			if (clientPlayer.getPlayerLevel() == 1
-					|| clientPlayer.getPlayerLevel() == 2) {
-				clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
-						+ ((RareCandy) ObjectOfLoc).level());
-				//=================================================
-				//draw gif here
-				if (clientPlayer.getPlayerLevel() == 2) {
-					shakeOffsetZero = LVL2_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
-					panel.add(lvlupLabel_2);
-					final Timer timer = new Timer();
-					TimerTask tt = new TimerTask() {
-						@Override
-						public void run() {
-							timer.cancel();
-							//here is the methods run after timer here 
-							///=======================================
-							panel.remove(lvlupLabel_2);
-							//========================================
-						}
-					};
-					timer.schedule(tt, 2500);
-				} else if (clientPlayer.getPlayerLevel() == 3) {
-					panel.add(lvlupLabel_3);
-					shakeOffsetZero = LVL3_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
-					final Timer timer = new Timer();
-					TimerTask tt = new TimerTask() {
-						@Override
-						public void run() {
-							timer.cancel();
-							//here is the methods run after timer here 
-							///=======================================
-							panel.remove(lvlupLabel_3);
-							//========================================
-						}
-					};
-					timer.schedule(tt, 4300);
-				}
-				//================================================
-				clientPlayer.setAttack(clientPlayer.getAttack()
-						* clientPlayer.getPlayerLevel());
-				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-						.setGameObjectOnSquare(null);
-			}else{
-				JOptionPane.showMessageDialog(getContentPane(),
-						"You are already max evolutionary level(level 3).", "Message", JOptionPane.INFORMATION_MESSAGE);
-			}
-		}
-		//If you find a Door, checks your inventory for a Key
-		//If you have a Key, compares the Key ID and Door ID for a match
-		//If they match, allows you to enter a different room
-		if (ObjectOfLoc instanceof Door) {
-			for (Item items : clientPlayer.getInventory()) {
-				if (items instanceof Key) {
-					if (((Door) ObjectOfLoc).id() == items.id()) {
-
-						Door theDoor = (Door) ObjectOfLoc;
-						clientPlayer.setLocation(new Location(gameClient
-								.getGame().getRooms()
-								.get(theDoor.getNextRoom()), 9, 0));
+					//character will turn 1st if the character is not facing that side
+					if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+						loc.moveWest();
+					} else {
 						clientPlayer.setDirection(Direction.FACE_LEFT);
+						loc.moveWest();//oo
+					}
+				} else {
+					clientPlayer.setDirection(Direction.FACE_LEFT);
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_D) {
+				//check whrther can move 
+				if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
+					//character will turn 1st if the character is not facing that side
+					if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+						loc.moveEast();
+					} else {
+						clientPlayer.setDirection(Direction.BACK_RIGHT);
+						loc.moveEast();//oo
+					}
+				} else {
+					clientPlayer.setDirection(Direction.BACK_RIGHT);
+				}
+			}
+			//these are for 1st person view contrl
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+					//check whrther can move 
+					if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
+						loc.moveEast();
+					}
+				} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+					//check whrther can move 
+					if (canMove(loc.getX(), loc.getY() - 1, clientPlayer)) {
+						loc.moveNorth();
+					}
+				} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+					//check whrther can move 
+					if (canMove(loc.getX() - 1, loc.getY(), clientPlayer)) {
+						loc.moveWest();
+					}
+				} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+					if (canMove(loc.getX(), loc.getY() + 1, clientPlayer)) {
+						loc.moveSouth();
+					}
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+					clientPlayer.setDirection(Direction.FACE_RIGHT);
+				} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+					clientPlayer.setDirection(Direction.FACE_LEFT);
+				} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+					clientPlayer.setDirection(Direction.BACK_RIGHT);
+				} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+					clientPlayer.setDirection(Direction.BACK_LEFT);
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+					clientPlayer.setDirection(Direction.FACE_LEFT);
+				} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+					clientPlayer.setDirection(Direction.BACK_LEFT);
+				} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+					clientPlayer.setDirection(Direction.FACE_RIGHT);
+				} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+					clientPlayer.setDirection(Direction.BACK_RIGHT);
+				}
+				firstViewDirection = Direction.BACK_LEFT;
+				turnCounter -= 15;
+			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				//character will turn 1st if the character is not facing that side
+				if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+					clientPlayer.setDirection(Direction.BACK_RIGHT);
+				} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+					clientPlayer.setDirection(Direction.FACE_RIGHT);
+				} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+					clientPlayer.setDirection(Direction.BACK_LEFT);
+				} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+					clientPlayer.setDirection(Direction.FACE_LEFT);
+				}
+				turnCounter += 15;
+				firstViewDirection = Direction.BACK_RIGHT;
+			}
+			// these are for changing game newDirection
+			else if (e.getKeyCode() == KeyEvent.VK_E) {
+				//turn the GUI to the left side
+				//change the board(change the location of objects)
+				Board oldBoard = clientPlayer.getLocation().getRoom()
+						.getBoard();
+				Board newBoard = new EmptyBoard();
 
-						//Room nowRoom = clientPlayer.getLocation().getRoom();
+				for (int i = 0; i < oldBoard.getWidth(); i++) {
+					for (int j = 0; j < oldBoard.getHeight(); j++) {
+						int offset = 1;//because the start position is (0,0) not(1,1), so there is an offset
+						newBoard.squares[i][j] = oldBoard.squares[oldBoard
+								.getHeight() - (j + offset)][i];
+					}
+				}
+				clientPlayer.getLocation().getRoom().board = newBoard;
+				//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
 
-						/*if (nowRoom.level == theDoor.linkFrom) {
-							//for change room 
-							//1. i change change board
-							//2. i change the location of player
-							//GameLauncher.ROOMINDEX = theDoor.linkTo - 1;
-							clientPlayer.getLocation().setRoom();
+				//change the locations of player 
+				Location newloc = new Location();
+				newloc.setRoom(clientPlayer.getLocation().getRoom());
 
-						} else if (nowRoom.level == theDoor.linkFrom + 1) {
-							System.out.println("this door goes to level 1");
-							GameLauncher.ROOMINDEX = theDoor.linkTo - 2;
-							clientPlayer.getLocation().setRoom(
-									gameClient.getGame().getRooms()
-									.get(GameLauncher.ROOMINDEX));
+				int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
 
-						}*/
+				newloc.setX(oldBoard.getHeight()
+						- (clientPlayer.getLocation().getY() + offset));
+
+				newloc.setY(clientPlayer.getLocation().getX());
+				clientPlayer.setLocation(newloc);
+				//let the player image turn left 
+				rotate.turnPlayerImageLeft(clientPlayer);
+				//let monster turn
+				Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
+				BoardSquare[][] bs = r.board.getSquares();
+				for (int cellY = 0; cellY < 10; cellY++) {
+					for (int cellX = 9; cellX >= 0; cellX--) {
+						if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
+							if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
+								rotate.turnMonsterImageLeft((Monster) bs[cellY][cellX]
+										.getGameObjectOnSquare());
+							}
+							if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
+								rotate.turnPlantImageLeft((Plant) bs[cellY][cellX]
+										.getGameObjectOnSquare());
+							}
+							if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence) {
+								rotate.turnFenceImageLeft((Fence) bs[cellY][cellX]
+										.getGameObjectOnSquare());
+							}
+						}
+					}
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_Q) {
+				//turn the gui to right side
+				//change the board(change the locations of object)
+				Board newBoard = new EmptyBoard();
+				Board oldBoard = clientPlayer.getLocation().getRoom()
+						.getBoard();
+				for (int i = 0; i < oldBoard.getWidth(); i++) {
+					for (int j = 0; j < oldBoard.getHeight(); j++) {
+						int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
+						newBoard.squares[i][j] = oldBoard.squares[j][oldBoard
+								.getWidth() - (i + offset)];
+					}
+				}
+				clientPlayer.getLocation().getRoom().board = newBoard;
+				//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
+
+				//change the locations of player 
+				Location newloc = new Location();
+				newloc.setRoom(clientPlayer.getLocation().getRoom());
+
+				int offset = 1;//because the start position is (0,0) not(1,1), so there is a offset
+
+				newloc.setX(clientPlayer.getLocation().getY());
+
+				newloc.setY(oldBoard.getWidth()
+						- (clientPlayer.getLocation().getX() + offset));
+
+				clientPlayer.setLocation(newloc);
+				//let the player image turn left 
+				rotate.turnPlayerImageRight(clientPlayer);
+				//let monster turn
+				Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
+				BoardSquare[][] bs = r.board.getSquares();
+				for (int cellY = 0; cellY < 10; cellY++) {
+					for (int cellX = 9; cellX >= 0; cellX--) {
+						if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
+							if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
+								turnMonsterImageRight((Monster) bs[cellY][cellX]
+										.getGameObjectOnSquare());
+							}
+							if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
+								rotate.turnPlantImageRight((Plant) bs[cellY][cellX]
+										.getGameObjectOnSquare());
+							}
+							if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Fence) {
+								rotate.turnFenceImageRight((Fence) bs[cellY][cellX]
+										.getGameObjectOnSquare());
+							}
+						}
+					}
+				}
+
+			}
+			//allows player to jump on the spot
+			else if (e.getKeyCode() == KeyEvent.VK_J) {
+				isJumping = false;
+				//			jumpOffset = 0;
+				//			jumpOffsetFirstView = 0;
+			}
+			if (loc.getY() < 0) {
+				loc.moveSouth();
+			} else if (loc.getY() == loc.getRoom().board.getHeight()) {
+				loc.moveNorth();
+			}
+			if (loc.getX() < 0) {
+				loc.moveEast();
+			} else if (loc.getX() == loc.getRoom().board.getWidth()) {
+				loc.moveWest();
+			}
+
+			//check to take items
+			GameObject ObjectOfLoc = loc.getRoom().board.getSquares()[loc
+					.getY()][loc.getX()].getGameObjectOnSquare();
+
+			//pick up
+			//check whether the item bag is full
+			if (clientPlayer.getInventory().size() < clientPlayer.getMaxItems()) {
+				//If you find a key, adds it to the inventory and removes from the board
+				if (ObjectOfLoc instanceof Key) {
+					clientPlayer.addToInventory(((Key) ObjectOfLoc));
+					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+							.setGameObjectOnSquare(null);
+				}
+				//If you find a goodPotion, increases your health and removes it from the board
+				if (ObjectOfLoc instanceof GoodPotion) {
+					clientPlayer.setHealth(clientPlayer.getHealth()
+							+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
+					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+							.setGameObjectOnSquare(null);
+				}
+			}
+			//If you find a RareCandy, increases your level and removes it from the board
+			if (ObjectOfLoc instanceof RareCandy) {
+				if (clientPlayer.getPlayerLevel() == 1
+						|| clientPlayer.getPlayerLevel() == 2) {
+					clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
+							+ ((RareCandy) ObjectOfLoc).level());
+					//=================================================
+					//draw gif here
+					if (clientPlayer.getPlayerLevel() == 2) {
+						shakeOffsetZero = LVL2_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
+						panel.add(lvlupLabel_2);
+						isLevelUpping=true;//stop key control and monster moving when the player is level uping
+						final Timer timer = new Timer();
+						TimerTask tt = new TimerTask() {
+							@Override
+							public void run() {
+								timer.cancel();
+								//here is the methods run after timer here 
+								///=======================================
+								panel.remove(lvlupLabel_2);
+								isLevelUpping =false;//restore key control and monster moving after the player level up
+								//========================================
+							}
+						};
+						timer.schedule(tt, 2500);
+					} else if (clientPlayer.getPlayerLevel() == 3) {
+						panel.add(lvlupLabel_3);
+						shakeOffsetZero = LVL3_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
+						final Timer timer = new Timer();
+						isLevelUpping = true;//stop key control and monster moving when the player is level uping
+						TimerTask tt = new TimerTask() {
+							@Override
+							public void run() {
+								timer.cancel();
+								//here is the methods run after timer here 
+								///=======================================
+								panel.remove(lvlupLabel_3);
+								isLevelUpping =false;//restore key control and monster moving after the player level up
+								//========================================
+							}
+						};
+						timer.schedule(tt, 4300);
+					}
+					//================================================
+					clientPlayer.setAttack(clientPlayer.getAttack()
+							* clientPlayer.getPlayerLevel());
+					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+							.setGameObjectOnSquare(null);
+				} else {
+					JOptionPane.showMessageDialog(getContentPane(),
+							"You are already max evolutionary level(level 3).",
+							"Message", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+			//If you find a Door, checks your inventory for a Key
+			//If you have a Key, compares the Key ID and Door ID for a match
+			//If they match, allows you to enter a different room
+			if (ObjectOfLoc instanceof Door) {
+				for (Item items : clientPlayer.getInventory()) {
+					if (items instanceof Key) {
+						if (((Door) ObjectOfLoc).id() == items.id()) {
+
+							Door theDoor = (Door) ObjectOfLoc;
+							clientPlayer.setLocation(new Location(gameClient
+									.getGame().getRooms()
+									.get(theDoor.getNextRoom()), 9, 0));
+							clientPlayer.setDirection(Direction.FACE_LEFT);
+
+							//Room nowRoom = clientPlayer.getLocation().getRoom();
+
+							/*if (nowRoom.level == theDoor.linkFrom) {
+								//for change room 
+								//1. i change change board
+								//2. i change the location of player
+								//GameLauncher.ROOMINDEX = theDoor.linkTo - 1;
+								clientPlayer.getLocation().setRoom();
+
+							} else if (nowRoom.level == theDoor.linkFrom + 1) {
+								System.out.println("this door goes to level 1");
+								GameLauncher.ROOMINDEX = theDoor.linkTo - 2;
+								clientPlayer.getLocation().setRoom(
+										gameClient.getGame().getRooms()
+										.get(GameLauncher.ROOMINDEX));
+
+							}*/
+						}
 					}
 				}
 			}
-		}
 
-		gameClient.sendPlayerMoveUpdateToServer();
-		repaint();
+			gameClient.sendPlayerMoveUpdateToServer();
+			repaint();
+		}
 	}
 
 	/**
@@ -1661,6 +1674,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	 *@author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
 	public void fightDialog(final Location mosterLocation) {
+		isFighting = true;
 		Player clientPlayer = gameClient.getClientPlayer();
 		final Location loc = clientPlayer.getLocation();
 
@@ -1698,6 +1712,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fightBox.dispose();
+				isFighting =false;
 			}
 		});
 
@@ -1782,6 +1797,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					"Monster is still alive, but now he only has "
 							+ ((Monster) ObjectOfLoc).getHealth() + "health");
 		}
+		isFighting = false;
 	}
 
 	/**
