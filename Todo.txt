@@ -1,0 +1,33 @@
+code:
+
+- rotate compass
+
+- change values/effects of potions, rare candy to make game more difficult/tactical
+
+- make sure you cant walk into fences and other players 
+
+- comment, author, seperate classes and tidy up (last)
+
+bugs:
+
+- Fix door locations, when moving from one room to another, we spawn at the top-right (0,9)
+corner of the board instead of the door we entered. 
+
+simple UI stuff:
+
+- move gifs to the side or corner of the screen instead of the middle
+
+- spread out the UI, too cramped and overlapping
+
+- move pop-up dialogs to corner or side
+
+- make character select box smaller
+
+
+Documentation:
+
+- finish up UML once we tidy code up and seperate classes and methods
+
+- add loading and saving into UML when completed
+
+- CRC cards

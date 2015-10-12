@@ -16,7 +16,7 @@ import javax.swing.ImageIcon;
 public class Fence extends SceneObjects{
 
 	private static final long serialVersionUID = -5093601402600649692L;
-	public Direction direction = Direction.FACE_RIGHT;
+	public Direction direction = Direction.FACE_LEFT;
 	
 	public Fence(){
 	}	
