@@ -756,7 +756,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY, 20, 20, null);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
-							
+
 							g.drawImage(bs[cellY][cellX]
 									.getGameObjectOnSquare().getSpriteImage()
 									.getImage(), tileX, tileY
@@ -1317,46 +1317,52 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		//If you find a RareCandy, increases your level and removes it from the board
 		if (ObjectOfLoc instanceof RareCandy) {
-			clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
-					+ ((RareCandy) ObjectOfLoc).level());
-			//=================================================
-			//draw gif here
-			if (clientPlayer.getPlayerLevel() == 2) {
-				shakeOffsetZero = LVL2_PRINT_OFFSET ;//let the character print higher. cuz lvl3 picture is bigger
-				panel.add(lvlupLabel_2);
-				final Timer timer = new Timer();
-				TimerTask tt = new TimerTask() {
-					@Override
-					public void run() {
-						timer.cancel();
-						//here is the methods run after timer here 
-						///=======================================
-						panel.remove(lvlupLabel_2);
-						//========================================
-					}
-				};
-				timer.schedule(tt, 2500);
-			} else if (clientPlayer.getPlayerLevel() == 3) {
-				panel.add(lvlupLabel_3);
-				shakeOffsetZero = LVL3_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
-				final Timer timer = new Timer();
-				TimerTask tt = new TimerTask() {
-					@Override
-					public void run() {
-						timer.cancel();
-						//here is the methods run after timer here 
-						///=======================================
-						panel.remove(lvlupLabel_3);
-						//========================================
-					}
-				};
-				timer.schedule(tt, 4300);
+			if (clientPlayer.getPlayerLevel() == 1
+					|| clientPlayer.getPlayerLevel() == 2) {
+				clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
+						+ ((RareCandy) ObjectOfLoc).level());
+				//=================================================
+				//draw gif here
+				if (clientPlayer.getPlayerLevel() == 2) {
+					shakeOffsetZero = LVL2_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
+					panel.add(lvlupLabel_2);
+					final Timer timer = new Timer();
+					TimerTask tt = new TimerTask() {
+						@Override
+						public void run() {
+							timer.cancel();
+							//here is the methods run after timer here 
+							///=======================================
+							panel.remove(lvlupLabel_2);
+							//========================================
+						}
+					};
+					timer.schedule(tt, 2500);
+				} else if (clientPlayer.getPlayerLevel() == 3) {
+					panel.add(lvlupLabel_3);
+					shakeOffsetZero = LVL3_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
+					final Timer timer = new Timer();
+					TimerTask tt = new TimerTask() {
+						@Override
+						public void run() {
+							timer.cancel();
+							//here is the methods run after timer here 
+							///=======================================
+							panel.remove(lvlupLabel_3);
+							//========================================
+						}
+					};
+					timer.schedule(tt, 4300);
+				}
+				//================================================
+				clientPlayer.setAttack(clientPlayer.getAttack()
+						* clientPlayer.getPlayerLevel());
+				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+						.setGameObjectOnSquare(null);
+			}else{
+				JOptionPane.showMessageDialog(getContentPane(),
+						"You are already max evolutionary level(level 3).", "Message", JOptionPane.INFORMATION_MESSAGE);
 			}
-			//================================================
-			clientPlayer.setAttack(clientPlayer.getAttack()
-					* clientPlayer.getPlayerLevel());
-			loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-					.setGameObjectOnSquare(null);
 		}
 		//If you find a Door, checks your inventory for a Key
 		//If you have a Key, compares the Key ID and Door ID for a match
