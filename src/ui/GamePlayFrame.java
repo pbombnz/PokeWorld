@@ -78,6 +78,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public int jumpOffset = 0;
 	public int shakeOffsetZero = 0;//for changing the print postion on screen(some character picture is bigger, so need to be printed higher).the smaller the value is , the higher the character print
 	public int shakeOffset = shakeOffsetZero;//the player will keep shake when they are standing in one place
+	private final int LVL2_PRINT_OFFSET = -5;
+	private final int LVL3_PRINT_OFFSET = -10;
 	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
 	public final int SHAKE_TIMER_LIMIT = 200;// the shakeoffset will change when it reaches the timer limit
 
@@ -1320,7 +1322,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//=================================================
 			//draw gif here
 			if (clientPlayer.getPlayerLevel() == 2) {
-				shakeOffsetZero = -5;//let the character print higher. cuz lvl3 picture is bigger
+				shakeOffsetZero = LVL2_PRINT_OFFSET ;//let the character print higher. cuz lvl3 picture is bigger
 				panel.add(lvlupLabel_2);
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
@@ -1336,7 +1338,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				timer.schedule(tt, 2500);
 			} else if (clientPlayer.getPlayerLevel() == 3) {
 				panel.add(lvlupLabel_3);
-				shakeOffsetZero = -10;//let the character print higher. cuz lvl3 picture is bigger
+				shakeOffsetZero = LVL3_PRINT_OFFSET;//let the character print higher. cuz lvl3 picture is bigger
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
 					@Override
