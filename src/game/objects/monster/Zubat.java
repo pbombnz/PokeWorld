@@ -23,7 +23,7 @@ public class Zubat extends Monster {
 	public Direction direction = Direction.FACE_RIGHT;
 
 	public Zubat() {
-		spriteImage = GameObject.ZUBAT;
+		spriteImage = GameObject.ZUBATFL;
 	}
 
 	public Zubat(int attack, int health) {
@@ -59,7 +59,15 @@ public class Zubat extends Monster {
 
 	@Override
 	public ImageIcon getSpriteImage() {
-		return spriteImage;
+		if(direction==Direction.BACK_LEFT){
+			return GameObject.ZUBATBL;
+		}else if(direction==Direction.BACK_RIGHT){
+			return GameObject.ZUBATBR;
+		}else if(direction==Direction.FACE_LEFT){
+			return GameObject.ZUBATFL;
+		}else {
+			return GameObject.ZUBATFR;
+		}
 	}
 
 	public void setDirection(Direction direction) {

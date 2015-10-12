@@ -21,11 +21,11 @@ public class Player implements Serializable {
 	
 	public static final int HEALTH = 10;
 	public static final int ATTACK = 10;
-
+	public static final int MAX_PLAYER_LEVEL = 3;
 	private Avatar avatar;
 	
-	private final int id;
-	private final String name;
+	private int id;
+	private String name;
 	
 	private int health;
 	private int attack;
@@ -42,8 +42,6 @@ public class Player implements Serializable {
 	 * No-Args Constructor for Networking Serialization (DO NOT USE)
 	 */
 	public Player() {
-		this.id = -1;
-		this.name = null;
 	}
 	
 	/**
@@ -55,7 +53,6 @@ public class Player implements Serializable {
 		this.id = id;
 		this.name = name;
 		this.avatar = avatar;
-		
 		this.attack = ATTACK;
 		this.health = HEALTH;
 	}
@@ -121,6 +118,14 @@ public class Player implements Serializable {
 
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getName() {

@@ -58,7 +58,7 @@ public class Board1 extends Board{
 									this.squares[i][j] = new BoardSquare(new Key(1));
 								}
 								if (i == 7 && j == 2) {
-									this.squares[i][j] = new BoardSquare(new Key(1));
+									this.squares[i][j] = new BoardSquare(new Fence());
 								}if (i == 7 && j == 1) {
 									this.squares[i][j] = new BoardSquare(new Key(1));
 								}if (i == 7 && j == 0) {
@@ -71,7 +71,7 @@ public class Board1 extends Board{
 									this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 								}
 								if (i == 0 && j == 0) {
-									this.squares[i][j] = new BoardSquare(new Door(1,1,2));
+									this.squares[i][j] = new BoardSquare(new Door(1,1));
 								}
 								if (i == 8 && j == 1) {
 									this.squares[i][j] = new BoardSquare(new Rattata(10, 10));

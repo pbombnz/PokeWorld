@@ -21,7 +21,7 @@ public class Rhydon extends Monster{
 	public Direction direction = Direction.FACE_RIGHT;
 
 	public Rhydon(){
-		spriteImage=GameObject.RHYDON;
+		spriteImage=GameObject.RHYDONFL;
 	}
 	
 	public Rhydon(int attack, int health){
@@ -57,7 +57,15 @@ public class Rhydon extends Monster{
 	
 	@Override
 	public ImageIcon getSpriteImage() {
-		return spriteImage;
+		if(direction==Direction.BACK_LEFT){
+			return GameObject.RHYDONBL;
+		}else if(direction==Direction.BACK_RIGHT){
+			return GameObject.RHYDONBR;
+		}else if(direction==Direction.FACE_LEFT){
+			return GameObject.RHYDONFL;
+		}else {
+			return GameObject.RHYDONFR;
+		}
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;

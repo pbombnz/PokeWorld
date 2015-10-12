@@ -1,5 +1,7 @@
 package network;
 
+import java.util.ArrayList;
+
 import game.Location;
 import game.Player;
 import game.Direction;
@@ -23,7 +25,16 @@ public class Packets {
 	
 	public static class ServerQuit {
 	}	
+
+	public static class ServerRestart_LoadedGameFromFile {
+	}
 	
+	public static class ClientOnChoosePlayer {
+	}
+	
+	public static class ClientOnChoosePlayer_Response {
+		ArrayList<Player> savedFilePlayers;
+	}
 	/**
 	 * USED: Client -> Server
 	 *
