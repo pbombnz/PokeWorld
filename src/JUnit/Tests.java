@@ -208,13 +208,73 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
-
+	@Test
+	public void testPlayerEquals1() throws IOException {
+		try {
+			createPlayer();
+			Player p = new Player(-1, "Donald", new Avatar());
+			this.p.setAvatar(list.get(0));
+			p.setAvatar(list.get(0));
+			assertTrue(p.equals(this.p));
+		} catch (IllegalArgumentException e) {
+		}
+	}
+	@Test
+	public void testPlayerEquals2() throws IOException {
+		try {
+			createPlayer();
+			Player p = new Player(-1, "Donald", new Avatar());
+			this.p.setAvatar(list.get(1));
+			p.setAvatar(list.get(1));
+			assertTrue(p.equals(this.p));
+		} catch (IllegalArgumentException e) {
+		}
+	}
+	@Test
+	public void testPlayerEquals3() throws IOException {
+		try {
+			createPlayer();
+			Player p = new Player(-1, "Donald", new Avatar());
+			this.p.setAvatar(list.get(2));
+			p.setAvatar(list.get(2));
+			assertTrue(p.equals(this.p));
+		} catch (IllegalArgumentException e) {
+		}
+	}
+	@Test
+	public void testPlayerEquals4() throws IOException {
+		try {
+			createPlayer();
+			Player p = new Player(-1, "Prashant", new Avatar());
+			assertFalse(p.equals(this.p));
+		} catch (IllegalArgumentException e) {
+		}
+	}
+	@Test
+	public void testPlayerEquals5() throws IOException {
+		try {
+			createPlayer();
+			Player p = new Player(-2, "Donald", new Avatar());
+			assertFalse(p.equals(this.p));
+		} catch (IllegalArgumentException e) {
+		}
+	}
 	
-	
+	@Test
+	public void testPlayerEquals6() throws IOException {
+		try {
+			createPlayer();
+			Player p = new Player(-1, null, new Avatar());
+			this.p.setAvatar(list.get(2));
+			p.setAvatar(list.get(0));
+			assertFalse(p.equals(this.p));
+		} catch (IllegalArgumentException e) {
+		}
+	}
 	
 	public void createPlayer() throws FileNotFoundException {
 		this.p = new Player(-1, "Donald", new Avatar());
-		this.list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		this.list = (ArrayList<Avatar>) this.p.getAvatar().getAllAvatars();
 	}
 
 }
