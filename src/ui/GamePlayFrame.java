@@ -1162,8 +1162,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		if (x > 9 || x < 0 || y < 0 || y > 9) {
 			return false;
 		}
-		if (sq[y][x].getGameObjectOnSquare() instanceof Tree) {
+		if (sq[y][x].getGameObjectOnSquare() instanceof Tree
+				|| sq[y][x].getGameObjectOnSquare() instanceof Fence) {
 			return false;
+		}
+		for (Player otherPlayer : gameClient.getGame().getPlayers()) {
+			Location otherLoc = otherPlayer.getLocation();
+			if (otherLoc.getRoom()==player.getLocation().getRoom()&&otherLoc.getX()==x&&otherLoc.getY()==y) {
+				return false;
+			}
 		}
 		//change here if add new kinds of Monster
 		if (sq[y][x].getGameObjectOnSquare() instanceof Mewtwo

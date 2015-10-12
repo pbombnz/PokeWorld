@@ -49,7 +49,7 @@ public interface GameObject extends Serializable {
 	public static ImageIcon RHYDONFL = new ImageIcon("./sprites/monster/Rhydon/faceleft.png");
 	public static ImageIcon RHYDONBR = new ImageIcon("./sprites/monster/Rhydon/backright.png");
 	public static ImageIcon RHYDONBL = new ImageIcon("./sprites/monster/Rhydon/backleft.png");
-	public static ImageIcon RHYDONFR = new ImageIcon("./sprites/monster/Rhydon/frontright.png");
+	public static ImageIcon RHYDONFR = new ImageIcon("./sprites/monster/Rhydon/faceright.png");
 	
 	public static ImageIcon ZUBATFL = new ImageIcon("./sprites/monster/Zubat/faceleft.png");
 	public static ImageIcon ZUBATBR = new ImageIcon("./sprites/monster/Zubat/backright.png");
