@@ -1320,6 +1320,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//=================================================
 			//draw gif here
 			if (clientPlayer.getPlayerLevel() == 2) {
+				shakeOffsetZero = -5;//let the character print higher. cuz lvl3 picture is bigger
 				panel.add(lvlupLabel_2);
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
@@ -1394,77 +1395,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		gameClient.sendPlayerMoveUpdateToServer();
 		repaint();
 	}
-
-	//	/**
-	//	 * let the monster go through
-	//	 * @param monster
-	//	 */
-	//	public boolean letMonsterMove(Monster monster, int cellY, int cellX) {
-	//		BoardSquare[][] square = gameClient.getClientPlayer().getLocation()
-	//				.getRoom().getBoard().getSquares();
-	//		if (monster.getDirection() == Direction.FACE_LEFT) {
-	//			if ((cellY - 1) >= 0) {
-	//				//if add another kind of can't moved square, please also add it here(add)
-	//				if (square[cellY- 1][cellX-1].getGameObjectOnSquare() == null
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY - 1))) {
-	//					square[cellY - 1][cellX].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//					return true;
-	//				} else {
-	//					return false;
-	//				}
-	//			} else {
-	//				return false;
-	//			}
-	//		} else if (monster.getDirection() == Direction.FACE_RIGHT) {
-	//			if ((cellX + 1) < 10) {
-	//				if (square[cellY ][cellX+1].getGameObjectOnSquare() == null
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX + 1 && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY))) {
-	//					square[cellY][cellX + 1].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//					return true;
-	//				} else {
-	//					return false;
-	//				}
-	//			} else {
-	//				return false;
-	//			}
-	//		} else if (monster.getDirection() == Direction.BACK_RIGHT) {
-	//			if ((cellY + 1) < 10) {
-	//				//if add another kind of can't moved square, please also add it here(add)
-	//				if ((square[cellY + 1][cellX].getGameObjectOnSquare() == null)
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY + 1))) {
-	//					square[cellY + 1][cellX].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//					return true;
-	//				} else {
-	//					return false;
-	//				}
-	//			} else {
-	//				return false;
-	//			}
-	//
-	//		} else if (monster.getDirection() == Direction.BACK_LEFT) {
-	//			if ((cellX - 1) >= 0) {
-	//				if (square[cellY ][cellX-1].getGameObjectOnSquare() == null
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX - 1 && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY))) {
-	//					square[cellY][cellX - 1].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//					return true;
-	//				} else {
-	//					return false;
-	//				}
-	//			} else {
-	//				return false;
-	//			}
-	//		} else {
-	//			return false;
-	//		}
-	//	}
 
 	/**
 	 * let the monster go through
@@ -1588,58 +1518,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 		}
 	}
-
-	//	/**
-	//	 * let the monster image turn around
-	//	 * @param monster
-	//	 */
-	//	public void turnMonsterAroundAndMove(Monster monster, int cellY, int cellX) {
-	//		BoardSquare[][] square = gameClient.getClientPlayer().getLocation()
-	//				.getRoom().getBoard().getSquares();
-	//		if (monster.getDirection() == Direction.FACE_LEFT) {
-	//			monster.setDirection(Direction.BACK_RIGHT);
-	//			if ((cellY + 1) < 10) {
-	//				//if add another kind of can't moved square, please also add it here(add)
-	//				if ((square[cellY + 1][cellX].getGameObjectOnSquare() == null)
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY + 1))) {
-	//					square[cellY + 1][cellX].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//				}
-	//			}
-	//		} else if (monster.getDirection() == Direction.FACE_RIGHT) {
-	//			monster.setDirection(Direction.BACK_LEFT);
-	//			if ((cellX - 1) >= 0) {
-	//				if (square[cellY ][cellX-1].getGameObjectOnSquare() == null
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX - 1 && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY))) {
-	//					square[cellY][cellX - 1].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//				}
-	//			}
-	//		} else if (monster.getDirection() == Direction.BACK_RIGHT) {
-	//			monster.setDirection(Direction.FACE_LEFT);
-	//			if ((cellY - 1) >= 0) {
-	//				//if add another kind of can't moved square, please also add it here(add)
-	//				if (square[cellY -1][cellX].getGameObjectOnSquare() == null
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY - 1))) {
-	//					square[cellY -1][cellX].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//				}
-	//			}
-	//		} else if (monster.getDirection() == Direction.BACK_LEFT) {
-	//			monster.setDirection(Direction.FACE_RIGHT);
-	//			if ((cellX + 1) < 10) {
-	//				if (square[cellY + 1][cellX].getGameObjectOnSquare() == null
-	//						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX + 1 && gameClient
-	//								.getClientPlayer().getLocation().getY() == (cellY))) {
-	//					square[cellY+1][cellX ].setGameObjectOnSquare(monster);
-	//					square[cellY][cellX].setGameObjectOnSquare(null);
-	//				}
-	//			}
-	//		}
-	//	}
 
 	/**
 	 * let the monster image turn right
