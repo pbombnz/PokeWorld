@@ -498,7 +498,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						startX + 2 - turnOffset, startY + 2
 								- jumpOffsetFirstView - 60, null);
 			} else {
-				g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
+				g.drawImage(
+						new ImageIcon("src/darkfirstview_bk.png").getImage(),
 						startX + 2 - turnOffset, startY + 2
 								- jumpOffsetFirstView - 60, null);
 			}
