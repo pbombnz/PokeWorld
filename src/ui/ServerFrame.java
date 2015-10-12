@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -19,7 +20,10 @@ import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
 import Storage.GameToJson;
+import Storage.GameToXML;
 import Storage.JsonToGame;
+import Storage.SaverLoader;
+import Storage.XMLToGame;
 import network.GameServer;
 
 @SuppressWarnings("serial")
@@ -47,6 +51,9 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 	private JScrollPane consoleScrollPane;
 	
 	private GameServer gameServer;
+	private GameToXML saver;
+	private XMLToGame loader;
+	private SaverLoader sl;
 	
 	public ServerFrame() {
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -107,7 +114,14 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 		} else if(menuItem == exit) {
 			windowClosing(null);
 		} else if (menuItem == savePlayer) {
-			GameToJson.saveGame(this, gameServer.getGame());
+			//GameToJson.saveGame(this, gameServer.getGame());
+			sl = new SaverLoader();
+			try {
+				String path = sl.savePath();
+				sl.saveGame(path);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		} else if (menuItem == clearServerLog) {
 			console.setText("");
 		}
