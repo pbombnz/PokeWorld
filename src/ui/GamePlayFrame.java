@@ -1863,11 +1863,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 				}
 
-				Avatar playerAvatar = ChooseCharacterDialog.Chooser(this);
-
-				// Created a player for the client and send it the server to be passed to other clients
-				gameClient.sendNewPlayerToServer(playerUsername, playerAvatar);
-
+				ArrayList<Player> savedFilePlayers = gameClient.sendOnClientCharacterSelect();
+				
+				if(!savedFilePlayers.isEmpty()) {
+					Player choosenClientPlayer = CharcterSelectDialog2.Chooser(this, savedFilePlayers);
+					gameClient.sendLoadedPlayerToSever(playerUsername, choosenClientPlayer);
+				} else {
+				
+					Avatar playerAvatar = ChooseCharacterDialog.Chooser(this);
+	
+					// Created a player for the client and send it the server to be passed to other clients
+					gameClient.sendNewPlayerToServer(playerUsername, playerAvatar);
+				}
 				// redraw the board
 				//frameState = FRAME_STATE.GAME_START;
 				//add all jlabel after picking character

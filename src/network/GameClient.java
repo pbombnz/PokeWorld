@@ -7,6 +7,7 @@ import game.avatar.Avatar;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -110,6 +111,23 @@ public class GameClient extends Listener {
 		else if(object instanceof ValidateNewPlayerUsername_Response) {
 			recievedServerReponses.add(object);
 		}
+		
+		else if(object instanceof ClientOnChoosePlayer_Response) {
+			recievedServerReponses.add(object);
+		}
+		
+		else if (object instanceof ClientDeletePlayer) {
+			ClientDeletePlayer packet = (ClientDeletePlayer) object;
+			Player playerToDelete = null;
+			for(Player connectedPlayer : getGame().getPlayers()) {
+				if(connectedPlayer.getId() == packet.id && connectedPlayer.getName().equals(packet.name)) {
+					playerToDelete = connectedPlayer;
+					break;
+				}
+			}
+			
+			game.getPlayers().remove(playerToDelete);
+		}
 	}
 	
 	/**
@@ -165,6 +183,23 @@ public class GameClient extends Listener {
 		client.sendTCP(packet); 
 	}
 	
+	public void sendLoadedPlayerToSever(String playerUsername, Player choosenClientPlayer) {
+		ClientDeletePlayer deleteOldPlayerpacket = new ClientDeletePlayer();
+		deleteOldPlayerpacket.id = -1;
+		deleteOldPlayerpacket.name = choosenClientPlayer.getName();
+		
+		client.sendTCP(deleteOldPlayerpacket); 
+				
+		choosenClientPlayer.setName(playerUsername);
+		choosenClientPlayer.setId(client.getID());		
+		
+		ClientNewPlayer packet = new ClientNewPlayer();
+		packet.player = choosenClientPlayer;
+		
+		// Finally send packet to server
+		client.sendTCP(packet); 
+	}
+	
 	/**
 	 * Sends the Player's new Location and direction to the server, to update other
 	 * client's screen.
@@ -178,6 +213,31 @@ public class GameClient extends Listener {
 		packet.newLocation = clientPlayer.getLocation();
 		// Send the packet to the server for processing
 		client.sendTCP(packet);
+	}
+	
+	public ArrayList<Player> sendOnClientCharacterSelect() {	
+		client.updateReturnTripTime(); // Update the ping
+		client.sendTCP(new Packets.ClientOnChoosePlayer());// Send to packet to the server
+		
+		// Pause the client for a respectable amount of time (based on ping)
+		// so the server has time to send a response
+		try {
+			Thread.sleep(client.getReturnTripTime() + 100);
+		} catch (InterruptedException e) { 
+		}
+		
+		// Assuming a response is received, we get it read the response
+		Object object = getRecievedServerReponses().pop();
+			
+		if(object instanceof ClientOnChoosePlayer_Response) {
+			// Cast the object with the packet response class 
+			ClientOnChoosePlayer_Response packet_recv = (ClientOnChoosePlayer_Response) object;
+			// Return the response from the server which will indicate if the name is valid or not
+			return packet_recv.savedFilePlayers;
+		}  else {
+			 // DEAD CODE - Typically Should NEVER get here due to the nature of TCP (Always will receive packet)
+			 throw new RuntimeException("I dont even know how the Client lost the packet!!!");
+		}		
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package network;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import rooms.Board;
 import rooms.Room;
@@ -109,7 +110,22 @@ public class GameServer extends Listener {
 			ClientQuit packet = (ClientQuit) object;
 			game.getPlayers().remove(game.getPlayerByID(packet.id));
 			server.sendToAllExceptTCP(packet.id, packet);
-		}		
+		}
+		
+		else if (object instanceof ClientDeletePlayer) {
+			ClientDeletePlayer packet = (ClientDeletePlayer) object;
+			Player playerToDelete = null;
+			for(Player connectedPlayer : getGame().getPlayers()) {
+				if(connectedPlayer.getId() == packet.id && connectedPlayer.getName().equals(packet.name)) {
+					playerToDelete = connectedPlayer;
+					break;
+				}
+			}
+			
+			game.getPlayers().remove(playerToDelete);
+			server.sendToAllExceptTCP(connection.getID(), packet);
+		}	
+		
 		
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
 			serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
@@ -121,6 +137,20 @@ public class GameServer extends Listener {
 			player.setDirection(packet.newDirection);
 			
 			server.sendToAllExceptTCP(connection.getID(), packet);
+		}
+		
+		else if(object instanceof ClientOnChoosePlayer) {
+			ArrayList<Player> savedFilePlayers = new ArrayList<Player>();
+			
+			for(Player connectedPlayer: getGame().getPlayers()) {
+				if(connectedPlayer.getId() == -1) {
+					savedFilePlayers.add(connectedPlayer);
+				}
+			}
+			
+			ClientOnChoosePlayer_Response packet = new ClientOnChoosePlayer_Response();
+			packet.savedFilePlayers = savedFilePlayers;
+			connection.sendTCP(packet);
 		}
 	}
 

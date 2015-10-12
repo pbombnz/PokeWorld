@@ -28,6 +28,12 @@ public class Packets {
 
 	public static class ServerRestart_LoadedGameFromFile {
 	}
+
+	public static class ClientDeletePlayer {
+		int id;
+		String name;
+	}
+	
 	
 	public static class ClientOnChoosePlayer {
 	}
