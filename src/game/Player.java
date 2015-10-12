@@ -21,7 +21,7 @@ public class Player implements Serializable {
 	
 	public static final int HEALTH = 10;
 	public static final int ATTACK = 10;
-
+	public static final int MAX_PLAYER_LEVEL = 3;
 	private Avatar avatar;
 	
 	private int id;

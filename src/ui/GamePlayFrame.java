@@ -283,14 +283,18 @@ ActionListener, WindowListener, GameClientListener {
 		// Proper Comment: Sets all Labels with Sprites of the clients player.
 		Evolution clientPlayerCurrentEvolution = clientPlayer.getAvatar()
 				.getCurrentEvolution(clientPlayer.getPlayerLevel());
-		Evolution clientPlayerNextEvolution = clientPlayer.getAvatar()
-				.getNextEvolution(clientPlayer.getPlayerLevel());
 
 		dieLabel = new JLabel(clientPlayerCurrentEvolution.getDieGIF());
 		attackLabel = new JLabel(clientPlayerCurrentEvolution.getAttackGIF());
 		levelUpLabel_2 = new JLabel(
 				clientPlayerCurrentEvolution.getEvolvingGIF());
-		levelUpLabel_3 = new JLabel(clientPlayerNextEvolution.getEvolvingGIF());
+		
+		if(clientPlayer.getPlayerLevel() != Player.MAX_PLAYER_LEVEL) {
+			Evolution clientPlayerNextEvolution = clientPlayer.getAvatar().getNextEvolution(clientPlayer.getPlayerLevel());
+			levelUpLabel_3 = new JLabel(clientPlayerNextEvolution.getEvolvingGIF());
+		} else {
+			levelUpLabel_3 = new JLabel();
+		}
 
 		int diexPo = 400;
 		int dieyPo = 100;
@@ -1867,7 +1871,7 @@ ActionListener, WindowListener, GameClientListener {
 
 		GameObject ObjectOfLoc = mosterLocation.getRoom().board.getSquares()[mosterLocation
 		                                                                     .getY()][mosterLocation.getX()].getGameObjectOnSquare();
-
+		// COMPILER ERROR - HERE BELOW. Make sure monster still on object...
 		int damage = ((Monster) ObjectOfLoc).attack();
 
 		//Monster attacks first
