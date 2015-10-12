@@ -533,24 +533,23 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			int numSquaresRight = 0;
 			Location playerLoc = clientPlayer.getLocation();
 			int boardSize = 10;
-			int offset = 0;//this offset is cuz the locaion is from 0 not 1
+			int offset = 1;//this offset is cuz the locaion is from 0 not 1
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				numSquaresFace = playerLoc.getY();
-				numSquaresLeft = playerLoc.getX();
-				numSquaresRight = boardSize - playerLoc.getX() - offset;
+				numSquaresLeft = playerLoc.getX()+offset;
+				numSquaresRight = boardSize - playerLoc.getX();
 			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 				numSquaresFace = boardSize - playerLoc.getX() - offset;
-				numSquaresLeft = playerLoc.getY();
-				numSquaresRight = boardSize - playerLoc.getY() - offset;
+				numSquaresLeft = playerLoc.getY()+offset;
+				numSquaresRight = boardSize - playerLoc.getY();
 			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
 				numSquaresFace = playerLoc.getX();
-				numSquaresLeft = boardSize - playerLoc.getY() - offset;
-				numSquaresRight = playerLoc.getY();
-				;
+				numSquaresLeft = boardSize - playerLoc.getY();
+				numSquaresRight = playerLoc.getY()+offset;
 			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				numSquaresFace = boardSize - playerLoc.getY() - offset;
-				numSquaresLeft = boardSize - playerLoc.getX() - offset;
-				numSquaresRight = playerLoc.getX();
+				numSquaresLeft = boardSize - playerLoc.getX();
+				numSquaresRight = playerLoc.getX()+offset;
 			}
 			//			System.out.println(numSquaresFace);
 			//			System.out.println(playerLoc.getX()+","+playerLoc.getY());
