@@ -285,9 +285,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 		int xPo = 10;
 		int yPo = 10;
-		int touxiangSize = 130;
-		bgHeadViewLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
-		headPictureLabel.setBounds(xPo, yPo, touxiangSize, touxiangSize);
+		int headPictureSize = 130;
+		bgHeadViewLabel.setBounds(xPo, yPo, headPictureSize, headPictureSize);
+		headPictureLabel.setBounds(xPo, yPo, headPictureSize, headPictureSize);
 		headPictureLabel.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5,
 				Color.BLACK));
 		this.bgHeadViewLabel = bgHeadViewLabel;
