@@ -88,60 +88,33 @@ public class Tests {
 	}
 
 	@Test
-	public void testCharacterSelect() throws IOException, AWTException {
-		createGame();
-		bot.mouseMove(200, 200);
-		bot.delay(1000);
-		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.mouseRelease(InputEvent.BUTTON1_MASK);
-		bot.keyPress(KeyEvent.VK_S);
-		bot.keyRelease(KeyEvent.VK_S);
-		bot.delay(100);
-		bot.keyPress(KeyEvent.VK_S);
-		bot.keyRelease(KeyEvent.VK_S);
-		bot.delay(100);
-		
-		
+	public void testPlayerLevel1() throws IOException {
+		Player p = new Player(-1, "Donald", new Avatar());
+		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		p.setAvatar(list.get(2));
+		assertTrue(p.getPlayerLevel() == 1);
 	}
-
-	public void createGame() throws AWTException {
-		this.g = new GameLauncher();
-		this.bot = new Robot();
-		bot.delay(1000);
-		bot.mouseMove(10, 40);
-		bot.delay(1000);
-		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.mouseRelease(InputEvent.BUTTON1_MASK);
-		bot.mouseMove(10, 50);
-		bot.delay(1000);
-		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.mouseRelease(InputEvent.BUTTON1_MASK);
-		bot.delay(1000);
-		bot.mouseMove(1000, 40);
-		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.mouseRelease(InputEvent.BUTTON1_MASK);
-		bot.delay(1000);
-		bot.mouseMove(10, 40);
-		bot.delay(1000);
-		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.mouseRelease(InputEvent.BUTTON1_MASK);
-		bot.mouseMove(10, 80);
-		bot.delay(1000);
-		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.mouseRelease(InputEvent.BUTTON1_MASK);
-		bot.delay(1000);
-		bot.keyPress(KeyEvent.VK_H);
-		bot.delay(500);
-		bot.keyPress(KeyEvent.VK_H);
-		bot.delay(500);
-		bot.keyPress(KeyEvent.VK_H);
-		bot.delay(500);
-		bot.keyPress(KeyEvent.VK_H);
-		bot.keyPress(KeyEvent.VK_ENTER);
-		bot.delay(500);
-		bot.mouseMove(500, 200);
-		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.mouseRelease(InputEvent.BUTTON1_MASK);
-		bot.delay(5000);
+	@Test
+	public void testPlayerLevel2() throws IOException {
+		Player p = new Player(-1, "Donald", new Avatar());
+		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		p.setAvatar(list.get(2));
+		p.setPlayerLevel(2);
+		assertTrue(p.getPlayerLevel() == 2);
+	}
+	@Test
+	public void testPlayerLevel3() throws IOException {
+		Player p = new Player(-1, "Donald", new Avatar());
+		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		p.setAvatar(list.get(2));
+		p.setPlayerLevel(3);
+		assertTrue(p.getPlayerLevel() == 3);
+	}
+	@Test
+	public void testPlayerLevel4() throws IOException {
+		Player p = new Player(-1, "Donald", new Avatar());
+		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		p.getAvatar().getCurrentEvolution(p.getPlayerLevel());
+		fail("");
 	}
 }
