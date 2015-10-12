@@ -18,6 +18,7 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,8 +26,9 @@ import java.util.ArrayList;
  * @author Donald Tang
  */
 public class Tests {
-	private Robot bot;
-	private GameLauncher g;
+	private Player p;
+	private ArrayList<Avatar> list;
+
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testBoard1() {
 		Board1 board = new Board1();
@@ -65,56 +67,126 @@ public class Tests {
 
 	@Test
 	public void testAvatar1() throws IOException {
-		Player p = new Player(-1, "Donald", new Avatar());
-		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		createPlayer();
 		p.setAvatar(list.get(0));
 		assertTrue(p.getAvatar().getName().equals("Bulbasaur"));
 	}
 
 	@Test
 	public void testAvatar2() throws IOException {
-		Player p = new Player(-1, "Donald", new Avatar());
-		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		createPlayer();
 		p.setAvatar(list.get(1));
 		assertTrue(p.getAvatar().getName().equals("Charmander"));
 	}
 
 	@Test
 	public void testAvatar3() throws IOException {
-		Player p = new Player(-1, "Donald", new Avatar());
-		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+		createPlayer();
 		p.setAvatar(list.get(2));
 		assertTrue(p.getAvatar().getName().equals("Squirtle"));
 	}
 
 	@Test
 	public void testPlayerLevel1() throws IOException {
-		Player p = new Player(-1, "Donald", new Avatar());
-		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
-		p.setAvatar(list.get(2));
+		createPlayer();
+		p.setAvatar(list.get(0));
 		assertTrue(p.getPlayerLevel() == 1);
 	}
+
 	@Test
 	public void testPlayerLevel2() throws IOException {
-		Player p = new Player(-1, "Donald", new Avatar());
-		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
-		p.setAvatar(list.get(2));
+		createPlayer();
+		p.setAvatar(list.get(0));
 		p.setPlayerLevel(2);
 		assertTrue(p.getPlayerLevel() == 2);
 	}
+
 	@Test
 	public void testPlayerLevel3() throws IOException {
-		Player p = new Player(-1, "Donald", new Avatar());
-		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
-		p.setAvatar(list.get(2));
+		createPlayer();
+		p.setAvatar(list.get(0));
 		p.setPlayerLevel(3);
 		assertTrue(p.getPlayerLevel() == 3);
 	}
+
 	@Test
 	public void testPlayerLevel4() throws IOException {
-		Player p = new Player(-1, "Donald", new Avatar());
-		ArrayList<Avatar> list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
-		p.getAvatar().getCurrentEvolution(p.getPlayerLevel());
-		fail("");
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getCurrentEvolution(p.getPlayerLevel());
+		} catch (IllegalArgumentException e) {
+			fail("Shouldn't have thrown an error");
+		}
 	}
+
+	@Test
+	public void testPlayerLevel5() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getCurrentEvolution(p.getPlayerLevel());
+		} catch (IllegalArgumentException e) {
+			fail("Shouldn't have thrown an error");
+		}
+	}
+
+	@Test
+	public void testPlayerLevel6() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getCurrentEvolution(5);
+			fail("Max level is 3");
+		} catch (IllegalArgumentException e) {
+		}
+	}
+
+	@Test
+	public void testPlayerLevel7() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getCurrentEvolution(0);
+			fail("Min level is 1");
+		} catch (IllegalArgumentException e) {
+		}
+	}
+	@Test
+	public void testPlayerLevel8() throws IOException {
+		try {
+			createPlayer();
+			p.setAvatar(list.get(0));
+			p.getAvatar().getCurrentEvolution(0);
+			fail("Min level is 1");
+		} catch (IllegalArgumentException e) {
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void createPlayer() throws FileNotFoundException {
+		this.p = new Player(-1, "Donald", new Avatar());
+		this.list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
+	}
+	
+
 }
