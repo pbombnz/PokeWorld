@@ -152,6 +152,7 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
+
 	@Test
 	public void testPlayerLevel8() throws IOException {
 		try {
@@ -162,6 +163,7 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
+
 	@Test
 	public void testPlayerLevel9() throws IOException {
 		try {
@@ -172,6 +174,7 @@ public class Tests {
 			fail("Max level is 3");
 		}
 	}
+
 	@Test
 	public void testPlayerLevel10() throws IOException {
 		try {
@@ -180,9 +183,10 @@ public class Tests {
 			p.getAvatar().getNextEvolution(3);
 			fail("Max level is 3");
 		} catch (IllegalArgumentException e) {
-			
+
 		}
 	}
+
 	@Test
 	public void testPlayerLevel11() throws IOException {
 		try {
@@ -193,6 +197,7 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
+
 	@Test
 	public void testPlayerLevel12() throws IOException {
 		try {
@@ -207,29 +212,9 @@ public class Tests {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public void createPlayer() throws FileNotFoundException {
 		this.p = new Player(-1, "Donald", new Avatar());
 		this.list = (ArrayList<Avatar>) p.getAvatar().getAllAvatars();
 	}
-	
 
 }
