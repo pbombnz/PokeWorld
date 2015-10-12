@@ -1168,7 +1168,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		for (Player otherPlayer : gameClient.getGame().getPlayers()) {
 			Location otherLoc = otherPlayer.getLocation();
-			if (otherLoc.getRoom()==player.getLocation().getRoom()&&otherLoc.getX()==x&&otherLoc.getY()==y) {
+			if (otherLoc.getX() == x && otherLoc.getY() == y) {
 				return false;
 			}
 		}
