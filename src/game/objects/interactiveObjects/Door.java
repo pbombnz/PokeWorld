@@ -13,25 +13,45 @@ import rooms.Room;
  * 
  * @author Sushant Balajee
  * @author Donald Tang
- * @contrib Donald Tang
+ * @contrib Donald Tang,Wang Zhen
  */
 
-public class Door implements GameObject{
-	
+public class Door implements GameObject {
+
 	private static final long serialVersionUID = -3108639527814191048L;
 	private int id;
 	private int nextRoom;
+	private int nextRoomX;//the position you want to go in nextroom
+	private int nextRoomY;
 
-	public Door(){
+	public Door() {
 	}
-	
+
 	/**
 	 * @param id, ID of the door
 	 * @param nextRoom The room this door goes to
 	 */
-	public Door(int id, int nextRoom){
+	public Door(int id, int nextRoom, int nextRoomX, int nextRoomY) {
 		this.id = id;
 		this.nextRoom = nextRoom;
+		this.nextRoomX = nextRoomX;
+		this.nextRoomY = nextRoomY;
+	}
+
+	public int getNextRoomX() {
+		return nextRoomX;
+	}
+
+	public void setNextRoomX(int nextRoomX) {
+		this.nextRoomX = nextRoomX;
+	}
+
+	public int getNextRoomY() {
+		return nextRoomY;
+	}
+
+	public void setNextRoomY(int nextRoomY) {
+		this.nextRoomY = nextRoomY;
 	}
 
 	@Override
@@ -42,7 +62,7 @@ public class Door implements GameObject{
 	/**
 	 * @return the id of the door
 	 */
-	public int id(){
+	public int id() {
 		return id;
 	}
 

@@ -1388,7 +1388,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							Door theDoor = (Door) ObjectOfLoc;
 							clientPlayer.setLocation(new Location(gameClient
 									.getGame().getRooms()
-									.get(theDoor.getNextRoom()), 9, 0));
+									.get(theDoor.getNextRoom()), theDoor.getNextRoomX(), theDoor.getNextRoomY()));
 							clientPlayer.setDirection(Direction.FACE_LEFT);
 
 							//Room nowRoom = clientPlayer.getLocation().getRoom();
