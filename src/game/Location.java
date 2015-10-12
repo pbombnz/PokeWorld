@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 import rooms.Room;
 import rooms.Room1;
-
+/**
+ * A simple class that holds the room, x and y to represent the position.
+ * It also has methods to move but does not have logic for it.
+ *
+ */
 
 public class Location implements Serializable {
 	private static final long serialVersionUID = -5585594220565441892L;
