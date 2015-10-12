@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,6 +36,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+
+import com.sun.org.apache.bcel.internal.generic.LCONST;
+
 import rooms.Board;
 import rooms.EmptyBoard;
 import rooms.Room;
@@ -114,7 +118,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private boolean isFighting = false;//stop key control and monster moving when the player is level uping
 	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
 	protected boolean isDay = true;
-	private final int sightRange = 3;
+	private final int sightRange = 2;
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -707,14 +711,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 								.getImage(), tileX, tileY, TILE_WIDTH,
 								TILE_HEIGHT, null);
 					} else {
-						if (isInSightRange(clientPlayer, tileY, tileX)) {
-							g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
-							.getImage(), tileX, tileY, TILE_WIDTH,
-							TILE_HEIGHT, null);
+						if (isInSightRange(clientPlayer, cellY, cellX)) {
+							g.drawImage(new ImageIcon(
+									"./sprites/tiles/grass.png").getImage(),
+									tileX, tileY, TILE_WIDTH, TILE_HEIGHT, null);
 						} else {
-							g.drawImage(new ImageIcon("./sprites/tiles/darkgrass.png")
-							.getImage(), tileX, tileY, TILE_WIDTH,
-							TILE_HEIGHT, null);
+							g.drawImage(
+									new ImageIcon(
+											"./sprites/tiles/darkgrass.png")
+											.getImage(), tileX, tileY,
+									TILE_WIDTH, TILE_HEIGHT, null);
 						}
 					}
 
@@ -988,8 +994,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public boolean isInSightRange(Player player, int y, int x) {
 		Location loc = player.getLocation();
 		if (x < (loc.getX() + sightRange) && x > (loc.getX() - sightRange)
-				&& y < (loc.getY() + sightRange)
-				&& y > (loc.getY() - sightRange)) {
+				&& y < (loc.getY() + sightRange)&& y > (loc.getY() - sightRange)) {
 			return true;
 		} else {
 			return false;
