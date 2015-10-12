@@ -19,15 +19,15 @@ import javax.swing.ImageIcon;
  */
 public class Player implements Serializable {
 	private static final long serialVersionUID = -3023304431184848781L;
-	
+
 	public static final int HEALTH = 10;
 	public static final int ATTACK = 10;
 	public static final int MAX_PLAYER_LEVEL = 3;
 	private Avatar avatar;
-	
+
 	private int id;
 	private String name;
-	
+
 	private int health;
 	private int attack;
 
@@ -44,11 +44,14 @@ public class Player implements Serializable {
 	 */
 	public Player() {
 	}
-	
+
 	/**
-	 * @param id, players id
-	 * @param name, players name
-	 * @param avatar, players avatar character
+	 * @param id,
+	 *            players id
+	 * @param name,
+	 *            players name
+	 * @param avatar,
+	 *            players avatar character
 	 */
 	public Player(int id, String name, Avatar avatar) {
 		this.id = id;
@@ -57,132 +60,194 @@ public class Player implements Serializable {
 		this.attack = ATTACK;
 		this.health = HEALTH;
 	}
-/**
- * 
- * @return int, players heatlh
- */
-	
-	public int getHealth(){
+
+	/**
+	 * 
+	 * @return int, players heatlh
+	 */
+
+	public int getHealth() {
 		return health;
 	}
 
 	/**
-	 * @param change, amount of health changed by
+	 * @param change,
+	 *            amount of health changed by
 	 */
-	public void setHealth(int change){
+	public void setHealth(int change) {
 		health = change;
-		if(health < 0){
+		if (health < 0) {
 			health = 0;
 		}
 	}
-/**
- * 
- * @return boolean, players life status
- */
-	public boolean isDead(){
+
+	/**
+	 * 
+	 * @return boolean, players life status
+	 */
+	public boolean isDead() {
 		return health <= 0;
 	}
-/**
- * 
- * @return int, attack damage
- */
-	public int getAttack(){
+
+	/**
+	 * 
+	 * @return int, attack damage
+	 */
+	public int getAttack() {
 		return attack;
 	}
 
 	/**
-	 * @param change, amount of attack changed by
+	 * @param change,
+	 *            amount of attack changed by
 	 */
-	public void setAttack(int change){
+	public void setAttack(int change) {
 		this.attack = change;
 	}
-/**
- * 
- * @return List<Item>, player inventory
- */
-	public List<Item> getInventory(){
+
+	/**
+	 * 
+	 * @return List<Item>, player inventory
+	 */
+	public List<Item> getInventory() {
 		return inventory;
 	}
 
 	/**
-	 * @param item, the item being added to the inventory
+	 * @param item,
+	 *            the item being added to the inventory
 	 * @return
 	 */
-	public boolean addToInventory(Item item){
-		if (item == null){
+	public boolean addToInventory(Item item) {
+		if (item == null) {
 			return false;
 		}
 		return inventory.add(item);
 	}
 
+	/**
+	 * 
+	 * @return Avatar, players avatar
+	 */
 	public Avatar getAvatar() {
 		return avatar;
 	}
 
 	/**
-	 * @param avatar, the character chosen by the player to represent them
+	 * @param avatar,
+	 *            the character chosen by the player to represent them
 	 */
 	public void setAvatar(Avatar avatar) {
 		this.avatar = avatar;
 	}
 
+	/**
+	 * 
+	 * @return Direction, players direction
+	 */
 	public Direction getDirection() {
 		return direction;
 	}
 
+	/**
+	 * 
+	 * @param direction,
+	 *            direction to set
+	 */
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 
+	/**
+	 * 
+	 * @param id,
+	 *            used to set unique id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * 
+	 * @param name,
+	 *            sets player name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * 
+	 * @return String, players name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * 
+	 * @param inventory,
+	 *            sets player inventory
+	 */
 	public void setInventory(List<Item> inventory) {
 		this.inventory = inventory;
 	}
 
+	/**
+	 * 
+	 * @return Location, players location
+	 */
 	public Location getLocation() {
 		return location;
 	}
 
+	/**
+	 * 
+	 * @param location,
+	 *            sets player location
+	 */
 	public void setLocation(Location location) {
 		this.location = location;
 	}
-	
-	public int getPlayerLevel(){
+
+	/**
+	 * 
+	 * @return int, players level
+	 */
+	public int getPlayerLevel() {
 		return playerLevel;
 	}
-	
-	/**
-	 * @param change, the level of the player character
-	 */
-	public void setPlayerLevel(int change){
-		this.playerLevel = change;
-	}	
 
+	/**
+	 * @param change,
+	 *            the level of the player character
+	 */
+	public void setPlayerLevel(int change) {
+		this.playerLevel = change;
+	}
+
+	/**
+	 * 
+	 * @return int, max number of items player can hold
+	 */
 	public int getMaxItems() {
 		return maxItems;
 	}
 
 	/**
-	 * @param maxItems, 6 items max held by the inventory
+	 * @param maxItems,
+	 *            6 items max held by the inventory
 	 */
 	public void setMaxItems(int maxItems) {
 		this.maxItems = maxItems;
 	}
-
+	/**
+	 * 
+	 * @return ImageIcon, based on players direction
+	 */
 	public ImageIcon getSpriteBasedOnDirection() {
-		if(avatar != null) {
-			switch(direction) {
+		if (avatar != null) {
+			switch (direction) {
 			case FACE_LEFT:
 				return avatar.getCurrentEvolution(playerLevel).getFaceLeft();
 			case FACE_RIGHT:
@@ -195,10 +260,13 @@ public class Player implements Serializable {
 		}
 		throw new RuntimeException("The Avatar of the Player has not been set yet.");
 	}
-	
+	/**
+	 * @param fpsDirection, players direction
+	 * @return ImageIcon, based on players direction
+	 */
 	public ImageIcon getSpriteBasedOnDirection(Direction fpsDirection) {
-		if(avatar != null) {
-			switch(fpsDirection) {
+		if (avatar != null) {
+			switch (fpsDirection) {
 			case FACE_LEFT:
 				return avatar.getCurrentEvolution(playerLevel).getFaceLeft();
 			case FACE_RIGHT:
@@ -211,7 +279,10 @@ public class Player implements Serializable {
 		}
 		throw new RuntimeException("The Avatar of the Player has not been set yet.");
 	}
-
+/**
+ * 
+ * @return int, players id
+ */
 	public int getId() {
 		return id;
 	}
@@ -221,14 +292,11 @@ public class Player implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + attack;
-		result = prime * result
-				+ ((direction == null) ? 0 : direction.hashCode());
+		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
 		result = prime * result + health;
 		result = prime * result + id;
-		result = prime * result
-				+ ((inventory == null) ? 0 : inventory.hashCode());
-		result = prime * result
-				+ ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((inventory == null) ? 0 : inventory.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + playerLevel;
 		return result;
