@@ -32,7 +32,7 @@ public class Avatar implements Serializable {
 	// Although redunant due to 'evolution1_name', it is keep in the code for compatibility
 	private final String avatarName;
 	private final ImageIcon displayPic;
-	private List<Evolution> evolutions = new ArrayList<Evolution>();
+	private ArrayList<Evolution> evolutions = new ArrayList<Evolution>();
 
 
 	public static List<Avatar> getAllAvatars() throws FileNotFoundException
