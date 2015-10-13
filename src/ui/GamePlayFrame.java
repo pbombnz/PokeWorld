@@ -4,11 +4,13 @@ package ui;
  * @author Wang Zhen
  */
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -38,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
 import com.sun.org.apache.bcel.internal.generic.LCONST;
@@ -102,12 +105,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public JLabel characterLabel;
 	private JDialog fightBox;
 	private JDialog dropBox;
-	private JTextArea textOutputArea;
 	//add explored time
 	private String startTime = null;
 	public JLabel timeLabel = new JLabel();
 	public List<JLabel> itemJLabels = new ArrayList<JLabel>();
 	public JButton dropButton = new JButton();
+	public JButton sendMessageButton = new JButton();
 	public boolean buttonsAdded = false;
 	public int jumpTimeCounter = 0;
 	private boolean isJumping = false;
@@ -123,6 +126,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
 	protected boolean isDay = true;
 	private final int sightRange = 3;
+	private JTextArea textOutputArea;
+	private JTextField inputMessageField;
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -151,6 +156,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	protected JLabel lvlupLabel_2;
 	protected JLabel lvlupLabel_3;
 	private final int TEXT_OUTPUT_ROWS = 5;
+	private final int SEARCH_COLS = 15;
+	private boolean UPDATE_ON_EVERY_CHARACTER = true;
 
 	///==================================
 
@@ -260,14 +267,57 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		textOutputArea.setWrapStyleWord(true); // pretty line wrap.
 		textOutputArea.setEditable(false);
 		JScrollPane scroll = new JScrollPane(textOutputArea);
+		scroll.setToolTipText("Output messages");
 		// these two lines make the JScrollPane always scroll to the bottom when
 		// text is appended to the JTextArea.
 		DefaultCaret caret = (DefaultCaret) textOutputArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		scroll.setBounds(10, 470, 350, 70);
+		scroll.setBounds(0, 470, 350, 70);
 		panel.add(scroll);
 		textOutputArea.setText("");
 		textOutputArea.append("Welcome to PokeWorld!");
+
+		//add textField to input message
+		inputMessageField = new JTextField(SEARCH_COLS);
+		inputMessageField
+				.setToolTipText("Input the message you want to send here");
+		inputMessageField.setMaximumSize(new Dimension(0, 25));
+		inputMessageField.setBounds(0, 440, 200, 20);
+		inputMessageField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				outputSentMessage();
+				sendMessageToCient();
+			}
+		});
+		panel.add(inputMessageField);
+
+		//add send Message button
+		sendMessageButton.setText("Send");
+		sendMessageButton.setToolTipText("Press to send message");
+		sendMessageButton.setBounds(210, 430, 80, 30);
+		panel.add(sendMessageButton);
+		sendMessageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				outputSentMessage();
+				sendMessageToCient();
+			}
+		});
+	}
+	
+	/**
+	 * send Message To Cient
+	 */
+	private void sendMessageToCient(){
+		//@prashant 
+	}
+	
+	/**
+	 * output the sent message here
+	 */
+	private void outputSentMessage(){
+		String message = inputMessageField.getText();
+		textOutputArea.append("\nSent :" + message);
+		inputMessageField.setText("");
 	}
 
 	/**
