@@ -12,6 +12,10 @@ import game.objects.scene.*;
  *this board is for store information
  */
 
+/**
+ * @author Donald
+ *
+ */
 public abstract class Board implements Serializable {
 	protected static final long serialVersionUID = -3601832062619945416L;
 	
@@ -24,10 +28,19 @@ public abstract class Board implements Serializable {
 		super();
 	}
 	
+	/**
+	 * @return an array of BoardSquards
+	 */
 	public abstract BoardSquare[][] getSquares();
 
+	/**
+	 * @return width of board
+	 */
 	public abstract int getWidth() ;
 
+	/**
+	 * @return height of board
+	 */
 	public abstract int getHeight() ;
 
 	@Override
@@ -37,6 +50,11 @@ public abstract class Board implements Serializable {
 	public abstract boolean equals(Object obj) ;
 
 
+	/**
+	 * @param y coord
+	 * @param x coord
+	 * @return BoardSquare at coords
+	 */
 	public abstract BoardSquare getSquareAt(int y, int x) ;
 
 }
