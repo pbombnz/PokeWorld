@@ -19,7 +19,7 @@ import rooms.Room1;
 
 
 /**
- * 
+ * this class is for loadfile
  * @contributer Prashant Bhikhu
  */
 @SuppressWarnings("serial")

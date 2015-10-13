@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * 
+ * Create a frame for let user choose character
  * @author Wang Zhen 
  * @contributer Prashant Bhikhu
  */

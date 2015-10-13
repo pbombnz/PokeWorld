@@ -3,6 +3,7 @@ package ui;
 import java.awt.Frame;
 
 /**
+ * gameLauncher is for starting game
  *@author Wang Zhen
  */
 public class GameLauncher {
