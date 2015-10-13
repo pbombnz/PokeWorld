@@ -25,7 +25,9 @@ import storage.JsonToGame;
 import storage.SaverLoader;
 import storage.XMLToGame;
 import network.GameServer;
-
+/**
+ * create this frame for showing information of server
+ */
 @SuppressWarnings("serial")
 public class ServerFrame extends JFrame implements ActionListener, WindowListener {
 	// The Size of the Frame

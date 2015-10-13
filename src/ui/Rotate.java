@@ -5,7 +5,9 @@ import game.Player;
 import game.objects.monster.Monster;
 import game.objects.scene.Fence;
 import game.objects.scene.Plant;
-
+/**
+ * let the player image turn 
+ */
 public class Rotate {
 	
 	/**
