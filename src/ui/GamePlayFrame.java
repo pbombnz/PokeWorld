@@ -283,12 +283,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				.setToolTipText("Input the message you want to send here");
 		inputMessageField.setMaximumSize(new Dimension(0, 25));
 		inputMessageField.setBounds(0, 440, 200, 20);
-		inputMessageField.addActionListener(new ActionListener() {
+		/*inputMessageField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				outputSentMessage();
+				
 				sendMessageToCient();
 			}
-		});
+		});*/
 		panel.add(inputMessageField);
 
 		//add send Message button
@@ -298,44 +298,25 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		panel.add(sendMessageButton);
 		sendMessageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				outputSentMessage();
-				sendMessageToCient();
+				if(inputMessageField.getText().length() != 0) {
+					sendMessage();
+				}
 			}
 		});
 	}
 	
-	/**
-	 * send Message To Cient
-	 */
-	private void sendMessageToCient(){
-		//@prashant 
+	private void outputMessageToTextArea(String playerName, String message) {
+		textOutputArea.append("\n<"+playerName+">" + message);
 	}
 	
-	/**
-	 * output the sent message here
-	 */
-	private void outputSentMessage(){
+	private void sendMessage(){
+		String playerName = gameClient.getClientPlayer().getName();
 		String message = inputMessageField.getText();
-		textOutputArea.append("\nSent :" + message);
+		outputMessageToTextArea( playerName, message);
+		gameClient.sendMessage(playerName, message);
 		inputMessageField.setText("");
 	}
-
-	/**
-	 * outPut Message From Server
-	 * @param message
-	 */
-	public void outPutMessageFromServer(String message) {
-		//@prashant
-		textOutputArea.append("Server:"+message);
-	}
 	
-	/**
-	 * print text on textArea
-	 * @param text
-	 */
-	public void printTextInTextArea(String text) {
-		textOutputArea.append(text);
-	}
 
 	public void dropIventory(int index) {
 		Player clientPlayer = gameClient.getClientPlayer();
@@ -2552,6 +2533,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		gameClient.disconnect();
 		new ActionEvent(new JMenuItem("Join Game (As Client)"),
 				ActionEvent.ACTION_PERFORMED, "");
+	}
+
+	@Override
+	public void onMessageRecieved(String playerName, String message) {
+		outputMessageToTextArea( playerName, message);
 	}
 }
 

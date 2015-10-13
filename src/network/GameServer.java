@@ -155,6 +155,12 @@ public class GameServer extends Listener {
 			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 			server.sendToAllTCP(newGame);
 		}
+		
+		else if(object instanceof ClientMessage) {
+			ClientMessage packet = (ClientMessage) object;
+			serverFrame.writeToConsole("[Server][Client Message] Player Name: "+packet.playerName+" | Message: "+packet.message);
+			server.sendToAllExceptTCP(connection.getID(), object);
+		}
 	}
 
 	@Override

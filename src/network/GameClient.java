@@ -108,6 +108,11 @@ public class GameClient extends Listener {
 			this.disconnect();
 		}
 		
+		else if(object instanceof ClientMessage) {
+			ClientMessage packet = (ClientMessage) object;
+			gameClientListener.onMessageRecieved(packet.playerName, packet.message);
+		}
+		
 		else if(object instanceof ValidateNewPlayerUsername_Response) {
 			recievedServerReponses.add(object);
 		}
@@ -170,7 +175,7 @@ public class GameClient extends Listener {
 		client.sendTCP(packet); 
 	}
 	
-	public void sendLoadedPlayerToSever(String playerUsername, Player choosenClientPlayer) {
+	public void sendLoadedPlayerToSever(String playerName, Player choosenClientPlayer) {
 		//choosenClientPlayer.setName(playerUsername);
 		//choosenClientPlayer.setId(client.getID());		
 		
@@ -178,10 +183,17 @@ public class GameClient extends Listener {
 		packet.oldId = choosenClientPlayer.getId();
 		packet.oldName = choosenClientPlayer.getName();
 		packet.newId = client.getID();
-		packet.newName = playerUsername;
+		packet.newName = playerName;
 		
 		// Finally send packet to server
 		client.sendTCP(packet); 
+	}
+	
+	public void sendMessage(String playerName, String message) {
+		ClientMessage packet = new ClientMessage();
+		packet.playerName = playerName;
+		packet.message = message;
+		client.sendTCP(packet);
 	}
 	
 	/**
