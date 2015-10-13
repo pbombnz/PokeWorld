@@ -136,7 +136,7 @@ public class GameClient extends Listener {
 		}
 		
 		else if(object instanceof PlayerPickUpItem) {
-			PlayerDropItem packet = (PlayerDropItem) object;
+			PlayerPickUpItem packet = (PlayerPickUpItem) object;
 			
 			Player playerToUpdate = getGame().getPlayerByID(packet.id);
 			playerToUpdate.getInventory().add(packet.item);
