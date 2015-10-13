@@ -8,6 +8,11 @@ import java.io.FileNotFoundException;
 
 import game.Game;
 
+/*
+ * Loads game from xml file 
+ *
+ * @author Pri Bhula
+ */
 public class XMLToGame {
 	private BufferedInputStream buffins;
 	private FileInputStream fileins;

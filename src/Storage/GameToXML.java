@@ -8,6 +8,11 @@ import java.io.FileOutputStream;
 import game.Game;
 import game.Player;
 
+/*
+ * Saves game to XMl file
+ * 
+ * @author Pri Bhula
+ */
 public class GameToXML {
 	private BufferedOutputStream buffout;
 	private FileOutputStream fileout;
