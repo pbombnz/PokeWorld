@@ -31,6 +31,28 @@ import rooms.Room;
 
 /**
  *@author Wang Zhen
+ *This class extends GameFrame.It build a gamePanel inside. And the method paintComponent() will be  called every fixed time(so the
+ *game panel will be repait every fixed time)
+ *
+ * These 2 classes(GameFrame and GamePanelFrame) include all methods,fileds of game gui and some game logic
+ * 
+ * This gui has two parts:1st person view gui on the right side and 3rd person 
+ * view gui on the left side.
+ *  
+ * This gui has two keyboard control system:The 1st system is for using in 3rd person view gui.
+ * (user can use WSAD to move. W-north S-south A-west D-east)
+ * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view. 
+ * (user can use Up,Down,Left,Right to move. Up-go,Down-turn around,Left-turn left,Right-turn right)
+ * And user can also use "J" to jump in both 2 views.
+ * 
+ * Control:
+ * Q-rotate game left, E-rotate game right
+ * W-north S-south A-west D-east J- jump
+ * Up-go  ,Down-turn around ,Left-turn left,Right-turn right
+ * 
+ * The functions in this class:evolving animation,fighting animation,move,pick up(automaticlly pick up when player go to the sqaure with object),
+ * drop,fight,change weather(rainy,sunny),change day or night,send message to other player,
+ * monster wonder around,draw mini map,make player shake,refresh player's information.
  */
 public class GamePanelFrame extends GameFrame{
 	
