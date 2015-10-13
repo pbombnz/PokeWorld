@@ -28,7 +28,7 @@ public interface GameObject extends Serializable {
 	public static ImageIcon FENCEL = new ImageIcon("./sprites/tiles/FenceLeft1.png");
 	public static ImageIcon FENCER = new ImageIcon("./sprites/tiles/FenceRight1.png");
 
-	//Game Objects player can iteract with
+	//Game Objects player can interact with
 
 	public static ImageIcon ITEM_KEY = new ImageIcon("./sprites/items/key.png");
 
@@ -39,7 +39,7 @@ public interface GameObject extends Serializable {
 	public static ImageIcon ITEM_RARECANDY = new ImageIcon("./sprites/items/rarecandy.png");
 
 	//Game enemies
-	//change here for print 4 direction
+	//Change here for print 4 direction
 	public static ImageIcon RATTATA = new ImageIcon("./sprites/monster/Rattata/backright.png");
 	public static ImageIcon RATTATABR = new ImageIcon("./sprites/monster/Rattata/backright.png");
 	public static ImageIcon RATTATABL = new ImageIcon("./sprites/monster/Rattata/backleft.png");

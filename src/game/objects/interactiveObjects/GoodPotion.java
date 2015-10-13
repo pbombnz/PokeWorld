@@ -28,6 +28,9 @@ public class GoodPotion implements Item {
 		return "This potion smells good";
 	}
 	
+	/**
+	 * @return the health it can heal
+	 */
 	public int getHealthHealAmount(){
 		return healthHealAmount;
 	}
