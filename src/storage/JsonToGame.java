@@ -1,4 +1,4 @@
-package Storage;
+package storage;
 
 import java.awt.FileDialog;
 import java.io.File;
@@ -19,10 +19,21 @@ import com.esotericsoftware.jsonbeans.OutputType;
 
 import game.Game;
 
-
+/**
+ * This class loads a Game from a JSON formatted file
+ * 
+ * @author Prashant Bhikhu
+ * @author Priyanka Bhula
+ */
 public class JsonToGame {
 	
-	//PRASHANT LOADING 
+	/**
+	 * Loads Game from JSON file
+	 * 
+	 * @param parentFrame
+	 * @return The Game Object from the JSON if successful, otherwise return null
+	 * @author Prashant Bhikhu
+	 */
 	public static Game loadGame(ServerFrame parentFrame) {
 		// Creates the saving File Dialog and sets the appropriate 
 	    FileDialog fDialog = new FileDialog(parentFrame, "Load Saved Game as file..", FileDialog.LOAD);
@@ -56,7 +67,8 @@ public class JsonToGame {
 		return loadedGame;
 	}	
 	
-	/*@SuppressWarnings("unchecked")
+	/* PRIYANKA's REDUNDANT CODE
+	@SuppressWarnings("unchecked")
 	public static Player loadPlayer(){
 		Player p = new Player();
 		JSONParser jp = new JSONParser();
