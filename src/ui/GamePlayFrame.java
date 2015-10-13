@@ -1238,7 +1238,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			///print compass
 			g.drawImage(
 					new ImageIcon("./sprites/other/compass.png").getImage(),
-					600, 355, 200, 200, null);
+					640, 400, 200, 200, null);
 
 			// Initial starting position of where the first square is going to be drawn
 			int yPos = FRAME_HEIGHT / 2;
