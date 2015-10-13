@@ -27,42 +27,69 @@ public class Location implements Serializable {
 		this.y = y;
 	}
 
+	/**
+	 * @return Room, the room
+	 */
 	public Room getRoom() {
 		return room;
 	}
 
+	/**
+	 * @param room, sets the room
+	 */
 	public void setRoom(Room room) {
 		this.room = room;
 	}
 
+	/**
+	 * @param x, sets the x coord
+	 */
 	public void setX(int x) {
 		this.x = x;
 	}
 	
+	/**
+	 * @param y, sets the y coord
+	 */
 	public void setY(int y) {
 		this.y=y;
 	}
 
+	/**
+	 * @return int, the x coord
+	 */
 	public int getX() {
 		return x;
 	}
 	
+	/**
+	 * @return int, the y coord
+	 */
 	public int getY() {
 		return y;
 	}
 
+	/**
+	 * moves North
+	 */
 	public void moveNorth() {
 		this.y = this.y - 1;
 	}
-
+	/**
+	 * moves East
+	 */
 	public void moveEast() {
 		this.x = this.x + 1;
 	}
-	
+	/**
+	 * moves South
+	 */
 	public void moveSouth() {
 		this.y = this.y + 1;
 	}
-	
+	/**
+	 * moves West
+	 */
 	public void moveWest() {
 		this.x = this.x - 1;
 	}
