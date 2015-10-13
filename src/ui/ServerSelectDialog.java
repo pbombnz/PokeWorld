@@ -5,6 +5,7 @@ import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -47,6 +48,21 @@ public class ServerSelectDialog extends JDialog {
 		// so produce a error message to the user and don't bother showing the dialog at all.
 		if(serverAddresses.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "No LAN Servers found!", "ERROR", JOptionPane.ERROR_MESSAGE);
+			
+			// Show an input dialog that allows the user to input the IP manually because it could be LAN discovery problems or multiplayer on web
+			String manualIPAddress = JOptionPane.showInputDialog(this, "Enter a Server Address:", "ERROR", JOptionPane.ERROR_MESSAGE);
+			// If the input box is empty, the close the the overall dialog box
+			if(manualIPAddress != null) {
+				// Parse the input as an IP address
+				try {
+					
+					selectedAddress = InetAddress.getByName(manualIPAddress);
+				} catch (UnknownHostException e1) {
+					// Failure to parse.
+					JOptionPane.showMessageDialog(this, "No server at "+manualIPAddress+"!", "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			// Regardless of the outcome above, we dont need to load the main dialog box as there are no servers
 			dispose();
 			return;
 		}
