@@ -103,22 +103,23 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public int shakeOffsetZero = 0;//for changing the print postion on screen(some character picture is bigger, so need to be printed higher).the smaller the value is , the higher the character print
 	public int shakeOffset = shakeOffsetZero;//the player will keep shake when they are standing in one place
 	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
-	private final int LVL2_PRINT_OFFSET = -5;
-	private final int LVL3_PRINT_OFFSET = -10;
+	private final int LVL2_PRINT_OFFSET = -5;//the lvl2 picture is bigger , so print it higher
+	private final int LVL3_PRINT_OFFSET = -10;//the lvl3 picture is bigger , so print it higher
 	public final int SHAKE_TIMER_LIMIT = 200;// the shakeoffset will change when it reaches the timer limit
 
-	public List<JLabel> infoLabels = new ArrayList<JLabel>();
-
-	public boolean hasLoadedLabels = false;
-
+	//these fields are for printing information lables
+	public boolean hasLoadedLabels = false;//only load label 1 time on panel. if hasLoadedLabels, wont load again
+	public List<JLabel> infoLabels = new ArrayList<JLabel>();//add infomation labels here, delete them before print them again
 	public JLabel headPictureLabel = null;
 	public JLabel bgHeadViewLabel = null;
 	public JLabel dieLabel = null;
 	public JLabel attackLabel = null;
 	public JPanel panel;
 	public JLabel characterLabel;
+	
 	private JDialog fightBox;
 	private JDialog dropBox;
+	
 	//add explored time
 	private String startTime = null;
 	public JLabel timeLabel = new JLabel();
