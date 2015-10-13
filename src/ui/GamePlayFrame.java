@@ -2,6 +2,21 @@ package ui;
 
 /**
  * @author Wang Zhen
+ * This class include all methods,fileds of game gui and some game logic
+ * 
+ * This gui has two parts:1st person view gui on the right side and 3rd person 
+ * view gui on the left side.
+ *  
+ * This gui has two keyboard control system:The 1st system is for using in 3rd person view gui.
+ * (user can use WSAD to move. W-north S-south A-west D-east)
+ * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view. 
+ * (user can use Up,Down,Left,Right to move. Up-go,Down-turn around,Left-turn left,Right-turn right)
+ * And user can also use "J" to jump in both 2 views.
+ * 
+ * The functions in this class:evolving animation,fighting animation,move,pick up(automaticlly pick up when player go to the sqaure with object),
+ * drop,fight,change weather(rainy,sunny),change day or night,send message to other player,
+ * monster wonder around,draw mini map,make player shake,refresh player's information.
+ * 
  */
 import java.awt.Color;
 import java.awt.Dimension;
@@ -72,10 +87,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	};
 
 	// The Size of the Frame
-	//
 	private static final int FRAME_HEIGHT = 610;
 	private static final int FULL_FRAME_WIDTH = 1400;
-	//	private static final int WELCOME_FRAME_WIDTH = 1000;
 	// The size of the tiles when they are displayed
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
@@ -86,11 +99,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private Rotate rotate = new Rotate();
 
 	public int jumpOffset = 0;
+	//these fileds are for helping make player shake even if they do not move
 	public int shakeOffsetZero = 0;//for changing the print postion on screen(some character picture is bigger, so need to be printed higher).the smaller the value is , the higher the character print
 	public int shakeOffset = shakeOffsetZero;//the player will keep shake when they are standing in one place
+	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
 	private final int LVL2_PRINT_OFFSET = -5;
 	private final int LVL3_PRINT_OFFSET = -10;
-	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
 	public final int SHAKE_TIMER_LIMIT = 200;// the shakeoffset will change when it reaches the timer limit
 
 	public List<JLabel> infoLabels = new ArrayList<JLabel>();
