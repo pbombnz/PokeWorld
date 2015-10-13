@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -84,20 +83,20 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 		
 		clearServerLogMenu.add(clearServerLog);
 				
-		// Add Listners to all Menu Items
+		// Add Listeners to all Menu Items
 		connect.addActionListener(this);
 		disconnect.addActionListener(this);
 		exit.addActionListener(this);
 		saveGame.addActionListener(this);
 		clearServerLog.addActionListener(this);
 		
-		// Sets the Console properties so that it cannot be editted (only for display), and auto scrolls
+		// Sets the Console properties so that it cannot be edited (only for display), and auto scrolls
 		console.setEditable(false);
 		((DefaultCaret) console.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		// Wrap the console in a scrollpane to enable scrolling
+		// Wrap the console in a scroll pane to enable scrolling
 		consoleScrollPane = new JScrollPane(console);
 
-		// Add the menu and console scrollpane to the frame
+		// Add the menu and console scroll pane to the frame
 		setJMenuBar(menuBar);
 		add(consoleScrollPane);
 		// Finally show frame
