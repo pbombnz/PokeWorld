@@ -285,8 +285,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		inputMessageField.setBounds(0, 440, 200, 20);
 		inputMessageField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				sendMessage();
+				requestFocus();
 			}
 		});
 		panel.add(inputMessageField);
