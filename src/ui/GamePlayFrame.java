@@ -296,13 +296,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		sendMessageButton.setToolTipText("Press to send message");
 		sendMessageButton.setBounds(210, 435, 80, 30);
 		panel.add(sendMessageButton);
-		sendMessageButton.addActionListener(new ActionListener() {
+		sendMessageButton.addActionListener(this/*new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if(inputMessageField.getText().length() != 0) {
 					sendMessage();
 				}
+				requestFocus();
 			}
-		});
+		}*/);
 	}
 	
 	private void outputMessageToTextArea(String playerName, String message) {
@@ -2487,6 +2488,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			} else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
 			}
+		}
+		else if(source instanceof JButton) {
+			if(inputMessageField.getText().length() > 0) {
+				sendMessage();
+			}
+			this.requestFocus();
 		}
 	}
 
