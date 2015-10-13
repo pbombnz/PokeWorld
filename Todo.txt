@@ -6,7 +6,9 @@ code:
 
 - make sure you cant walk into fences and other players 
 
-- comment, author, seperate classes and tidy up (last)
+- add other players to minimap
+
+- comment, author, separate classes and tidy up (last)
 
 bugs:
 
@@ -15,9 +17,6 @@ corner of the board instead of the door we entered.
 
 simple UI stuff:
 
-- move gifs to the side or corner of the screen instead of the middle
-
-- spread out the UI, too cramped and overlapping
 
 - move pop-up dialogs to corner or side
 
@@ -26,8 +25,6 @@ simple UI stuff:
 
 Documentation:
 
-- finish up UML once we tidy code up and seperate classes and methods
+- finish up UML once we tidy code up and separate classes and methods
 
 - add loading and saving into UML when completed
-
-- CRC cards
