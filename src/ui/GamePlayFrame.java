@@ -378,6 +378,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		return time;
 	}
 
+	/**
+	 * load JLabels. 
+	 */
 	public void loadLabels() {
 		// Get Client Player from Client Connection
 		Player clientPlayer = gameClient.getClientPlayer();
@@ -387,14 +390,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
 		//load head picture
 		JLabel headPictureLabel = null;
-
-		System.out.println(clientPlayer);
+//		System.out.println(clientPlayer);
 		ImageIcon headPicture = clientPlayer.getAvatar()
 				.getCurrentEvolution(clientPlayer.getPlayerLevel())
 				.getDisplayPictureGIF();
 		headPictureLabel = new JLabel(headPicture);
 		headPictureLabel.setToolTipText("The head picture of character");
-
 		int xPo = 10;
 		int yPo = 10;
 		int headPictureSize = 130;
@@ -410,17 +411,13 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		JLabel attackLabel = null;
 		JLabel levelUpLabel_2 = null;
 		JLabel levelUpLabel_3 = null;
-
-		//print head picture <- Bad Comment
-		// Proper Comment: Sets all Labels with Sprites of the clients player.
 		Evolution clientPlayerCurrentEvolution = clientPlayer.getAvatar()
 				.getCurrentEvolution(clientPlayer.getPlayerLevel());
-
+		//create labels
 		dieLabel = new JLabel(clientPlayerCurrentEvolution.getDieGIF());
 		attackLabel = new JLabel(clientPlayerCurrentEvolution.getAttackGIF());
 		levelUpLabel_2 = new JLabel(
 				clientPlayerCurrentEvolution.getEvolvingGIF());
-
 		if (clientPlayer.getPlayerLevel() != Player.MAX_PLAYER_LEVEL) {
 			Evolution clientPlayerNextEvolution = clientPlayer.getAvatar()
 					.getNextEvolution(clientPlayer.getPlayerLevel());
@@ -429,11 +426,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		} else {
 			levelUpLabel_3 = new JLabel();
 		}
-
+		//set position
 		int diexPo = 400;
 		int dieyPo = 100;
 		int dieOrAttackLabelSize = 300;
-
 		dieLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
 				dieOrAttackLabelSize);
 		attackLabel.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
@@ -442,7 +438,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				dieOrAttackLabelSize);
 		levelUpLabel_3.setBounds(diexPo, dieyPo, dieOrAttackLabelSize * 2,
 				dieOrAttackLabelSize);
-
 		this.dieLabel = dieLabel;
 		this.attackLabel = attackLabel;
 		this.lvlupLabel_2 = levelUpLabel_2;
@@ -450,8 +445,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	}
 
+	/**
+	 * print player's information on the panel
+	 * it will print name,type,health,attack,level,exployed time
+	 * @param player
+	 */
 	public void printInformation(Player player) {
-
 		//clear all info labels first
 		for (JLabel jl : infoLabels) {
 			panel.remove(jl);
@@ -529,6 +528,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		repaint();
 	}
 
+	/**
+	 * transfer long(runningTime) to a string
+	 * @param runningTime
+	 * @return
+	 */
 	private String getTimeText(long runningTime) {
 		runningTime = runningTime / 1000;//trasfter ms to s
 		long second = (runningTime % 60);
@@ -549,6 +553,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
+	/**
+	 * 
+	 */
 	private void changeShakeLimit() {
 		if (shakeOffset == shakeOffsetZero) {
 			shakeOffset = shakeOffsetZero + 5;
