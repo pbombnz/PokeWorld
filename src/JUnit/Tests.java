@@ -271,6 +271,16 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
+	@Test
+	public void testFight(){
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 	public void createPlayer() throws FileNotFoundException {
 		this.p = new Player(-1, "Donald", new Avatar());
