@@ -43,8 +43,14 @@ public abstract class Monster implements GameObject {
 	 */
 	public abstract boolean isDead();
 
+	/**
+	 * @return direction of Monster
+	 */
 	public abstract Direction getDirection();
 
+	/**
+	 * @param direction to set the Monster
+	 */
 	public abstract void setDirection(Direction direction);
 
 }

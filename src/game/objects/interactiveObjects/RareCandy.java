@@ -47,6 +47,9 @@ public class RareCandy implements Item {
 		//level up
 	}
 
+	/**
+	 * @return the new level after eating the candy
+	 */
 	public int level(){
 		return currLevel + 1;
 	}
