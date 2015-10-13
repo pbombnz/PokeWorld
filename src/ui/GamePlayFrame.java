@@ -103,9 +103,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public int shakeOffsetZero = 0;//for changing the print postion on screen(some character picture is bigger, so need to be printed higher).the smaller the value is , the higher the character print
 	public int shakeOffset = shakeOffsetZero;//the player will keep shake when they are standing in one place
 	public int shakeTimer = 0;//using calculation number as timer. the shakeoffset will change when the timer reaches the timerLimit
+	public final int SHAKE_TIMER_LIMIT = 200;// the shakeoffset will change when it reaches the timer limit
+
+	//level up
+	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
 	private final int LVL2_PRINT_OFFSET = -5;//the lvl2 picture is bigger , so print it higher
 	private final int LVL3_PRINT_OFFSET = -10;//the lvl3 picture is bigger , so print it higher
-	public final int SHAKE_TIMER_LIMIT = 200;// the shakeoffset will change when it reaches the timer limit
 
 	//these fields are for printing information lables
 	public boolean hasLoadedLabels = false;//only load label 1 time on panel. if hasLoadedLabels, wont load again
@@ -116,33 +119,46 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public JLabel attackLabel = null;
 	public JPanel panel;
 	public JLabel characterLabel;
-	
-	private JDialog fightBox;
-	private JDialog dropBox;
-	
+
+	//fight
+	private JDialog fightBox;//dialog when fight monster
+	private boolean isFighting = false;//stop key control and monster moving when the player is level uping
+
 	//add explored time
 	private String startTime = null;
 	public JLabel timeLabel = new JLabel();
+
 	public List<JLabel> itemJLabels = new ArrayList<JLabel>();
+
+	public boolean componentsAdded = false;//only add components 1 time on panel. if componentsAdded, wont load again
+
+	//drop invertory
 	public JButton dropButton = new JButton();
+	private JDialog dropBox;//items choosing dialog when press drop button
 	public JButton sendMessageButton = new JButton();
-	public boolean buttonsAdded = false;
 	public int jumpTimeCounter = 0;
-	private boolean isJumping = false;
-	public boolean isRainning = false;
+
+	private boolean isJumping = false;//whether the player is jumping now
+
+	//changing weather
 	public JButton rainyButton = new JButton();
 	public JButton sunnyButton = new JButton();
 	public JButton dayButton = new JButton();
 	public JButton nightButton = new JButton();
+	public boolean isRainning = false;
+
+	//monster wonder around
 	private long lastMovedtime = 0;//the time that monster  moved in last wonder around unit 
 	private boolean moved = false;
 	private List<Monster> monstersChanged = new ArrayList<Monster>();//monster's location already be changed in one turn in wander around
-	private boolean isFighting = false;//stop key control and monster moving when the player is level uping
-	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
+
+	//choose day or night
 	protected boolean isDay = true;
-	private final int sightRange = 3;
+	private final int sightRange = 3;//the sight range in night
+
 	private JTextArea textOutputArea;
 	private JTextField inputMessageField;
+
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
@@ -178,7 +194,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	public GamePlayFrame() {
 		gameClient.setGameClientListener(this);
-		//		system.ge
 
 		//initialises game frame
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);
@@ -186,16 +201,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		addWindowListener(this);
 		setResizable(false);
 
+		//create panel
 		panel = new GamePanel();
 		setContentPane(panel);
-
 		panel.setOpaque(false);
 		panel.setLayout(null);
 
 		// Create Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu gameMenu = new JMenu("Game");
-		//gameMenu.setMnemonic(KeyEvent.VK_G);
 
 		menuBar.add(gameMenu);
 
@@ -220,7 +234,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		startTime = getCurrentTime();
 	}
 
-	public void addButtons() {
+	/**
+	 * Add Components: drop ,rainy, sunny,day , night,send
+	 * only add Components 1 time on panel.After labels added  change the hasLoadedLabels to true.
+	 * if hasLoadedLabels is true, wont load button again
+	 */
+	public void addComponents() {
 		//Add button
 		dropButton.setText("Drop");
 		dropButton.setToolTipText("Press this button to drop item");
@@ -311,36 +330,40 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		sendMessageButton.setToolTipText("Press to send message");
 		sendMessageButton.setBounds(210, 435, 80, 30);
 		panel.add(sendMessageButton);
-		sendMessageButton.addActionListener(this/*new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				if(inputMessageField.getText().length() != 0) {
-					sendMessage();
-				}
-				requestFocus();
-			}
-		}*/);
+		sendMessageButton.addActionListener(this);
 	}
-	
+
+	/**
+	 * output Message To TextArea
+	 */
 	private void outputMessageToTextArea(String playerName, String message) {
-		textOutputArea.append("\n<"+playerName+">" + message);
+		textOutputArea.append("\n<" + playerName + ">" + message);
 	}
-	
-	private void sendMessage(){
+
+	/**
+	 * send Message to client
+	 */
+	private void sendMessage() {
 		String playerName = gameClient.getClientPlayer().getName();
 		String message = inputMessageField.getText();
-		outputMessageToTextArea( playerName, message);
+		outputMessageToTextArea(playerName, message);
 		gameClient.sendMessage(playerName, message);
 		inputMessageField.setText("");
 	}
-	
 
+	/**
+	 * drop the number index 
+	 * @param index
+	 */
 	public void dropIventory(int index) {
 		Player clientPlayer = gameClient.getClientPlayer();
 		Location loc = clientPlayer.getLocation();
 		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.setGameObjectOnSquare(clientPlayer.getInventory().get(index));
 		Item removedItem = clientPlayer.getInventory().remove(index);
-		gameClient.sendDropItem(removedItem, new Location(loc.getRoom(), loc.getX(), loc.getY()), clientPlayer.getId());
+		gameClient.sendDropItem(removedItem,
+				new Location(loc.getRoom(), loc.getX(), loc.getY()),
+				clientPlayer.getId());
 
 	}
 
@@ -1241,9 +1264,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					for (Player connectedPlayer : gameClient.getGame()
 							.getPlayers()) {
 						if (connectedPlayer != clientPlayer) {
-							Location otherPlayerLoc = connectedPlayer.getLocation();
-							if (otherPlayerLoc.getRoom().getName().equals(clientPlayer.getLocation().getRoom().getName()) && 
-								otherPlayerLoc.getX() == cellX && otherPlayerLoc.getY() == cellY) {
+							Location otherPlayerLoc = connectedPlayer
+									.getLocation();
+							if (otherPlayerLoc
+									.getRoom()
+									.getName()
+									.equals(clientPlayer.getLocation()
+											.getRoom().getName())
+									&& otherPlayerLoc.getX() == cellX
+									&& otherPlayerLoc.getY() == cellY) {
 								g.drawImage(
 										connectedPlayer
 												.getSpriteBasedOnDirection()
@@ -1407,9 +1436,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			printInventory(clientPlayer, g);
 
 			//add buttons on frame
-			if (buttonsAdded == false) {
-				addButtons();
-				buttonsAdded = true;
+			if (componentsAdded == false) {
+				addComponents();
+				componentsAdded = true;
 			}
 			//draw small map
 			int mapStartX = 600;
@@ -1647,8 +1676,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		for (Player otherPlayer : gameClient.getGame().getPlayers()) {
 			Location otherLoc = otherPlayer.getLocation();
-			if (otherLoc.getX() == x && otherLoc.getY() == y 
-					&& otherLoc.getRoom().getName().equals(player.getLocation().getRoom().getName())) {
+			if (otherLoc.getX() == x
+					&& otherLoc.getY() == y
+					&& otherLoc.getRoom().getName()
+							.equals(player.getLocation().getRoom().getName())) {
 				return false;
 			}
 		}
@@ -1926,7 +1957,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					clientPlayer.addToInventory(((Key) ObjectOfLoc));
 					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 							.setGameObjectOnSquare(null);
-					gameClient.sendPickupItem((Item) ObjectOfLoc, new Location(loc.getRoom(), loc.getX(), loc.getY()), clientPlayer.getId());
+					gameClient.sendPickupItem((Item) ObjectOfLoc, new Location(
+							loc.getRoom(), loc.getX(), loc.getY()),
+							clientPlayer.getId());
 				}
 				//If you find a goodPotion, increases your health and removes it from the board
 				if (ObjectOfLoc instanceof GoodPotion) {
@@ -2000,8 +2033,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						if (((Door) ObjectOfLoc).id() == items.id()) {
 
 							Door theDoor = (Door) ObjectOfLoc;
-							Room newRoom = gameClient.getGame().getRooms().get(theDoor.getNextRoom());
-							clientPlayer.setLocation(new Location(newRoom, theDoor.getNextRoomX(), theDoor.getNextRoomY()));
+							Room newRoom = gameClient.getGame().getRooms()
+									.get(theDoor.getNextRoom());
+							clientPlayer.setLocation(new Location(newRoom,
+									theDoor.getNextRoomX(), theDoor
+											.getNextRoomY()));
 							clientPlayer.setDirection(Direction.FACE_LEFT);
 
 							//gameClient.sendPlayerMoveUpdateToServer();
@@ -2506,9 +2542,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			} else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
 			}
-		}
-		else if(source instanceof JButton) {
-			if(inputMessageField.getText().length() > 0) {
+		} else if (source instanceof JButton) {
+			if (inputMessageField.getText().length() > 0) {
 				sendMessage();
 			}
 			this.requestFocus();
@@ -2555,7 +2590,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 	@Override
 	public void onMessageRecieved(String playerName, String message) {
-		outputMessageToTextArea( playerName, message);
+		outputMessageToTextArea(playerName, message);
 	}
 }
 
