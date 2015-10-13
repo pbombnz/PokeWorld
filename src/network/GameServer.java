@@ -148,6 +148,11 @@ public class GameServer extends Listener {
 				}
 			}
 			
+			ClientMessage joinMessagePacket = new ClientMessage();
+			joinMessagePacket.playerName = packet.newName;
+			joinMessagePacket.message = "* Joined Server *";
+			server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
+			
 			ClientNewGame newGame = new ClientNewGame();
 			newGame.gameByteArray = game.toByteArray();
 			
@@ -237,6 +242,11 @@ public class GameServer extends Listener {
 		packet.player.setLocation(newLoc);
 		game.getPlayers().add(packet.player);
 
+		ClientMessage joinMessagePacket = new ClientMessage();
+		joinMessagePacket.playerName = packet.player.getName();
+		joinMessagePacket.message = "* Joined Server *";
+		server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
+		
 		// Send game world object to client so they can load the game, as well as the final
 		// version of the client player (so their client player can actually be drawn)
 		ClientNewGame newGame = new ClientNewGame();
