@@ -108,8 +108,14 @@ public class GameServer extends Listener {
 		}	
 		else if (object instanceof ClientQuit) {
 			ClientQuit packet = (ClientQuit) object;
+			String newName = game.getPlayerByID(packet.id).getName();
 			game.getPlayers().remove(game.getPlayerByID(packet.id));
 			server.sendToAllExceptTCP(packet.id, packet);
+			
+			ClientMessage joinMessagePacket = new ClientMessage();
+			joinMessagePacket.playerName = newName;
+			joinMessagePacket.message = "* Left Server *";
+			server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
 		}	
 		
 		else if(object instanceof PlayerUpdateLocationAndDirection) {

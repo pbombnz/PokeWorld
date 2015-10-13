@@ -9,7 +9,7 @@ public class Room1 extends Room{
 	
 	public Room1() {
 		this.level=1;
-		this.roomName = "Testing Room";
+		this.roomName = "Stage 1";
 		this.board = new Board1();
 	}
 	

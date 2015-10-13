@@ -1223,8 +1223,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					for (Player connectedPlayer : gameClient.getGame()
 							.getPlayers()) {
 						if (connectedPlayer != clientPlayer) {
-							if (connectedPlayer.getLocation().getX() == cellX
-									&& connectedPlayer.getLocation().getY() == cellY) {
+							Location otherPlayerLoc = connectedPlayer.getLocation();
+							if (otherPlayerLoc.getRoom().getName().equals(clientPlayer.getLocation().getRoom().getName()) && 
+								otherPlayerLoc.getX() == cellX && otherPlayerLoc.getY() == cellY) {
 								g.drawImage(
 										connectedPlayer
 												.getSpriteBasedOnDirection()
@@ -1979,12 +1980,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						if (((Door) ObjectOfLoc).id() == items.id()) {
 
 							Door theDoor = (Door) ObjectOfLoc;
-							clientPlayer.setLocation(new Location(gameClient
-									.getGame().getRooms()
-									.get(theDoor.getNextRoom()), theDoor
-									.getNextRoomX(), theDoor.getNextRoomY()));
+							Room newRoom = gameClient.getGame().getRooms().get(theDoor.getNextRoom());
+							clientPlayer.setLocation(new Location(newRoom, theDoor.getNextRoomX(), theDoor.getNextRoomY()));
 							clientPlayer.setDirection(Direction.FACE_LEFT);
 
+							gameClient.sendPlayerMoveUpdateToServer();
 							//Room nowRoom = clientPlayer.getLocation().getRoom();
 
 							/*if (nowRoom.level == theDoor.linkFrom) {
