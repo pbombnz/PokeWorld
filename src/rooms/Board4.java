@@ -41,7 +41,7 @@ public class Board4 extends Board{
 				this.squares[i][j] = new BoardSquare(null);
 
 				if(i == 9 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(3,3,1,1));
+					this.squares[i][j] = new BoardSquare(new Door(2,2,8,9));
 				}
 				if(i == 5 && j == 5)
 					this.squares[i][j] = new BoardSquare(new Mewtwo(100,100));
