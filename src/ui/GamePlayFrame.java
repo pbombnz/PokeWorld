@@ -324,7 +324,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		Location loc = clientPlayer.getLocation();
 		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.setGameObjectOnSquare(clientPlayer.getInventory().get(index));
-		clientPlayer.getInventory().remove(index);
+		Item removedItem = clientPlayer.getInventory().remove(index);
+		gameClient.sendDropItem(removedItem, new Location(loc.getRoom(), loc.getX(), loc.getY()), clientPlayer.getId());
+
 	}
 
 	/**
@@ -1909,6 +1911,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					clientPlayer.addToInventory(((Key) ObjectOfLoc));
 					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 							.setGameObjectOnSquare(null);
+					gameClient.sendPickupItem((Item) ObjectOfLoc, new Location(loc.getRoom(), loc.getX(), loc.getY()), clientPlayer.getId());
 				}
 				//If you find a goodPotion, increases your health and removes it from the board
 				if (ObjectOfLoc instanceof GoodPotion) {
@@ -1925,7 +1928,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						|| clientPlayer.getPlayerLevel() == 2) {
 					clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
 							+ ((RareCandy) ObjectOfLoc).level());
-					gameClient.sendPlayerUpdate();
 					//=================================================
 					//draw gif here
 					if (clientPlayer.getPlayerLevel() == 2) {
@@ -1987,7 +1989,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							clientPlayer.setLocation(new Location(newRoom, theDoor.getNextRoomX(), theDoor.getNextRoomY()));
 							clientPlayer.setDirection(Direction.FACE_LEFT);
 
-							gameClient.sendPlayerMoveUpdateToServer();
+							//gameClient.sendPlayerMoveUpdateToServer();
 							//Room nowRoom = clientPlayer.getLocation().getRoom();
 
 							/*if (nowRoom.level == theDoor.linkFrom) {
@@ -2009,7 +2011,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 				}
 			}
-
+			gameClient.sendPlayerUpdate();
 			gameClient.sendPlayerMoveUpdateToServer();
 			repaint();
 		}
@@ -2396,6 +2398,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					"Monster is still alive, but now he only has "
 							+ ((Monster) ObjectOfLoc).getHealth() + "health");
 		}
+		gameClient.sendPlayerUpdate();
 		isFighting = false;
 	}
 

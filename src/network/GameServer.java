@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import rooms.Board;
 import rooms.Room;
 import ui.ServerFrame;
+import game.BoardSquare;
 import game.Game;
 import game.Location;
 import game.Player;
@@ -183,6 +184,30 @@ public class GameServer extends Listener {
 			playerToUpdate.setPlayerLevel(packet.newPlayerLevel);
 			
 			server.sendToAllExceptTCP(connection.getID(), object);
+		}
+		
+		else if(object instanceof PlayerPickUpItem) {
+			PlayerPickUpItem packet = (PlayerPickUpItem) object;
+			
+			Player playerToUpdate = getGame().getPlayerByID(packet.id);
+			playerToUpdate.getInventory().add(packet.item);
+			
+			BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
+			sq.setGameObjectOnSquare(null);
+			
+			server.sendToAllExceptTCP(packet.id, object);
+		}
+		
+		else if(object instanceof PlayerDropItem) {
+			PlayerDropItem packet = (PlayerDropItem) object;
+			
+			Player playerToUpdate = getGame().getPlayerByID(packet.id);
+			playerToUpdate.getInventory().remove(packet.item);
+			
+			BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
+			sq.setGameObjectOnSquare(packet.item);
+			
+			server.sendToAllExceptTCP(packet.id, object);
 		}
 	}
 

@@ -1,8 +1,12 @@
 package network;
 
+import game.BoardSquare;
 import game.Game;
+import game.Location;
 import game.Player;
 import game.avatar.Avatar;
+import game.objects.GameObject;
+import game.objects.interactiveObjects.Item;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -129,6 +133,30 @@ public class GameClient extends Listener {
 			playerToUpdate.setHealth(packet.newHealth);
 			playerToUpdate.setPlayerLevel(packet.newPlayerLevel);
 			gameClientListener.onGameUpdated();
+		}
+		
+		else if(object instanceof PlayerPickUpItem) {
+			PlayerDropItem packet = (PlayerDropItem) object;
+			
+			Player playerToUpdate = getGame().getPlayerByID(packet.id);
+			playerToUpdate.getInventory().add(packet.item);
+			
+			BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
+			sq.setGameObjectOnSquare(null);
+			
+			//server.sendToAllExceptTCP(packet.id, object);
+		}
+		
+		else if(object instanceof PlayerDropItem) {
+			PlayerDropItem packet = (PlayerDropItem) object;
+			
+			Player playerToUpdate = getGame().getPlayerByID(packet.id);
+			playerToUpdate.getInventory().remove(packet.item);
+			
+			BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
+			sq.setGameObjectOnSquare(packet.item);
+			
+			//server.sendToAllExceptTCP(packet.id, object);
 		}
 	}
 	
@@ -358,6 +386,24 @@ public class GameClient extends Listener {
 	 */
 	public void setGameClientListener(GameClientListener gameClientListener) {
 		this.gameClientListener = gameClientListener;
+	}
+
+	public void sendPickupItem(Item item, Location location, int id) {
+		PlayerPickUpItem packet = new PlayerPickUpItem();
+		packet.id = client.getID();
+		packet.item = (Item) item;
+		packet.location = location;
+		
+		client.sendTCP(packet);
+	}
+	
+	public void sendDropItem(Item item, Location location, int id) {
+		PlayerDropItem packet = new PlayerDropItem();
+		packet.id = client.getID();
+		packet.item = (Item) item;
+		packet.location = location;
+		
+		client.sendTCP(packet);
 	}
 }
 
