@@ -28,15 +28,15 @@ public class CharacterSelectDialog extends JDialog implements ActionListener {
 
 	public CharacterSelectDialog(JFrame parentFrame) {
 		super(parentFrame, "Choose your Character?");
-		
+
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-		
+
 		setLayout(new BorderLayout());
 
 		setSize(700, 400);
 		setResizable(false);
-		
+
 		buttonsPanel.setLayout(new FlowLayout());
 
 		try {
@@ -45,35 +45,38 @@ public class CharacterSelectDialog extends JDialog implements ActionListener {
 				avatarButton.setText(avatar.getName());
 				avatarButton.setName(avatar.getName());
 				avatarButton.setIcon(avatar.getDisplayPic());
-				avatarButton.setToolTipText("Name:"+avatar.getName()+"\n");
+				avatarButton.setToolTipText("Name:" + avatar.getName() + "\n");
 				avatarButton.addActionListener(this);
-				
+
 				buttonsPanel.add(avatarButton);
 			}
 		} catch (IOException e) {
 			new RuntimeException(e);
 		}
-		
-		add(new JLabel("What Character would you like to pick?"), BorderLayout.PAGE_START);
+
+		add(new JLabel("What Character would you like to pick?"),
+				BorderLayout.PAGE_START);
 		add(buttonsPanel, BorderLayout.CENTER);
 
 		setLocationRelativeTo(parentFrame);
 		setVisible(true);
 	}
 
+	/**
+	 * paintComponents
+	 */
 	public void paintComponents(Graphics g) {
 		super.paintComponents(g);
 	}
 
-	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		
+
 		JButton button = (JButton) event.getSource();
-		
+
 		try {
 			for (Avatar avatar : Avatar.getAllAvatars()) {
-				if(avatar.getName().equals(button.getName())) {
+				if (avatar.getName().equals(button.getName())) {
 					choosenAvatar = avatar;
 					this.dispose();
 					return;
@@ -83,12 +86,20 @@ public class CharacterSelectDialog extends JDialog implements ActionListener {
 			new RuntimeException(e);
 		}
 	}
-	
+
+	/**get avatar
+	 * @param parentFrame
+	 * @return
+	 */
 	public static Avatar Chooser(JFrame parentFrame) {
 		CharacterSelectDialog dialog = new CharacterSelectDialog(parentFrame);
 		return dialog.getChoosenAvatar();
 	}
-	
+
+	/**
+	 * return choosed avatar
+	 * @return
+	 */
 	public Avatar getChoosenAvatar() {
 		return choosenAvatar;
 	}

@@ -158,7 +158,10 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 		} 
 	}
 	
-	
+	/**
+	 * write message ToConsole
+	 * @param message
+	 */
 	public void writeToConsole(String message) {
 		console.append(message + "\n");
 	}

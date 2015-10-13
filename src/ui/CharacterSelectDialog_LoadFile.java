@@ -60,16 +60,29 @@ public class CharacterSelectDialog_LoadFile extends JDialog implements ActionLis
 		setVisible(true);
 	}
 
+	/**
+	 * actionPerformed
+	 */
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		choosenPlayer = loadedPlayers.get(loadedPlayersComboBox.getSelectedIndex());
 		this.dispose();
 	}
 	
+	/**
+	 * getChoosenPlayer
+	 * @return
+	 */
 	private Player getChoosenPlayer() {
 		return choosenPlayer;
 	}
 	
+	/**
+	 * return choosed player
+	 * @param parentFrame
+	 * @param loadedPlayers
+	 * @return
+	 */
 	public static Player Chooser(JFrame parentFrame, ArrayList<Player> loadedPlayers) {
 		CharacterSelectDialog_LoadFile dialog = new CharacterSelectDialog_LoadFile(parentFrame, loadedPlayers);
 		return dialog.getChoosenPlayer();
