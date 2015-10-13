@@ -5,7 +5,6 @@ import game.Game;
 import game.Location;
 import game.Player;
 import game.avatar.Avatar;
-import game.objects.GameObject;
 import game.objects.interactiveObjects.Item;
 
 import java.io.FileNotFoundException;
