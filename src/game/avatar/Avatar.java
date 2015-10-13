@@ -29,34 +29,45 @@ public class Avatar implements Serializable {
 	
 	private static File avatarPath = new File("./sprites/avatars/"); // The file path that locates the avatar sprites
 
-	// Although redunant due to 'evolution1_name', it is keep in the code for compatibility
-	private final String avatarName;
-	private final ImageIcon displayPic;
-	private ArrayList<Evolution> evolutions = new ArrayList<Evolution>();
+	private final String avatarName; // Although redunant due to 'evolution1_name', it is keep in the code for compatibility
+	private final ImageIcon displayPic; // The picture used when a player chooses a character
+	private ArrayList<Evolution> evolutions = new ArrayList<Evolution>(); // The list of evolutions for a particualr avatar
 
-
+	/**
+	 * Gets All Avatars dynamically from the Avatar resources folder, and parses images into
+	 * categories of evolutions for easier use.
+	 * 
+	 * @return A list of avatars retrieved from the file.
+	 * @throws FileNotFoundException Thrown if the files for a particular evolution are not found.
+	 */
 	public static List<Avatar> getAllAvatars() throws FileNotFoundException
 	{
+		// Initialize the avatars list for returning
 		List<Avatar> avatars;
 
+		// Checks if the Avatar Path even exist
 		if(avatarPath.exists() && avatarPath.isDirectory()) {
 			avatars = new ArrayList<Avatar>();
 		} else {
 			throw new FileNotFoundException("Sprite Avatar Folder Does not exist or cannot be found.");
 		}
 
+		// Get all Avatar directories
 		File[] fList = avatarPath.listFiles();
 
+		// Iterate through all characters and create the evolutions for the specific avatar
 		for (File file : fList) {
+			// Only enter a file if it is a directory
 			if (file.isDirectory()) {	
+				// Holds the sub-directories of the characters
 				File[] directories = null;
 				
-				//System.out.println(checkImagesExist(file.getAbsolutePath(), 1));
+				// Firstly check if all first evolution images of character exist
 				if(!checkImagesExist(file.getAbsolutePath(), 1)) {
 					throw new FileNotFoundException("Sprite Avatar Folder, in \""+file.getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 				
-				
+				// Assuming they exist from the above boolean statement, then retrieve all images.
 				String avatarName = file.getName();
 				ImageIcon displayPic  = new ImageIcon(file.getAbsolutePath() + "/dp.png");				
 				
@@ -70,10 +81,10 @@ public class Avatar implements Serializable {
 				ImageIcon dieGIF = new ImageIcon(file.getAbsolutePath() + "/die.gif");
 				ImageIcon evolvingGIF = new ImageIcon(file.getAbsolutePath() + "/evolve.gif");
 
-				
+				// Pack all images and name variables into an Evolution object
 				Evolution firstEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF, evolvingGIF);
 				
-				
+				// Looking for the next directory (next evolution) as a sub directory
 				directories = new File(file.getAbsolutePath()).listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File current, String name) {
@@ -81,14 +92,19 @@ public class Avatar implements Serializable {
 					}
 				});
 				
+				// Check if only ONE directory is a subdirectory of the current directory (which is assumed to be the next evolution)
 				if(directories.length != 1) {
+					// If the folder has no sub-directories, then we cannot continue hence through an error OR if there
+					// is more than one sub-directory then the program will not know which one to choose so it throws an error.
 					throw new FileNotFoundException("Second Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 				}
 				
+				// Firstly check if all first evolution images of character exist
 				if(!checkImagesExist(directories[0].getAbsolutePath(), 2)) {
 					throw new FileNotFoundException("Sprite Avatar Folder, in \""+directories[0].getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 
+				// Assuming they exist from the above boolean statement, then retrieve all images.
 				name = directories[0].getName();
 				displayPicGIF  = new ImageIcon(directories[0].getAbsolutePath() + "/dp.gif");
 				faceLeft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
@@ -99,22 +115,30 @@ public class Avatar implements Serializable {
 				dieGIF = new ImageIcon(directories[0].getAbsolutePath() + "/die.gif");
 				evolvingGIF = new ImageIcon(directories[0].getAbsolutePath() + "/evolve.gif");				
 				
+				// Pack all images and name variables into an Evolution object
 				Evolution secondEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF, evolvingGIF);
 						
+				// Looking for the next directory (next evolution) as a sub directory
 				directories = new File(directories[0].getAbsolutePath()).listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File current, String name) {
 						return new File(current, name).isDirectory();
 					}
 				});	 
+
+				// Check if only ONE directory is a subdirectory of the current directory (which is assumed to be the next evolution)
 				if(directories.length != 1) {
+					// If the folder has no sub-directories, then we cannot continue hence through an error OR if there
+					// is more than one sub-directory then the program will not know which one to choose so it throws an error.
 					throw new FileNotFoundException("Third Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 				}
 				
+				// Firstly check if all third evolution images of character exist
 				if(!checkImagesExist(directories[0].getAbsolutePath(), 3)) {
 					throw new FileNotFoundException("Sprite Avatar Folder, in \""+directories[0].getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 
+				// Assuming they exist from the above boolean statement, then retrieve all images.
 				name = directories[0].getName();
 				displayPicGIF  = new ImageIcon(directories[0].getAbsolutePath() + "/dp.gif");
 				faceLeft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
@@ -124,17 +148,29 @@ public class Avatar implements Serializable {
 				attackGIF = new ImageIcon(directories[0].getAbsolutePath() + "/attack.gif");
 				dieGIF = new ImageIcon(directories[0].getAbsolutePath() + "/die.gif");				
 				
+				// Pack all images and name variables into an Evolution object
 				Evolution thirdEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF);
 				
-				
+				// Construct an Avatar from the evolutions, name and display picture add append it to the list of Avatars
 				avatars.add(new Avatar(avatarName, displayPic, firstEvolution, secondEvolution, thirdEvolution));
 			}
 		}
+		
+		// Finally, after all dynamically created Avatars have been created, we return them
 		return avatars;
-
 	}
 	
+	/**
+	 * Checks if the correct images exist within the specified directory for that evolution level.
+	 * The reason why evolutionLevel needs to be specified is because the different evolutions
+	 * have different sprite requirements from each other.
+	 * 
+	 * @param directory The Directory which the specified evolution sprites are located in.
+	 * @param evolutionLevel The evolution level of the directory
+	 * @return
+	 */
 	private static boolean checkImagesExist(String directory, int evolutionLevel) {
+		// Check the certain image files exist depending in the evolution level 
 		if(evolutionLevel == 1) {
 			return new File(directory + "/dp.png").exists() 
 				   && new File(directory + "/dp.gif").exists() 
@@ -164,11 +200,21 @@ public class Avatar implements Serializable {
 				   new File(directory + "/attack.gif").exists() &&
 				   new File(directory + "/die.gif").exists();			
 		} else {
-			return false;
+			return false; // DEAD CODE - Should never get here (as there are always only 3 evolutions)
 		}
 	}
 	
-	public Avatar(String avatarName, ImageIcon displayPic,
+	/**
+	 * Creates an Avatar object. Although not used publicly, it is used by the static method
+	 * to get all the Avatar images in a structured way.
+	 * 
+	 * @param avatarName Name of the Avatar
+	 * @param displayPic Display picture of Avatar
+	 * @param firstEvolution The first evolution of Avatar
+	 * @param secondEvolution The Second evolution of Avatar
+	 * @param thirdEvolution The Second evolution of Avatar
+	 */
+	private Avatar(String avatarName, ImageIcon displayPic,
 			Evolution firstEvolution, Evolution secondEvolution, Evolution thirdEvolution) {
 		this.avatarName = avatarName;
 		this.displayPic = displayPic;
@@ -186,8 +232,9 @@ public class Avatar implements Serializable {
 		this.displayPic = null;
 	}	
 
-	
-	
+	/**
+	 * @return The name of the Avatar
+	 */
 	public String getName() {
 		return avatarName;
 	}
@@ -218,6 +265,12 @@ public class Avatar implements Serializable {
 		return true;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param playerEvolutionLevel The Evolution level that the 
+	 * @return
+	 */
 	public Evolution getCurrentEvolution(int playerEvolutionLevel) {
 		if(playerEvolutionLevel < 1 || playerEvolutionLevel > 3) {
 			throw new IllegalArgumentException("The Evolution Level of a Player must be between 1-3.");
@@ -230,6 +283,13 @@ public class Avatar implements Serializable {
 			throw new IllegalArgumentException("The Evolution Level of a Player must be between 1-3.");
 		}
 		return evolutions.get(playerEvolutionLevel);
+	}
+	
+	/**
+	 * @return the character's display picture
+	 */
+	public ImageIcon getDisplayPic() {
+		return displayPic;
 	}
 	
 	/**
@@ -247,9 +307,4 @@ public class Avatar implements Serializable {
 			throw new RuntimeException(e);
 		}
 	}
-
-	public ImageIcon getDisplayPic() {
-		return displayPic;
-	}
-
 }

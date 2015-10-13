@@ -4,11 +4,13 @@ package ui;
  * @author Wang Zhen
  */
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -35,7 +37,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.text.DefaultCaret;
 
 import com.sun.org.apache.bcel.internal.generic.LCONST;
 
@@ -104,6 +110,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public JLabel timeLabel = new JLabel();
 	public List<JLabel> itemJLabels = new ArrayList<JLabel>();
 	public JButton dropButton = new JButton();
+	public JButton sendMessageButton = new JButton();
 	public boolean buttonsAdded = false;
 	public int jumpTimeCounter = 0;
 	private boolean isJumping = false;
@@ -119,10 +126,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private boolean isLevelUpping = false;//stop key control and monster moving when the player is level uping
 	protected boolean isDay = true;
 	private final int sightRange = 3;
+	private JTextArea textOutputArea;
+	private JTextField inputMessageField;
 	///================================================
 	//the file below is for drawing 1st view
 	//assume the is width of 1 square is 300 in 1st view
 	private static final int FRAME_WIDTH = 800;//the width of the left backgroud picture
+	public static final int CHARACTER_SIZE_IN_FIRST_VIIEW = 100;
+	public static final int TREE_SCALE_FIRST_VIEW = 4;
+	public static final int CHARACTER_BASED_Y_IN_FIRST_VIIEW = 450;
+	public static final int UNIT_SECOND = 1;//every unit second,monster move around
 	public int squareWidthView = 300;
 	public int playerXView = (FULL_FRAME_WIDTH - FRAME_WIDTH) / 2;//push player in the mid of view window
 	public int playerYView = FRAME_HEIGHT;
@@ -142,6 +155,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private Direction firstViewDirection = Direction.BACK_LEFT;
 	protected JLabel lvlupLabel_2;
 	protected JLabel lvlupLabel_3;
+	private final int TEXT_OUTPUT_ROWS = 5;
+	private final int SEARCH_COLS = 15;
+	private boolean UPDATE_ON_EVERY_CHARACTER = true;
 
 	///==================================
 
@@ -187,7 +203,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		frameState = GamePlayFrame.FRAME_STATE.STANDBY;
 		//set start time
 		startTime = getCurrentTime();
-
 	}
 
 	public void addButtons() {
@@ -245,14 +260,73 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				requestFocus();
 			}
 		});
+
+		//add textarea
+		textOutputArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
+		textOutputArea.setLineWrap(true);
+		textOutputArea.setWrapStyleWord(true); // pretty line wrap.
+		textOutputArea.setEditable(false);
+		JScrollPane scroll = new JScrollPane(textOutputArea);
+		scroll.setToolTipText("Output messages");
+		// these two lines make the JScrollPane always scroll to the bottom when
+		// text is appended to the JTextArea.
+		DefaultCaret caret = (DefaultCaret) textOutputArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		scroll.setBounds(0, 470, 350, 70);
+		panel.add(scroll);
+		textOutputArea.setText("");
+		textOutputArea.append("Welcome to PokeWorld!");
+
+		//add textField to input message
+		inputMessageField = new JTextField(SEARCH_COLS);
+		inputMessageField
+				.setToolTipText("Input the message you want to send here");
+		inputMessageField.setMaximumSize(new Dimension(0, 25));
+		inputMessageField.setBounds(0, 440, 200, 20);
+		inputMessageField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				sendMessage();
+			}
+		});
+		panel.add(inputMessageField);
+
+		//add send Message button
+		sendMessageButton.setText("Send");
+		sendMessageButton.setToolTipText("Press to send message");
+		sendMessageButton.setBounds(210, 435, 80, 30);
+		panel.add(sendMessageButton);
+		sendMessageButton.addActionListener(this/*new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				if(inputMessageField.getText().length() != 0) {
+					sendMessage();
+				}
+				requestFocus();
+			}
+		}*/);
 	}
+	
+	private void outputMessageToTextArea(String playerName, String message) {
+		textOutputArea.append("\n<"+playerName+">" + message);
+	}
+	
+	private void sendMessage(){
+		String playerName = gameClient.getClientPlayer().getName();
+		String message = inputMessageField.getText();
+		outputMessageToTextArea( playerName, message);
+		gameClient.sendMessage(playerName, message);
+		inputMessageField.setText("");
+	}
+	
 
 	public void dropIventory(int index) {
 		Player clientPlayer = gameClient.getClientPlayer();
 		Location loc = clientPlayer.getLocation();
 		loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 				.setGameObjectOnSquare(clientPlayer.getInventory().get(index));
-		clientPlayer.getInventory().remove(index);
+		Item removedItem = clientPlayer.getInventory().remove(index);
+		gameClient.sendDropItem(removedItem, new Location(loc.getRoom(), loc.getX(), loc.getY()), clientPlayer.getId());
+
 	}
 
 	/**
@@ -532,21 +606,20 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			int offset = 1;//this offset is cuz the locaion is from 0 not 1
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				numSquaresFace = playerLoc.getY();
-				numSquaresLeft = playerLoc.getX();
-				numSquaresRight = boardSize - playerLoc.getX() - offset;
+				numSquaresLeft = playerLoc.getX() + offset;
+				numSquaresRight = boardSize - playerLoc.getX();
 			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 				numSquaresFace = boardSize - playerLoc.getX() - offset;
-				numSquaresLeft = playerLoc.getY();
-				numSquaresRight = boardSize - playerLoc.getY() - offset;
+				numSquaresLeft = playerLoc.getY() + offset;
+				numSquaresRight = boardSize - playerLoc.getY();
 			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
 				numSquaresFace = playerLoc.getX();
-				numSquaresLeft = boardSize - playerLoc.getY() - offset;
-				numSquaresRight = playerLoc.getY();
-				;
+				numSquaresLeft = boardSize - playerLoc.getY();
+				numSquaresRight = playerLoc.getY() + offset;
 			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				numSquaresFace = boardSize - playerLoc.getY() - offset;
-				numSquaresLeft = boardSize - playerLoc.getX() - offset;
-				numSquaresRight = playerLoc.getX();
+				numSquaresLeft = boardSize - playerLoc.getX();
+				numSquaresRight = playerLoc.getX() + offset;
 			}
 			//			System.out.println(numSquaresFace);
 			//			System.out.println(playerLoc.getX()+","+playerLoc.getY());
@@ -561,7 +634,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			double previouY1 = viewHight;
 			int checkLocationX = clientPlayer.getLocation().getX();
 			int checkLocationY = clientPlayer.getLocation().getY();
-
+			//#draw background Rectengel
 			for (int i = 0; i < numSquaresFace + 1; i++) {
 				//draw face square
 				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
@@ -580,7 +653,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				xPoint[3] = (int) nowStartX;
 				yPoint[3] = (int) (nowDrawLine - squareHeigh
 						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-				g.setColor(Color.green.darker());
+
+				if (!isDay) {
+					if (i > sightRange) {
+						g.setColor(Color.gray.darker().darker());
+					} else {
+						g.setColor(Color.green.darker());
+					}
+				} else {
+					g.setColor(Color.green.darker());
+				}
 				g.fillPolygon(xPoint, yPoint, 4);
 				g.setColor(Color.BLACK);
 				g.drawPolygon(xPoint, yPoint, 4);
@@ -602,7 +684,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					g.setColor(Color.green.darker());
+					if (!isDay) {
+						if (j > sightRange || i > sightRange) {
+							g.setColor(Color.gray.darker().darker());
+						} else {
+							g.setColor(Color.green.darker());
+						}
+					} else {
+						g.setColor(Color.green.darker());
+					}
 					g.fillPolygon(xPointLeft, yPointLeft, 4);
 					g.setColor(Color.BLACK);
 					g.drawPolygon(xPointLeft, yPointLeft, 4);
@@ -610,25 +700,35 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 				//draw right squares
 				for (int j = 0; j < numSquaresRight; j++) {
-					int[] xPointLeft = new int[4];
-					int[] yPointLeft = new int[4];
+					int[] xPointRight = new int[4];
+					int[] yPointRight = new int[4];
 					//draw Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
-					xPointLeft[0] = (int) (previouX0 + j * previouWidthOfSquare);
-					yPointLeft[0] = (int) (previouY0 - jumpOffsetFirstView);
-					xPointLeft[1] = (int) (previouX1 + j * previouWidthOfSquare);
-					yPointLeft[1] = (int) (previouY1 - jumpOffsetFirstView);
-					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare + j
+					xPointRight[0] = (int) (previouX0 + j
+							* previouWidthOfSquare);
+					yPointRight[0] = (int) (previouY0 - jumpOffsetFirstView);
+					xPointRight[1] = (int) (previouX1 + j
+							* previouWidthOfSquare);
+					yPointRight[1] = (int) (previouY1 - jumpOffsetFirstView);
+					xPointRight[2] = (int) (nowStartX + nowWidthOfSquare + j
 							* nowWidthOfSquare);
-					yPointLeft[2] = (int) (nowDrawLine - squareHeigh
+					yPointRight[2] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
-					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
+					xPointRight[3] = (int) (nowStartX + j * nowWidthOfSquare);
+					yPointRight[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					g.setColor(Color.green.darker());
-					g.fillPolygon(xPointLeft, yPointLeft, 4);
+					if (!isDay) {
+						if (j > sightRange || i > sightRange) {
+							g.setColor(Color.gray.darker().darker());
+						} else {
+							g.setColor(Color.green.darker());
+						}
+					} else {
+						g.setColor(Color.green.darker());
+					}
+					g.fillPolygon(xPointRight, yPointRight, 4);
 					g.setColor(Color.BLACK);
-					g.drawPolygon(xPointLeft, yPointLeft, 4);
+					g.drawPolygon(xPointRight, yPointRight, 4);
 				}
 
 				//				g.drawImage(new ImageIcon("src/firstviewgrass.png").getImage(),xPoint[0],yPoint[0] , xPoint[1], yPoint[1], xPoint[2], yPoint[2], xPoint[3],yPoint[3],null);
@@ -643,7 +743,296 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				previouDrawLine = nowDrawLine;
 				nowDrawLine = nowDrawLine - squareHeigh
 						* Math.pow(scaleY, i + 1);
-				//print the object on this location
+			}
+
+			//#create storages to store the positions and load information into storages 
+			double nowDrawLinePrintObject = viewHight;//the height of line now draw(it is the bot of the frame at start)
+			double previouDrawLinePrintObject = viewHight;
+			double previouX0PrintObject = midOfView - squareWidth / 2;//the line in the bot of the frame
+			double previouY0PrintObject = viewHight;
+			double previouX1PrintObject = midOfView + squareWidth / 2;//the line in the bot of the frame
+			double previouY1PrintObject = viewHight;
+			int checkLocationXPrintObject = clientPlayer.getLocation().getX();
+			int checkLocationYPrintObject = clientPlayer.getLocation().getY();
+			List<PointArrayStorage> storages = new ArrayList<PointArrayStorage>();
+			//these code is for road information into storages-----------------------------------
+			for (int i = 0; i < numSquaresFace + 1; i++) {
+				PointArrayStorage storage = new PointArrayStorage();
+				//draw face square
+				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
+				double nowStartX = midOfView - nowWidthOfSquare / 2;
+				//add points for drawing Polygon
+				int[] xPoint = new int[4];
+				int[] yPoint = new int[4];
+				//draw Polygon
+				xPoint[0] = (int) previouX0PrintObject;
+				yPoint[0] = (int) previouY0PrintObject - jumpOffsetFirstView;
+				xPoint[1] = (int) previouX1PrintObject;
+				yPoint[1] = (int) previouY1PrintObject - jumpOffsetFirstView;
+				xPoint[2] = (int) (nowStartX + nowWidthOfSquare);
+				yPoint[2] = (int) (nowDrawLinePrintObject - squareHeigh
+						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+				xPoint[3] = (int) nowStartX;
+				yPoint[3] = (int) (nowDrawLinePrintObject - squareHeigh
+						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+				//SAVE INTO STORAGE
+				storage.xPoint = xPoint;
+				storage.yPoint = yPoint;
+				//save left squares
+				for (int j = 0; j < numSquaresLeft; j++) {
+					int[] xPointLeft = new int[4];
+					int[] yPointLeft = new int[4];
+					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
+					xPointLeft[0] = (int) (previouX0PrintObject - j
+							* previouWidthOfSquare);
+					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
+					xPointLeft[1] = (int) (previouX1PrintObject - j
+							* previouWidthOfSquare);
+					yPointLeft[1] = (int) (previouY1PrintObject - jumpOffsetFirstView);
+					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare - j
+							* nowWidthOfSquare);
+					yPointLeft[2] = (int) (nowDrawLinePrintObject - squareHeigh
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
+					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+					//save data
+					PointArrayStorageLeft storageLeft = new PointArrayStorageLeft();
+					storageLeft.xPoint = xPointLeft;
+					storageLeft.yPoint = yPointLeft;
+					storage.leftList.add(storageLeft);
+
+				}
+
+				//save right squares
+				for (int j = 0; j < numSquaresRight; j++) {
+					int[] xPointLeft = new int[4];
+					int[] yPointLeft = new int[4];
+					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
+					xPointLeft[0] = (int) (previouX0PrintObject + j
+							* previouWidthOfSquare);
+					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
+					xPointLeft[1] = (int) (previouX1PrintObject + j
+							* previouWidthOfSquare);
+					yPointLeft[1] = (int) (previouY1PrintObject - jumpOffsetFirstView);
+					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare + j
+							* nowWidthOfSquare);
+					yPointLeft[2] = (int) (nowDrawLinePrintObject - squareHeigh
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
+					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
+							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+					//save data
+					PointArrayStorageRight storageRight = new PointArrayStorageRight();
+					storageRight.xPoint = xPointLeft;
+					storageRight.yPoint = yPointLeft;
+					storage.rightlList.add(storageRight);
+				}
+
+				//updata previou
+				previouX0PrintObject = nowStartX;
+				previouY0PrintObject = nowDrawLinePrintObject - squareHeigh
+						* Math.pow(scaleY, i + 1);
+				previouX1PrintObject = nowStartX + nowWidthOfSquare;
+				previouY1PrintObject = nowDrawLinePrintObject - squareHeigh
+						* Math.pow(scaleY, i + 1);
+				previouDrawLinePrintObject = nowDrawLinePrintObject;
+				nowDrawLinePrintObject = nowDrawLinePrintObject - squareHeigh
+						* Math.pow(scaleY, i + 1);
+				//add storage to stroages
+				storages.add(storage);
+			}
+			//---------------------------------------------------------------------
+
+			//#print object
+			for (int i = numSquaresFace; i > -1; i--) {
+				PointArrayStorage storage = storages.get(i);
+				int[] xPoint = storage.xPoint;
+				int[] yPoint = storage.yPoint;
+
+				//draw left squares
+				for (int j = numSquaresLeft - 1; j > -1; j--) {
+					PointArrayStorageLeft storageLeft = storage.leftList.get(j);
+					int[] xPointLeft = storageLeft.xPoint;
+					int[] yPointLeft = storageLeft.yPoint;
+
+					//print the object left this location====================================================
+					Location nextLoc = nextSquareLocation(clientPlayer, i);
+
+					Game ga = gameClient.getGame();
+					Room r = clientPlayer.getLocation().getRoom();
+					BoardSquare[][] bs = r.board.getSquares();
+
+					int locX = nextLoc.getX();
+					int locY = nextLoc.getY();
+					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+						locX = nextLoc.getX() + j;
+					} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+						locY = nextLoc.getY() + j;
+					} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+						locX = nextLoc.getX() - j;
+					} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+						locY = nextLoc.getY() - j;
+					}
+
+					//diff direction has diff order to print ,this is for making sure the closer picture cover far
+					//check whether next square is out of board
+					if (locX != -1 && locX != 10 && locY != -1 && locY != 10) {
+						if (bs[locY][locX].getGameObjectOnSquare() != null) {
+							if (isDay) {
+								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+									int width = (xPoint[1] - xPoint[0])
+											* TREE_SCALE_FIRST_VIEW;
+									int height = width;
+									int midPointX = xPointLeft[0]
+											+ (xPointLeft[1] - xPointLeft[0])
+											/ 2;
+									int drawStartX = midPointX - width / 2;
+									int drawStartY = yPointLeft[0] - (height);
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								} else {
+									int height = (xPointLeft[2] - xPointLeft[3]);
+									int width = height;
+									int drawStartX = xPointLeft[3];
+									int drawStartY = yPointLeft[0]
+											- ((xPointLeft[2] - xPointLeft[3]));
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								}
+							} else {
+								if (isInSightRange(clientPlayer, locY, locX)) {
+									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+										int width = (xPoint[1] - xPoint[0])
+												* TREE_SCALE_FIRST_VIEW;
+										int height = width;
+										int midPointX = xPointLeft[0]
+												+ (xPointLeft[1] - xPointLeft[0])
+												/ 2;
+										int drawStartX = midPointX - width / 2;
+										int drawStartY = yPointLeft[0]
+												- (height);
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									} else {
+										int height = (xPointLeft[2] - xPointLeft[3]);
+										int width = height;
+										int drawStartX = xPointLeft[3];
+										int drawStartY = yPointLeft[0]
+												- ((xPointLeft[2] - xPointLeft[3]));
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									}
+								}
+							}
+						}
+					}
+				}
+
+				//draw right squares
+				for (int j = numSquaresRight - 1; j > -1; j--) {
+					PointArrayStorageRight storageRight = storage.rightlList
+							.get(j);
+					int[] xPointRight = storageRight.xPoint;
+					int[] yPointRight = storageRight.yPoint;
+					//print the object left on this location====================================================
+					Location nextLoc = nextSquareLocation(clientPlayer, i);
+
+					Game ga = gameClient.getGame();
+					Room r = clientPlayer.getLocation().getRoom();
+					BoardSquare[][] bs = r.board.getSquares();
+
+					int locX = nextLoc.getX();
+					int locY = nextLoc.getY();
+					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+						locX = nextLoc.getX() - j;
+					} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+						locY = nextLoc.getY() - j;
+					} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+						locX = nextLoc.getX() + j;
+					} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+						locY = nextLoc.getY() + j;
+					}
+
+					//diff direction has diff order to print ,this is for making sure the closer picture cover far
+					//check whether next square is out of board
+					if (locX != -1 && locX != 10 && locY != -1 && locY != 10) {
+						if (bs[locY][locX].getGameObjectOnSquare() != null) {
+							if (isDay) {
+								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+									int width = (xPoint[1] - xPoint[0])
+											* TREE_SCALE_FIRST_VIEW;
+									int height = width;
+									int midPointX = xPointRight[0]
+											+ (xPointRight[1] - xPointRight[0])
+											/ 2;
+									int drawStartX = midPointX - width / 2;
+									int drawStartY = yPointRight[0] - (height);
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								} else {
+									int height = (xPointRight[2] - xPointRight[3]);
+									int width = height;
+									int drawStartX = xPointRight[3];
+									int drawStartY = yPointRight[0]
+											- ((xPointRight[2] - xPointRight[3]));
+									g.drawImage(bs[locY][locX]
+											.getGameObjectOnSquare()
+											.getSpriteImage().getImage(),
+											drawStartX, drawStartY, width,
+											height, null);
+								}
+							} else {
+								if (isInSightRange(clientPlayer, locY, locX)) {
+									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+										int width = (xPoint[1] - xPoint[0])
+												* TREE_SCALE_FIRST_VIEW;
+										int height = width;
+										int midPointX = xPointRight[0]
+												+ (xPointRight[1] - xPointRight[0])
+												/ 2;
+										int drawStartX = midPointX - width / 2;
+										int drawStartY = yPointRight[0]
+												- (height);
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									} else {
+										int height = (xPointRight[2] - xPointRight[3]);
+										int width = height;
+										int drawStartX = xPointRight[3];
+										int drawStartY = yPointRight[0]
+												- ((xPointRight[2] - xPointRight[3]));
+										g.drawImage(bs[locY][locX]
+												.getGameObjectOnSquare()
+												.getSpriteImage().getImage(),
+												drawStartX, drawStartY, width,
+												height, null);
+									}
+								}
+							}
+						}
+					}
+				}
+
+				//print the object on this location====================================================
 				Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 				Game ga = gameClient.getGame();
@@ -653,20 +1042,91 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				//check whether next square is out of board
 				if (nextLoc.getX() != -1 && nextLoc.getX() != 10
 						&& nextLoc.getY() != -1 && nextLoc.getY() != 10) {
-					if (bs[nextLoc.getX()][nextLoc.getY()]
+					if (bs[nextLoc.getY()][nextLoc.getX()]
 							.getGameObjectOnSquare() != null) {
-
-						if (bs[nextLoc.getX()][nextLoc.getY()]
-								.getGameObjectOnSquare() instanceof Tree) {
-							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), (int) previouX0 - 20,
-									(int) previouY0 - 150, null);
+						if (isDay) {
+							if (bs[nextLoc.getY()][nextLoc.getX()]
+									.getGameObjectOnSquare() instanceof Tree) {
+								int width = (xPoint[1] - xPoint[0])
+										* TREE_SCALE_FIRST_VIEW;
+								int height = width;
+								int midPointX = xPoint[0]
+										+ (xPoint[1] - xPoint[0]) / 2;
+								int drawStartX = midPointX - width / 2;
+								int drawStartY = yPoint[0] - (height);
+								g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(),
+										drawStartX, drawStartY, width, height,
+										null);
+							} else {
+								int height = (xPoint[2] - xPoint[3]);
+								int width = height;
+								int drawStartX = xPoint[3];
+								int drawStartY = yPoint[0]
+										- ((xPoint[2] - xPoint[3]));
+								g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+										.getGameObjectOnSquare()
+										.getSpriteImage().getImage(),
+										drawStartX, drawStartY, width, height,
+										null);
+								/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
+								*/
+								//							int height = yPoint[0] - yPoint[3];
+								//							int width = height;
+								//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
+								//									/ 2;
+								//							int drawStartX = midPointX - width / 2;
+								//							int drawStartY = yPoint[3];
+								//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+								//									.getGameObjectOnSquare().getSpriteImage()
+								//								.getImage(), drawStartX,drawStartY,width,height, null);
+								//----------------------------------------------------------------------------------
+							}
 						} else {
-							g.drawImage(bs[nextLoc.getX()][nextLoc.getY()]
-									.getGameObjectOnSquare().getSpriteImage()
-									.getImage(), (int) previouX0,
-									(int) previouY1 - 20, 50, 50, null);
+							if (isInSightRange(clientPlayer, nextLoc.getY(),
+									nextLoc.getX())) {
+								if (bs[nextLoc.getY()][nextLoc.getX()]
+										.getGameObjectOnSquare() instanceof Tree) {
+									int width = (xPoint[1] - xPoint[0])
+											* TREE_SCALE_FIRST_VIEW;
+									int height = width;
+									int midPointX = xPoint[0]
+											+ (xPoint[1] - xPoint[0]) / 2;
+									int drawStartX = midPointX - width / 2;
+									int drawStartY = yPoint[0] - (height);
+									g.drawImage(
+											bs[nextLoc.getY()][nextLoc.getX()]
+													.getGameObjectOnSquare()
+													.getSpriteImage()
+													.getImage(), drawStartX,
+											drawStartY, width, height, null);
+								} else {
+									int height = (xPoint[2] - xPoint[3]);
+									int width = height;
+									int drawStartX = xPoint[3];
+									int drawStartY = yPoint[0]
+											- ((xPoint[2] - xPoint[3]));
+									g.drawImage(
+											bs[nextLoc.getY()][nextLoc.getX()]
+													.getGameObjectOnSquare()
+													.getSpriteImage()
+													.getImage(), drawStartX,
+											drawStartY, width, height, null);
+									/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
+									*/
+									//							int height = yPoint[0] - yPoint[3];
+									//							int width = height;
+									//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
+									//									/ 2;
+									//							int drawStartX = midPointX - width / 2;
+									//							int drawStartY = yPoint[3];
+									//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+									//									.getGameObjectOnSquare().getSpriteImage()
+									//								.getImage(), drawStartX,drawStartY,width,height, null);
+									//----------------------------------------------------------------------------------
+								}
+							}
 						}
 					}
 				}
@@ -678,7 +1138,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			//print character
 			Image characterImage = clientPlayer.getSpriteBasedOnDirection(
 					firstViewDirection).getImage();
-			g.drawImage(characterImage, midOfView, 500 + shakeOffset, null);
+			g.drawImage(characterImage, midOfView,
+					CHARACTER_BASED_Y_IN_FIRST_VIIEW + shakeOffset,
+					CHARACTER_SIZE_IN_FIRST_VIIEW,
+					CHARACTER_SIZE_IN_FIRST_VIIEW, null);
 
 			g.fillRect(startX - 10, 0, 20, FRAME_HEIGHT);
 			g.fillRect(FULL_FRAME_WIDTH - 20, 0, 20, FRAME_HEIGHT);
@@ -763,8 +1226,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					for (Player connectedPlayer : gameClient.getGame()
 							.getPlayers()) {
 						if (connectedPlayer != clientPlayer) {
-							if (connectedPlayer.getLocation().getX() == cellX
-									&& connectedPlayer.getLocation().getY() == cellY) {
+							Location otherPlayerLoc = connectedPlayer.getLocation();
+							if (otherPlayerLoc.getRoom().getName().equals(clientPlayer.getLocation().getRoom().getName()) && 
+								otherPlayerLoc.getX() == cellX && otherPlayerLoc.getY() == cellY) {
 								g.drawImage(
 										connectedPlayer
 												.getSpriteBasedOnDirection()
@@ -825,9 +1289,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 								if (!isFighting && !isLevelUpping) {
 									int passSecond = (int) (runningTime / 1000);
 									//every unit second,monster move around
-									int unitSecond = 2;
 									if (runningTime != lastMovedtime) {
-										if (passSecond % unitSecond == 0) {
+										if (passSecond % UNIT_SECOND == 0) {
 											Monster monster = (Monster) bs[cellY][cellX]
 													.getGameObjectOnSquare();
 											if (!monstersChanged
@@ -1169,7 +1632,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		for (Player otherPlayer : gameClient.getGame().getPlayers()) {
 			Location otherLoc = otherPlayer.getLocation();
-			if (otherLoc.getX() == x && otherLoc.getY() == y) {
+			if (otherLoc.getX() == x && otherLoc.getY() == y 
+					&& otherLoc.getRoom().getName().equals(player.getLocation().getRoom().getName())) {
 				return false;
 			}
 		}
@@ -1447,6 +1911,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					clientPlayer.addToInventory(((Key) ObjectOfLoc));
 					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 							.setGameObjectOnSquare(null);
+					gameClient.sendPickupItem((Item) ObjectOfLoc, new Location(loc.getRoom(), loc.getX(), loc.getY()), clientPlayer.getId());
 				}
 				//If you find a goodPotion, increases your health and removes it from the board
 				if (ObjectOfLoc instanceof GoodPotion) {
@@ -1520,12 +1985,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						if (((Door) ObjectOfLoc).id() == items.id()) {
 
 							Door theDoor = (Door) ObjectOfLoc;
-							clientPlayer.setLocation(new Location(gameClient
-									.getGame().getRooms()
-									.get(theDoor.getNextRoom()), theDoor
-									.getNextRoomX(), theDoor.getNextRoomY()));
+							Room newRoom = gameClient.getGame().getRooms().get(theDoor.getNextRoom());
+							clientPlayer.setLocation(new Location(newRoom, theDoor.getNextRoomX(), theDoor.getNextRoomY()));
 							clientPlayer.setDirection(Direction.FACE_LEFT);
 
+							//gameClient.sendPlayerMoveUpdateToServer();
 							//Room nowRoom = clientPlayer.getLocation().getRoom();
 
 							/*if (nowRoom.level == theDoor.linkFrom) {
@@ -1547,7 +2011,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 				}
 			}
-
+			gameClient.sendPlayerUpdate();
 			gameClient.sendPlayerMoveUpdateToServer();
 			repaint();
 		}
@@ -1934,6 +2398,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					"Monster is still alive, but now he only has "
 							+ ((Monster) ObjectOfLoc).getHealth() + "health");
 		}
+		gameClient.sendPlayerUpdate();
 		isFighting = false;
 	}
 
@@ -2027,6 +2492,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				System.exit(0);
 			}
 		}
+		else if(source instanceof JButton) {
+			if(inputMessageField.getText().length() > 0) {
+				sendMessage();
+			}
+			this.requestFocus();
+		}
 	}
 
 	@Override
@@ -2075,6 +2546,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		new ActionEvent(new JMenuItem("Join Game (As Client)"),
 				ActionEvent.ACTION_PERFORMED, "");
 	}
+
+	@Override
+	public void onMessageRecieved(String playerName, String message) {
+		outputMessageToTextArea( playerName, message);
+	}
 }
 
 //=========================================================================
@@ -2121,3 +2597,203 @@ public int trasferY(int col, int row) {
 	int base = 50;
 	return (int) ((offset + edgeLong) * (row) + base);
 }*/
+
+/**
+ * this way to print object in 1st view will print closer stuff 1st
+ */
+////#print objects
+//			double nowDrawLinePrintObject = viewHight;//the height of line now draw(it is the bot of the frame at start)
+//			double previouDrawLinePrintObject = viewHight;
+//			double previouX0PrintObject = midOfView - squareWidth / 2;//the line in the bot of the frame
+//			double previouY0PrintObject = viewHight;
+//			double previouX1PrintObject = midOfView + squareWidth / 2;//the line in the bot of the frame
+//			double previouY1PrintObject = viewHight;
+//			int checkLocationXPrintObject = clientPlayer.getLocation().getX();
+//			int checkLocationYPrintObject = clientPlayer.getLocation().getY();
+//			for (int i = 0; i < numSquaresFace + 1; i++) {
+//				//draw face square
+//				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
+//				double nowStartX = midOfView - nowWidthOfSquare / 2;
+//				//add points for drawing Polygon
+//				int[] xPoint = new int[4];
+//				int[] yPoint = new int[4];
+//				//draw Polygon
+//				xPoint[0] = (int) previouX0PrintObject;
+//				yPoint[0] = (int) previouY0PrintObject - jumpOffsetFirstView;
+//				xPoint[1] = (int) previouX1PrintObject;
+//				yPoint[1] = (int) previouY1PrintObject - jumpOffsetFirstView;
+//				xPoint[2] = (int) (nowStartX + nowWidthOfSquare);
+//				yPoint[2] = (int) (nowDrawLinePrintObject - squareHeigh
+//						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+//				xPoint[3] = (int) nowStartX;
+//				yPoint[3] = (int) (nowDrawLinePrintObject - squareHeigh
+//						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+//
+//				//draw left squares
+//				for (int j = 0; j < numSquaresLeft; j++) {
+//					int[] xPointLeft = new int[4];
+//					int[] yPointLeft = new int[4];
+//					//draw Polygon
+//					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
+//					xPointLeft[0] = (int) (previouX0PrintObject - j
+//							* previouWidthOfSquare);
+//					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
+//					xPointLeft[1] = (int) (previouX1PrintObject - j
+//							* previouWidthOfSquare);
+//					yPointLeft[1] = (int) (previouY1PrintObject - jumpOffsetFirstView);
+//					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare - j
+//							* nowWidthOfSquare);
+//					yPointLeft[2] = (int) (nowDrawLinePrintObject - squareHeigh
+//							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+//					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
+//					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
+//							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+//
+//					//=====================================================================================
+//					//print the object left on this location====================================================
+//					Location nextLoc = nextSquareLocation(clientPlayer, i);
+//
+//					Game ga = gameClient.getGame();
+//					Room r = clientPlayer.getLocation().getRoom();
+//					BoardSquare[][] bs = r.board.getSquares();
+//
+//					int locX = nextLoc.getX();
+//					int locY = nextLoc.getY();
+//					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+//						locX = nextLoc.getX() + j;
+//					} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
+//						locY = nextLoc.getY() + j;
+//					} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
+//						locX = nextLoc.getX() - j;
+//					} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
+//						locY = nextLoc.getY() - j;
+//					}
+//					
+//					//diff direction has diff order to print ,this is for making sure the closer picture cover far
+//					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
+//						//check whether next square is out of board
+//						if (locX != -1 && locX != 10 && locY != -1
+//								&& locY != 10) {
+//							if (bs[locY][locX].getGameObjectOnSquare() != null) {
+//
+//								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+//									int width = (xPoint[1] - xPoint[0])
+//											* TREE_SCALE_FIRST_VIEW;
+//									int height = width;
+//									int midPointX = xPointLeft[0]
+//											+ (xPointLeft[1] - xPointLeft[0])
+//											/ 2;
+//									int drawStartX = midPointX - width / 2;
+//									int drawStartY = yPointLeft[0] - (height);
+//									g.drawImage(bs[locY][locX]
+//											.getGameObjectOnSquare()
+//											.getSpriteImage().getImage(),
+//											drawStartX, drawStartY, width,
+//											height, null);
+//								} else {
+//									int height = (xPointLeft[2] - xPointLeft[3]);
+//									int width = height;
+//									int drawStartX = xPointLeft[3];
+//									int drawStartY = yPointLeft[0]
+//											- ((xPointLeft[2] - xPointLeft[3]));
+//									g.drawImage(bs[locY][locX]
+//											.getGameObjectOnSquare()
+//											.getSpriteImage().getImage(),
+//											drawStartX, drawStartY, width,
+//											height, null);
+//								}
+//							}
+//						}
+//					}
+//					//===============================================================================
+//				}
+//
+//				//draw right squares
+//				for (int j = 0; j < numSquaresRight; j++) {
+//					int[] xPointLeft = new int[4];
+//					int[] yPointLeft = new int[4];
+//					//draw Polygon
+//					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
+//					xPointLeft[0] = (int) (previouX0PrintObject + j
+//							* previouWidthOfSquare);
+//					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
+//					xPointLeft[1] = (int) (previouX1PrintObject + j
+//							* previouWidthOfSquare);
+//					yPointLeft[1] = (int) (previouY1PrintObject - jumpOffsetFirstView);
+//					xPointLeft[2] = (int) (nowStartX + nowWidthOfSquare + j
+//							* nowWidthOfSquare);
+//					yPointLeft[2] = (int) (nowDrawLinePrintObject - squareHeigh
+//							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+//					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
+//					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
+//							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+//
+//				}
+//
+//				//				g.drawImage(new ImageIcon("src/firstviewgrass.png").getImage(),xPoint[0],yPoint[0] , xPoint[1], yPoint[1], xPoint[2], yPoint[2], xPoint[3],yPoint[3],null);
+//				//				g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
+//				//				System.out.println(xPoint[0]+","+yPoint[0]);
+//
+//				//updata previou
+//				previouX0PrintObject = nowStartX;
+//				previouY0PrintObject = nowDrawLinePrintObject - squareHeigh
+//						* Math.pow(scaleY, i + 1);
+//				previouX1PrintObject = nowStartX + nowWidthOfSquare;
+//				previouY1PrintObject = nowDrawLinePrintObject - squareHeigh
+//						* Math.pow(scaleY, i + 1);
+//				previouDrawLinePrintObject = nowDrawLinePrintObject;
+//				nowDrawLinePrintObject = nowDrawLinePrintObject - squareHeigh
+//						* Math.pow(scaleY, i + 1);
+//
+//				//=====================================================================================
+//				//print the object on this location====================================================
+//				Location nextLoc = nextSquareLocation(clientPlayer, i);
+//
+//				Game ga = gameClient.getGame();
+//				Room r = clientPlayer.getLocation().getRoom();
+//				BoardSquare[][] bs = r.board.getSquares();
+//
+//				//check whether next square is out of board
+//				if (nextLoc.getX() != -1 && nextLoc.getX() != 10
+//						&& nextLoc.getY() != -1 && nextLoc.getY() != 10) {
+//					if (bs[nextLoc.getY()][nextLoc.getX()]
+//							.getGameObjectOnSquare() != null) {
+//
+//						if (bs[nextLoc.getY()][nextLoc.getX()]
+//								.getGameObjectOnSquare() instanceof Tree) {
+//							int width = (xPoint[1] - xPoint[0])
+//									* TREE_SCALE_FIRST_VIEW;
+//							int height = width;
+//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
+//									/ 2;
+//							int drawStartX = midPointX - width / 2;
+//							int drawStartY = yPoint[0] - (height);
+//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+//									.getGameObjectOnSquare().getSpriteImage()
+//									.getImage(), drawStartX, drawStartY, width,
+//									height, null);
+//						} else {
+//							int height = (xPoint[2] - xPoint[3]);
+//							int width = height;
+//							int drawStartX = xPoint[3];
+//							int drawStartY = yPoint[0]
+//									- ((xPoint[2] - xPoint[3]));
+//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+//									.getGameObjectOnSquare().getSpriteImage()
+//									.getImage(), drawStartX, drawStartY, width,
+//									height, null);
+//							//these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
+//							//							int height = yPoint[0] - yPoint[3];
+//							//							int width = height;
+//							//							int midPointX = xPoint[0]+(xPoint[1]-xPoint[0])/2;
+//							//							int drawStartX = midPointX-width/2;
+//							//							int drawStartY = yPoint[3];
+//							//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+//							//									.getGameObjectOnSquare().getSpriteImage()
+//							//									.getImage(), drawStartX,drawStartY,width,height, null);
+//							//----------------------------------------------------------------------------------
+//						}
+//					}
+//				}
+//				//===============================================================================
+//			}

@@ -8,6 +8,11 @@ import java.io.FileOutputStream;
 import game.Game;
 import game.Player;
 
+/*
+ * Saves game to XMl file
+ * 
+ * @author Pri Bhula
+ */
 public class GameToXML {
 	private BufferedOutputStream buffout;
 	private FileOutputStream fileout;
@@ -25,9 +30,15 @@ public class GameToXML {
 		enc = new XMLEncoder(buffout);
 	}
 	
-	public void saveGame(Player p, Game g){
-		enc.writeObject(p);
+	public void saveGame(Game g){
 		enc.writeObject(g);
+	}
+	
+	public void save(Object o){
+		enc.writeObject(o);
+	}
+	
+	public void close(){
 		enc.close();
 	}
 	

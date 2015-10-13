@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
+ *
  * @author Donald Tang
  */
 public class Tests {
@@ -259,7 +260,7 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
-	
+
 	@Test
 	public void testPlayerEquals6() throws IOException {
 		try {
@@ -271,7 +272,17 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
-	
+	@Test
+	public void testFight(){
+
+	}
+
+
+
+
+
+
+
 	public void createPlayer() throws FileNotFoundException {
 		this.p = new Player(-1, "Donald", new Avatar());
 		this.list = (ArrayList<Avatar>) this.p.getAvatar().getAllAvatars();
