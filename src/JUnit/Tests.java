@@ -5,11 +5,13 @@ import org.junit.Test;
 import game.Player;
 import game.avatar.Avatar;
 import game.objects.GameObject;
+import network.GameServer;
 import rooms.Board1;
 import rooms.Board2;
 import rooms.Board3;
 import ui.GameLauncher;
 import ui.GamePlayFrame;
+import ui.ServerFrame;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
@@ -273,16 +275,10 @@ public class Tests {
 		}
 	}
 	@Test
-	public void testFight(){
-
+	public void testServer() throws IOException {
+		new GameServer(new ServerFrame());
 	}
-
-
-
-
-
-
-
+	
 	public void createPlayer() throws FileNotFoundException {
 		this.p = new Player(-1, "Donald", new Avatar());
 		this.list = (ArrayList<Avatar>) this.p.getAvatar().getAllAvatars();
