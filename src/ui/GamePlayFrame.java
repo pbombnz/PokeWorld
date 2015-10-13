@@ -13,6 +13,11 @@ package ui;
  * (user can use Up,Down,Left,Right to move. Up-go,Down-turn around,Left-turn left,Right-turn right)
  * And user can also use "J" to jump in both 2 views.
  * 
+ * Control:
+ * Q-rotate game left, E-rotate game right
+ * W-north S-south A-west D-east J- jump
+ * Up-go  ,Down-turn around ,Left-turn left,Right-turn right
+ * 
  * The functions in this class:evolving animation,fighting animation,move,pick up(automaticlly pick up when player go to the sqaure with object),
  * drop,fight,change weather(rainy,sunny),change day or night,send message to other player,
  * monster wonder around,draw mini map,make player shake,refresh player's information.
@@ -2120,25 +2125,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 									theDoor.getNextRoomX(), theDoor
 											.getNextRoomY()));
 							clientPlayer.setDirection(Direction.FACE_LEFT);
-
-							//gameClient.sendPlayerMoveUpdateToServer();
-							//Room nowRoom = clientPlayer.getLocation().getRoom();
-
-							/*if (nowRoom.level == theDoor.linkFrom) {
-								//for change room 
-								//1. i change change board
-								//2. i change the location of player
-								//GameLauncher.ROOMINDEX = theDoor.linkTo - 1;
-								clientPlayer.getLocation().setRoom();
-
-							} else if (nowRoom.level == theDoor.linkFrom + 1) {
-								System.out.println("this door goes to level 1");
-								GameLauncher.ROOMINDEX = theDoor.linkTo - 2;
-								clientPlayer.getLocation().setRoom(
-										gameClient.getGame().getRooms()
-										.get(GameLauncher.ROOMINDEX));
-
-							}*/
 						}
 					}
 				}
@@ -2288,6 +2274,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
+	/**
+	 * draw dropDialog after pressing drop button
+	 */
 	public void dropDialog() {
 		Player clientPlayer = gameClient.getClientPlayer();
 		dropBox = new JDialog();
@@ -2403,7 +2392,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	/**
-	 *@author Sushant Balajee,Donald Tang,Wang Zhen
+	 * draw dropDialog after pressing drop button
+	 * @author Sushant Balajee,Donald Tang,Wang Zhen(add timer and animation)
 	 */
 	public void fightDialog(final Location mosterLocation) {
 		isFighting = true;
@@ -2490,15 +2480,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	/**
+	 * fight with monster
 	 * @author Sushant Balajee,Donald Tang,Wang Zhen
 	 */
 	public void fight(Location mosterLocation) {
 		Player clientPlayer = gameClient.getClientPlayer();
-		//		Location loc = clientPlayer.getLocation();
 
 		GameObject ObjectOfLoc = mosterLocation.getRoom().board.getSquares()[mosterLocation
 				.getY()][mosterLocation.getX()].getGameObjectOnSquare();
-		// COMPILER ERROR - HERE BELOW. Make sure monster still on object...
 		int damage = ((Monster) ObjectOfLoc).attack();
 
 		//Monster attacks first
@@ -2506,8 +2495,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//Player attacks second
 		((Monster) ObjectOfLoc).setHealth(((Monster) ObjectOfLoc).getHealth()
 				- clientPlayer.getAttack());
-
-		//		fightBox.dispose();
 
 		//if the player dies, it will show a gif and a message dialog
 		if (clientPlayer.isDead()) {
@@ -2535,6 +2522,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	/**
+	 * link the gui to the network
 	 * @author Prashant Bhikhu
 	 */
 	@Override
@@ -2597,7 +2585,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 				ArrayList<Player> savedFilePlayers = gameClient
 						.sendOnClientCharacterSelect();
-				System.out.println(savedFilePlayers);
+				//				System.out.println(savedFilePlayers);
 
 				if (!savedFilePlayers.isEmpty()) {
 					Player choosenClientPlayer = CharacterSelectDialog_LoadFile
@@ -2631,6 +2619,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
+	//unimplements method=============================================================
 	@Override
 	public void onGameUpdated() {
 		frameState = FRAME_STATE.GAME_RUNNING;
@@ -2721,7 +2710,7 @@ public int trasferY(int col, int row) {
 }*/
 
 /**
- * this way to print object in 1st view will print closer stuff 1st
+ * this way to print object in 1st view will print far stuff before close stuff
  */
 ////#print objects
 //			double nowDrawLinePrintObject = viewHight;//the height of line now draw(it is the bot of the frame at start)
