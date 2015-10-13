@@ -34,7 +34,7 @@ public class CharacterSelectDialog extends JDialog implements ActionListener {
 
 		setLayout(new BorderLayout());
 
-		setSize(700, 400);
+		setSize(700, 200);
 		setResizable(false);
 
 		buttonsPanel.setLayout(new FlowLayout());
