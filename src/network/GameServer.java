@@ -91,37 +91,19 @@ public class GameServer extends Listener {
 
 	@Override
 	public void received (Connection connection, Object object) {
+		// Handles the incoming packets
+		
 		if (object instanceof ValidateNewPlayerUsername) {
 			validatePlayerName(connection, object);
-		}
+		} 
 		else if (object instanceof ClientNewPlayer) {
-			// Get the ClientNewPlayer Packet
-			ClientNewPlayer packet = (ClientNewPlayer) object;
-			handleNewPlayer(connection, packet);
-		}	
+			handleNewPlayer(connection, object);
+		} 
 		else if (object instanceof ClientQuit) {
-			ClientQuit packet = (ClientQuit) object;
-			String newName = game.getPlayerByID(packet.id).getName();
-			game.getPlayers().remove(game.getPlayerByID(packet.id));
-			server.sendToAllExceptTCP(packet.id, packet);
-			
-			ClientMessage joinMessagePacket = new ClientMessage();
-			joinMessagePacket.playerName = newName;
-			joinMessagePacket.message = "* Left Server *";
-			server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
+			handleClientQuit(connection, object);
 		}	
-		
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
-			// Removed Spammy Message as these objects are always sent back and forth
-			//serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
-			//serverFrame.writeToConsole("[Server][Sent] Sent Recieved UpdatePlayer Packet to all other clients.");
-			PlayerUpdateLocationAndDirection packet = ((PlayerUpdateLocationAndDirection) object);
-			
-			Player player = game.getPlayerByID(packet.id);
-			player.setLocation(packet.newLocation);
-			player.setDirection(packet.newDirection);
-			
-			server.sendToAllExceptTCP(connection.getID(), packet);
+			handlePlayerUpdateLocation(connection, object);
 		}
 		
 		else if(object instanceof ClientOnChoosePlayer) {
@@ -204,26 +186,6 @@ public class GameServer extends Listener {
 		}
 	}
 
-	/**
-	 * Checks if a player's new chosen name is unique (ie. not other currently connected players have it)
-	 * 
-	 * @param connection The Client's connection
-	 * @param object
-	 */
-	private void validatePlayerName(Connection connection, Object object) {
-		ValidateNewPlayerUsername packetReceived = (ValidateNewPlayerUsername) object;
-		ValidateNewPlayerUsername_Response packet_send = new ValidateNewPlayerUsername_Response();
-		
-		for(Player connectedPlayer : game.getPlayers()) {
-			if(connectedPlayer.getName().equalsIgnoreCase(packetReceived.name)){
-				packet_send.valid = false;
-				connection.sendTCP(packet_send);
-				return;
-			}
-		}
-		packet_send.valid = true;
-		connection.sendTCP(packet_send);
-	}
 
 	@Override
 	public void idle (Connection connection) {
@@ -262,12 +224,44 @@ public class GameServer extends Listener {
 		this.game = game; // Sets the loaded game as the global game now
 	}	
 	
-	// ================================================================
-	// Handler Methods - Handles Incoming Packets in seperate Methods
-	// ================================================================
+	/* 
+	 * ================================================================
+	 * Handler Methods - Handles Incoming Packets in separate Methods
+	 * ================================================================
+	 */
 	
-	public void handleNewPlayer(Connection connection, ClientNewPlayer packet) {
-		//Once all client validation is done, we need to create the location for the player
+	/**
+	 * Checks if a player's new chosen name is unique (ie. not other currently connected players have it)
+	 * 
+	 * @param connection The Client's connection
+	 * @param packet The packet incoming
+	 */
+	private void validatePlayerName(Connection connection, Object packet) {
+		ValidateNewPlayerUsername packetReceived = (ValidateNewPlayerUsername) packet;
+		ValidateNewPlayerUsername_Response packetSend = new ValidateNewPlayerUsername_Response();
+		
+		for(Player connectedPlayer : game.getPlayers()) {
+			if(connectedPlayer.getName().equalsIgnoreCase(packetReceived.name)){
+				packetSend.valid = false;
+				connection.sendTCP(packetSend);
+				return;
+			}
+		}
+		packetSend.valid = true;
+		connection.sendTCP(packetSend);
+	}	
+	
+	/**
+	 * Controls how a server handles a packet that indicates that a new playe wants to join the game
+	 * 
+	 * @param connection
+	 * @param object the received NewPlayer packet
+	 */
+	private void handleNewPlayer(Connection connection, Object object) {
+		// Gets the packet from the incoming object
+		ClientNewPlayer packet = (ClientNewPlayer) object;
+		
+		//Once all client name validation is done, we need to create the location for the player
 		
 		// From top-right to top-left and going all the way, we find a location to put the player on the board
 		// which involves checking if their are any conflicting game objects in the new position
@@ -314,6 +308,7 @@ public class GameServer extends Listener {
 		packet.player.setLocation(newLoc);
 		game.getPlayers().add(packet.player);
 
+		// Sends a packet (in form of a player message) to all clients saying a new user has joined
 		ClientMessage joinMessagePacket = new ClientMessage();
 		joinMessagePacket.playerName = packet.player.getName();
 		joinMessagePacket.message = "* Joined Server *";
@@ -327,5 +322,46 @@ public class GameServer extends Listener {
 		// Send packet to client
 		serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 		server.sendToAllTCP(newGame);
+	}
+	
+	/**
+	 * Handles packets that are about a specific player's location or direction moving
+	 * 
+	 * @param connection the client connection
+	 * @param object the packet incoming
+	 */
+	private void handlePlayerUpdateLocation(Connection connection, Object object) {
+		// Retrieve incoming object as packet
+		PlayerUpdateLocationAndDirection packet = ((PlayerUpdateLocationAndDirection) object);
+		// Set the player's new location on the global game
+		Player player = game.getPlayerByID(packet.id);
+		player.setLocation(packet.newLocation);
+		player.setDirection(packet.newDirection);
+		// Passes the retrieved packet to clients so they can do the update the location on their screen
+		server.sendToAllExceptTCP(connection.getID(), packet);
+	}
+	
+	/**
+	 * Handles the way a client quits (Assuming they quit nicely)
+	 * 
+	 * @param connection
+	 * @param object
+	 */
+	private void handleClientQuit(Connection connection, Object object) {
+		// Casts the incoming object as a packet
+		ClientQuit packet = (ClientQuit) object;
+		
+		// Deletes leaving player from global game
+		String playerName = game.getPlayerByID(packet.id).getName();
+		game.getPlayers().remove(game.getPlayerByID(packet.id));
+		
+		// Passes the message through the server to clients so they can delete the player off their game
+		server.sendToAllExceptTCP(packet.id, packet);
+		
+		// Sends a quit message to the clients so that clients are aware of the player quitting
+		ClientMessage packetSend = new ClientMessage();
+		packetSend.playerName = playerName;
+		packetSend.message = "* Left Server *";
+		server.sendToAllExceptTCP(connection.getID(), packetSend);
 	}
 }
