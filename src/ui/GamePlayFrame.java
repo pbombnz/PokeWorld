@@ -283,12 +283,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				.setToolTipText("Input the message you want to send here");
 		inputMessageField.setMaximumSize(new Dimension(0, 25));
 		inputMessageField.setBounds(0, 440, 200, 20);
-		/*inputMessageField.addActionListener(new ActionListener() {
+		inputMessageField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				sendMessageToCient();
+				sendMessage();
 			}
-		});*/
+		});
 		panel.add(inputMessageField);
 
 		//add send Message button
