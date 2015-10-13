@@ -12,8 +12,7 @@ import rooms.Room;
  * 
  * 
  * @author Sushant Balajee
- * @author Donald Tang
- * @contrib Donald Tang,Wang Zhen
+ * @contrib Donald Tang, Wang Zhen
  */
 
 public class Door implements GameObject {
@@ -38,22 +37,35 @@ public class Door implements GameObject {
 		this.nextRoomY = nextRoomY;
 	}
 
+	/**
+	 * @return the next room that is x
+	 */
 	public int getNextRoomX() {
 		return nextRoomX;
 	}
 
+	/**
+	 * @param nextRoomX, set the next room at x
+	 */
 	public void setNextRoomX(int nextRoomX) {
 		this.nextRoomX = nextRoomX;
 	}
 
+	/**
+	 * @return the next room at y
+	 */
 	public int getNextRoomY() {
 		return nextRoomY;
 	}
 
+	/**
+	 * @param nextRoomY, set the next room at y
+	 */
 	public void setNextRoomY(int nextRoomY) {
 		this.nextRoomY = nextRoomY;
 	}
 
+	
 	@Override
 	public ImageIcon getSpriteImage() {
 		return GameObject.DOOR;
@@ -66,6 +78,9 @@ public class Door implements GameObject {
 		return id;
 	}
 
+	/**
+	 * @return the next room
+	 */
 	public int getNextRoom() {
 		return nextRoom;
 	}
