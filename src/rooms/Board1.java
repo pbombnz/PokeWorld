@@ -33,7 +33,7 @@ public class Board1 extends Board{
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
 				
-								if (i == 0 && j == 5) {
+								if (i == 0 && j == 5 || i == 1 && j == 6) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
 								if (i == 1 && j == 4 || i == 7 && j == 0|| i == 9 && j == 9) {
