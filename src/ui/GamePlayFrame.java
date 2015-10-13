@@ -35,7 +35,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 import com.sun.org.apache.bcel.internal.generic.LCONST;
 
@@ -99,6 +102,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	public JLabel characterLabel;
 	private JDialog fightBox;
 	private JDialog dropBox;
+	private JTextArea textOutputArea;
 	//add explored time
 	private String startTime = null;
 	public JLabel timeLabel = new JLabel();
@@ -146,6 +150,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	private Direction firstViewDirection = Direction.BACK_LEFT;
 	protected JLabel lvlupLabel_2;
 	protected JLabel lvlupLabel_3;
+	private final int TEXT_OUTPUT_ROWS = 5;
 
 	///==================================
 
@@ -191,7 +196,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		frameState = GamePlayFrame.FRAME_STATE.STANDBY;
 		//set start time
 		startTime = getCurrentTime();
-
 	}
 
 	public void addButtons() {
@@ -249,6 +253,29 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				requestFocus();
 			}
 		});
+
+		//add textarea
+		textOutputArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
+		textOutputArea.setLineWrap(true);
+		textOutputArea.setWrapStyleWord(true); // pretty line wrap.
+		textOutputArea.setEditable(false);
+		JScrollPane scroll = new JScrollPane(textOutputArea);
+		// these two lines make the JScrollPane always scroll to the bottom when
+		// text is appended to the JTextArea.
+		DefaultCaret caret = (DefaultCaret) textOutputArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		scroll.setBounds(10, 470, 350, 70);
+		panel.add(scroll);
+		textOutputArea.setText("");
+		textOutputArea.append("Welcome to PokeWorld!");
+	}
+
+	/**
+	 * print text on textArea
+	 * @param text
+	 */
+	public void printTextInTextArea(String text) {
+		textOutputArea.append(text);
 	}
 
 	public void dropIventory(int index) {
@@ -536,20 +563,20 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			int offset = 1;//this offset is cuz the locaion is from 0 not 1
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				numSquaresFace = playerLoc.getY();
-				numSquaresLeft = playerLoc.getX()+offset;
+				numSquaresLeft = playerLoc.getX() + offset;
 				numSquaresRight = boardSize - playerLoc.getX();
 			} else if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
 				numSquaresFace = boardSize - playerLoc.getX() - offset;
-				numSquaresLeft = playerLoc.getY()+offset;
+				numSquaresLeft = playerLoc.getY() + offset;
 				numSquaresRight = boardSize - playerLoc.getY();
 			} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
 				numSquaresFace = playerLoc.getX();
 				numSquaresLeft = boardSize - playerLoc.getY();
-				numSquaresRight = playerLoc.getY()+offset;
+				numSquaresRight = playerLoc.getY() + offset;
 			} else if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
 				numSquaresFace = boardSize - playerLoc.getY() - offset;
 				numSquaresLeft = boardSize - playerLoc.getX();
-				numSquaresRight = playerLoc.getX()+offset;
+				numSquaresRight = playerLoc.getX() + offset;
 			}
 			//			System.out.println(numSquaresFace);
 			//			System.out.println(playerLoc.getX()+","+playerLoc.getY());
@@ -587,7 +614,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				if (!isDay) {
 					if (i > sightRange) {
 						g.setColor(Color.gray.darker().darker());
-					}else{
+					} else {
 						g.setColor(Color.green.darker());
 					}
 				} else {
@@ -615,9 +642,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 					if (!isDay) {
-						if (j > sightRange||i>sightRange) {
+						if (j > sightRange || i > sightRange) {
 							g.setColor(Color.gray.darker().darker());
-						}else{
+						} else {
 							g.setColor(Color.green.darker());
 						}
 					} else {
@@ -648,9 +675,9 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					yPointRight[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
 					if (!isDay) {
-						if (j > sightRange||i>sightRange) {
+						if (j > sightRange || i > sightRange) {
 							g.setColor(Color.gray.darker().darker());
-						}else{
+						} else {
 							g.setColor(Color.green.darker());
 						}
 					} else {
