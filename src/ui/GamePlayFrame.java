@@ -390,7 +390,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		JLabel bgHeadViewLabel = new JLabel(new ImageIcon("src/bgHeadView.png"));
 		//load head picture
 		JLabel headPictureLabel = null;
-//		System.out.println(clientPlayer);
+		//		System.out.println(clientPlayer);
 		ImageIcon headPicture = clientPlayer.getAvatar()
 				.getCurrentEvolution(clientPlayer.getPlayerLevel())
 				.getDisplayPictureGIF();
@@ -554,7 +554,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	/**
-	 * 
+	 * when the shake timer get shaketimelimit, change the shakelimit,
+	 * then the character will be print lower or higher
 	 */
 	private void changeShakeLimit() {
 		if (shakeOffset == shakeOffsetZero) {
@@ -565,9 +566,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	//------------------------------------------------------------------------------------------------
+	/**
+	 * the game panel on game frame
+	 */
 	class GamePanel extends JPanel {
+		/**
+		 * this method will run every fix time
+		 */
 		protected void paintComponent(Graphics g) {
-			super.paintComponent(g); // Clears panel
+			super.paintComponent(g);
 			// jumpTimeCounter run
 			if (isJumping) {
 				jumpTimeCounter++;
@@ -589,7 +596,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						0, FULL_FRAME_WIDTH, FRAME_HEIGHT, null);
 				return;
 			}
-
 			if (gameClient.getGame() == null && !gameClient.isConnected()) {
 				super.paintComponent(g);
 				frameState = FRAME_STATE.STANDBY;
@@ -598,12 +604,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 
 			////================================================================
-			//1st view
+			//these are 1st person view
 			//draw frame
 			g.setColor(Color.black);
 			g.fillRect(startX - 10, 0, FULL_FRAME_WIDTH - startX, FRAME_HEIGHT);
-			//			g.drawLine(startX - 10, startY, startX + viewWidth, startY
-			//					+ viewHight);
 			//print background
 			if (turnOffset < 0) {
 				turnOffset = 2250;
@@ -611,7 +615,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			if (turnOffset > 2250) {
 				turnOffset = 0;
 			}
-
 			if (isDay) {
 				g.drawImage(new ImageIcon("src/firstview_bk.png").getImage(),
 						startX + 2 - turnOffset, startY + 2
@@ -622,6 +625,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						startX + 2 - turnOffset, startY + 2
 								- jumpOffsetFirstView - 60, null);
 			}
+			//changeoffset is for turning backgroud picture when turn character
+			//change the offset when it will get edge
 			int changeOffset = 50;
 			if (turnCounter > 0) {
 				//turn right
@@ -633,8 +638,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				turnOffset -= changeOffset;
 			}
 
+			//load labels
 			Player clientPlayer = gameClient.getClientPlayer();
-
 			if (!hasLoadedLabels) {
 				//add all jlabel after picking character
 				loadLabels();
@@ -643,9 +648,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				hasLoadedLabels = true;
 			}
 
-			int numSquaresFace = 0;
-			int numSquaresLeft = 0;
-			int numSquaresRight = 0;
+			//caculating how many squares on the player's left side,right side and face side
+			int numSquaresFace = 0;//the number of squares on the player's face side
+			int numSquaresLeft = 0;//the number of squares on the player's left side
+			int numSquaresRight = 0;////the number of squares on the player's right side 
 			Location playerLoc = clientPlayer.getLocation();
 			int boardSize = 10;
 			int offset = 1;//this offset is cuz the locaion is from 0 not 1
@@ -666,11 +672,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				numSquaresLeft = boardSize - playerLoc.getX();
 				numSquaresRight = playerLoc.getX() + offset;
 			}
-			//			System.out.println(numSquaresFace);
-			//			System.out.println(playerLoc.getX()+","+playerLoc.getY());
-			//			System.out.println(numSquaresFace + " left:" + numSquaresLeft
-			//					+ "right:" + numSquaresRight);
 
+			//set the size and based data of 1st person view 
 			double nowDrawLine = viewHight;//the height of line now draw(it is the bot of the frame at start)
 			double previouDrawLine = viewHight;
 			double previouX0 = midOfView - squareWidth / 2;//the line in the bot of the frame
@@ -681,13 +684,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			int checkLocationY = clientPlayer.getLocation().getY();
 			//#draw background Rectengel
 			for (int i = 0; i < numSquaresFace + 1; i++) {
-				//draw face square
+
+				//draw ground Polygons on face side
 				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
 				double nowStartX = midOfView - nowWidthOfSquare / 2;
 				//add points for drawing Polygon
 				int[] xPoint = new int[4];
 				int[] yPoint = new int[4];
-				//draw Polygon
+				//calcutating the 4 potions for a Polygon
 				xPoint[0] = (int) previouX0;
 				yPoint[0] = (int) previouY0 - jumpOffsetFirstView;
 				xPoint[1] = (int) previouX1;
@@ -698,9 +702,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				xPoint[3] = (int) nowStartX;
 				yPoint[3] = (int) (nowDrawLine - squareHeigh
 						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-
+				//draw ground Polygons on face side
 				if (!isDay) {
 					if (i > sightRange) {
+						//draw darker Polygons in night and out of range
 						g.setColor(Color.gray.darker().darker());
 					} else {
 						g.setColor(Color.green.darker());
@@ -712,11 +717,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				g.setColor(Color.BLACK);
 				g.drawPolygon(xPoint, yPoint, 4);
 
-				//draw left squares
+				//draw ground Polygons on left side
 				for (int j = 0; j < numSquaresLeft; j++) {
 					int[] xPointLeft = new int[4];
 					int[] yPointLeft = new int[4];
-					//draw Polygon
+					//calcutating the 4 potions for a Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
 					xPointLeft[0] = (int) (previouX0 - j * previouWidthOfSquare);
 					yPointLeft[0] = (int) (previouY0 - jumpOffsetFirstView);
@@ -729,8 +734,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+					//draw ground Polygons on left side
 					if (!isDay) {
 						if (j > sightRange || i > sightRange) {
+							//draw darker Polygons in night and out of range
 							g.setColor(Color.gray.darker().darker());
 						} else {
 							g.setColor(Color.green.darker());
@@ -743,11 +750,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					g.drawPolygon(xPointLeft, yPointLeft, 4);
 				}
 
-				//draw right squares
+				//draw ground Polygons on right side
 				for (int j = 0; j < numSquaresRight; j++) {
 					int[] xPointRight = new int[4];
 					int[] yPointRight = new int[4];
-					//draw Polygon
+					//calcutating the 4 potions for a Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
 					xPointRight[0] = (int) (previouX0 + j
 							* previouWidthOfSquare);
@@ -762,8 +769,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					xPointRight[3] = (int) (nowStartX + j * nowWidthOfSquare);
 					yPointRight[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
+					//draw ground Polygons on right side
 					if (!isDay) {
 						if (j > sightRange || i > sightRange) {
+							//draw darker Polygons in night and out of range
 							g.setColor(Color.gray.darker().darker());
 						} else {
 							g.setColor(Color.green.darker());
@@ -776,11 +785,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					g.drawPolygon(xPointRight, yPointRight, 4);
 				}
 
-				//				g.drawImage(new ImageIcon("src/firstviewgrass.png").getImage(),xPoint[0],yPoint[0] , xPoint[1], yPoint[1], xPoint[2], yPoint[2], xPoint[3],yPoint[3],null);
-				//				g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer)
-				//				System.out.println(xPoint[0]+","+yPoint[0]);
-
-				//updata previou
+				//updata values
 				previouX0 = nowStartX;
 				previouY0 = nowDrawLine - squareHeigh * Math.pow(scaleY, i + 1);
 				previouX1 = nowStartX + nowWidthOfSquare;
@@ -791,6 +796,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			}
 
 			//#create storages to store the positions and load information into storages 
+			//save positions and read and print object is because the object need to be printed reverse
 			double nowDrawLinePrintObject = viewHight;//the height of line now draw(it is the bot of the frame at start)
 			double previouDrawLinePrintObject = viewHight;
 			double previouX0PrintObject = midOfView - squareWidth / 2;//the line in the bot of the frame
@@ -800,16 +806,17 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			int checkLocationXPrintObject = clientPlayer.getLocation().getX();
 			int checkLocationYPrintObject = clientPlayer.getLocation().getY();
 			List<PointArrayStorage> storages = new ArrayList<PointArrayStorage>();
-			//these code is for road information into storages-----------------------------------
+			//caculating all positions and save into storages
 			for (int i = 0; i < numSquaresFace + 1; i++) {
+				//create storage
 				PointArrayStorage storage = new PointArrayStorage();
-				//draw face square
+
+				//get positions of the face side square and save into storage 
 				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
 				double nowStartX = midOfView - nowWidthOfSquare / 2;
-				//add points for drawing Polygon
 				int[] xPoint = new int[4];
 				int[] yPoint = new int[4];
-				//draw Polygon
+				//calcutating the 4 potions for a Polygon
 				xPoint[0] = (int) previouX0PrintObject;
 				yPoint[0] = (int) previouY0PrintObject - jumpOffsetFirstView;
 				xPoint[1] = (int) previouX1PrintObject;
@@ -823,11 +830,13 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				//SAVE INTO STORAGE
 				storage.xPoint = xPoint;
 				storage.yPoint = yPoint;
-				//save left squares
+
+				//get positions of the left side square and save into storage 
 				for (int j = 0; j < numSquaresLeft; j++) {
 					int[] xPointLeft = new int[4];
 					int[] yPointLeft = new int[4];
 					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
+					//calcutating the 4 potions for a Polygon
 					xPointLeft[0] = (int) (previouX0PrintObject - j
 							* previouWidthOfSquare);
 					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
@@ -841,7 +850,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					//save data
+					//SAVE INTO STORAGE
 					PointArrayStorageLeft storageLeft = new PointArrayStorageLeft();
 					storageLeft.xPoint = xPointLeft;
 					storageLeft.yPoint = yPointLeft;
@@ -849,11 +858,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 
 				}
 
-				//save right squares
+				//get positions of the right side square and save into storage 
 				for (int j = 0; j < numSquaresRight; j++) {
 					int[] xPointLeft = new int[4];
 					int[] yPointLeft = new int[4];
 					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
+					//calcutating the 4 potions for a Polygon
 					xPointLeft[0] = (int) (previouX0PrintObject + j
 							* previouWidthOfSquare);
 					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
@@ -867,14 +877,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					//save data
+					//SAVE INTO STORAGE
 					PointArrayStorageRight storageRight = new PointArrayStorageRight();
 					storageRight.xPoint = xPointLeft;
 					storageRight.yPoint = yPointLeft;
 					storage.rightlList.add(storageRight);
 				}
 
-				//updata previou
+				//updata values
 				previouX0PrintObject = nowStartX;
 				previouY0PrintObject = nowDrawLinePrintObject - squareHeigh
 						* Math.pow(scaleY, i + 1);
@@ -887,27 +897,28 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				//add storage to stroages
 				storages.add(storage);
 			}
-			//---------------------------------------------------------------------
 
-			//#print object
+			//#load the positions from storages and print objects
+			//save positions and read and print object is because the object need to be printed reverse
 			for (int i = numSquaresFace; i > -1; i--) {
 				PointArrayStorage storage = storages.get(i);
 				int[] xPoint = storage.xPoint;
 				int[] yPoint = storage.yPoint;
 
-				//draw left squares
+				//draw left side objects
 				for (int j = numSquaresLeft - 1; j > -1; j--) {
 					PointArrayStorageLeft storageLeft = storage.leftList.get(j);
 					int[] xPointLeft = storageLeft.xPoint;
 					int[] yPointLeft = storageLeft.yPoint;
 
-					//print the object left this location====================================================
+					//print the object left this location
 					Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 					Game ga = gameClient.getGame();
 					Room r = clientPlayer.getLocation().getRoom();
 					BoardSquare[][] bs = r.board.getSquares();
 
+					//caculate position depend on player face side
 					int locX = nextLoc.getX();
 					int locY = nextLoc.getY();
 					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
@@ -926,6 +937,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						if (bs[locY][locX].getGameObjectOnSquare() != null) {
 							if (isDay) {
 								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+									// tree
 									int width = (xPoint[1] - xPoint[0])
 											* TREE_SCALE_FIRST_VIEW;
 									int height = width;
@@ -940,6 +952,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 											drawStartX, drawStartY, width,
 											height, null);
 								} else {
+									//not tree
 									int height = (xPointLeft[2] - xPointLeft[3]);
 									int width = height;
 									int drawStartX = xPointLeft[3];
@@ -952,8 +965,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 											height, null);
 								}
 							} else {
+								//is night
 								if (isInSightRange(clientPlayer, locY, locX)) {
+									//only print objects in the sight range in night
 									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+										//tree
 										int width = (xPoint[1] - xPoint[0])
 												* TREE_SCALE_FIRST_VIEW;
 										int height = width;
@@ -969,6 +985,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 												drawStartX, drawStartY, width,
 												height, null);
 									} else {
+										//not tree
 										int height = (xPointLeft[2] - xPointLeft[3]);
 										int width = height;
 										int drawStartX = xPointLeft[3];
@@ -986,19 +1003,20 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 				}
 
-				//draw right squares
+				//draw right side objects
 				for (int j = numSquaresRight - 1; j > -1; j--) {
 					PointArrayStorageRight storageRight = storage.rightlList
 							.get(j);
 					int[] xPointRight = storageRight.xPoint;
 					int[] yPointRight = storageRight.yPoint;
-					//print the object left on this location====================================================
+					//print the object left on this location
 					Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 					Game ga = gameClient.getGame();
 					Room r = clientPlayer.getLocation().getRoom();
 					BoardSquare[][] bs = r.board.getSquares();
 
+					//caculate position depend on player face side
 					int locX = nextLoc.getX();
 					int locY = nextLoc.getY();
 					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
@@ -1017,6 +1035,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						if (bs[locY][locX].getGameObjectOnSquare() != null) {
 							if (isDay) {
 								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+									//tree
 									int width = (xPoint[1] - xPoint[0])
 											* TREE_SCALE_FIRST_VIEW;
 									int height = width;
@@ -1031,6 +1050,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 											drawStartX, drawStartY, width,
 											height, null);
 								} else {
+									//not tree
 									int height = (xPointRight[2] - xPointRight[3]);
 									int width = height;
 									int drawStartX = xPointRight[3];
@@ -1043,8 +1063,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 											height, null);
 								}
 							} else {
+								//night
 								if (isInSightRange(clientPlayer, locY, locX)) {
+									//only print objects in the sight range in night
 									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
+										//tree
 										int width = (xPoint[1] - xPoint[0])
 												* TREE_SCALE_FIRST_VIEW;
 										int height = width;
@@ -1060,6 +1083,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 												drawStartX, drawStartY, width,
 												height, null);
 									} else {
+										//not tree
 										int height = (xPointRight[2] - xPointRight[3]);
 										int width = height;
 										int drawStartX = xPointRight[3];
@@ -1077,7 +1101,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 				}
 
-				//print the object on this location====================================================
+				//print the object on face side
 				Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 				Game ga = gameClient.getGame();
@@ -1092,6 +1116,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						if (isDay) {
 							if (bs[nextLoc.getY()][nextLoc.getX()]
 									.getGameObjectOnSquare() instanceof Tree) {
+								//tree
 								int width = (xPoint[1] - xPoint[0])
 										* TREE_SCALE_FIRST_VIEW;
 								int height = width;
@@ -1105,6 +1130,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 										drawStartX, drawStartY, width, height,
 										null);
 							} else {
+								//not tree
 								int height = (xPoint[2] - xPoint[3]);
 								int width = height;
 								int drawStartX = xPoint[3];
@@ -1117,22 +1143,24 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 										null);
 								/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
 								*/
-								//							int height = yPoint[0] - yPoint[3];
-								//							int width = height;
-								//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
-								//									/ 2;
-								//							int drawStartX = midPointX - width / 2;
-								//							int drawStartY = yPoint[3];
-								//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
-								//									.getGameObjectOnSquare().getSpriteImage()
-								//								.getImage(), drawStartX,drawStartY,width,height, null);
+								//int height = yPoint[0] - yPoint[3];
+								//int width = height;
+								//int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])/ 2;
+								//int drawStartX = midPointX - width / 2;
+								//int drawStartY = yPoint[3];
+								//g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+								//	.getGameObjectOnSquare().getSpriteImage()
+								//  .getImage(), drawStartX,drawStartY,width,height, null);
 								//----------------------------------------------------------------------------------
 							}
 						} else {
+							//night
 							if (isInSightRange(clientPlayer, nextLoc.getY(),
 									nextLoc.getX())) {
+								//only print objects in the sight range in night
 								if (bs[nextLoc.getY()][nextLoc.getX()]
 										.getGameObjectOnSquare() instanceof Tree) {
+									//tree
 									int width = (xPoint[1] - xPoint[0])
 											* TREE_SCALE_FIRST_VIEW;
 									int height = width;
@@ -1147,6 +1175,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 													.getImage(), drawStartX,
 											drawStartY, width, height, null);
 								} else {
+									//not tree
 									int height = (xPoint[2] - xPoint[3]);
 									int width = height;
 									int drawStartX = xPoint[3];
@@ -1160,15 +1189,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 											drawStartY, width, height, null);
 									/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
 									*/
-									//							int height = yPoint[0] - yPoint[3];
-									//							int width = height;
-									//							int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])
-									//									/ 2;
-									//							int drawStartX = midPointX - width / 2;
-									//							int drawStartY = yPoint[3];
-									//							g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
-									//									.getGameObjectOnSquare().getSpriteImage()
-									//								.getImage(), drawStartX,drawStartY,width,height, null);
+									//int height = yPoint[0] - yPoint[3];
+									//int width = height;
+									//int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])/ 2;
+									//int drawStartX = midPointX - width / 2;
+									//int drawStartY = yPoint[3];
+									//g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+									//	.getGameObjectOnSquare().getSpriteImage()
+									//  .getImage(), drawStartX,drawStartY,width,height, null);
 									//----------------------------------------------------------------------------------
 								}
 							}
@@ -1221,11 +1249,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				e.printStackTrace();
 			}
 
+			//print ground square(grass)
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					int tileX = xPos + (cellX * TILE_WIDTH / 2);
 					int tileY = yPos - (cellX * TILE_HEIGHT / 4);
-
 					if (isDay) {
 						g.drawImage(new ImageIcon("./sprites/tiles/grass.png")
 								.getImage(), tileX, tileY, TILE_WIDTH,
@@ -1236,6 +1264,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 									"./sprites/tiles/grass.png").getImage(),
 									tileX, tileY, TILE_WIDTH, TILE_HEIGHT, null);
 						} else {
+							//print darkgrass out of the sight range in night
 							g.drawImage(
 									new ImageIcon(
 											"./sprites/tiles/darkgrass.png")
@@ -1244,11 +1273,11 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						}
 					}
 
-					Location clientPlayerLoc = clientPlayer.getLocation();
-
 					//print player
+					Location clientPlayerLoc = clientPlayer.getLocation();
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
+						//let player shake even if he dont move
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
 							shakeTimer = 0;
 							changeShakeLimit();
@@ -1259,7 +1288,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 											+ shakeOffset, null);
 						} else {
 							shakeTimer++;
-
 							g.drawImage(clientPlayer
 									.getSpriteBasedOnDirection().getImage(),
 									tileX + (TILE_WIDTH / 5), tileY
@@ -1268,6 +1296,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						}
 					}
 
+					//print other players
 					for (Player connectedPlayer : gameClient.getGame()
 							.getPlayers()) {
 						if (connectedPlayer != clientPlayer) {
@@ -1436,6 +1465,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			if (moved) {
 				lastMovedtime = runningTime;
 			}
+
 			//printInformation of player
 			printInformation(clientPlayer);
 
@@ -1447,6 +1477,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				addComponents();
 				componentsAdded = true;
 			}
+
 			//draw small map
 			int mapStartX = 600;
 			int mapNowX = mapStartX;
@@ -1457,6 +1488,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					if (gameClient.getClientPlayer().getLocation().getX() == cellX
 							&& gameClient.getClientPlayer().getLocation()
 									.getY() == cellY) {
+						//draw player as red 
 						g.setColor(Color.red);
 						g.fillRect(mapNowX, mapStartY, mapSquareSize,
 								mapSquareSize);
@@ -1467,6 +1499,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
 						BoardSquare[][] bs = r.board.getSquares();
 						if (bs[cellY][cellX].getGameObjectOnSquare() == null) {
+							//draw space as green 
 							g.setColor(Color.GREEN.darker());
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1474,6 +1507,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
+							//draw tree as black 
 							g.setColor(Color.black);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1481,6 +1515,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
+							//draw plant as pink 
 							g.setColor(Color.PINK);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1488,13 +1523,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
-							g.setColor(Color.blue);
+							//draw monster as CYAN 
+							g.setColor(Color.CYAN);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 							g.setColor(Color.black);
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof MagicCircle) {
+							//draw migiccircle as cyan 
 							g.setColor(Color.CYAN);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1502,6 +1539,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Key) {
+							//draw key as orange
 							g.setColor(Color.ORANGE);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1509,6 +1547,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof RareCandy) {
+							//draw candy as blue 
 							g.setColor(Color.blue);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1516,6 +1555,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else {
+							//draw others as LIGHT_GRAY 
 							g.setColor(Color.LIGHT_GRAY);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1524,13 +1564,14 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 									mapSquareSize);
 						}
 					}
-
 					mapNowX += mapSquareSize;
 				}
 				mapNowX = mapStartX;
 				mapStartY += mapSquareSize;
 			}
+
 			//add raining weather
+			//draw white lines as rain
 			if (isRainning) {
 				int rainStartX = 200;
 				int rainStartY = -50;
@@ -1550,11 +1591,10 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 					}
 					g.setColor(Color.WHITE);
 					g.drawLine(nextX, nextY, nextX + width, nextY + height);
-					//					nextX = nextX+width;
-					//					nextY = nextY+height;
 					number++;
 				}
 			}
+
 			//add rain for 1st view
 			if (isRainning) {
 				int rainStartX = 900;
@@ -1580,6 +1620,13 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
+	/**
+	 * check whether the location(x,y) is in the players sigh range.
+	 * @param player
+	 * @param y
+	 * @param x
+	 * @return
+	 */
 	public boolean isInSightRange(Player player, int y, int x) {
 		Location loc = player.getLocation();
 		if (x < (loc.getX() + sightRange) && x > (loc.getX() - sightRange)
@@ -1591,8 +1638,12 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 	}
 
+	/**
+	 * print player's inventory in bag
+	 * @param player
+	 * @param g
+	 */
 	public void printInventory(Player player, Graphics g) {
-
 		int itemSize = 40;
 		int itemX = -itemSize;
 		int itemY = 350;
@@ -1617,8 +1668,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		for (Item item : player.getInventory()) {
 			JLabel jlabel = new JLabel(player.getInventory().get(itemNumber)
 					.getSpriteImage());
-			//			jbutton.setIcon(player.getInventory().get(itemNumber)
-			//					.getSpriteImage());
 			if (itemNumber == 3) {
 				itemX = 0;
 				itemY += itemSize;
@@ -1632,12 +1681,16 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			jlabel.setBounds(xPo, yPo, itemSize, itemSize);
 			itemJLabels.add(jlabel);
 			panel.add(jlabel);
-			//			ActionListener al = new DropActionListener(player, item,itemJLables,jlabel);
-			//			jlabel.addActionListener(al);
 		}
 		repaint();
 	}
 
+	/**
+	 * After player walk steps(int) step on currentlly face side,get the location
+	 * @param player
+	 * @param steps
+	 * @return
+	 */
 	public Location nextSquareLocation(Player player, int steps) {
 		Direction dir = player.getDirection();
 		if (dir == Direction.BACK_LEFT) {
@@ -1656,31 +1709,38 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		return null;
 	}
 
+	/**
+	 * type the key
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	/**
+	 * press the key, start jump
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_J) {
 			isJumping = true;
-			//			jumpOffset = -20;
-			//			jumpOffsetFirstView = -50;
 		}
 	}
 
 	/**
-	 * check whether the place can be move into
+	 * check whether the place can be moved
 	 */
 	private boolean canMove(int x, int y, Player player) {
 		BoardSquare[][] sq = player.getLocation().getRoom().board.getSquares();
+		//if the location is out of board,cannot move
 		if (x > 9 || x < 0 || y < 0 || y > 9) {
 			return false;
 		}
+		//if the location is tree,cannot move
 		if (sq[y][x].getGameObjectOnSquare() instanceof Tree
 				|| sq[y][x].getGameObjectOnSquare() instanceof Fence) {
 			return false;
 		}
+		//if a player is at that location, cannot move
 		for (Player otherPlayer : gameClient.getGame().getPlayers()) {
 			Location otherLoc = otherPlayer.getLocation();
 			if (otherLoc.getX() == x
@@ -1690,7 +1750,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 				return false;
 			}
 		}
-		//change here if add new kinds of Monster
+		//if a monster is at that location, cannot move
+		//(for teamwork ,change here if add new kinds of Monster)
 		if (sq[y][x].getGameObjectOnSquare() instanceof Mewtwo
 				|| sq[y][x].getGameObjectOnSquare() instanceof Rattata
 				|| sq[y][x].getGameObjectOnSquare() instanceof Rhydon
@@ -1698,6 +1759,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 			fightDialog(new Location(player.getLocation().getRoom(), x, y));
 			return false;
 		}
+		//if a MagicCircle is at that location, cannot move
 		if (sq[y][x].getGameObjectOnSquare() instanceof MagicCircle) {
 			MagicCircle mc = (MagicCircle) (sq[y][x].getGameObjectOnSquare());
 			player.setLocation(new Location(player.getLocation().getRoom(), mc
@@ -1707,6 +1769,18 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		return true;
 	}
 
+	/**
+	 * release key
+	 * Q-rotate game left, E-rotate game right
+	 * W-north S-south A-west D-east J- jump
+	 * Up-go  ,Down-turn around ,Left-turn left,Right-turn right
+	 * 
+	 * This gui has two keyboard control system:The 1st system is for using in 3rd person view gui.
+	 * (user can use WSAD to move. W-north S-south A-west D-east)
+	 * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view. 
+	 * (user can use Up,Down,Left,Right to move. Up-go,Down-turn around,Left-turn left,Right-turn right)
+	 * And user can also use "J" to jump in both 2 views.
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (!isLevelUpping && !isFighting) {
