@@ -294,7 +294,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		//add send Message button
 		sendMessageButton.setText("Send");
 		sendMessageButton.setToolTipText("Press to send message");
-		sendMessageButton.setBounds(210, 430, 80, 30);
+		sendMessageButton.setBounds(210, 435, 80, 30);
 		panel.add(sendMessageButton);
 		sendMessageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -320,6 +320,15 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		inputMessageField.setText("");
 	}
 
+	/**
+	 * outPut Message From Server
+	 * @param message
+	 */
+	public void outPutMessageFromServer(String message) {
+		//@prashant
+		textOutputArea.append("Server:"+message);
+	}
+	
 	/**
 	 * print text on textArea
 	 * @param text
