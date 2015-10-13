@@ -6,34 +6,44 @@ import java.awt.Image;
 import java.io.Serializable;
 
 import javax.swing.ImageIcon;
+
 /**
- * This class is how we represent a square on the board.
- * It stores a gameObject which is encapsulated so it has getters and setters.
+ * This class is how we represent a square on the board. It stores a gameObject
+ * which is encapsulated so it has getters and setters.
  *
  */
 public class BoardSquare implements Serializable {
-	
+
 	private static final long serialVersionUID = -5741277974211422063L;
 
 	private static final ImageIcon terrainTileSprite = new ImageIcon("./sprites/tiles/grass.png");
-	
+
 	private GameObject gameObjectOnSquare;
-	
+
 	public BoardSquare() {
-		
 	}
-	
+
 	public BoardSquare(GameObject gameObjectOnSquare) {
 		this.gameObjectOnSquare = gameObjectOnSquare;
 	}
-	
+
+	/**
+	 * @return Image， the image of the tile
+	 */
 	public static Image getTileImage() {
 		return terrainTileSprite.getImage();
 	}
+
+	/**
+	 * @return GameObject, the GameObject on the square
+	 */
 	public GameObject getGameObjectOnSquare() {
 		return gameObjectOnSquare;
 	}
 
+	/**
+	 * @param gameObjectOnSquare, sets GameObject on the square
+	 */
 	public void setGameObjectOnSquare(GameObject gameObjectOnSquare) {
 		this.gameObjectOnSquare = gameObjectOnSquare;
 	}
@@ -42,10 +52,7 @@ public class BoardSquare implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime
-				* result
-				+ ((gameObjectOnSquare == null) ? 0 : gameObjectOnSquare
-						.hashCode());
+		result = prime * result + ((gameObjectOnSquare == null) ? 0 : gameObjectOnSquare.hashCode());
 		return result;
 	}
 
@@ -65,6 +72,5 @@ public class BoardSquare implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
+
 }
