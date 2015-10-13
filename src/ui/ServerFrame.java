@@ -19,11 +19,11 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
-import Storage.GameToJson;
-import Storage.GameToXML;
-import Storage.JsonToGame;
-import Storage.SaverLoader;
-import Storage.XMLToGame;
+import storage.GameToJson;
+import storage.GameToXML;
+import storage.JsonToGame;
+import storage.SaverLoader;
+import storage.XMLToGame;
 import network.GameServer;
 
 @SuppressWarnings("serial")

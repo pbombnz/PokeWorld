@@ -1,4 +1,4 @@
-package Storage;
+package storage;
 
 import java.awt.FileDialog;
 import java.io.BufferedWriter;
@@ -7,30 +7,28 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import org.json.simple.*;
-
 import ui.ServerFrame;
 
 import com.esotericsoftware.jsonbeans.Json;
 import com.esotericsoftware.jsonbeans.OutputType;
 
 import game.Game;
-import game.Location;
-import game.Player;
-import game.Direction;
-import game.avatar.Avatar;
-import game.objects.interactiveObjects.*;
 
-/*
- * a class that saves the player's current state to a json file
+/**
+ * A Class that saves the Game's current state into a JSON formatted file
  * 
- * stores all the major variables in the player class
- * 
+ * @author Prashant Bhikhu
  * @author Priyanka Bhula
  */
 public class GameToJson {
 
-	//PRASHANT SAVING 
+	/**
+	 * Saves the Game world
+	 * 
+	 * @author Prashant Bhikhu
+	 * @param parentFrame The current frame the save method is used in so any dialog boxes that appear are centered
+	 * @param game The Game world object you would like to save
+	 */
 	public static void saveGame(ServerFrame parentFrame, Game game) {
 		// Creates the saving File Dialog and sets the appropriate 
 	    FileDialog fDialog = new FileDialog(parentFrame, "Save Server Game as file..", FileDialog.SAVE);
@@ -76,8 +74,7 @@ public class GameToJson {
 	    parentFrame.writeToConsole("[Server][Save] Saved game Sucessfully. ("+path+")");
 	}
 
-	
-	/*
+	/* PRIYANKA's REDUNDANT CODE
 	//@SuppressWarnings("unchecked")
 	public static void savePlayer(Player p) throws IOException, InvalidSaveException{
 		
