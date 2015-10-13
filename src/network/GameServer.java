@@ -172,6 +172,18 @@ public class GameServer extends Listener {
 			serverFrame.writeToConsole("[Server][Client Message] Player Name: "+packet.playerName+" | Message: "+packet.message);
 			server.sendToAllExceptTCP(connection.getID(), object);
 		}
+		
+		else if(object instanceof PlayerUpdate) {
+			PlayerUpdate packet = (PlayerUpdate) object;
+			Player playerToUpdate = game.getPlayerByID(packet.id);
+			serverFrame.writeToConsole("[Server][Player Update] Player : "+playerToUpdate.getName()+" | ID:"+playerToUpdate.getId());
+			
+			playerToUpdate.setAttack(packet.newAttack);
+			playerToUpdate.setHealth(packet.newHealth);
+			playerToUpdate.setPlayerLevel(packet.newPlayerLevel);
+			
+			server.sendToAllExceptTCP(connection.getID(), object);
+		}
 	}
 
 	@Override

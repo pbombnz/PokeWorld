@@ -66,13 +66,9 @@ public class Network {
 		kyro.register(network.Packets.ValidateNewPlayerUsername_Response.class);
 		
 		kyro.register(network.Packets.PlayerUpdateLocationAndDirection.class);
-		kyro.register(network.Packets.PlayerUpdatePlayerLevel.class);
-		kyro.register(network.Packets.PlayerUpdateHealth.class);
-		kyro.register(network.Packets.PlayerUpdateAttack.class);
+		kyro.register(network.Packets.PlayerUpdate.class);
 		kyro.register(network.Packets.PlayerPickUpItem.class);
 		kyro.register(network.Packets.PlayerDropItem.class);
-		kyro.register(network.Packets.PlayerUpdateAttack.class);
-		kyro.register(network.Packets.PlayerUpdatePlayerLevel.class);
 		
 		kyro.register(network.Packets.ClientUseExistingPlayer.class);
 		kyro.register(network.Packets.ClientOnChoosePlayer.class);

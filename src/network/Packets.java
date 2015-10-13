@@ -81,16 +81,6 @@ public class Packets {
 		Location newLocation;
 		Direction newDirection;
 	}
-
-	public static class PlayerUpdateAttack {
-		int id;
-		int newAttack;
-	}
-
-	public static class PlayerUpdateHealth {
-		int id;
-		int newAttack;
-	}
 	
 	public static class PlayerPickUpItem {
 		int id;
@@ -104,9 +94,11 @@ public class Packets {
 		Location location;
 	}
 	
-	public static class PlayerUpdatePlayerLevel {
+	public static class PlayerUpdate {
 		int id;
 		int newPlayerLevel;
+		int newHealth;
+		int newAttack;
 	}	
 	
 	/**

@@ -1629,7 +1629,8 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 		}
 		for (Player otherPlayer : gameClient.getGame().getPlayers()) {
 			Location otherLoc = otherPlayer.getLocation();
-			if (otherLoc.getX() == x && otherLoc.getY() == y) {
+			if (otherLoc.getX() == x && otherLoc.getY() == y 
+					&& otherLoc.getRoom().getName().equals(player.getLocation().getRoom().getName())) {
 				return false;
 			}
 		}
@@ -1923,6 +1924,7 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 						|| clientPlayer.getPlayerLevel() == 2) {
 					clientPlayer.setPlayerLevel(clientPlayer.getPlayerLevel()
 							+ ((RareCandy) ObjectOfLoc).level());
+					gameClient.sendPlayerUpdate();
 					//=================================================
 					//draw gif here
 					if (clientPlayer.getPlayerLevel() == 2) {

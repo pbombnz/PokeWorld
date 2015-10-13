@@ -120,6 +120,16 @@ public class GameClient extends Listener {
 		else if(object instanceof ClientOnChoosePlayer_Response) {
 			recievedServerReponses.add(object);
 		}
+		
+		else if(object instanceof PlayerUpdate) {
+			PlayerUpdate packet = (PlayerUpdate) object;
+			Player playerToUpdate = game.getPlayerByID(packet.id);
+			
+			playerToUpdate.setAttack(packet.newAttack);
+			playerToUpdate.setHealth(packet.newHealth);
+			playerToUpdate.setPlayerLevel(packet.newPlayerLevel);
+			gameClientListener.onGameUpdated();
+		}
 	}
 	
 	/**
@@ -154,6 +164,8 @@ public class GameClient extends Listener {
 			 // DEAD CODE - Typically Should NEVER get here due to the nature of TCP (Always will receive packet)
 			 throw new RuntimeException("I dont even know how the Client lost the packet!!!");
 		}
+		
+		
 	}
 	
 	/**
@@ -193,6 +205,17 @@ public class GameClient extends Listener {
 		ClientMessage packet = new ClientMessage();
 		packet.playerName = playerName;
 		packet.message = message;
+		client.sendTCP(packet);
+	}
+	
+	public void sendPlayerUpdate() {
+		PlayerUpdate packet = new PlayerUpdate();
+		Player clientPlayer = getClientPlayer();
+		packet.id = client.getID();
+		packet.newPlayerLevel = clientPlayer.getPlayerLevel();
+		packet.newAttack = clientPlayer.getAttack();
+		packet.newHealth = clientPlayer.getHealth();
+		
 		client.sendTCP(packet);
 	}
 	
