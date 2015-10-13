@@ -33,38 +33,18 @@ public class Board1 extends Board{
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
 				
-								if (i == 3 && j == 0) {
-									this.squares[i][j] = new BoardSquare(new RareCandy());
-								}
-//								if (i == 9 && j ==6 ) {
-//									this.squares[i][j] = new BoardSquare(new MagicCircle(5,9));
-//								}
-//								if (i == 5 && j ==9 ) {
-//									this.squares[i][j] = new BoardSquare(new MagicCircle(9,6));
-//								}
-								if (i == 2 && j == 0) {
+								if (i == 0 && j == 5) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
 								if (i == 1 && j == 4 || i == 7 && j == 0|| i == 9 && j == 9) {
 									this.squares[i][j] = new BoardSquare(new Tree());
 								}
-								if (i == 7 && j == 5) {
+								if (i == 5 && j == 3) {
 									this.squares[i][j] = new BoardSquare(new Key(1));
 								}
-								if (i == 7 && j == 4) {
-									this.squares[i][j] = new BoardSquare(new Key(1));
-								}
-								if (i == 7 && j == 3) {
-									this.squares[i][j] = new BoardSquare(new Key(1));
-								}
+								
 								if (i == 7 && j == 2) {
 									this.squares[i][j] = new BoardSquare(new Fence());
-								}if (i == 7 && j == 1) {
-									this.squares[i][j] = new BoardSquare(new Key(1));
-								}if (i == 7 && j == 0) {
-									this.squares[i][j] = new BoardSquare(new Key(1));
-								}if (i == 6 && j == 0) {
-									this.squares[i][j] = new BoardSquare(new Key(1));
 								}
 								
 								if (i == 2 && j == 9) {
