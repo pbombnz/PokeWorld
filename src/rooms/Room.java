@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *@author Wang Zhen
- *this class is for ceate a room and store information
+ *this class is for create a room and store information
  */
 public abstract class Room implements Serializable{
 
@@ -17,6 +17,9 @@ public abstract class Room implements Serializable{
 		super();
 	}
 	
+	/**
+	 * @return name of the room
+	 */
 	public String getName(){
 		return roomName;
 	}
@@ -27,5 +30,8 @@ public abstract class Room implements Serializable{
 	@Override
 	public abstract boolean equals(Object obj);
 	
+	/**
+	 * @return the Board the room holds
+	 */
 	public abstract Board getBoard();
 }
