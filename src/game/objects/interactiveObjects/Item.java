@@ -13,11 +13,26 @@ import game.objects.GameObject;
 
 public interface Item extends GameObject {
 	
+	/**
+	 * @return name of item
+	 */
 	public String getName();
+	
+	/**
+	 * @return description of item
+	 */
 	public String getDescription();
 	
+	/**
+	 * @param player uses the item on player
+	 */
 	public void useItem(Player player);
+	
+	/**
+	 * @return if the item is usable
+	 */
 	public boolean isUsable();
+	
 	/**
 	 * @return id of the item, used for the Key
 	 */
