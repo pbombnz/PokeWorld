@@ -108,8 +108,14 @@ public class GameServer extends Listener {
 		}	
 		else if (object instanceof ClientQuit) {
 			ClientQuit packet = (ClientQuit) object;
+			String newName = game.getPlayerByID(packet.id).getName();
 			game.getPlayers().remove(game.getPlayerByID(packet.id));
 			server.sendToAllExceptTCP(packet.id, packet);
+			
+			ClientMessage joinMessagePacket = new ClientMessage();
+			joinMessagePacket.playerName = newName;
+			joinMessagePacket.message = "* Left Server *";
+			server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
 		}	
 		
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
@@ -148,12 +154,35 @@ public class GameServer extends Listener {
 				}
 			}
 			
+			ClientMessage joinMessagePacket = new ClientMessage();
+			joinMessagePacket.playerName = packet.newName;
+			joinMessagePacket.message = "* Joined Server *";
+			server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
+			
 			ClientNewGame newGame = new ClientNewGame();
 			newGame.gameByteArray = game.toByteArray();
 			
 			// Send packet to client
 			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 			server.sendToAllTCP(newGame);
+		}
+		
+		else if(object instanceof ClientMessage) {
+			ClientMessage packet = (ClientMessage) object;
+			serverFrame.writeToConsole("[Server][Client Message] Player Name: "+packet.playerName+" | Message: "+packet.message);
+			server.sendToAllExceptTCP(connection.getID(), object);
+		}
+		
+		else if(object instanceof PlayerUpdate) {
+			PlayerUpdate packet = (PlayerUpdate) object;
+			Player playerToUpdate = game.getPlayerByID(packet.id);
+			serverFrame.writeToConsole("[Server][Player Update] Player : "+playerToUpdate.getName()+" | ID:"+playerToUpdate.getId());
+			
+			playerToUpdate.setAttack(packet.newAttack);
+			playerToUpdate.setHealth(packet.newHealth);
+			playerToUpdate.setPlayerLevel(packet.newPlayerLevel);
+			
+			server.sendToAllExceptTCP(connection.getID(), object);
 		}
 	}
 
@@ -231,6 +260,11 @@ public class GameServer extends Listener {
 		packet.player.setLocation(newLoc);
 		game.getPlayers().add(packet.player);
 
+		ClientMessage joinMessagePacket = new ClientMessage();
+		joinMessagePacket.playerName = packet.player.getName();
+		joinMessagePacket.message = "* Joined Server *";
+		server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
+		
 		// Send game world object to client so they can load the game, as well as the final
 		// version of the client player (so their client player can actually be drawn)
 		ClientNewGame newGame = new ClientNewGame();
