@@ -40,17 +40,20 @@ public class Board3 extends Board{
 				if(i == 0 && j == 9) {
 					this.squares[i][j] = new BoardSquare(new Key(3));
 				}
-				if(i == 0 && j == 0 || i == 4 && j == 5) {
+				if(i == 0 && j == 0 || i == 4 && j == 5 || i == 2 && j == 2 || i == 8 && j == 8 || i == 4 && j == 7 ) {
 					this.squares[i][j] = new BoardSquare(new Key(100));
+				}
+				if(i == 1 && j == 6 ) {
+					this.squares[i][j] = new BoardSquare(new RareCandy());
 				}
 				if(i == 7 && j == 4) {
 					this.squares[i][j] = new BoardSquare(new GoodPotion(100));
 				}
 				if(i == 9 && j == 0) {
-					this.squares[i][j] = new BoardSquare(new Door(1,1,1,1));
+					this.squares[i][j] = new BoardSquare(new Door(3,3,1,9));
 				}
 				if (i == 8 && j == 8) {
-					this.squares[i][j] = new BoardSquare(new Door(2,3,1,1));
+					this.squares[i][j] = new BoardSquare(new Door(1,1,8,9));
 				}
 				if(i == 2 && j == 5) {
 					this.squares[i][j] = new BoardSquare(new Rhydon(50,50));

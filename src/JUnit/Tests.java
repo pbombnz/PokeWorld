@@ -10,7 +10,7 @@ import rooms.Board1;
 import rooms.Board2;
 import rooms.Board3;
 import ui.GameLauncher;
-import ui.GamePlayFrame;
+import ui.GameFrame;
 import ui.ServerFrame;
 
 import static org.hamcrest.CoreMatchers.instanceOf;

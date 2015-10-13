@@ -19,7 +19,7 @@ import rooms.Room3;
 import rooms.Room4;
 import game.Player;
 import game.avatar.Avatar;
-import ui.GamePlayFrame;
+import ui.GameFrame;
 
 /**
  * The Class represents the model of the state of the game at any time, this represents the
