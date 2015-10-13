@@ -28,7 +28,7 @@ import com.esotericsoftware.minlog.Log;
  *
  */
 public class GameServer extends Listener {
-	private final int port = Network.DEFAULT_SERVER_PORT_TCP; // The TCP port the server is listening to
+	private static final boolean DEBUG = false;
 	private Game game; // The global game world object that is given to all clients
 	private ServerFrame serverFrame; // The frame in which console messages are written in to
 	private Server server; // The actual server handling incoming/outgoing packets
@@ -45,7 +45,13 @@ public class GameServer extends Listener {
 	
 		// Create the server object 
 		this.server = new Server(Network.DEFAULT_BUFFER_SIZE, Network.DEFAULT_BUFFER_SIZE);
-		//Log.set(Log.LEVEL_DEBUG); // turn off debug unless its actually needed
+		
+		// Determine whether to write debug messages in Java console or not
+		if(DEBUG) {
+			Log.set(Log.LEVEL_DEBUG); 
+		} else {
+			Log.set(Log.LEVEL_NONE); 
+		}
 	
 		// Write messages to notify the user what is happened so far
 		serverFrame.writeToConsole("[Server][Start] Intialized.");
@@ -59,16 +65,16 @@ public class GameServer extends Listener {
 		this.server.addListener(this);
 		
 		// Attempt to bound server to the TCP (and UDP Discovery port)
-		serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...");
+		serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+Network.DEFAULT_SERVER_PORT_TCP+"...");
 		try {
-			this.server.bind(this.port, Network.DEFAULT_SERVER_PORT_UDP); 
+			this.server.bind(Network.DEFAULT_SERVER_PORT_TCP, Network.DEFAULT_SERVER_PORT_UDP); 
 		} catch(IOException e) {
 			// Attempt to bound server to the TCP (and UDP Discovery port) failed
-			serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...FAILED!");
+			serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+Network.DEFAULT_SERVER_PORT_TCP+"...FAILED!");
 			this.server.stop();
 			this.game = null;
 		}
-		serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+port+"...SUCCESS!");
+		serverFrame.writeToConsole("[Server][Start] Attempting to bound server to TCP Port "+Network.DEFAULT_SERVER_PORT_TCP+"...SUCCESS!");
 		// Start the server after a port is bound
 		this.server.start(); 
 	}
@@ -85,22 +91,8 @@ public class GameServer extends Listener {
 
 	@Override
 	public void received (Connection connection, Object object) {
-		//serverFrame.writeToConsole("Received connection from " + connection.getRemoteAddressTCP());
-		//System.out.println(object);
-		
 		if (object instanceof ValidateNewPlayerUsername) {
-			ValidateNewPlayerUsername packet = (ValidateNewPlayerUsername) object;
-			ValidateNewPlayerUsername_Response packet_send = new ValidateNewPlayerUsername_Response();
-			
-			for(Player connectedPlayer : game.getPlayers()) {
-				if(connectedPlayer.getName().equalsIgnoreCase(packet.name)){
-					packet_send.valid = false;
-					connection.sendTCP(packet_send);
-					return;
-				}
-			}
-			packet_send.valid = true;
-			connection.sendTCP(packet_send);
+			validatePlayerName(connection, object);
 		}
 		else if (object instanceof ClientNewPlayer) {
 			// Get the ClientNewPlayer Packet
@@ -120,8 +112,9 @@ public class GameServer extends Listener {
 		}	
 		
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
-			serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
-			serverFrame.writeToConsole("[Server][Sent] Sent Recieved UpdatePlayer Packet to all other clients.");
+			// Removed Spammy Message as these objects are always sent back and forth
+			//serverFrame.writeToConsole("[Server][Recieved] Recieved UpdatePlayer Packet from Connection ID "+connection.getID()+".");
+			//serverFrame.writeToConsole("[Server][Sent] Sent Recieved UpdatePlayer Packet to all other clients.");
 			PlayerUpdateLocationAndDirection packet = ((PlayerUpdateLocationAndDirection) object);
 			
 			Player player = game.getPlayerByID(packet.id);
@@ -211,27 +204,63 @@ public class GameServer extends Listener {
 		}
 	}
 
+	/**
+	 * Checks if a player's new chosen name is unique (ie. not other currently connected players have it)
+	 * 
+	 * @param connection The Client's connection
+	 * @param object
+	 */
+	private void validatePlayerName(Connection connection, Object object) {
+		ValidateNewPlayerUsername packetReceived = (ValidateNewPlayerUsername) object;
+		ValidateNewPlayerUsername_Response packet_send = new ValidateNewPlayerUsername_Response();
+		
+		for(Player connectedPlayer : game.getPlayers()) {
+			if(connectedPlayer.getName().equalsIgnoreCase(packetReceived.name)){
+				packet_send.valid = false;
+				connection.sendTCP(packet_send);
+				return;
+			}
+		}
+		packet_send.valid = true;
+		connection.sendTCP(packet_send);
+	}
+
 	@Override
 	public void idle (Connection connection) {
 	}
 	
-	
+	/**
+	 * Safely disconnects the server so clients know. Can be
+	 */
 	public void disconnect() {
-		// Ask the user if the want to save (MAYBE FEATURE)
-		
 		// Tell all connected clients that the server is turning off
 		server.sendToAllTCP(new ServerQuit());
 		serverFrame.writeToConsole("[Server][Request] User requested to stop server. Disconnecting clients...");
-		// Stop the server
+		// Stop and close the server safely
 		server.stop();
-		
-		// Safety measure just to make sure all server resources are let go
-		try {
-			server.dispose();
-		} catch (IOException e) {
-		}
+		server.close();
+		// Write a confirmation message
 		serverFrame.writeToConsole("[Server][Sent] Server Ended.");
 	}
+
+	/**
+	 * @return The global copy of the game (Used when saving game to file)
+	 */
+	public Game getGame() {
+		return game;
+	}
+	
+	/**
+	 * @return The global copy of the game (Used when loading game from file)
+	 */
+	public void setGame(Game game) {
+		// Because the player in the loaded game are not associated to any client, we set
+		// their id to '-1'  so the server knows these need to be assigned to clients.
+		for(Player player : game.getPlayers()) {
+			player.setId(-1);
+		}
+		this.game = game; // Sets the loaded game as the global game now
+	}	
 	
 	// ================================================================
 	// Handler Methods - Handles Incoming Packets in seperate Methods
@@ -298,22 +327,5 @@ public class GameServer extends Listener {
 		// Send packet to client
 		serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
 		server.sendToAllTCP(newGame);
-	}
-	
-	/**
-	 * @return The global copy of the game (Used when saving game to file)
-	 */
-	public Game getGame() {
-		return game;
-	}
-	
-	/**
-	 * @return The global copy of the game (Used when loading game from file)
-	 */
-	public void setGame(Game game) {
-		for(Player player : game.getPlayers()) {
-			player.setId(-1);
-		}
-		this.game = game;
 	}
 }
