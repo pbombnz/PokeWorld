@@ -2539,15 +2539,6 @@ public class GamePlayFrame extends JFrame implements KeyListener,
 	}
 
 	@Override
-	public void onServerRestart() {
-		frameState = FRAME_STATE.STANDBY;
-		repaint();
-		gameClient.disconnect();
-		new ActionEvent(new JMenuItem("Join Game (As Client)"),
-				ActionEvent.ACTION_PERFORMED, "");
-	}
-
-	@Override
 	public void onMessageRecieved(String playerName, String message) {
 		outputMessageToTextArea( playerName, message);
 	}

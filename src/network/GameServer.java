@@ -15,7 +15,7 @@ import network.Packets.*;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
+import com.esotericsoftware.minlog.Log; 
 
 /**
  * This class handles the Server Connection of the game and the interactions 
@@ -43,9 +43,9 @@ public class GameServer extends Listener {
 		this.game = Game.createTestMap(); // Creates the game object
 		this.serverFrame = serverFrame;	
 	
-		// Create the server object and turn off debug unless its actually needed
+		// Create the server object 
 		this.server = new Server(Network.DEFAULT_BUFFER_SIZE, Network.DEFAULT_BUFFER_SIZE);
-		Log.set(Log.LEVEL_DEBUG);
+		//Log.set(Log.LEVEL_DEBUG); // turn off debug unless its actually needed
 	
 		// Write messages to notify the user what is happened so far
 		serverFrame.writeToConsole("[Server][Start] Intialized.");
