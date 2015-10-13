@@ -114,14 +114,14 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 		} else if(menuItem == exit) {
 			windowClosing(null);
 		} else if (menuItem == savePlayer) {
-			//GameToJson.saveGame(this, gameServer.getGame());
-			sl = new SaverLoader();
+			GameToJson.saveGame(this, gameServer.getGame());
+			/*sl = new SaverLoader();
 			try {
 				String path = sl.savePath();
 				sl.saveGame(path);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-			}
+			}*/
 		} else if (menuItem == clearServerLog) {
 			console.setText("");
 		}
@@ -146,6 +146,7 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 		        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			// Checks if User wants to load Game from file
 			Game loadedGame = JsonToGame.loadGame(this);
+			String path = sl.loadPath();
 			// if the load is null, then the user canceled the load operation, do do anything.
 			if(loadedGame == null) {
 				return;
