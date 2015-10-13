@@ -55,18 +55,19 @@ public class Avatar implements Serializable {
 		// Get all Avatar directories
 		File[] fList = avatarPath.listFiles();
 
-		// Iterate through all Avatar and create the evolutions for the specific avatar
+		// Iterate through all characters and create the evolutions for the specific avatar
 		for (File file : fList) {
 			// Only enter a file if it is a directory
 			if (file.isDirectory()) {	
-				// Makes the directory always changes
+				// Holds the sub-directories of the characters
 				File[] directories = null;
 				
+				// Firstly check if all first evolution images of character exist
 				if(!checkImagesExist(file.getAbsolutePath(), 1)) {
 					throw new FileNotFoundException("Sprite Avatar Folder, in \""+file.getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 				
-				
+				// Assuming they exist from the above boolean statement, then retrieve all images.
 				String avatarName = file.getName();
 				ImageIcon displayPic  = new ImageIcon(file.getAbsolutePath() + "/dp.png");				
 				
@@ -80,10 +81,10 @@ public class Avatar implements Serializable {
 				ImageIcon dieGIF = new ImageIcon(file.getAbsolutePath() + "/die.gif");
 				ImageIcon evolvingGIF = new ImageIcon(file.getAbsolutePath() + "/evolve.gif");
 
-				
+				// Pack all images and name variables into an Evolution object
 				Evolution firstEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF, evolvingGIF);
 				
-				
+				// Looking for the next directory (next evolution) as a sub directory
 				directories = new File(file.getAbsolutePath()).listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File current, String name) {
@@ -91,14 +92,19 @@ public class Avatar implements Serializable {
 					}
 				});
 				
+				// Check if only ONE directory is a subdirectory of the current directory (which is assumed to be the next evolution)
 				if(directories.length != 1) {
+					// If the folder has no sub-directories, then we cannot continue hence through an error OR if there
+					// is more than one sub-directory then the program will not know which one to choose so it throws an error.
 					throw new FileNotFoundException("Second Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 				}
 				
+				// Firstly check if all first evolution images of character exist
 				if(!checkImagesExist(directories[0].getAbsolutePath(), 2)) {
 					throw new FileNotFoundException("Sprite Avatar Folder, in \""+directories[0].getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 
+				// Assuming they exist from the above boolean statement, then retrieve all images.
 				name = directories[0].getName();
 				displayPicGIF  = new ImageIcon(directories[0].getAbsolutePath() + "/dp.gif");
 				faceLeft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
@@ -109,22 +115,30 @@ public class Avatar implements Serializable {
 				dieGIF = new ImageIcon(directories[0].getAbsolutePath() + "/die.gif");
 				evolvingGIF = new ImageIcon(directories[0].getAbsolutePath() + "/evolve.gif");				
 				
+				// Pack all images and name variables into an Evolution object
 				Evolution secondEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF, evolvingGIF);
 						
+				// Looking for the next directory (next evolution) as a sub directory
 				directories = new File(directories[0].getAbsolutePath()).listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File current, String name) {
 						return new File(current, name).isDirectory();
 					}
 				});	 
+
+				// Check if only ONE directory is a subdirectory of the current directory (which is assumed to be the next evolution)
 				if(directories.length != 1) {
+					// If the folder has no sub-directories, then we cannot continue hence through an error OR if there
+					// is more than one sub-directory then the program will not know which one to choose so it throws an error.
 					throw new FileNotFoundException("Third Evolution for \""+avatarName+"\" Sprite doesn't Exist");
 				}
 				
+				// Firstly check if all third evolution images of character exist
 				if(!checkImagesExist(directories[0].getAbsolutePath(), 3)) {
 					throw new FileNotFoundException("Sprite Avatar Folder, in \""+directories[0].getAbsolutePath()+"\"  are not Structured Correctly.");
 				}
 
+				// Assuming they exist from the above boolean statement, then retrieve all images.
 				name = directories[0].getName();
 				displayPicGIF  = new ImageIcon(directories[0].getAbsolutePath() + "/dp.gif");
 				faceLeft = new ImageIcon(directories[0].getAbsolutePath() + "/faceleft.png");
@@ -134,14 +148,16 @@ public class Avatar implements Serializable {
 				attackGIF = new ImageIcon(directories[0].getAbsolutePath() + "/attack.gif");
 				dieGIF = new ImageIcon(directories[0].getAbsolutePath() + "/die.gif");				
 				
+				// Pack all images and name variables into an Evolution object
 				Evolution thirdEvolution = new Evolution(name, displayPicGIF, faceLeft, faceRight, backLeft, backRight, attackGIF, dieGIF);
 				
-				
+				// Construct an Avatar from the evolutions, name and display picture add append it to the list of Avatars
 				avatars.add(new Avatar(avatarName, displayPic, firstEvolution, secondEvolution, thirdEvolution));
 			}
 		}
+		
+		// Finally, after all dynamically created Avatars have been created, we return them
 		return avatars;
-
 	}
 	
 	/**
@@ -154,6 +170,7 @@ public class Avatar implements Serializable {
 	 * @return
 	 */
 	private static boolean checkImagesExist(String directory, int evolutionLevel) {
+		// Check the certain image files exist depending in the evolution level 
 		if(evolutionLevel == 1) {
 			return new File(directory + "/dp.png").exists() 
 				   && new File(directory + "/dp.gif").exists() 
@@ -183,7 +200,7 @@ public class Avatar implements Serializable {
 				   new File(directory + "/attack.gif").exists() &&
 				   new File(directory + "/die.gif").exists();			
 		} else {
-			return false;
+			return false; // DEAD CODE - Should never get here (as there are always only 3 evolutions)
 		}
 	}
 	

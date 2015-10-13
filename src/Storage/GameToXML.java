@@ -25,9 +25,15 @@ public class GameToXML {
 		enc = new XMLEncoder(buffout);
 	}
 	
-	public void saveGame(Player p, Game g){
-		enc.writeObject(p);
+	public void saveGame(Game g){
 		enc.writeObject(g);
+	}
+	
+	public void save(Object o){
+		enc.writeObject(o);
+	}
+	
+	public void close(){
 		enc.close();
 	}
 	
