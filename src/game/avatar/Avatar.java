@@ -266,9 +266,7 @@ public class Avatar implements Serializable {
 	}
 
 	/**
-	 * 
-	 * 
-	 * @param playerEvolutionLevel The Evolution level that the 
+	 * @param playerEvolutionLevel, The current evolution level
 	 * @return
 	 */
 	public Evolution getCurrentEvolution(int playerEvolutionLevel) {
@@ -278,6 +276,10 @@ public class Avatar implements Serializable {
 		return evolutions.get(playerEvolutionLevel-1);
 	}
 	
+	/**
+	 * @param playerEvolutionLevel, The current evolution level
+	 * @return Evolution, the next evolution
+	 */
 	public Evolution getNextEvolution(int playerEvolutionLevel) {
 		if(playerEvolutionLevel < 1 || playerEvolutionLevel >= 3) {
 			throw new IllegalArgumentException("The Evolution Level of a Player must be between 1-3.");
