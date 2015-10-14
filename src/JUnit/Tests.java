@@ -67,7 +67,9 @@ public class Tests {
 		Board3 board = new Board3();
 		assertThat(board, instanceOf(Board3.class));
 	}
-
+	/*
+	 * Tests if avatar is made correctly
+	 */
 	@Test
 	public void testAvatar1() throws IOException {
 		createPlayer();
@@ -88,7 +90,9 @@ public class Tests {
 		p.setAvatar(list.get(2));
 		assertTrue(p.getAvatar().getName().equals("Squirtle"));
 	}
-
+	/*
+	 * Tests if levels are correctly allocated
+	 */
 	@Test
 	public void testPlayerLevel1() throws IOException {
 		createPlayer();
@@ -200,7 +204,9 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
-
+	/*
+	 * Tests the player.equals() method
+	 */
 	@Test
 	public void testPlayerLevel12() throws IOException {
 		try {
@@ -274,11 +280,9 @@ public class Tests {
 		} catch (IllegalArgumentException e) {
 		}
 	}
-	@Test
-	public void testServer() throws IOException {
-		new GameServer(new ServerFrame());
-	}
-	
+	/*
+	 * Method to create a player.	
+	 */
 	public void createPlayer() throws FileNotFoundException {
 		this.p = new Player(-1, "Donald", new Avatar());
 		this.list = (ArrayList<Avatar>) this.p.getAvatar().getAllAvatars();
