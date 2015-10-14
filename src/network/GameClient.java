@@ -192,15 +192,14 @@ public class GameClient extends Listener {
 			 throw new RuntimeException("I dont even know how the Client lost the packet!!!");
 		}
 		
-		
 	}
 	
 	/**
 	 * Creates the new player and sends it to the server so the server can add the player
 	 * into the global game on the server.
 	 * 
-	 * @param playerUsername
-	 * @param playerAvatar
+	 * @param playerUsername the username the user inputs
+	 * @param playerAvatar the avatar the user picks
 	 */
 	public void sendNewPlayerToServer(String playerUsername, Avatar playerAvatar) {
 		// Create the Player with the variables supplied and the connection ID as well
@@ -218,8 +217,8 @@ public class GameClient extends Listener {
 	 * Creates a new packet and gives it parameters based on the current player.
 	 * It then sends the packet to the server
 	 * 
-	 * @param playerName
-	 * @param choosenClientPlayer
+	 * @param playerName the name corresponding to the current player
+	 * @param choosenClientPlayer the player to be loaded
 	 */
 	public void sendLoadedPlayerToSever(String playerName, Player choosenClientPlayer) {
 		//choosenClientPlayer.setName(playerUsername);
@@ -238,8 +237,8 @@ public class GameClient extends Listener {
 	/**
 	 * Creates a new packet of the client's message and sends it the server
 	 * 
-	 * @param playerName
-	 * @param message
+	 * @param playerName name of player who sent the message
+	 * @param message the message to be sent
 	 */
 	public void sendMessage(String playerName, String message) {
 		ClientMessage packet = new ClientMessage();
@@ -278,7 +277,7 @@ public class GameClient extends Listener {
 	}
 	
 	/**
-	 * Sends empty packet to server to indicate character selecr
+	 * Sends empty packet to server to indicate the program is ready for character selection
 	 * 
 	 * @return arraylist of saved players
 	 */	
@@ -311,7 +310,7 @@ public class GameClient extends Listener {
 	 * Handles the ClientNewGame packet, which will set the game or update the game of the client. 
 	 * This is sent when a new player joins generally.
 	 * 
-	 * @param packet
+	 * @param packet new packet created for a new client
 	 */
 	private void handleNewGamePacket(ClientNewGame packet) {
 		byte[] gameBytes = packet.gameByteArray; // Disassemble the newGame packet and retrieve the btye array of the game
@@ -411,9 +410,9 @@ public class GameClient extends Listener {
 	/**
 	 * Creates a new packet of item being picked up and sends it the server
 	 * 
-	 * @param item
-	 * @param location
-	 * @param id
+	 * @param item item being picked up
+	 * @param location location of where item is being picked up from
+	 * @param id id of current network
 	 */
 	public void sendPickupItem(Item item, Location location, int id) {
 		PlayerPickUpItem packet = new PlayerPickUpItem();
@@ -427,9 +426,9 @@ public class GameClient extends Listener {
 	/**
 	 * Creates new packet of item being dropped and sends it to the server
 	 * 
-	 * @param item
-	 * @param location
-	 * @param id
+	 * @param item being being dropped
+	 * @param location of where item is being dropped
+	 * @param id id of current network
 	 */
 	public void sendDropItem(Item item, Location location, int id) {
 		PlayerDropItem packet = new PlayerDropItem();
