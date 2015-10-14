@@ -1459,6 +1459,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 		fightBox.setLayout(null);
 		fightBox.setLocation(600, 300);
 		fightBox.setSize(200, 170);
+		fightBox.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		fightBox.add(type);
 		fightBox.add(attack);
@@ -1525,10 +1526,8 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			if (menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
-				List<InetAddress> serverAddressList = gameClient
-						.getServerList();
-				InetAddress serverAddress = ServerSelectDialog.Chooser(this,
-						serverAddressList);
+				List<InetAddress> serverAddressList = gameClient.getServerList();
+				InetAddress serverAddress = ServerSelectDialog.Chooser(this, serverAddressList);
 				if (serverAddress == null) {
 					return;
 				}
@@ -1601,6 +1600,13 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 				addKeyListener(this);
 			} else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
+			} else if (menuItem.getText().equals("Instructions")) {
+				JOptionPane.showMessageDialog(this, 
+						"WASD - Up Left Down Right\n"
+						+ "Arrow Keys - Up Left Down Right (Allows Rotation)\n"
+						+ "Q - Rotate Board Left\n" 
+						+ "E - Rotate Board Right",
+						"Instructions", JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else if (source instanceof JButton) {
 			if (inputMessageField.getText().length() > 0) {

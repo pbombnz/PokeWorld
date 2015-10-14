@@ -80,21 +80,26 @@ public class GamePanelFrame extends GameFrame {
 		// Create Menu
 		JMenuBar menuBar = new JMenuBar();
 		JMenu gameMenu = new JMenu("Game");
+		JMenu aboutMenu = new JMenu("About");
 
 		menuBar.add(gameMenu);
+		menuBar.add(aboutMenu);
 
 		JMenuItem createGame = new JMenuItem("Create Game (As Server)");
 		JMenuItem joinGame = new JMenuItem("Join Game (As Client)");
 		JMenuItem exit = new JMenuItem("Exit");
+		JMenuItem about = new JMenuItem("Instructions");
 
 		gameMenu.add(createGame);
 		gameMenu.add(joinGame);
 		gameMenu.add(new JSeparator());
 		gameMenu.add(exit);
+		aboutMenu.add(about);
 
 		createGame.addActionListener(this);
 		joinGame.addActionListener(this);
 		exit.addActionListener(this);
+		about.addActionListener(this);
 
 		setJMenuBar(menuBar);
 		setVisible(true);
