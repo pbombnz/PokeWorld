@@ -1,4 +1,5 @@
 package ui;
+
 import game.BoardSquare;
 import game.Direction;
 import game.Game;
@@ -29,44 +30,48 @@ import javax.swing.JSeparator;
 import rooms.Room;
 
 /**
- *@author Wang Zhen
-
- *This class extends GameFrame.It build a gamePanel inside. And the method paintComponent() will be  called every fixed time(so the
- *game panel will be repait every fixed time)
+ * @author Wang Zhen
+ * 
+ *         This class extends GameFrame.It build a gamePanel inside. And the
+ *         method paintComponent() will be called every fixed time(so the game
+ *         panel will be repait every fixed time)
  *
- * These 2 classes(GameFrame and GamePanelFrame) include all methods,fileds of game gui and some game logic
- * 
- * This gui has two parts:1st person view gui on the right side and 3rd person 
- * view gui on the left side.
- *  
- * This gui has two keyboard control system:The 1st system is for using in 3rd person view gui.
- * (user can use WSAD to move. W-north S-south A-west D-east)
- * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view. 
- * (user can use Up,Down,Left,Right to move. Up-go,Down-turn around,Left-turn left,Right-turn right)
- * And user can also use "J" to jump in both 2 views.
- * 
- * Control:
- * Q-rotate game left, E-rotate game right
- * W-north S-south A-west D-east J- jump
- * Up-go  ,Down-turn around ,Left-turn left,Right-turn right
- * 
- * The functions in this class:evolving animation,fighting animation,move,pick up(automaticlly pick up when player go to the sqaure with object),
- * drop,fight,change weather(rainy,sunny),change day or night,send message to other player,
- * monster wonder around,draw mini map,make player shake,refresh player's information.
+ *         These 2 classes(GameFrame and GamePanelFrame) include all
+ *         methods,fileds of game gui and some game logic
+ *
+ *         This gui has two parts:1st person view gui on the right side and 3rd
+ *         person view gui on the left side.
+ *
+ *         This gui has two keyboard control system:The 1st system is for using
+ *         in 3rd person view gui. (user can use WSAD to move. W-north S-south
+ *         A-west D-east) The 2nd system is for using on 1st person view gui.I
+ *         create this control system for easily playing in 1st person view.
+ *         (user can use Up,Down,Left,Right to move. Up-go,Down-turn
+ *         around,Left-turn left,Right-turn right) And user can also use "J" to
+ *         jump in both 2 views.
+ *
+ *         Control: Q-rotate game left, E-rotate game right W-north S-south
+ *         A-west D-east J- jump Up-go ,Down-turn around ,Left-turn
+ *         left,Right-turn right
+ *
+ *         The functions in this class:evolving animation,fighting
+ *         animation,move,pick up(automaticlly pick up when player go to the
+ *         sqaure with object), drop,fight,change weather(rainy,sunny),change
+ *         day or night,send message to other player, monster wonder around,draw
+ *         mini map,make player shake,refresh player's information.
  */
-public class GamePanelFrame extends GameFrame{
-	
+public class GamePanelFrame extends GameFrame {
 
 	public GamePanelFrame() {
 		gameClient.setGameClientListener(this);
 
-		//initialises game frame
+		// initialises game frame
 		setSize(FULL_FRAME_WIDTH, FRAME_HEIGHT);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(this);
 		setResizable(false);
 
-		//create panel
+		// create panel
 		panel = new GamePanel();
 		setContentPane(panel);
 		panel.setOpaque(false);
@@ -95,10 +100,9 @@ public class GamePanelFrame extends GameFrame{
 		setVisible(true);
 
 		frameState = GameFrame.FRAME_STATE.STANDBY;
-		//set start time
+		// set start time
 		startTime = getCurrentTime();
 	}
-
 
 	/**
 	 * the game panel on game frame
@@ -123,7 +127,7 @@ public class GamePanelFrame extends GameFrame{
 				}
 			}
 
-			//draw welcome picture
+			// draw welcome picture
 			if (frameState == FRAME_STATE.STANDBY) {
 				g.drawImage(new ImageIcon(
 						"./sprites/backgrounds/welcome_bg.jpg").getImage(), 0,
@@ -137,12 +141,12 @@ public class GamePanelFrame extends GameFrame{
 				return;
 			}
 
-			////================================================================
-			//these are 1st person view
-			//draw frame
+			// //================================================================
+			// these are 1st person view
+			// draw frame
 			g.setColor(Color.black);
 			g.fillRect(startX - 10, 0, FULL_FRAME_WIDTH - startX, FRAME_HEIGHT);
-			//print background
+			// print background
 			if (turnOffset < 0) {
 				turnOffset = 2250;
 			}
@@ -159,36 +163,40 @@ public class GamePanelFrame extends GameFrame{
 						startX + 2 - turnOffset, startY + 2
 								- jumpOffsetFirstView - 60, null);
 			}
-			//changeoffset is for turning backgroud picture when turn character
-			//change the offset when it will get edge
+			// changeoffset is for turning backgroud picture when turn character
+			// change the offset when it will get edge
 			int changeOffset = 50;
 			if (turnCounter > 0) {
-				//turn right
+				// turn right
 				turnCounter--;
 				turnOffset += changeOffset;
 			} else if (turnCounter < 0) {
-				//turn left
+				// turn left
 				turnCounter++;
 				turnOffset -= changeOffset;
 			}
 
-			//load labels
+			// load labels
 			Player clientPlayer = gameClient.getClientPlayer();
 			if (!hasLoadedLabels) {
-				//add all jlabel after picking character
+				// add all jlabel after picking character
 				loadLabels();
 				panel.add(headPictureLabel);
 				panel.add(bgHeadViewLabel);
 				hasLoadedLabels = true;
 			}
 
-			//caculating how many squares on the player's left side,right side and face side
-			int numSquaresFace = 0;//the number of squares on the player's face side
-			int numSquaresLeft = 0;//the number of squares on the player's left side
-			int numSquaresRight = 0;////the number of squares on the player's right side 
+			// caculating how many squares on the player's left side,right side
+			// and face side
+			int numSquaresFace = 0;// the number of squares on the player's face
+									// side
+			int numSquaresLeft = 0;// the number of squares on the player's left
+									// side
+			int numSquaresRight = 0;// //the number of squares on the player's
+									// right side
 			Location playerLoc = clientPlayer.getLocation();
 			int boardSize = 10;
-			int offset = 1;//this offset is cuz the locaion is from 0 not 1
+			int offset = 1;// this offset is cuz the locaion is from 0 not 1
 			if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
 				numSquaresFace = playerLoc.getY();
 				numSquaresLeft = playerLoc.getX() + offset;
@@ -207,25 +215,28 @@ public class GamePanelFrame extends GameFrame{
 				numSquaresRight = playerLoc.getX() + offset;
 			}
 
-			//set the size and based data of 1st person view 
-			double nowDrawLine = viewHight;//the height of line now draw(it is the bot of the frame at start)
+			// set the size and based data of 1st person view
+			double nowDrawLine = viewHight;// the height of line now draw(it is
+											// the bot of the frame at start)
 			double previouDrawLine = viewHight;
-			double previouX0 = midOfView - squareWidth / 2;//the line in the bot of the frame
+			double previouX0 = midOfView - squareWidth / 2;// the line in the
+															// bot of the frame
 			double previouY0 = viewHight;
-			double previouX1 = midOfView + squareWidth / 2;//the line in the bot of the frame
+			double previouX1 = midOfView + squareWidth / 2;// the line in the
+															// bot of the frame
 			double previouY1 = viewHight;
 			int checkLocationX = clientPlayer.getLocation().getX();
 			int checkLocationY = clientPlayer.getLocation().getY();
-			//#draw background Rectengel
+			// #draw background Rectengel
 			for (int i = 0; i < numSquaresFace + 1; i++) {
 
-				//draw ground Polygons on face side
+				// draw ground Polygons on face side
 				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
 				double nowStartX = midOfView - nowWidthOfSquare / 2;
-				//add points for drawing Polygon
+				// add points for drawing Polygon
 				int[] xPoint = new int[4];
 				int[] yPoint = new int[4];
-				//calcutating the 4 potions for a Polygon
+				// calcutating the 4 potions for a Polygon
 				xPoint[0] = (int) previouX0;
 				yPoint[0] = (int) previouY0 - jumpOffsetFirstView;
 				xPoint[1] = (int) previouX1;
@@ -236,10 +247,10 @@ public class GamePanelFrame extends GameFrame{
 				xPoint[3] = (int) nowStartX;
 				yPoint[3] = (int) (nowDrawLine - squareHeigh
 						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-				//draw ground Polygons on face side
+				// draw ground Polygons on face side
 				if (!isDay) {
 					if (i > sightRange) {
-						//draw darker Polygons in night and out of range
+						// draw darker Polygons in night and out of range
 						g.setColor(Color.gray.darker().darker());
 					} else {
 						g.setColor(Color.green.darker());
@@ -251,11 +262,11 @@ public class GamePanelFrame extends GameFrame{
 				g.setColor(Color.BLACK);
 				g.drawPolygon(xPoint, yPoint, 4);
 
-				//draw ground Polygons on left side
+				// draw ground Polygons on left side
 				for (int j = 0; j < numSquaresLeft; j++) {
 					int[] xPointLeft = new int[4];
 					int[] yPointLeft = new int[4];
-					//calcutating the 4 potions for a Polygon
+					// calcutating the 4 potions for a Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
 					xPointLeft[0] = (int) (previouX0 - j * previouWidthOfSquare);
 					yPointLeft[0] = (int) (previouY0 - jumpOffsetFirstView);
@@ -268,10 +279,10 @@ public class GamePanelFrame extends GameFrame{
 					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					//draw ground Polygons on left side
+					// draw ground Polygons on left side
 					if (!isDay) {
 						if (j > sightRange || i > sightRange) {
-							//draw darker Polygons in night and out of range
+							// draw darker Polygons in night and out of range
 							g.setColor(Color.gray.darker().darker());
 						} else {
 							g.setColor(Color.green.darker());
@@ -284,11 +295,11 @@ public class GamePanelFrame extends GameFrame{
 					g.drawPolygon(xPointLeft, yPointLeft, 4);
 				}
 
-				//draw ground Polygons on right side
+				// draw ground Polygons on right side
 				for (int j = 0; j < numSquaresRight; j++) {
 					int[] xPointRight = new int[4];
 					int[] yPointRight = new int[4];
-					//calcutating the 4 potions for a Polygon
+					// calcutating the 4 potions for a Polygon
 					int previouWidthOfSquare = (int) (previouX1 - previouX0);
 					xPointRight[0] = (int) (previouX0 + j
 							* previouWidthOfSquare);
@@ -303,10 +314,10 @@ public class GamePanelFrame extends GameFrame{
 					xPointRight[3] = (int) (nowStartX + j * nowWidthOfSquare);
 					yPointRight[3] = (int) (nowDrawLine - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					//draw ground Polygons on right side
+					// draw ground Polygons on right side
 					if (!isDay) {
 						if (j > sightRange || i > sightRange) {
-							//draw darker Polygons in night and out of range
+							// draw darker Polygons in night and out of range
 							g.setColor(Color.gray.darker().darker());
 						} else {
 							g.setColor(Color.green.darker());
@@ -319,7 +330,7 @@ public class GamePanelFrame extends GameFrame{
 					g.drawPolygon(xPointRight, yPointRight, 4);
 				}
 
-				//updata values
+				// updata values
 				previouX0 = nowStartX;
 				previouY0 = nowDrawLine - squareHeigh * Math.pow(scaleY, i + 1);
 				previouX1 = nowStartX + nowWidthOfSquare;
@@ -329,28 +340,46 @@ public class GamePanelFrame extends GameFrame{
 						* Math.pow(scaleY, i + 1);
 			}
 
-			//#create storages to store the positions and load information into storages 
-			//save positions and read and print object is because the object need to be printed reverse
-			double nowDrawLinePrintObject = viewHight;//the height of line now draw(it is the bot of the frame at start)
+			// #create storages to store the positions and load information into
+			// storages
+			// save positions and read and print object is because the object
+			// need to be printed reverse
+			double nowDrawLinePrintObject = viewHight;// the height of line now
+														// draw(it is the bot of
+														// the frame at start)
 			double previouDrawLinePrintObject = viewHight;
-			double previouX0PrintObject = midOfView - squareWidth / 2;//the line in the bot of the frame
+			double previouX0PrintObject = midOfView - squareWidth / 2;// the
+																		// line
+																		// in
+																		// the
+																		// bot
+																		// of
+																		// the
+																		// frame
 			double previouY0PrintObject = viewHight;
-			double previouX1PrintObject = midOfView + squareWidth / 2;//the line in the bot of the frame
+			double previouX1PrintObject = midOfView + squareWidth / 2;// the
+																		// line
+																		// in
+																		// the
+																		// bot
+																		// of
+																		// the
+																		// frame
 			double previouY1PrintObject = viewHight;
 			int checkLocationXPrintObject = clientPlayer.getLocation().getX();
 			int checkLocationYPrintObject = clientPlayer.getLocation().getY();
 			List<PointArrayStorage> storages = new ArrayList<PointArrayStorage>();
-			//caculating all positions and save into storages
+			// caculating all positions and save into storages
 			for (int i = 0; i < numSquaresFace + 1; i++) {
-				//create storage
+				// create storage
 				PointArrayStorage storage = new PointArrayStorage();
 
-				//get positions of the face side square and save into storage 
+				// get positions of the face side square and save into storage
 				double nowWidthOfSquare = squareWidth * Math.pow(scaleY, i + 1);
 				double nowStartX = midOfView - nowWidthOfSquare / 2;
 				int[] xPoint = new int[4];
 				int[] yPoint = new int[4];
-				//calcutating the 4 potions for a Polygon
+				// calcutating the 4 potions for a Polygon
 				xPoint[0] = (int) previouX0PrintObject;
 				yPoint[0] = (int) previouY0PrintObject - jumpOffsetFirstView;
 				xPoint[1] = (int) previouX1PrintObject;
@@ -361,16 +390,16 @@ public class GamePanelFrame extends GameFrame{
 				xPoint[3] = (int) nowStartX;
 				yPoint[3] = (int) (nowDrawLinePrintObject - squareHeigh
 						* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-				//SAVE INTO STORAGE
+				// SAVE INTO STORAGE
 				storage.xPoint = xPoint;
 				storage.yPoint = yPoint;
 
-				//get positions of the left side square and save into storage 
+				// get positions of the left side square and save into storage
 				for (int j = 0; j < numSquaresLeft; j++) {
 					int[] xPointLeft = new int[4];
 					int[] yPointLeft = new int[4];
 					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
-					//calcutating the 4 potions for a Polygon
+					// calcutating the 4 potions for a Polygon
 					xPointLeft[0] = (int) (previouX0PrintObject - j
 							* previouWidthOfSquare);
 					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
@@ -384,7 +413,7 @@ public class GamePanelFrame extends GameFrame{
 					xPointLeft[3] = (int) (nowStartX - j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					//SAVE INTO STORAGE
+					// SAVE INTO STORAGE
 					PointArrayStorageLeft storageLeft = new PointArrayStorageLeft();
 					storageLeft.xPoint = xPointLeft;
 					storageLeft.yPoint = yPointLeft;
@@ -392,12 +421,12 @@ public class GamePanelFrame extends GameFrame{
 
 				}
 
-				//get positions of the right side square and save into storage 
+				// get positions of the right side square and save into storage
 				for (int j = 0; j < numSquaresRight; j++) {
 					int[] xPointLeft = new int[4];
 					int[] yPointLeft = new int[4];
 					int previouWidthOfSquare = (int) (previouX1PrintObject - previouX0PrintObject);
-					//calcutating the 4 potions for a Polygon
+					// calcutating the 4 potions for a Polygon
 					xPointLeft[0] = (int) (previouX0PrintObject + j
 							* previouWidthOfSquare);
 					yPointLeft[0] = (int) (previouY0PrintObject - jumpOffsetFirstView);
@@ -411,14 +440,14 @@ public class GamePanelFrame extends GameFrame{
 					xPointLeft[3] = (int) (nowStartX + j * nowWidthOfSquare);
 					yPointLeft[3] = (int) (nowDrawLinePrintObject - squareHeigh
 							* Math.pow(scaleY, i + 1) - jumpOffsetFirstView);
-					//SAVE INTO STORAGE
+					// SAVE INTO STORAGE
 					PointArrayStorageRight storageRight = new PointArrayStorageRight();
 					storageRight.xPoint = xPointLeft;
 					storageRight.yPoint = yPointLeft;
 					storage.rightlList.add(storageRight);
 				}
 
-				//updata values
+				// updata values
 				previouX0PrintObject = nowStartX;
 				previouY0PrintObject = nowDrawLinePrintObject - squareHeigh
 						* Math.pow(scaleY, i + 1);
@@ -428,31 +457,32 @@ public class GamePanelFrame extends GameFrame{
 				previouDrawLinePrintObject = nowDrawLinePrintObject;
 				nowDrawLinePrintObject = nowDrawLinePrintObject - squareHeigh
 						* Math.pow(scaleY, i + 1);
-				//add storage to stroages
+				// add storage to stroages
 				storages.add(storage);
 			}
 
-			//#load the positions from storages and print objects
-			//save positions and read and print object is because the object need to be printed reverse
+			// #load the positions from storages and print objects
+			// save positions and read and print object is because the object
+			// need to be printed reverse
 			for (int i = numSquaresFace; i > -1; i--) {
 				PointArrayStorage storage = storages.get(i);
 				int[] xPoint = storage.xPoint;
 				int[] yPoint = storage.yPoint;
 
-				//draw left side objects
+				// draw left side objects
 				for (int j = numSquaresLeft - 1; j > -1; j--) {
 					PointArrayStorageLeft storageLeft = storage.leftList.get(j);
 					int[] xPointLeft = storageLeft.xPoint;
 					int[] yPointLeft = storageLeft.yPoint;
 
-					//print the object left this location
+					// print the object left this location
 					Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 					Game ga = gameClient.getGame();
 					Room r = clientPlayer.getLocation().getRoom();
 					BoardSquare[][] bs = r.board.getSquares();
 
-					//caculate position depend on player face side
+					// caculate position depend on player face side
 					int locX = nextLoc.getX();
 					int locY = nextLoc.getY();
 					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
@@ -465,8 +495,9 @@ public class GamePanelFrame extends GameFrame{
 						locY = nextLoc.getY() - j;
 					}
 
-					//diff direction has diff order to print ,this is for making sure the closer picture cover far
-					//check whether next square is out of board
+					// diff direction has diff order to print ,this is for
+					// making sure the closer picture cover far
+					// check whether next square is out of board
 					if (locX != -1 && locX != 10 && locY != -1 && locY != 10) {
 						if (bs[locY][locX].getGameObjectOnSquare() != null) {
 							if (isDay) {
@@ -486,7 +517,7 @@ public class GamePanelFrame extends GameFrame{
 											drawStartX, drawStartY, width,
 											height, null);
 								} else {
-									//not tree
+									// not tree
 									int height = (xPointLeft[2] - xPointLeft[3]);
 									int width = height;
 									int drawStartX = xPointLeft[3];
@@ -499,11 +530,12 @@ public class GamePanelFrame extends GameFrame{
 											height, null);
 								}
 							} else {
-								//is night
+								// is night
 								if (isInSightRange(clientPlayer, locY, locX)) {
-									//only print objects in the sight range in night
+									// only print objects in the sight range in
+									// night
 									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
-										//tree
+										// tree
 										int width = (xPoint[1] - xPoint[0])
 												* TREE_SCALE_FIRST_VIEW;
 										int height = width;
@@ -519,7 +551,7 @@ public class GamePanelFrame extends GameFrame{
 												drawStartX, drawStartY, width,
 												height, null);
 									} else {
-										//not tree
+										// not tree
 										int height = (xPointLeft[2] - xPointLeft[3]);
 										int width = height;
 										int drawStartX = xPointLeft[3];
@@ -537,20 +569,20 @@ public class GamePanelFrame extends GameFrame{
 					}
 				}
 
-				//draw right side objects
+				// draw right side objects
 				for (int j = numSquaresRight - 1; j > -1; j--) {
 					PointArrayStorageRight storageRight = storage.rightlList
 							.get(j);
 					int[] xPointRight = storageRight.xPoint;
 					int[] yPointRight = storageRight.yPoint;
-					//print the object left on this location
+					// print the object left on this location
 					Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 					Game ga = gameClient.getGame();
 					Room r = clientPlayer.getLocation().getRoom();
 					BoardSquare[][] bs = r.board.getSquares();
 
-					//caculate position depend on player face side
+					// caculate position depend on player face side
 					int locX = nextLoc.getX();
 					int locY = nextLoc.getY();
 					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
@@ -563,13 +595,14 @@ public class GamePanelFrame extends GameFrame{
 						locY = nextLoc.getY() + j;
 					}
 
-					//diff direction has diff order to print ,this is for making sure the closer picture cover far
-					//check whether next square is out of board
+					// diff direction has diff order to print ,this is for
+					// making sure the closer picture cover far
+					// check whether next square is out of board
 					if (locX != -1 && locX != 10 && locY != -1 && locY != 10) {
 						if (bs[locY][locX].getGameObjectOnSquare() != null) {
 							if (isDay) {
 								if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
-									//tree
+									// tree
 									int width = (xPoint[1] - xPoint[0])
 											* TREE_SCALE_FIRST_VIEW;
 									int height = width;
@@ -584,7 +617,7 @@ public class GamePanelFrame extends GameFrame{
 											drawStartX, drawStartY, width,
 											height, null);
 								} else {
-									//not tree
+									// not tree
 									int height = (xPointRight[2] - xPointRight[3]);
 									int width = height;
 									int drawStartX = xPointRight[3];
@@ -597,11 +630,12 @@ public class GamePanelFrame extends GameFrame{
 											height, null);
 								}
 							} else {
-								//night
+								// night
 								if (isInSightRange(clientPlayer, locY, locX)) {
-									//only print objects in the sight range in night
+									// only print objects in the sight range in
+									// night
 									if (bs[locY][locX].getGameObjectOnSquare() instanceof Tree) {
-										//tree
+										// tree
 										int width = (xPoint[1] - xPoint[0])
 												* TREE_SCALE_FIRST_VIEW;
 										int height = width;
@@ -617,7 +651,7 @@ public class GamePanelFrame extends GameFrame{
 												drawStartX, drawStartY, width,
 												height, null);
 									} else {
-										//not tree
+										// not tree
 										int height = (xPointRight[2] - xPointRight[3]);
 										int width = height;
 										int drawStartX = xPointRight[3];
@@ -635,14 +669,14 @@ public class GamePanelFrame extends GameFrame{
 					}
 				}
 
-				//print the object on face side
+				// print the object on face side
 				Location nextLoc = nextSquareLocation(clientPlayer, i);
 
 				Game ga = gameClient.getGame();
 				Room r = clientPlayer.getLocation().getRoom();
 				BoardSquare[][] bs = r.board.getSquares();
 
-				//check whether next square is out of board
+				// check whether next square is out of board
 				if (nextLoc.getX() != -1 && nextLoc.getX() != 10
 						&& nextLoc.getY() != -1 && nextLoc.getY() != 10) {
 					if (bs[nextLoc.getY()][nextLoc.getX()]
@@ -650,7 +684,7 @@ public class GamePanelFrame extends GameFrame{
 						if (isDay) {
 							if (bs[nextLoc.getY()][nextLoc.getX()]
 									.getGameObjectOnSquare() instanceof Tree) {
-								//tree
+								// tree
 								int width = (xPoint[1] - xPoint[0])
 										* TREE_SCALE_FIRST_VIEW;
 								int height = width;
@@ -664,7 +698,7 @@ public class GamePanelFrame extends GameFrame{
 										drawStartX, drawStartY, width, height,
 										null);
 							} else {
-								//not tree
+								// not tree
 								int height = (xPoint[2] - xPoint[3]);
 								int width = height;
 								int drawStartX = xPoint[3];
@@ -675,26 +709,32 @@ public class GamePanelFrame extends GameFrame{
 										.getSpriteImage().getImage(),
 										drawStartX, drawStartY, width, height,
 										null);
-								/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
-								*/
-								//int height = yPoint[0] - yPoint[3];
-								//int width = height;
-								//int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])/ 2;
-								//int drawStartX = midPointX - width / 2;
-								//int drawStartY = yPoint[3];
-								//g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
-								//	.getGameObjectOnSquare().getSpriteImage()
-								//  .getImage(), drawStartX,drawStartY,width,height, null);
-								//----------------------------------------------------------------------------------
+								/**
+								 * these are set size as (yPoint[0] -
+								 * yPoint[3]), this print smaller
+								 * picture---------------------------------------
+								 */
+								// int height = yPoint[0] - yPoint[3];
+								// int width = height;
+								// int midPointX = xPoint[0] + (xPoint[1] -
+								// xPoint[0])/ 2;
+								// int drawStartX = midPointX - width / 2;
+								// int drawStartY = yPoint[3];
+								// g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+								// .getGameObjectOnSquare().getSpriteImage()
+								// .getImage(),
+								// drawStartX,drawStartY,width,height, null);
+								// ----------------------------------------------------------------------------------
 							}
 						} else {
-							//night
+							// night
 							if (isInSightRange(clientPlayer, nextLoc.getY(),
 									nextLoc.getX())) {
-								//only print objects in the sight range in night
+								// only print objects in the sight range in
+								// night
 								if (bs[nextLoc.getY()][nextLoc.getX()]
 										.getGameObjectOnSquare() instanceof Tree) {
-									//tree
+									// tree
 									int width = (xPoint[1] - xPoint[0])
 											* TREE_SCALE_FIRST_VIEW;
 									int height = width;
@@ -709,7 +749,7 @@ public class GamePanelFrame extends GameFrame{
 													.getImage(), drawStartX,
 											drawStartY, width, height, null);
 								} else {
-									//not tree
+									// not tree
 									int height = (xPoint[2] - xPoint[3]);
 									int width = height;
 									int drawStartX = xPoint[3];
@@ -721,17 +761,24 @@ public class GamePanelFrame extends GameFrame{
 													.getSpriteImage()
 													.getImage(), drawStartX,
 											drawStartY, width, height, null);
-									/**these are set size as (yPoint[0] - yPoint[3]), this print smaller picture---------------------------------------
-									*/
-									//int height = yPoint[0] - yPoint[3];
-									//int width = height;
-									//int midPointX = xPoint[0] + (xPoint[1] - xPoint[0])/ 2;
-									//int drawStartX = midPointX - width / 2;
-									//int drawStartY = yPoint[3];
-									//g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
-									//	.getGameObjectOnSquare().getSpriteImage()
-									//  .getImage(), drawStartX,drawStartY,width,height, null);
-									//----------------------------------------------------------------------------------
+									/**
+									 * these are set size as (yPoint[0] -
+									 * yPoint[3]), this print smaller
+									 * picture----
+									 * -----------------------------------
+									 */
+									// int height = yPoint[0] - yPoint[3];
+									// int width = height;
+									// int midPointX = xPoint[0] + (xPoint[1] -
+									// xPoint[0])/ 2;
+									// int drawStartX = midPointX - width / 2;
+									// int drawStartY = yPoint[3];
+									// g.drawImage(bs[nextLoc.getY()][nextLoc.getX()]
+									// .getGameObjectOnSquare().getSpriteImage()
+									// .getImage(),
+									// drawStartX,drawStartY,width,height,
+									// null);
+									// ----------------------------------------------------------------------------------
 								}
 							}
 						}
@@ -739,10 +786,10 @@ public class GamePanelFrame extends GameFrame{
 				}
 			}
 
-			//print edge 
+			// print edge
 			g.setColor(Color.black);
 
-			//print character
+			// print character
 			Image characterImage = clientPlayer.getSpriteBasedOnDirection(
 					firstViewDirection).getImage();
 			g.drawImage(characterImage, midOfView,
@@ -752,9 +799,9 @@ public class GamePanelFrame extends GameFrame{
 
 			g.fillRect(startX - 10, 0, 20, FRAME_HEIGHT);
 			g.fillRect(FULL_FRAME_WIDTH - 20, 0, 20, FRAME_HEIGHT);
-			///=============================================
+			// /=============================================
 
-			/// Draw background picture
+			// / Draw background picture
 			if (isDay) {
 				g.drawImage(new ImageIcon("./sprites/backgrounds/game_bg.jpg")
 						.getImage(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
@@ -764,16 +811,17 @@ public class GamePanelFrame extends GameFrame{
 						0, FRAME_WIDTH, FRAME_HEIGHT, null);
 			}
 
-			///print compass
-			g.drawImage(
-					new ImageIcon("./sprites/other/compass.png").getImage(),
-					640, 400, 200, 200, null);
+			// /print compass
+			// g.drawImage(
+			// new ImageIcon("./sprites/other/compass.png").getImage(),
+			// 640, 400, 200, 200, null);
 
-			// Initial starting position of where the first square is going to be drawn
+			// Initial starting position of where the first square is going to
+			// be drawn
 			int yPos = FRAME_HEIGHT / 2;
 			int xPos = 110;
 
-			//caculate time 1st for adding "wander around"
+			// caculate time 1st for adding "wander around"
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			long runningTime = 0;
 			try {
@@ -783,7 +831,7 @@ public class GamePanelFrame extends GameFrame{
 				e.printStackTrace();
 			}
 
-			//print ground square(grass)
+			// print ground square(grass)
 			for (int cellY = 0; cellY < 10; cellY++) {
 				for (int cellX = 9; cellX >= 0; cellX--) {
 					int tileX = xPos + (cellX * TILE_WIDTH / 2);
@@ -798,7 +846,7 @@ public class GamePanelFrame extends GameFrame{
 									"./sprites/tiles/grass.png").getImage(),
 									tileX, tileY, TILE_WIDTH, TILE_HEIGHT, null);
 						} else {
-							//print darkgrass out of the sight range in night
+							// print darkgrass out of the sight range in night
 							g.drawImage(
 									new ImageIcon(
 											"./sprites/tiles/darkgrass.png")
@@ -807,11 +855,11 @@ public class GamePanelFrame extends GameFrame{
 						}
 					}
 
-					//print player
+					// print player
 					Location clientPlayerLoc = clientPlayer.getLocation();
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
-						//let player shake even if he dont move
+						// let player shake even if he dont move
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
 							shakeTimer = 0;
 							changeShakeLimit();
@@ -830,7 +878,7 @@ public class GamePanelFrame extends GameFrame{
 						}
 					}
 
-					//print other players
+					// print other players
 					for (Player connectedPlayer : gameClient.getGame()
 							.getPlayers()) {
 						if (connectedPlayer != clientPlayer) {
@@ -853,8 +901,8 @@ public class GamePanelFrame extends GameFrame{
 						}
 					}
 
-					//draw player
-					//shake the player when he dont move
+					// draw player
+					// shake the player when he dont move
 					if (clientPlayerLoc.getX() == cellX
 							&& clientPlayerLoc.getY() == cellY) {
 						if (shakeTimer >= SHAKE_TIMER_LIMIT) {
@@ -875,9 +923,9 @@ public class GamePanelFrame extends GameFrame{
 						}
 					}
 
-					//print object of game
+					// print object of game
 					Game ga = gameClient.getGame();
-					Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
+					Room r = clientPlayer.getLocation().getRoom();// ga.getRooms().get(GameLauncher.ROOMINDEX);
 					BoardSquare[][] bs = r.board.getSquares();
 					if (bs[cellY][cellX].getGameObjectOnSquare() != null) {
 						if (isDay) {
@@ -898,11 +946,13 @@ public class GamePanelFrame extends GameFrame{
 										.getSpriteImage().getImage(), tileX,
 										tileY - (TILE_HEIGHT / 2), 50, 50, null);
 
-								//add "wander around"----------------------------------
-								//the monster will stop move when the player is fighting or level uping
+								// add
+								// "wander around"----------------------------------
+								// the monster will stop move when the player is
+								// fighting or level uping
 								if (!isFighting && !isLevelUpping) {
 									int passSecond = (int) (runningTime / 1000);
-									//every unit second,monster move around
+									// every unit second,monster move around
 									if (runningTime != lastMovedtime) {
 										if (passSecond % UNIT_SECOND == 0) {
 											Monster monster = (Monster) bs[cellY][cellX]
@@ -921,8 +971,9 @@ public class GamePanelFrame extends GameFrame{
 										}
 									}
 								}
-								//update monstersChanged after print all monster in object list
-								//-----------------------------------------------------
+								// update monstersChanged after print all
+								// monster in object list
+								// -----------------------------------------------------
 							} else {
 								g.drawImage(bs[cellY][cellX]
 										.getGameObjectOnSquare()
@@ -951,11 +1002,13 @@ public class GamePanelFrame extends GameFrame{
 											tileX, tileY - (TILE_HEIGHT / 2),
 											50, 50, null);
 
-									//add "wander around"----------------------------------
-									//the monster will stop move when the player is fighting or level uping
+									// add
+									// "wander around"----------------------------------
+									// the monster will stop move when the
+									// player is fighting or level uping
 									if (!isFighting && !isLevelUpping) {
 										int passSecond = (int) (runningTime / 1000);
-										//every unit second,monster move around
+										// every unit second,monster move around
 										int unitSecond = 2;
 										if (runningTime != lastMovedtime) {
 											if (passSecond % unitSecond == 0) {
@@ -976,8 +1029,9 @@ public class GamePanelFrame extends GameFrame{
 											}
 										}
 									}
-									//update monstersChanged after print all monster in object list
-									//-----------------------------------------------------
+									// update monstersChanged after print all
+									// monster in object list
+									// -----------------------------------------------------
 								} else {
 									g.drawImage(bs[cellY][cellX]
 											.getGameObjectOnSquare()
@@ -993,26 +1047,26 @@ public class GamePanelFrame extends GameFrame{
 				xPos += TILE_WIDTH / 2;
 			}
 
-			//update monstersChanged after print all monster in object list
+			// update monstersChanged after print all monster in object list
 			monstersChanged = new ArrayList<Monster>();
 
 			if (moved) {
 				lastMovedtime = runningTime;
 			}
 
-			//printInformation of player
+			// printInformation of player
 			printInformation(clientPlayer);
 
-			//print players'inventory
+			// print players'inventory
 			printInventory(clientPlayer, g);
 
-			//add buttons on frame
+			// add buttons on frame
 			if (componentsAdded == false) {
 				addComponents();
 				componentsAdded = true;
 			}
 
-			//draw small map
+			// draw small map
 			int mapStartX = 600;
 			int mapNowX = mapStartX;
 			int mapStartY = 10;
@@ -1022,7 +1076,7 @@ public class GamePanelFrame extends GameFrame{
 					if (gameClient.getClientPlayer().getLocation().getX() == cellX
 							&& gameClient.getClientPlayer().getLocation()
 									.getY() == cellY) {
-						//draw player as red 
+						// draw player as red
 						g.setColor(Color.red);
 						g.fillRect(mapNowX, mapStartY, mapSquareSize,
 								mapSquareSize);
@@ -1030,10 +1084,10 @@ public class GamePanelFrame extends GameFrame{
 						g.drawRect(mapNowX, mapStartY, mapSquareSize,
 								mapSquareSize);
 					} else {
-						Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
+						Room r = clientPlayer.getLocation().getRoom();// ga.getRooms().get(GameLauncher.ROOMINDEX);
 						BoardSquare[][] bs = r.board.getSquares();
 						if (bs[cellY][cellX].getGameObjectOnSquare() == null) {
-							//draw space as green 
+							// draw space as green
 							g.setColor(Color.GREEN.darker());
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1041,7 +1095,7 @@ public class GamePanelFrame extends GameFrame{
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Tree) {
-							//draw tree as black 
+							// draw tree as black
 							g.setColor(Color.black);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1049,7 +1103,7 @@ public class GamePanelFrame extends GameFrame{
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Plant) {
-							//draw plant as pink 
+							// draw plant as pink
 							g.setColor(Color.PINK);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1057,7 +1111,7 @@ public class GamePanelFrame extends GameFrame{
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Monster) {
-							//draw monster as CYAN 
+							// draw monster as CYAN
 							g.setColor(Color.CYAN);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1065,7 +1119,7 @@ public class GamePanelFrame extends GameFrame{
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof MagicCircle) {
-							//draw migiccircle as cyan 
+							// draw migiccircle as cyan
 							g.setColor(Color.CYAN);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1073,7 +1127,7 @@ public class GamePanelFrame extends GameFrame{
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof Key) {
-							//draw key as orange
+							// draw key as orange
 							g.setColor(Color.ORANGE);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1081,7 +1135,7 @@ public class GamePanelFrame extends GameFrame{
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else if (bs[cellY][cellX].getGameObjectOnSquare() instanceof RareCandy) {
-							//draw candy as blue 
+							// draw candy as blue
 							g.setColor(Color.blue);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1089,7 +1143,7 @@ public class GamePanelFrame extends GameFrame{
 							g.drawRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
 						} else {
-							//draw others as LIGHT_GRAY 
+							// draw others as LIGHT_GRAY
 							g.setColor(Color.LIGHT_GRAY);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1098,12 +1152,12 @@ public class GamePanelFrame extends GameFrame{
 									mapSquareSize);
 						}
 					}
-					//draw other player
-					for(Player player:gameClient.getGame().getPlayers()){
-						if (player!=gameClient.getClientPlayer()&&player.getLocation().getX() == cellX
-								&& player.getLocation()
-								.getY() == cellY) {
-							//draw other player as brighter red 
+					// draw other player
+					for (Player player : gameClient.getGame().getPlayers()) {
+						if (player != gameClient.getClientPlayer()
+								&& player.getLocation().getX() == cellX
+								&& player.getLocation().getY() == cellY) {
+							// draw other player as brighter red
 							g.setColor(Color.yellow);
 							g.fillRect(mapNowX, mapStartY, mapSquareSize,
 									mapSquareSize);
@@ -1112,15 +1166,15 @@ public class GamePanelFrame extends GameFrame{
 									mapSquareSize);
 						}
 					}
-					//updata value
+					// updata value
 					mapNowX += mapSquareSize;
 				}
 				mapNowX = mapStartX;
 				mapStartY += mapSquareSize;
 			}
 
-			//add raining weather
-			//draw white lines as rain
+			// add raining weather
+			// draw white lines as rain
 			if (isRainning) {
 				int rainStartX = 200;
 				int rainStartY = -50;
@@ -1132,7 +1186,7 @@ public class GamePanelFrame extends GameFrame{
 				while (number < 50) {
 					nextX = (int) (Math.random() * 400 + rainStartX);
 					nextY = (int) (Math.random() * 100 + rainStartY);
-					int width = (int) (Math.random() * 100 + 20);//from 0 to 40
+					int width = (int) (Math.random() * 100 + 20);// from 0 to 40
 					int height = 3 * width;
 					if (nextY + height > rainEndY) {
 						height = rainEndY - nextY;
@@ -1144,7 +1198,7 @@ public class GamePanelFrame extends GameFrame{
 				}
 			}
 
-			//add rain for 1st view
+			// add rain for 1st view
 			if (isRainning) {
 				int rainStartX = 900;
 				int rainStartY = -50;
@@ -1153,9 +1207,13 @@ public class GamePanelFrame extends GameFrame{
 				int nextY = rainStartY;
 				int number = 0;
 				while (number < 50) {
-					nextX = (int) (Math.random() * 500 + rainStartX);//get rain from rainStartX to rainStartX+500
+					nextX = (int) (Math.random() * 500 + rainStartX);// get rain
+																		// from
+																		// rainStartX
+																		// to
+																		// rainStartX+500
 					nextY = (int) (Math.random() * 100 + rainStartY);
-					int width = (int) (Math.random() * 100 + 20);//from 0 to 40
+					int width = (int) (Math.random() * 100 + 20);// from 0 to 40
 					int height = 3 * width;
 					if (nextY + height > rainEndY) {
 						height = rainEndY - nextY;
