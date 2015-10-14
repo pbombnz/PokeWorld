@@ -1168,7 +1168,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 				if ((square[cellY][cellX + 1].getGameObjectOnSquare() == null)
 						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX + 1 && gameClient
 								.getClientPlayer().getLocation().getY() == (cellY))) {
-					square[cellY + 1][cellX].setGameObjectOnSquare(monster);
+					square[cellY][cellX+1].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 					return true;
 				} else {
