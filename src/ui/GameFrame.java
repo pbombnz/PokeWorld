@@ -311,7 +311,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 		// text is appended to the JTextArea.
 		DefaultCaret controlTipCaret = (DefaultCaret) controlTipArea.getCaret();
 		controlTipCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		controlTipScroll.setBounds(150, 0, 200, 100);
+		controlTipScroll.setBounds(150, 0, 200, 80);
 		panel.add(controlTipScroll);
 		controlTipArea.setText("");
 		controlTipArea

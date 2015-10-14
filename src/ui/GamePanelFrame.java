@@ -1098,9 +1098,23 @@ public class GamePanelFrame extends GameFrame{
 									mapSquareSize);
 						}
 					}
+					//draw other player
+					for(Player player:gameClient.getGame().getPlayers()){
+						if (player!=gameClient.getClientPlayer()&&player.getLocation().getX() == cellX
+								&& player.getLocation()
+								.getY() == cellY) {
+							//draw other player as brighter red 
+							g.setColor(Color.yellow);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						}
+					}
+					//updata value
 					mapNowX += mapSquareSize;
 				}
-				
 				mapNowX = mapStartX;
 				mapStartY += mapSquareSize;
 			}
