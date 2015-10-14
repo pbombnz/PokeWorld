@@ -29,7 +29,7 @@ public class Avatar implements Serializable {
 	
 	private static File avatarPath = new File("./sprites/avatars/"); // The file path that locates the avatar sprites
 
-	private final String avatarName; // Although redunant due to 'evolution1_name', it is keep in the code for compatibility
+	private final String avatarName; // Although redundant due to 'evolution1_name', it is keep in the code for compatibility
 	private final ImageIcon displayPic; // The picture used when a player chooses a character
 	private ArrayList<Evolution> evolutions = new ArrayList<Evolution>(); // The list of evolutions for a particualr avatar
 

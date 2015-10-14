@@ -75,7 +75,6 @@ public class Rattata extends Monster{
 
 	@Override
 	public Direction getDirection() {
-		// TODO Auto-generated method stub
 		return direction;
 	}
 }

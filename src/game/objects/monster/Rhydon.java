@@ -73,7 +73,6 @@ public class Rhydon extends Monster{
 
 	@Override
 	public Direction getDirection() {
-		// TODO Auto-generated method stub
 		return direction;
 	}
 }

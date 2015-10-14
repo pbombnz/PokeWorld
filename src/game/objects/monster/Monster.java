@@ -8,7 +8,7 @@ import game.objects.GameObject;
 /**
  * An interface that is implemented by all the enemies in the game
  * holds all key information needed to fight the enemy and return a result
- * 
+ *
  *@author Sushant Balajee
  *@author Donald Tang
  *@author Wang Zhen
@@ -16,7 +16,7 @@ import game.objects.GameObject;
 
 public abstract class Monster implements GameObject {
 	public ImageIcon spriteImage;
-//	public boolean changed =false;//monster's location already be changed in one turn in wander around
+
 
 	/**
 	 * @return name of the enemy
