@@ -214,6 +214,13 @@ public class GameClient extends Listener {
 		client.sendTCP(packet); 
 	}
 	
+	/**
+	 * Creates a new packet and gives it parameters based on the current player.
+	 * It then sends the packet to the server
+	 * 
+	 * @param playerName
+	 * @param choosenClientPlayer
+	 */
 	public void sendLoadedPlayerToSever(String playerName, Player choosenClientPlayer) {
 		//choosenClientPlayer.setName(playerUsername);
 		//choosenClientPlayer.setId(client.getID());		
@@ -228,6 +235,12 @@ public class GameClient extends Listener {
 		client.sendTCP(packet); 
 	}
 	
+	/**
+	 * Creates a new packet of the client's message and sends it the server
+	 * 
+	 * @param playerName
+	 * @param message
+	 */
 	public void sendMessage(String playerName, String message) {
 		ClientMessage packet = new ClientMessage();
 		packet.playerName = playerName;
@@ -235,6 +248,9 @@ public class GameClient extends Listener {
 		client.sendTCP(packet);
 	}
 	
+	/**
+	 * Creates a new packet with updated information about the player and sends it to the server
+	 */
 	public void sendPlayerUpdate() {
 		PlayerUpdate packet = new PlayerUpdate();
 		Player clientPlayer = getClientPlayer();
@@ -261,6 +277,11 @@ public class GameClient extends Listener {
 		client.sendTCP(packet);
 	}
 	
+	/**
+	 * Sends empty packet to server to indicate character selecr
+	 * 
+	 * @return arraylist of saved players
+	 */	
 	public ArrayList<Player> sendOnClientCharacterSelect() {	
 		client.updateReturnTripTime(); // Update the ping
 		client.sendTCP(new Packets.ClientOnChoosePlayer());// Send to packet to the server
@@ -387,6 +408,13 @@ public class GameClient extends Listener {
 		this.gameClientListener = gameClientListener;
 	}
 
+	/**
+	 * Creates a new packet of item being picked up and sends it the server
+	 * 
+	 * @param item
+	 * @param location
+	 * @param id
+	 */
 	public void sendPickupItem(Item item, Location location, int id) {
 		PlayerPickUpItem packet = new PlayerPickUpItem();
 		packet.id = client.getID();
@@ -396,6 +424,13 @@ public class GameClient extends Listener {
 		client.sendTCP(packet);
 	}
 	
+	/**
+	 * Creates new packet of item being dropped and sends it to the server
+	 * 
+	 * @param item
+	 * @param location
+	 * @param id
+	 */
 	public void sendDropItem(Item item, Location location, int id) {
 		PlayerDropItem packet = new PlayerDropItem();
 		packet.id = client.getID();
