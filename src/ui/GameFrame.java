@@ -1039,20 +1039,11 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			//If you find a goodPotion, increases your health and removes it from the board
 			if (ObjectOfLoc instanceof GoodPotion) {
 				//check whether the item bag is full
-				if (clientPlayer.getInventory().size() < clientPlayer
-						.getMaxItems()) {
-					clientPlayer.setHealth(clientPlayer.getHealth()
-							+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
-					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-							.setGameObjectOnSquare(null);
-				} else {
-					JOptionPane
-							.showMessageDialog(
-									getContentPane(),
-									"Sorry, you cannot pick this item up.Your bag is full.",
-									"No space in your bag!",
-									JOptionPane.INFORMATION_MESSAGE);
-				}
+				clientPlayer.setHealth(clientPlayer.getHealth()
+						+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
+				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+						.setGameObjectOnSquare(null);
+
 			}
 
 			//If you find a RareCandy, increases your level and removes it from the board
