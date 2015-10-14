@@ -196,7 +196,6 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	protected JLabel lvlupLabel_3;
 	private final int TEXT_OUTPUT_ROWS = 5;
 	private final int SEARCH_COLS = 15;
-	private boolean UPDATE_ON_EVERY_CHARACTER = true;
 
 	///==================================
 
@@ -374,7 +373,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	 * output Message To TextArea
 	 */
 	private void outputMessageToTextArea(String playerName, String message) {
-		//		textOutputArea.append("\n<" + playerName + ">" + message);
+				textOutputArea.append("\n<" + playerName + ">" + message);
 	}
 
 	/**
