@@ -304,48 +304,48 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 		});
 
 		//add control tips
-//		controlTipArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
-//		controlTipArea.setLineWrap(true);
-//		controlTipArea.setWrapStyleWord(true); // pretty line wrap.
-//		controlTipArea.setEditable(false);
-//		JScrollPane controlTipScroll = new JScrollPane(controlTipArea);
-//		controlTipScroll.setToolTipText("Control tips");
-//		// these two lines make the JScrollPane always scroll to the bottom when
-//		// text is appended to the JTextArea.
-//		DefaultCaret controlTipCaret = (DefaultCaret) controlTipArea.getCaret();
-//		controlTipCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-//		controlTipScroll.setBounds(150, 0, 200, 80);
-//		panel.add(controlTipScroll);
-//		controlTipArea.setText("");
-//		controlTipArea
-//				.append("Control:\n Q-rotate game left, E-rotate game right J- jump\n W-north S-south A-west D-east\n Up-go  ,Down-turn around ,Left-turn left,Right-turn right");
-//		//make the requestfocus
-//		controlTipArea.addMouseListener(new MouseListener() {
-//			@Override
-//			public void mouseReleased(MouseEvent e) {
-//				requestFocus();
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				requestFocus();
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//				requestFocus();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent e) {
-//				requestFocus();
-//			}
-//
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				requestFocus();
-//			}
-//		});
+		controlTipArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
+		controlTipArea.setLineWrap(true);
+		controlTipArea.setWrapStyleWord(true); // pretty line wrap.
+		controlTipArea.setEditable(false);
+		JScrollPane controlTipScroll = new JScrollPane(controlTipArea);
+		controlTipScroll.setToolTipText("Control tips");
+		// these two lines make the JScrollPane always scroll to the bottom when
+		// text is appended to the JTextArea.
+		DefaultCaret controlTipCaret = (DefaultCaret) controlTipArea.getCaret();
+		controlTipCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		controlTipScroll.setBounds(150, 0, 200, 80);
+		panel.add(controlTipScroll);
+		controlTipArea.setText("");
+		controlTipArea
+				.append("Control:\n Q-rotate game left, E-rotate game right J- jump\n W-north S-south A-west D-east\n Up-go  ,Down-turn around ,Left-turn left,Right-turn right");
+		//make the requestfocus
+		controlTipArea.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				requestFocus();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				requestFocus();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				requestFocus();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				requestFocus();
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				requestFocus();
+			}
+		});
 
 		//add textField to input message
 		inputMessageField = new JTextField(SEARCH_COLS);
