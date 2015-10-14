@@ -3,25 +3,25 @@ package ui;
 /**
  * @author Wang Zhen
  * These 2 classes(GameFrame and GamePanelFrame)  include all methods,fileds of game gui and some game logic
- * 
- * This gui has two parts:1st person view gui on the right side and 3rd person 
+ *
+ * This gui has two parts:1st person view gui on the right side and 3rd person
  * view gui on the left side.
- *  
+ *
  * This gui has two keyboard control system:The 1st system is for using in 3rd person view gui.
  * (user can use WSAD to move. W-north S-south A-west D-east)
- * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view. 
+ * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view.
  * (user can use Up,Down,Left,Right to move. Up-go,Down-turn around,Left-turn left,Right-turn right)
  * And user can also use "J" to jump in both 2 views.
- * 
+ *
  * Control:
  * Q-rotate game left, E-rotate game right
  * W-north S-south A-west D-east J- jump
  * Up-go  ,Down-turn around ,Left-turn left,Right-turn right
- * 
+ *
  * The functions in this class:evolving animation,fighting animation,move,pick up(automaticlly pick up when player go to the sqaure with object),
  * drop,fight,change weather(rainy,sunny),change day or night,send message to other player,
  * monster wonder around,draw mini map,make player shake,refresh player's information.
- * 
+ *
  */
 import java.awt.Color;
 import java.awt.Dimension;
@@ -155,7 +155,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	public boolean isRainning = false;
 
 	//monster wonder around
-	protected long lastMovedtime = 0;//the time that monster  moved in last wonder around unit 
+	protected long lastMovedtime = 0;//the time that monster  moved in last wonder around unit
 	protected boolean moved = false;
 	protected List<Monster> monstersChanged = new ArrayList<Monster>();//monster's location already be changed in one turn in wander around
 
@@ -304,48 +304,48 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 		});
 
 		//add control tips
-		controlTipArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
-		controlTipArea.setLineWrap(true);
-		controlTipArea.setWrapStyleWord(true); // pretty line wrap.
-		controlTipArea.setEditable(false);
-		JScrollPane controlTipScroll = new JScrollPane(controlTipArea);
-		controlTipScroll.setToolTipText("Control tips");
-		// these two lines make the JScrollPane always scroll to the bottom when
-		// text is appended to the JTextArea.
-		DefaultCaret controlTipCaret = (DefaultCaret) controlTipArea.getCaret();
-		controlTipCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		controlTipScroll.setBounds(150, 0, 200, 80);
-		panel.add(controlTipScroll);
-		controlTipArea.setText("");
-		controlTipArea
-				.append("Control:\n Q-rotate game left, E-rotate game right J- jump\n W-north S-south A-west D-east\n Up-go  ,Down-turn around ,Left-turn left,Right-turn right");
-		//make the requestfocus
-		controlTipArea.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				requestFocus();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				requestFocus();
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				requestFocus();
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				requestFocus();
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				requestFocus();
-			}
-		});
+//		controlTipArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
+//		controlTipArea.setLineWrap(true);
+//		controlTipArea.setWrapStyleWord(true); // pretty line wrap.
+//		controlTipArea.setEditable(false);
+//		JScrollPane controlTipScroll = new JScrollPane(controlTipArea);
+//		controlTipScroll.setToolTipText("Control tips");
+//		// these two lines make the JScrollPane always scroll to the bottom when
+//		// text is appended to the JTextArea.
+//		DefaultCaret controlTipCaret = (DefaultCaret) controlTipArea.getCaret();
+//		controlTipCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+//		controlTipScroll.setBounds(150, 0, 200, 80);
+//		panel.add(controlTipScroll);
+//		controlTipArea.setText("");
+//		controlTipArea
+//				.append("Control:\n Q-rotate game left, E-rotate game right J- jump\n W-north S-south A-west D-east\n Up-go  ,Down-turn around ,Left-turn left,Right-turn right");
+//		//make the requestfocus
+//		controlTipArea.addMouseListener(new MouseListener() {
+//			@Override
+//			public void mouseReleased(MouseEvent e) {
+//				requestFocus();
+//			}
+//
+//			@Override
+//			public void mousePressed(MouseEvent e) {
+//				requestFocus();
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent e) {
+//				requestFocus();
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent e) {
+//				requestFocus();
+//			}
+//
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				requestFocus();
+//			}
+//		});
 
 		//add textField to input message
 		inputMessageField = new JTextField(SEARCH_COLS);
@@ -388,7 +388,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	}
 
 	/**
-	 * drop the number index 
+	 * drop the number index
 	 * @param index
 	 */
 	public void dropIventory(int index) {
@@ -415,7 +415,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	}
 
 	/**
-	 * load JLabels. 
+	 * load JLabels.
 	 */
 	public void loadLabels() {
 		// Get Client Player from Client Connection
@@ -539,7 +539,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 		infoLabels.add(attack);
 		infoLabels.add(level);
 
-		//set time label; 
+		//set time label;
 		//initialization
 		panel.remove(timeLabel);
 		//set format
@@ -757,10 +757,10 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	 * Q-rotate game left, E-rotate game right
 	 * W-north S-south A-west D-east J- jump
 	 * Up-go  ,Down-turn around ,Left-turn left,Right-turn right
-	 * 
+	 *
 	 * This gui has two keyboard control system:The 1st system is for using in 3rd person view gui.
 	 * (user can use WSAD to move. W-north S-south A-west D-east)
-	 * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view. 
+	 * The 2nd system is for using on 1st person view gui.I create this control system for easily playing in 1st person view.
 	 * (user can use Up,Down,Left,Right to move. Up-go,Down-turn around,Left-turn left,Right-turn right)
 	 * And user can also use "J" to jump in both 2 views.
 	 */
@@ -774,7 +774,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			GameObject gg = loc.getRoom().board.getSquares()[loc.getY()][loc
 					.getX()].getGameObjectOnSquare();
 			if (e.getKeyCode() == KeyEvent.VK_W) {
-				//check whrther can move 
+				//check whrther can move
 				if (canMove(loc.getX(), loc.getY() - 1, clientPlayer)) {
 					//character will turn 1st if the character is not facing that side
 					if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
@@ -787,7 +787,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 					clientPlayer.setDirection(Direction.BACK_LEFT);
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
-				//check whrther can move 
+				//check whrther can move
 				if (canMove(loc.getX(), loc.getY() + 1, clientPlayer)) {
 					//character will turn 1st if the character is not facing that side
 					if (clientPlayer.getDirection() == Direction.FACE_RIGHT) {
@@ -800,7 +800,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 					clientPlayer.setDirection(Direction.FACE_RIGHT);
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
-				//check whrther can move 
+				//check whrther can move
 				if (canMove(loc.getX() - 1, loc.getY(), clientPlayer)) {
 					//character will turn 1st if the character is not facing that side
 					if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
@@ -813,7 +813,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 					clientPlayer.setDirection(Direction.FACE_LEFT);
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_D) {
-				//check whrther can move 
+				//check whrther can move
 				if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
 					//character will turn 1st if the character is not facing that side
 					if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
@@ -830,17 +830,17 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			if (e.getKeyCode() == KeyEvent.VK_UP) {
 				//character will turn 1st if the character is not facing that side
 				if (clientPlayer.getDirection() == Direction.BACK_RIGHT) {
-					//check whrther can move 
+					//check whrther can move
 					if (canMove(loc.getX() + 1, loc.getY(), clientPlayer)) {
 						loc.moveEast();
 					}
 				} else if (clientPlayer.getDirection() == Direction.BACK_LEFT) {
-					//check whrther can move 
+					//check whrther can move
 					if (canMove(loc.getX(), loc.getY() - 1, clientPlayer)) {
 						loc.moveNorth();
 					}
 				} else if (clientPlayer.getDirection() == Direction.FACE_LEFT) {
-					//check whrther can move 
+					//check whrther can move
 					if (canMove(loc.getX() - 1, loc.getY(), clientPlayer)) {
 						loc.moveWest();
 					}
@@ -905,7 +905,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 				clientPlayer.getLocation().getRoom().board = newBoard;
 				//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
 
-				//change the locations of player 
+				//change the locations of player
 				Location newloc = new Location();
 				newloc.setRoom(clientPlayer.getLocation().getRoom());
 
@@ -916,7 +916,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 
 				newloc.setY(clientPlayer.getLocation().getX());
 				clientPlayer.setLocation(newloc);
-				//let the player image turn left 
+				//let the player image turn left
 				rotate.turnPlayerImageLeft(clientPlayer);
 				//let monster turn
 				Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
@@ -955,7 +955,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 				clientPlayer.getLocation().getRoom().board = newBoard;
 				//gameClient.getGame().getRooms().get(GameLauncher.ROOMINDEX).board = newBoard;
 
-				//change the locations of player 
+				//change the locations of player
 				Location newloc = new Location();
 				newloc.setRoom(clientPlayer.getLocation().getRoom());
 
@@ -967,7 +967,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 						- (clientPlayer.getLocation().getX() + offset));
 
 				clientPlayer.setLocation(newloc);
-				//let the player image turn left 
+				//let the player image turn left
 				rotate.turnPlayerImageRight(clientPlayer);
 				//let monster turn
 				Room r = clientPlayer.getLocation().getRoom();//ga.getRooms().get(GameLauncher.ROOMINDEX);
@@ -1063,7 +1063,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 							@Override
 							public void run() {
 								timer.cancel();
-								//here is the methods run after timer here 
+								//here is the methods run after timer here
 								///=======================================
 								panel.remove(lvlupLabel_2);
 								isLevelUpping = false;//restore key control and monster moving after the player level up
@@ -1080,7 +1080,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 							@Override
 							public void run() {
 								timer.cancel();
-								//here is the methods run after timer here 
+								//here is the methods run after timer here
 								///=======================================
 								panel.remove(lvlupLabel_3);
 								isLevelUpping = false;//restore key control and monster moving after the player level up
@@ -1403,16 +1403,16 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 				fightBox.dispose();
 				///update label
 				loadLabels();
-				//fight giflabel 
+				//fight giflabel
 				panel.add(attackLabel);
-				//add a timer 
+				//add a timer
 				final Timer timer = new Timer();
 				TimerTask tt = new TimerTask() {
 
 					@Override
 					public void run() {
 						timer.cancel();
-						//here is the methods run after timer here 
+						//here is the methods run after timer here
 						///=======================================
 						panel.remove(attackLabel);
 						fight(mosterLocation);
