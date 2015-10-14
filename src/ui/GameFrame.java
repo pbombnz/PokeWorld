@@ -282,18 +282,22 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			public void mouseReleased(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				requestFocus();
@@ -322,24 +326,28 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			public void mouseReleased(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				requestFocus();
 			}
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				requestFocus();
 			}
 		});
-		
+
 		//add textField to input message
 		inputMessageField = new JTextField(SEARCH_COLS);
 		inputMessageField
@@ -1007,25 +1015,37 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 					.getY()][loc.getX()].getGameObjectOnSquare();
 
 			//pick up
-			//check whether the item bag is full
-			if (clientPlayer.getInventory().size() < clientPlayer.getMaxItems()) {
-				//If you find a key, adds it to the inventory and removes from the board
-				if (ObjectOfLoc instanceof Key) {
+
+			//If you find a key, adds it to the inventory and removes from the board
+			if (ObjectOfLoc instanceof Key) {
+				//check whether the item bag is full
+				if (clientPlayer.getInventory().size() < clientPlayer
+						.getMaxItems()) {
 					clientPlayer.addToInventory(((Key) ObjectOfLoc));
 					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
 							.setGameObjectOnSquare(null);
 					gameClient.sendPickupItem((Item) ObjectOfLoc, new Location(
 							loc.getRoom(), loc.getX(), loc.getY()),
 							clientPlayer.getId());
-				}
-				//If you find a goodPotion, increases your health and removes it from the board
-				if (ObjectOfLoc instanceof GoodPotion) {
-					clientPlayer.setHealth(clientPlayer.getHealth()
-							+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
-					loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
-							.setGameObjectOnSquare(null);
+				} else {
+					JOptionPane
+							.showMessageDialog(
+									getContentPane(),
+									"Sorry, you cannot pick this item up.Your bag is full.",
+									"No space in your bag!",
+									JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
+			//If you find a goodPotion, increases your health and removes it from the board
+			if (ObjectOfLoc instanceof GoodPotion) {
+				//check whether the item bag is full
+				clientPlayer.setHealth(clientPlayer.getHealth()
+						+ ((GoodPotion) ObjectOfLoc).getHealthHealAmount());
+				loc.getRoom().board.getSquares()[loc.getY()][loc.getX()]
+						.setGameObjectOnSquare(null);
+
+			}
+
 			//If you find a RareCandy, increases your level and removes it from the board
 			if (ObjectOfLoc instanceof RareCandy) {
 				//level up
@@ -1081,6 +1101,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 							"Message", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
+
 			//If you find a Door, checks your inventory for a Key
 			//If you have a Key, compares the Key ID and Door ID for a match
 			//If they match, allows you to enter a different room

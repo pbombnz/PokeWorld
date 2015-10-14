@@ -172,7 +172,7 @@ public class ServerFrame extends JFrame implements ActionListener, WindowListene
 		        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			// Checks if User wants to load Game from file
 			Game loadedGame = JsonToGame.loadGame(this);
-			String path = sl.loadPath();
+			//String path = sl.loadPath();
 			// if game loaded is null, then the user canceled the load operation, do do anything otherwise
 			// if the game loaded is valid, set it as the global server game.
 			if(loadedGame == null) {
