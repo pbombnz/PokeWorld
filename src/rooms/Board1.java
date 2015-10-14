@@ -32,7 +32,7 @@ public class Board1 extends Board{
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
-				
+
 								if (i == 0 && j == 5) {
 									this.squares[i][j] = new BoardSquare(new RareCandy());
 								}
@@ -42,11 +42,11 @@ public class Board1 extends Board{
 								if (i == 5 && j == 3) {
 									this.squares[i][j] = new BoardSquare(new Key(1));
 								}
-								
+
 								if (i == 7 && j == 2) {
 									this.squares[i][j] = new BoardSquare(new Fence());
 								}
-								
+
 								if (i == 2 && j == 9) {
 									this.squares[i][j] = new BoardSquare(new GoodPotion(50));
 								}
@@ -70,7 +70,9 @@ public class Board1 extends Board{
 										|| i == 0 && j == 6 || i == 7 && j == 7 || i == 7 && j == 8|| i == 9 && j ==8) {
 									this.squares[i][j] = new BoardSquare(new Plant());
 								}
-								
+								if (i == 9 && j == 4) {
+									this.squares[i][j] = new BoardSquare(new Key(1));
+								}
 
 
 			}

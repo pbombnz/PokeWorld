@@ -29,7 +29,7 @@ public class Board2 extends Board {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				this.squares[i][j] = new BoardSquare(null);
-				
+
 				if(j == 0 && i > 1 || j == 9 && i > 1){
 						this.squares[i][j] = new BoardSquare(new Fence());
 				}
@@ -50,6 +50,9 @@ public class Board2 extends Board {
 					this.squares[i][j] = new BoardSquare(new Zubat(30, 30));
 				}
 				if (i == 0 && j == 8) {
+					this.squares[i][j] = new BoardSquare(new Key(2));
+				}
+				if (i == 4 && j == 8) {
 					this.squares[i][j] = new BoardSquare(new Key(2));
 				}
 				if (i == 4 && j == 2) {
