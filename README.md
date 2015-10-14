@@ -16,11 +16,22 @@ This is because when committing, it uses the email address in the commit to dete
 
 ## How to Execute
 1. Import the JAR file into Eclipse as a New Project
-2. Add JUnit 4 and External Jars (json-simple-1.1.1.jar, jsonbeans-0.5.jar and kyro-2.23.1-SNAPSHOT-all-debug.jar) to Build Path (if it isn't already apart of the build path).
-2. Run the main method found in the 'main' package within the 'main' class.
-2. In the Game menu, Click "Create Game (As Server)"
-3. Then go back the main frame, In the Game menu, "Join Game (as Client)"
-4. Play!
+2. If java source folder within the package is empty, copy the folders..
+	* com
+	* game
+	* JUnit
+	* main
+	* META-INF
+	* network
+	* rooms
+	* storage
+	* ui
+  Into the source folder
+3. If the project is complaining about Build Errors (Red Explanation Mark), add all external libraries into the build path (such as the Kyro, JSON-simple and JSONBeans and JUnit 4)
+4. Run the main method found in the 'main' package within the 'main' class.
+5. In the Game menu, Click "Create Game (As Server)"
+6. Then go back the main frame, In the Game menu, "Join Game (as Client)"
+7. Play!
 
 ## Git Rules (For Team Members)
 1. When you open Eclipse, make sure the first thing you do before coding is 'pull' so you are sync'd with the remote server.
