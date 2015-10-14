@@ -303,6 +303,11 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			}
 		});
 
+		/**
+		 * here is the control tips. we move this to "about". 
+		 * if like is or think it is necesary,just uncomment 
+		 */
+		/*
 		//add control tips
 		controlTipArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
 		controlTipArea.setLineWrap(true);
@@ -346,6 +351,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 				requestFocus();
 			}
 		});
+		*/
 
 		//add textField to input message
 		inputMessageField = new JTextField(SEARCH_COLS);
@@ -373,7 +379,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	 * output Message To TextArea
 	 */
 	private void outputMessageToTextArea(String playerName, String message) {
-				textOutputArea.append("\n<" + playerName + ">" + message);
+		textOutputArea.append("\n<" + playerName + ">" + message);
 	}
 
 	/**
@@ -1168,7 +1174,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 				if ((square[cellY][cellX + 1].getGameObjectOnSquare() == null)
 						&& !(gameClient.getClientPlayer().getLocation().getX() == cellX + 1 && gameClient
 								.getClientPlayer().getLocation().getY() == (cellY))) {
-					square[cellY][cellX+1].setGameObjectOnSquare(monster);
+					square[cellY][cellX + 1].setGameObjectOnSquare(monster);
 					square[cellY][cellX].setGameObjectOnSquare(null);
 					return true;
 				} else {
@@ -1526,8 +1532,10 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			if (menuItem.getText().equals("Create Game (As Server)")) {
 				new ServerFrame();
 			} else if (menuItem.getText().equals("Join Game (As Client)")) {
-				List<InetAddress> serverAddressList = gameClient.getServerList();
-				InetAddress serverAddress = ServerSelectDialog.Chooser(this, serverAddressList);
+				List<InetAddress> serverAddressList = gameClient
+						.getServerList();
+				InetAddress serverAddress = ServerSelectDialog.Chooser(this,
+						serverAddressList);
 				if (serverAddress == null) {
 					return;
 				}
@@ -1601,12 +1609,14 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 			} else if (menuItem.getText().equals("Exit")) {
 				System.exit(0);
 			} else if (menuItem.getText().equals("Instructions")) {
-				JOptionPane.showMessageDialog(this, 
-						"WASD - Up Left Down Right\n"
-						+ "Arrow Keys - Up Left Down Right (Allows Rotation)\n"
-						+ "Q - Rotate Board Left\n" 
-						+ "E - Rotate Board Right",
-						"Instructions", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								this,
+								"WASD - Up Left Down Right\n"
+										+ "Arrow Keys - Up Left Down Right (Allows Rotation)\n"
+										+ "Q - Rotate Board Left\n"
+										+ "E - Rotate Board Right",
+								"Instructions", JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else if (source instanceof JButton) {
 			if (inputMessageField.getText().length() > 0) {
