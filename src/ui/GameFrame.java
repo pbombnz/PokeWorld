@@ -33,6 +33,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -162,6 +164,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	protected final int sightRange = 3;//the sight range in night
 
 	private JTextArea textOutputArea;
+	private JTextArea controlTipArea;
 	private JTextField inputMessageField;
 
 	///================================================
@@ -273,7 +276,70 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 		panel.add(scroll);
 		textOutputArea.setText("");
 		textOutputArea.append("Welcome to PokeWorld!");
+		//make the requestfocus
+		textOutputArea.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				requestFocus();
+			}
+		});
 
+		//add control tips
+		controlTipArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
+		controlTipArea.setLineWrap(true);
+		controlTipArea.setWrapStyleWord(true); // pretty line wrap.
+		controlTipArea.setEditable(false);
+		JScrollPane controlTipScroll = new JScrollPane(controlTipArea);
+		controlTipScroll.setToolTipText("Control tips");
+		// these two lines make the JScrollPane always scroll to the bottom when
+		// text is appended to the JTextArea.
+		DefaultCaret controlTipCaret = (DefaultCaret) controlTipArea.getCaret();
+		controlTipCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		controlTipScroll.setBounds(150, 0, 200, 80);
+		panel.add(controlTipScroll);
+		controlTipArea.setText("");
+		controlTipArea
+				.append("Control:\n Q-rotate game left, E-rotate game right J- jump\n W-north S-south A-west D-east\n Up-go  ,Down-turn around ,Left-turn left,Right-turn right");
+		//make the requestfocus
+		controlTipArea.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				requestFocus();
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				requestFocus();
+			}
+		});
+		
 		//add textField to input message
 		inputMessageField = new JTextField(SEARCH_COLS);
 		inputMessageField
@@ -300,7 +366,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 	 * output Message To TextArea
 	 */
 	private void outputMessageToTextArea(String playerName, String message) {
-		textOutputArea.append("\n<" + playerName + ">" + message);
+		//		textOutputArea.append("\n<" + playerName + ">" + message);
 	}
 
 	/**
@@ -410,7 +476,7 @@ public abstract class GameFrame extends JFrame implements KeyListener,
 
 	/**
 	 * print player's information on the panel
-	 * it will print name,type,health,attack,level,exployed time
+	 * it will print name,type,health,attack,level,control tips,exployed time
 	 * @param player
 	 */
 	public void printInformation(Player player) {

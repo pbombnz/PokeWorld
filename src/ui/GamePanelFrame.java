@@ -1,5 +1,4 @@
 package ui;
-
 import game.BoardSquare;
 import game.Direction;
 import game.Game;
@@ -31,6 +30,7 @@ import rooms.Room;
 
 /**
  *@author Wang Zhen
+
  *This class extends GameFrame.It build a gamePanel inside. And the method paintComponent() will be  called every fixed time(so the
  *game panel will be repait every fixed time)
  *
@@ -1098,6 +1098,21 @@ public class GamePanelFrame extends GameFrame{
 									mapSquareSize);
 						}
 					}
+					//draw other player
+					for(Player player:gameClient.getGame().getPlayers()){
+						if (player!=gameClient.getClientPlayer()&&player.getLocation().getX() == cellX
+								&& player.getLocation()
+								.getY() == cellY) {
+							//draw other player as brighter red 
+							g.setColor(Color.yellow);
+							g.fillRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+							g.setColor(Color.black);
+							g.drawRect(mapNowX, mapStartY, mapSquareSize,
+									mapSquareSize);
+						}
+					}
+					//updata value
 					mapNowX += mapSquareSize;
 				}
 				mapNowX = mapStartX;
