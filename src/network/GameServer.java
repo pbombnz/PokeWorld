@@ -105,87 +105,55 @@ public class GameServer extends Listener {
 		else if(object instanceof PlayerUpdateLocationAndDirection) {
 			handlePlayerUpdateLocation(connection, object);
 		}
-		
 		else if(object instanceof ClientOnChoosePlayer) {
-			ArrayList<Player> savedFilePlayers = new ArrayList<Player>();
-			
-			for(Player connectedPlayer: getGame().getPlayers()) {
-				if(connectedPlayer.getId() == -1) {
-					savedFilePlayers.add(connectedPlayer);
-				}
-			}
-			
-			ClientOnChoosePlayer_Response packet = new ClientOnChoosePlayer_Response();
-			packet.savedFilePlayers = savedFilePlayers;
-			connection.sendTCP(packet);
+			handleClientOnChoosePlayer(connection);
 		}
-		
 		else if(object instanceof ClientUseExistingPlayer) {
-			ClientUseExistingPlayer packet = ((ClientUseExistingPlayer) object);
-			
-			for(Player connectedPlayer: getGame().getPlayers()) {
-				if(connectedPlayer.getId() == packet.oldId && connectedPlayer.getName().equals(packet.oldName)) {
-					connectedPlayer.setId(packet.newId);
-					connectedPlayer.setName(packet.newName);
-				}
-			}
-			
-			ClientMessage joinMessagePacket = new ClientMessage();
-			joinMessagePacket.playerName = packet.newName;
-			joinMessagePacket.message = "* Joined Server *";
-			server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
-			
-			ClientNewGame newGame = new ClientNewGame();
-			newGame.gameByteArray = game.toByteArray();
-			
-			// Send packet to client
-			serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
-			server.sendToAllTCP(newGame);
+			handleClientUseExistingPlayer(connection, object);
 		}
-		
 		else if(object instanceof ClientMessage) {
-			ClientMessage packet = (ClientMessage) object;
-			serverFrame.writeToConsole("[Server][Client Message] Player Name: "+packet.playerName+" | Message: "+packet.message);
-			server.sendToAllExceptTCP(connection.getID(), object);
+			handleClientMessage(connection, object);
 		}
-		
 		else if(object instanceof PlayerUpdate) {
-			PlayerUpdate packet = (PlayerUpdate) object;
-			Player playerToUpdate = game.getPlayerByID(packet.id);
-			serverFrame.writeToConsole("[Server][Player Update] Player : "+playerToUpdate.getName()+" | ID:"+playerToUpdate.getId());
-			
-			playerToUpdate.setAttack(packet.newAttack);
-			playerToUpdate.setHealth(packet.newHealth);
-			playerToUpdate.setPlayerLevel(packet.newPlayerLevel);
-			
-			server.sendToAllExceptTCP(connection.getID(), object);
+			handlePlayerUpdate(connection, object);
 		}
-		
 		else if(object instanceof PlayerPickUpItem) {
-			PlayerPickUpItem packet = (PlayerPickUpItem) object;
-			
-			Player playerToUpdate = getGame().getPlayerByID(packet.id);
-			playerToUpdate.getInventory().add(packet.item);
-			
-			BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
-			sq.setGameObjectOnSquare(null);
-			
-			server.sendToAllExceptTCP(packet.id, object);
+			handlePickupItem(object);
 		}
-		
 		else if(object instanceof PlayerDropItem) {
-			PlayerDropItem packet = (PlayerDropItem) object;
-			
-			Player playerToUpdate = getGame().getPlayerByID(packet.id);
-			playerToUpdate.getInventory().remove(packet.item);
-			
-			BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
-			sq.setGameObjectOnSquare(packet.item);
-			
-			server.sendToAllExceptTCP(packet.id, object);
+			handlePlayerDropItem(object);
 		}
 	}
 
+	/**
+	 * @param object
+	 */
+	private void handlePlayerDropItem(Object object) {
+		PlayerDropItem packet = (PlayerDropItem) object;
+		
+		Player playerToUpdate = getGame().getPlayerByID(packet.id);
+		playerToUpdate.getInventory().remove(packet.item);
+		
+		BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
+		sq.setGameObjectOnSquare(packet.item);
+		
+		server.sendToAllExceptTCP(packet.id, object);
+	}
+
+	/**
+	 * @param object
+	 */
+	private void handlePickupItem(Object object) {
+		PlayerPickUpItem packet = (PlayerPickUpItem) object;
+		
+		Player playerToUpdate = getGame().getPlayerByID(packet.id);
+		playerToUpdate.getInventory().add(packet.item);
+		
+		BoardSquare sq = game.getRoomByName(packet.location.getRoom().getName()).getBoard().getSquareAt(packet.location.getY(), packet.location.getX());
+		sq.setGameObjectOnSquare(null);
+		
+		server.sendToAllExceptTCP(packet.id, object);
+	}
 
 	@Override
 	public void idle (Connection connection) {
@@ -234,14 +202,14 @@ public class GameServer extends Listener {
 	 * Checks if a player's new chosen name is unique (ie. not other currently connected players have it)
 	 * 
 	 * @param connection The Client's connection
-	 * @param packet The packet incoming
+	 * @param object The packet incoming
 	 */
-	private void validatePlayerName(Connection connection, Object packet) {
-		ValidateNewPlayerUsername packetReceived = (ValidateNewPlayerUsername) packet;
+	private void validatePlayerName(Connection connection, Object object) {
+		ValidateNewPlayerUsername packet = (ValidateNewPlayerUsername) object;
 		ValidateNewPlayerUsername_Response packetSend = new ValidateNewPlayerUsername_Response();
 		
 		for(Player connectedPlayer : game.getPlayers()) {
-			if(connectedPlayer.getName().equalsIgnoreCase(packetReceived.name)){
+			if(connectedPlayer.getName().equalsIgnoreCase(packet.name)){
 				packetSend.valid = false;
 				connection.sendTCP(packetSend);
 				return;
@@ -254,8 +222,8 @@ public class GameServer extends Listener {
 	/**
 	 * Controls how a server handles a packet that indicates that a new playe wants to join the game
 	 * 
-	 * @param connection
-	 * @param object the received NewPlayer packet
+	 * @param connection The Client's connection
+	 * @param object The packet incoming
 	 */
 	private void handleNewPlayer(Connection connection, Object object) {
 		// Gets the packet from the incoming object
@@ -325,6 +293,94 @@ public class GameServer extends Listener {
 	}
 	
 	/**
+	 * Handles a PlayerUpdate packet when received
+	 * 
+	 * @param connection The Client's connection
+	 * @param object The packet incoming
+	 */
+	private void handlePlayerUpdate(Connection connection, Object object) {
+		// Reads the packet and identifies the player to update
+		PlayerUpdate packet = (PlayerUpdate) object;
+		Player playerToUpdate = game.getPlayerByID(packet.id);
+		serverFrame.writeToConsole("[Server][Player Update] Player : "+playerToUpdate.getName()+" | ID:"+playerToUpdate.getId());
+		
+		// update the player properties of the packet on the global game
+		playerToUpdate.setAttack(packet.newAttack);
+		playerToUpdate.setHealth(packet.newHealth);
+		playerToUpdate.setPlayerLevel(packet.newPlayerLevel);
+		
+		// Passes the packet to all other clients so they can update their local game
+		server.sendToAllExceptTCP(connection.getID(), object);
+	}
+
+	/**
+	 * Handles client messages
+	 * 
+	 * @param connection The Client's connection
+	 * @param object The packet incoming
+	 */
+	private void handleClientMessage(Connection connection, Object object) {
+		// Reads the incoming message packet
+		ClientMessage packet = (ClientMessage) object;
+		// Writes a message on the server console
+		serverFrame.writeToConsole("[Server][Client Message] Player Name: "+packet.playerName+" | Message: "+packet.message);
+		// Passes the packet to all other clients so they can update their local game
+		server.sendToAllExceptTCP(connection.getID(), object);
+	}
+
+	/**
+	 * Handle when the client use existing player from the loaded game from a file.
+	 * 
+	 * @param connection The Client's connection
+	 * @param object The packet incoming
+	 */
+	private void handleClientUseExistingPlayer(Connection connection, Object object) {
+		// Reads the incoming handleClientUseExistingPlayer packet
+		ClientUseExistingPlayer packet = ((ClientUseExistingPlayer) object);
+		
+		// Set the saved player's ID and name for the new client so they use getClientPlayer() locally
+		for(Player connectedPlayer: getGame().getPlayers()) {
+			if(connectedPlayer.getId() == packet.oldId && connectedPlayer.getName().equals(packet.oldName)) {
+				connectedPlayer.setId(packet.newId);
+				connectedPlayer.setName(packet.newName);
+			}
+		}
+		
+		// Sends a join message to all clients so they know
+		ClientMessage joinMessagePacket = new ClientMessage();
+		joinMessagePacket.playerName = packet.newName;
+		joinMessagePacket.message = "* Joined Server *";
+		server.sendToAllExceptTCP(connection.getID(), joinMessagePacket);
+		
+		// Send a copy of the game to the client
+		ClientNewGame newGame = new ClientNewGame();
+		newGame.gameByteArray = game.toByteArray();
+		
+		// Send packet to client
+		serverFrame.writeToConsole("[Server][Sent] Sent Game World to new client.");
+		server.sendToAllTCP(newGame);
+	}
+
+	/**
+	 * Handles and chooses what do when a client said they are about to pick a character
+	 * 
+	 * @param connection The Client's connection
+	 */
+	private void handleClientOnChoosePlayer(Connection connection) {
+		// Add all non-playing saved characters into a list so we can past it in a packet
+		ArrayList<Player> savedFilePlayers = new ArrayList<Player>();
+		for(Player connectedPlayer: getGame().getPlayers()) {
+			if(connectedPlayer.getId() == -1) {
+				savedFilePlayers.add(connectedPlayer);
+			}
+		}
+		// Send a new response packet with the saved players so the clients knows which players to pick out of
+		ClientOnChoosePlayer_Response packet = new ClientOnChoosePlayer_Response();
+		packet.savedFilePlayers = savedFilePlayers;
+		connection.sendTCP(packet);
+	}	
+	
+	/**
 	 * Handles packets that are about a specific player's location or direction moving
 	 * 
 	 * @param connection the client connection
@@ -344,8 +400,8 @@ public class GameServer extends Listener {
 	/**
 	 * Handles the way a client quits (Assuming they quit nicely)
 	 * 
-	 * @param connection
-	 * @param object
+	 * @param connection The Client's connection
+	 * @param object The packet incoming
 	 */
 	private void handleClientQuit(Connection connection, Object object) {
 		// Casts the incoming object as a packet
