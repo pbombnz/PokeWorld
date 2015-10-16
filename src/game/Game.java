@@ -26,6 +26,8 @@ import ui.GameFrame;
  * rooms on which the game is played depending on the player's location. The Game contains
  * all the locations and items (via nested objects) that make up the world.
  *
+ * @author Sushant Balajee
+ * @author Donald Tang
  * @author Prashant Bhikhu
  *
  */

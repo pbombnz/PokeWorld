@@ -4,6 +4,11 @@ import game.Player;
 
 import javax.swing.ImageIcon;
 
+/**
+ * INGNORE THIS CLASS.
+ * NOT USED AT ALL
+ *
+ */
 public class BadPotion implements Item{
 	private static final long serialVersionUID = 9081977774417525283L;
 	

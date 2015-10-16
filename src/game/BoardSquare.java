@@ -10,7 +10,9 @@ import javax.swing.ImageIcon;
 /**
  * This class is how we represent a square on the board. It stores a gameObject
  * which is encapsulated so it has getters and setters.
- *
+ * 
+ * @author Donald Tang
+ * @author Sushant Balajee
  */
 public class BoardSquare implements Serializable {
 

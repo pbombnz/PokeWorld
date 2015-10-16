@@ -5,11 +5,12 @@ import java.io.Serializable;
 import rooms.Room;
 import rooms.Room1;
 /**
- * @author Sushant Balajee, Donald Tang
  * 
  * A simple class that holds the room, x and y to represent the position.
  * It also has methods to move but does not have logic for it.
  *
+ * @author Sushant Balajee
+ * @author Donald Tang
  */
 
 public class Location implements Serializable {

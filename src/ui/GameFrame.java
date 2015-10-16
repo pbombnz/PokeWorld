@@ -2,6 +2,7 @@ package ui;
 
 /**
  * @author Wang Zhen
+ * 
  * These 2 classes(GameFrame and GamePanelFrame)  include all methods,fileds of game gui and some game logic
  *
  * This gui has two parts:1st person view gui on the right side and 3rd person

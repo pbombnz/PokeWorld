@@ -19,8 +19,11 @@ import rooms.Room1;
 
 
 /**
- * this class is for loadfile
- * @contributer Prashant Bhikhu
+ * This class creates a Dialog which allows clients to pick a player. Unlike the 
+ * normal Character Select, this shows a Droplist of the player that have been
+ * loaded from file, so the client and pick an already created player.
+ * 
+ * @author Prashant Bhikhu
  */
 @SuppressWarnings("serial")
 public class CharacterSelectDialog_LoadFile extends JDialog implements ActionListener {
@@ -28,7 +31,13 @@ public class CharacterSelectDialog_LoadFile extends JDialog implements ActionLis
 	private ArrayList<Player> loadedPlayers;
 	private Player choosenPlayer = null;
 
-	public CharacterSelectDialog_LoadFile(JFrame parentFrame, ArrayList<Player> loadedPlayers) {
+	/**
+	 * Creates the JDialog box for the player selection and returns the selected player
+	 * 
+	 * @param parentFrame The frame used for the JDialog to be centered
+	 * @return The selected Avatar, otherwise if dialog box was closed then return null
+	 */
+	private CharacterSelectDialog_LoadFile(JFrame parentFrame, ArrayList<Player> loadedPlayers) {
 		super(parentFrame, "Choose your Character (From Load File)?");
 		this.loadedPlayers = loadedPlayers;
 		
@@ -60,9 +69,6 @@ public class CharacterSelectDialog_LoadFile extends JDialog implements ActionLis
 		setVisible(true);
 	}
 
-	/**
-	 * actionPerformed
-	 */
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		choosenPlayer = loadedPlayers.get(loadedPlayersComboBox.getSelectedIndex());
@@ -70,7 +76,7 @@ public class CharacterSelectDialog_LoadFile extends JDialog implements ActionLis
 	}
 	
 	/**
-	 * getChoosenPlayer
+	 * Returns the player chosen from the Character selections
 	 * @return
 	 */
 	private Player getChoosenPlayer() {
@@ -78,10 +84,10 @@ public class CharacterSelectDialog_LoadFile extends JDialog implements ActionLis
 	}
 	
 	/**
-	 * return choosed player
-	 * @param parentFrame
-	 * @param loadedPlayers
-	 * @return
+	 * Creates the JDialog box for the player selection and returns the selected player
+	 * 
+	 * @param parentFrame The frame used for the JDialog to be centered
+	 * @return The selected Avatar, otherwise if dialog box was closed then return null
 	 */
 	public static Player Chooser(JFrame parentFrame, ArrayList<Player> loadedPlayers) {
 		CharacterSelectDialog_LoadFile dialog = new CharacterSelectDialog_LoadFile(parentFrame, loadedPlayers);

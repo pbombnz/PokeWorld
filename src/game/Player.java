@@ -9,13 +9,13 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-/* 
- * @authors Sushant Balajee, Donald Tang,
- * @contributors Prashant Bhikhu
- * 
+/** 
  * This class represents the player of the game, it holds 
  * all key information about the player, their inventory, stats etc.
  * All player stats are initialised here
+ * 
+ * @author Sushant Balajee
+ * @author Donald Tang
  */
 public class Player implements Serializable {
 	private static final long serialVersionUID = -3023304431184848781L;

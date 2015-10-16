@@ -10,9 +10,10 @@ import rooms.Room;
  * This class represents the Door object in the game, the player must 
  * have a key which has a matching ID to that of the door they are trying to open
  * 
- * 
  * @author Sushant Balajee
- * @contrib Donald Tang, Wang Zhen
+ * @author Donald Tang
+ * @author Prashant Bhikhu
+ * @author Wang Zhen
  */
 
 public class Door implements GameObject {

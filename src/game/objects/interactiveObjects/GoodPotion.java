@@ -5,6 +5,12 @@ import game.objects.GameObject;
 
 import javax.swing.ImageIcon;
 
+/**
+ * The Potion that the character 'drinks' to increase health
+ * 
+ * @author Sushant Balajee
+ *
+ */
 public class GoodPotion implements Item {
 	private static final long serialVersionUID = -6872048042823538745L;
 

@@ -34,7 +34,7 @@ public interface Item extends GameObject {
 	public boolean isUsable();
 	
 	/**
-	 * @return id of the item, used for the Key
+	 * @return The ID of the item (used for the Key)
 	 */
 	public int id();
 }
